@@ -1,0 +1,34 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"lib": [
+			"ESNext"
+		],
+		"outFile": "/home/ferrocene/Desktop/GT/toolchain/build/project/sources/main.js",
+		"experimentalDecorators": true,
+		"downlevelIteration": true,
+		"allowJs": true
+	},
+	"exclude": [
+		"**/node_modules/*",
+		"dom",
+		"webpack"
+	],
+	"include": [
+		"import.js",
+		"API.js",
+		"API/net.js",
+		"sound.js",
+		"meta.js",
+		"ore.js",
+		"machine/pipe.js",
+		"machine/machine.js",
+		"recipe.js",
+		"tree.js"
+	],
+	"files": [
+		"/home/ferrocene/Desktop/GT/toolchain/declarations/core-engine.d.ts",
+		"/home/ferrocene/Desktop/GT/toolchain/declarations/android-declarations.d.ts",
+		"/home/ferrocene/Desktop/GT/toolchain/declarations/android.d.ts"
+	]
+}

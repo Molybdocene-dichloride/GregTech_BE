@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "enabled": {
+      "name": {
+        "en": "Enabled",
+        "ru": "Включен"
+      }
+    }
+  }
+}
