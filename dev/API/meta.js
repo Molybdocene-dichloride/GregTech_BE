@@ -135,6 +135,10 @@ let MaterialDictionary = {
 						continue;
 					}	
 				}
+				
+Logger.Log(material.name, "zuuia");
+        Logger.Log(form, "zoosia");
+        Logger.Log(type, "za");
 				if(material.hasFlag(this.types[type][form])) {
 				    /*if(i == Object.keys(this.types[type]).length - 1 && e == Object.keys(this.dict).length - 1) {
 				        Logger.Log(e, "zoosia");
@@ -273,7 +277,7 @@ if(form == undefined) return {name: "unknown"};
       }
     }
     
-    var xtra = new ItemExtraData();
+    let xtra = new ItemExtraData();
 xtra.putString("name", material.name);
     return {
       id: id,
@@ -462,149 +466,74 @@ function of() {
 	return stacks;
 }
 
-let createFlag = function(id) {
-  Logger.Log(id, "desk");
-  Logger.Log(1 << id, "deqw");
-	return 1 << id;
-};
-
-let DECOMPOSITION_BY_ELECTROLYZING = createFlag(40);
-
-        /**
-         * Enables centrifuge decomposition recipe generation
-         */
-let DECOMPOSITION_BY_CENTRIFUGING = createFlag(41);
-
-        /**
-         * Add to material if it has constantly burning aura
-         */
-let BURNING = createFlag(7);
-
-        /**
-         * Add to material if it is some kind of flammable
-         */
-let FLAMMABLE = createFlag(42);
-
-        /**
-         * Add to material if it is some kind of explosive
-         */
-let EXPLOSIVE = createFlag(4);
-
-        /**
-         * Add to material to disable it's unification fully
-         */
-let NO_UNIFICATION = createFlag(5);
-
-        /**
-         * Add to material if any of it's items cannot be recycled to get scrub
-         */
-let NO_RECYCLING = createFlag(6);
-
-        /**
-         * Disables decomposition recipe generation for this material and all materials that has it as component
-         */
-let DISABLE_DECOMPOSITION = createFlag(43);
-
-        /**
-         * Decomposition recipe requires hydrogen as additional input. Amount is equal to input amount
-         */
-let DECOMPOSITION_REQUIRES_HYDROGEN = createFlag(8);
-
-let GENERATE_FLUID_BLOCK = createFlag(44);
-
-        /**
-         * Add this flag to enable plasma generation for this material
-         */
-let GENERATE_PLASMA = createFlag(9);
-
-        /**
-         * Marks material state as gas
-         * Examples: Air, Argon, Refinery Gas, Oxygen, Hydrogen
-         */
-let STATE_GAS = createFlag(10);
+Logger.Log(java.lang.Long.toBinaryString(DECOMPOSITION_BY_ELECTROLYZING) , "qwest");
+Logger.Log( java.lang.Long.toBinaryString(DECOMPOSITION_BY_CENTRIFUGING) , "qwest");
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  BURNING), "$") ;
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  FLAMMABLE) , "sa") ;
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  EXPLOSIVE) , "ass") ;
+Logger.Log( java.lang.Long.toBinaryString(NO_UNIFICATION) ) ;
+Logger.Log( 
+java.lang.Long.toBinaryString( NO_RECYCLING ));
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  DISABLE_DECOMPOSITION ));
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  DECOMPOSITION_REQUIRES_HYDROGEN ));
+Logger.Log(
+java.lang.Long.toBinaryString(
+  GENERATE_FLUID_BLOCK) );
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  GENERATE_PLASMA));
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  STATE_GAS ));
 //dust
-let GENERATE_ORE = createFlag(11);
-
-        /**
-         * Generate a plate for this material
-         * If it's dust material, dust compressor recipe into plate will be generated
-         * If it's metal material, bending machine recipes will be generated
-         * If block is found, cutting machine recipe will be also generated
-         */
-let GENERATE_PLATE = createFlag(12);
-
-        /**
-         * Add to material if it cannot be worked by any other means, than smashing or smelting. This is used for coated Materials.
-         */
-let NO_WORKING = createFlag(13);
-        /**
-         * Add to material if it cannot be used for regular Metal working techniques since it is not possible to bend it.
-         */
-let NO_SMASHING = createFlag(14);
-
-        /**
-         * Add to material if it's impossible to smelt it
-         */
-let NO_SMELTING = createFlag(15);
-
-        /**
-         * Add to material if it is outputting less in an Induction Smelter.
-         */
-let INDUCTION_SMELTING_LOW_OUTPUT = createFlag(16);
-
-        /**
-         * Add to material if it melts into fluid (and it will also generate fluid for this material)
-         */
-let SMELT_INTO_FLUID = createFlag(17);
-
-        /**
-         * This will prevent material from creating Shapeless recipes for dust to block and vice versa
-         * Also preventing extruding and alloy smelting recipes via SHAPE_EXTRUDING/MOLD_BLOCK
-         */
-let EXCLUDE_BLOCK_CRAFTING_RECIPES = createFlag(18);
-
-        /**
-         * This will prevent material from creating Shapeless recipes for dust to block and vice versa
-         */
-let EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES = createFlag(46);
-
-let EXCLUDE_PLATE_COMPRESSOR_RECIPE = createFlag(19);
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  GENERATE_ORE));
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  GENERATE_PLATE ));
+Logger.Log(java.lang.Long.toBinaryString(NO_WORKING ));
+Logger.Log(java.lang.Long.toBinaryString(NO_SMASHING ));
+Logger.Log(java.lang.Long.toBinaryString(NO_SMELTING ));
+Logger.Log(java.lang.Long.toBinaryString(INDUCTION_SMELTING_LOW_OUTPUT) ) ;
+Logger.Log(java.lang.Long.toBinaryString(SMELT_INTO_FLUID) );
+Logger.Log(java.lang.Long.toBinaryString(EXCLUDE_BLOCK_CRAFTING_RECIPES) );
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES));
+Logger.Log(java.lang.Long.toBinaryString(EXCLUDE_PLATE_COMPRESSOR_RECIPE) );
 
 //solid
-let GENERATE_ROD = createFlag(20);
-let GENERATE_GEAR = createFlag(21);
-let GENERATE_LONG_ROD = createFlag(22);
-let MORTAR_GRINDABLE = createFlag(24);
-let GENERATE_FRAME = createFlag(45);
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_ROD ));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_GEAR));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_LONG_ROD) );
+Logger.Log(java.lang.Long.toBinaryString(MORTAR_GRINDABLE) );
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_FRAME) );
 //ingot
-let GENERATE_FOIL = createFlag(25);
-let GENERATE_BOLT_SCREW = createFlag(26);
-let GENERATE_RING = createFlag(27);
-let GENERATE_SPRING = createFlag(28);
-let GENERATE_FINE_WIRE = createFlag(29);
-let GENERATE_ROTOR = createFlag(30);
-let GENERATE_SMALL_GEAR = createFlag(31);
-let GENERATE_DENSE = createFlag(32);
-let GENERATE_SPRING_SMALL = createFlag(33);
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_FOIL));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_BOLT_SCREW) );
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_RING));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_SPRING) );
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_FINE_WIRE));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_ROTOR) );
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_SMALL_GEAR));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_DENSE));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_SPRING_SMALL), "hukok");
 
-        /**
-         * Add this to your Material if you want to have its Ore Calcite heated in a Blast Furnace for more output. Already listed are:
-         * Iron, Pyrite, PigIron, WroughtIron.
-         */
-let BLAST_FURNACE_CALCITE_DOUBLE = createFlag(35);
-let BLAST_FURNACE_CALCITE_TRIPLE = createFlag(36);
 
-//gem
-let CRYSTALLISABLE = createFlag(34);
-let GENERATE_LENSE = createFlag(37);
-let HIGH_SIFTER_OUTPUT = createFlag(38);
 
-//all
-let STD_SOLID = GENERATE_PLATE | GENERATE_ROD | GENERATE_BOLT_SCREW | GENERATE_LONG_ROD;
-let STD_GEM = GENERATE_ORE | STD_SOLID | GENERATE_LENSE;
-let STD_METAL = GENERATE_PLATE;
-let EXT_METAL = STD_METAL | GENERATE_ROD | GENERATE_BOLT_SCREW | GENERATE_LONG_ROD;
-let EXT2_METAL = EXT_METAL | GENERATE_GEAR | GENERATE_FOIL | GENERATE_FINE_WIRE;
+
+
 
 function Material(name, formula, type, materialGenerationFlags, pointMelting, pointBoiling) {
   this.name = name;
@@ -616,15 +545,25 @@ function Material(name, formula, type, materialGenerationFlags, pointMelting, po
 		return materialBits;
 	};
 	this.materialGenerationFlags = this.verifyMaterialBits(materialGenerationFlags);
+Logger.Log(name, "т");
+Logger.Log(materialGenerationFlags, "т");
+	Logger.Log(java.lang.Long.toBinaryString(materialGenerationFlags), "тогруты");
 	this.addFlag = function(materialGenerationFlags) {
 		let combined = 0;
 		for (let materialGenerationFlag in materialGenerationFlags) {
             		combined |= materialGenerationFlag;
         	}
+        	
+    //Logger.Log(Flag.pack(materialGenerationFlags, generationFlag), "deqoi");
+        	
 		this.materialGenerationFlags |= verifyMaterialBits(combined);
 	};
 	this.hasFlag = function(generationFlag) {
-        	return (materialGenerationFlags & generationFlag) >= generationFlag;
+	  
+Logger.Log(materialGenerationFlags, "тогрута");
+         Logger.Log(Flag.hasFlag(materialGenerationFlags, generationFlag), "deqoi");
+         Logger.Log((materialGenerationFlags & generationFlag) >= generationFlag, "deqator");
+        	return Flag.hasFlag(materialGenerationFlags, generationFlag);
 	};
 	this.genItem = function(form, count) {
 		MaterialDictionary.genItem(this, form, count);

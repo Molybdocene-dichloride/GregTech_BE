@@ -291,6 +291,7 @@ let RecipeDictionary = {
         }
         let iddataoutput = null;
         if(output.type == "material") {
+          Logger.Log(output.form, "zomboss");
            iddataoutput = {id: MaterialDictionary.invdata[output.form][output.material.name].id, count: output.count, data: MaterialDictionary.invdata[output.form][output.material.name].data};
         } else if(output.type == "common") {
           iddataoutput = {id: output.id, count: output.count, data: output.data};
@@ -482,7 +483,8 @@ if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) RecipeDictionary
         //if(input.type == "INGOT" || input.type == "GEM") MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "dust", count: 9}], [{material: input, form: "block", count: 1}], ));
         if(input.type == "INGOT" && input.hasFlag(GENERATE_PLATE)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 3}], [{material: input, form: "plate", count: 2}], 55, 16));
         if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_LONG_ROD)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "stick", count: 2}], [{material: input, form: "stickLong", count: 1}], 208, 16));
-        
+        Logger.Log("GENERATE_OREo", GENERATE_ORE);
+        Logger.Log("inputs", input.name);
         if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "ore", material: input, count: 1}], [{material: input, form: "crushed", count: 1}], 16, 10));
         if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushed", count: 1}], [{material: input, form: "dustImpure", count: 1}], 10, 16));
         
@@ -536,6 +538,8 @@ if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) RecipeDictionary
       }
     },
     registerToolRecipe: function(input) {
+        Logger.Log(input.material2.name, "ger");
+        Logger.Log(input.material.name, "zombied");
         if(ToolDictionary.invdata[input.name]) return;
         if(!input.material2.hasFlag(GENERATE_ROD)) return;
         if(!(input.material.type == "INGOT" || input.material.type == "GEM")) return;

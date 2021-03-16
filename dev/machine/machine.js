@@ -884,7 +884,7 @@ this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, r
         type = "machine"
       }
       Logger.Log("zomb$", type);
-      Game.message("id:" + block.id + "\n" + "data:" + block.data + "\n" + "hardness" + Block.getDestroyTime() + "\n" + "resistance" + Block.getExplosionResistance() + "\n" + "isConnectable" + true + "\n" + type + "\n" + "required" + 16 + "maximum" + 16 + "\n" + "\n" + temperature: + this.data.temperature + "\n progress: " + this.data.progress);
+      Game.message("id:" + block.id + "\n" + "data:" + block.data + "\n" + "hardness" + Block.getDestroyTime(block.id) + "\n" + "resistance" + Block.getExplosionResistance(block.id) + "\n" + "isConnectable" + true + "\n" + type + "\n" + "required" + 16 + "maximum" + 16 + "\n" + "temperature:" + this.data.temperature + "\n progress: " + this.data.progress);
       if(type == "pipe") Game.message("steam: " + this.data.amount + "\n type:" + this.data.typeLiquid);
       if(type == "machine") Game.message("steam: " + this.liquidStorage.getAmount("steam"));
     }
@@ -1366,3 +1366,5 @@ UI.getScreenHeight() / 2 - bitmap.getHeight() + 48, size: 36, bitmap: "slot", ne
         "output0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 190, y: UI.getScreenHeight() / 2 - bitmap.getHeight() + 48, size: 36, bitmap: "slot", needClean: true, isTransparentBackground: true},
      },
 }));*/
+
+group.add(BlockID.gtblockmachine, -1);

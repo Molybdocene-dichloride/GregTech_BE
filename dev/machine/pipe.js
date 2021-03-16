@@ -195,7 +195,7 @@ TileEntityRegistry.addEnergyTypeForId(BlockID.gtblockpipe, "liquid");
 var id = BlockID.gtblockpipe// id блока провода 
 var group = ICRender.getGroup("GTpipe"); // группа блоков 
 group.add(id, -1); // добавим сам провод в группу
-group.add(BlockID.gtblockmachine, -1);
+
 
 for(let m = 0; m < Object.keys(PipeDictionary.materials).length; m++) {
     for(let s = 0; s < PipeDictionary.sizes.length; s++) {
