@@ -199,7 +199,12 @@ group.add(id, -1); // добавим сам провод в группу
 
 for(let m = 0; m < Object.keys(PipeDictionary.materials).length; m++) {
     for(let s = 0; s < PipeDictionary.sizes.length; s++) {
-      let width = 0.25 + s * 0.25;
+      let width = 0;
+      if(s >= PipeDictionary.sizes.length - 2) {
+        width = 1/16 * (4 + s * 2 + 2);
+      } else {
+        width = 1/16 * (4 + s * 2);
+      }
       let model = new ICRender.Model();
       let collmodel = new ICRender.CollisionShape();
       

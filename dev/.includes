@@ -17,7 +17,7 @@ item/meta.js
 
 block/tree.js
 
-ore/ore.js
+ore/ore_generation.js
 
 machine/particle.js
 machine/pipe.js

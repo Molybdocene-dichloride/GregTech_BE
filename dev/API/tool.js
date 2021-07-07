@@ -15,42 +15,40 @@ Callback.addCallback('DestroyBlockStart', function (coords, block, playerUid) {
       ToolLib.setTool(ItemID.gtmetatool01, String(name).valueOf(), ToolDictionary.getTypeByData(item.data));
     }
     let i = -1;
-    for(let c = 0; c < 38; c++) {
+    /*for(let c = 0; c < 38; c++) {
     if(block.id == BlockID["gtblockores" + c]) i = c;
-    }
-    if(i >= 0 & i % 2 == 0) {
-      for(let l = 0; l < OreDictionary.stones.length; l++) {
-        if(block.data == l) {
-          ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invdata[block.id].level + 1, false);
-          Block.createSpecialType({
-	base: 1,
-	solid: true,
-	destroytime: 3,
-	explosionres: 15,
-	lightopacity: 15,
-	renderlayer: 2,
-	translucency: 0
-}, "gtore");
-        }
-      }
+    }*/
+    if(OreDictionary.number[block.id]) i = OreDictionary.number[block.id];
+    if(i >= 0 && i % 2 == 0) {
+      let type = "stone";
+      //if(OreDictionary.invblock[block.id].mindestroytime == -1) type = "unbreakable"
+      ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invsmallgens[block.id].level + 1, false);
+      let destroytime = 3;
+      let explosionres = 15;
+      Block.createSpecialType({
+	          base: 1,
+	          solid: true,
+	          destroytime: 3,
+	          explosionres: 15,
+	          lightopacity: 15,
+	          renderlayer: 2,
+	          translucency: 0
+      }, "gtore");
     } else if(i >= 0) {
-      for(let l = 0; l < OreDictionary.blocks.length; l++) {
-        if(block.data == l) {
-          ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invdat[block.id].level + 1, false);
-          Block.createSpecialType({
-	base: 1,
-	solid: true,
-	destroytime: 3,
-	explosionres: 15,
-	lightopacity: 15,
-	renderlayer: 2,
-	translucency: 0
-}, "gtore");
-
-        }
-      }
+      Logger.Log(OreDictionary.invsmallgen[block.id].level, "sertyui");
+      ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invdat[block.id].level, false);
+      Block.createSpecialType({
+	      base: 1,
+	      solid: true,
+	      destroytime: 3,
+	      explosionres: 15,
+	      lightopacity: 15,
+	      renderlayer: 2,
+	      translucency: 0
+      }, "gtore");
     }
     if(block.id == BlockID["gttree"]) {
+      Logger.Log("gttree", "zaeqo");
           if(block.data == 0 || block.data == 2 || block.data == 4) {
             ToolAPI.registerBlockMaterial(block.id, "wood", 0, false);
             Block.createSpecialType({
@@ -66,27 +64,27 @@ Callback.addCallback('DestroyBlockStart', function (coords, block, playerUid) {
             ToolAPI.registerBlockMaterial(block.id, "plant", 0, false);
             Block.createSpecialType({
 	            base: 1,
-	            solid: true,
+	            solid: false,
 	            destroytime: 0.2,
-	            explosionres: 2,
+	            explosionres: 1,
 	            lightopacity: 15,
 	            renderlayer: 2,
 	            translucency: 0,
 	            sound: "grass",
 	            renderallfaces: true,
-              }, "gtwood");
+              }, "gtplant");
               
           }
         }
 });
-Block.registerDropFunction(BlockID.gttree, function(coords, id, data) {
+Block.registerDropFunction(BlockID.gttree, function(coords, id, data, dig, enchant, item) {
     if(data == 1) {
-      if (level > 0 || Player.getCarriedItem().id == 359) return [[id, 1, data]];
-      if(Math.random() < .04) return [[id, 1, 3]];
-      if(Math.random() > .06 && Math.random() < .08) return [[280, 1, 0]];
-      return [[]]
+      if(item.id == 359) return [[id, 1, data]];
+      if(Math.random() < 0.04) return [[id, 1, 3]];
+      if(Math.random() > 0.06 && Math.random() < 0.08) return [[280, 1, 0]];
+      return [[0, 0, 0]];
     }
-    return [id, 1, data]
+    return [[id, 1, data]];
 })
 /*
 type:  type {

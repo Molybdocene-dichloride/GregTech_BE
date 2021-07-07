@@ -1,6 +1,10 @@
 {
-	"name":"GT5:BE",
-	"author":"Molybdocene Dichloride",
-	"version": "5.0",
-	"description": ""
+	"name": "GregTech Bedrock Edition",
+	"author": "Molybdocene Dichloride",
+	"version": "5.0.1 patch 0",
+	"description": "GregTech Bedrock Edition - порт великой и ужасной промышленной и научной модификации GregTech Community Edition или GregTech 5 Unofficial на Minecraft Bedrock Edition 1.11.4 для Inner Core.
+
+Данная модификация модификация содержит на данный момент бронзовые паровые станки.
+
+Не требует IndustrialCraft PE."
 }

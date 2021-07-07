@@ -15,79 +15,36 @@ abstract class Machine implements TileEntity.TileEntityPrototype {
   temperature: 20,
   fluidStorage: new Machine.FluidStorage(),
   
-  init: function() {
+  init() : void {
     this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, rotation: this.data.rotation, put0: this.data.put0, put1: this.data.put1, put2: this.data.put2, put3: this.data.put3, put4: this.data.put4, put5: this.data.put5, textures: this.data.type.textures, rotationOfBlock: this.data.rotation});
     
     this.prepareConnect();
     this.preparePipe();
     this.inited = true;
   }
-  tick: function() {
+  tick() : void {
     this.connectTick();
   }
-  click: function(id, count, data, coords, player) {
+  click(id, count, data, coords, player) : void {
     
   }
-  getRotation() {
+  getRotation() : number {
     return rotation;
   }
-  rotate(rotation) {
+  rotate(rotation) : void {
     
   }
   worldRotationToBlockRotation: function (rotation, rotationOfBlock) {
-          Logger.Log(rotationOfBlock, "@seao");
-          if(rotationOfBlock == 3) {
-            return rotation;
-          }
-          let e;
-          for(let i = 0; i < MetaRenderer.rotationMap[3].length; i++) {
-            if(MetaRenderer.rotationMap[3][i] == rotation) e = i;
-          }
-          return MetaRenderer.rotationMap[rotationOfBlock][e];
-        },
-        blockRotationToWorldRotation: function (rotation, rotationOfBlock) {
-          Logger.Log(rotationOfBlock, "@sas");
-          if(rotationOfBlock == 3) {
-            return rotation;
-          }
-      let e;
-      for(let i = 0; i < MetaRenderer.rotationMap[rotationOfBlock].length; i++) {
-        if(MetaRenderer.rotationMap[rotationOfBlock][i] == rotation) e = i;
-      }
-      Logger.Log(e, "@e");
-      Logger.Log(MetaRenderer.rotationMap[3][e], "@sashok");
-      return MetaRenderer.rotationMap[3][e];
-    },
+    RotationTransforms.worldRotationToBlockRotation(rotation, rotationOfBlock);
+  },
+  blockRotationToWorldRotation: function (rotation, rotationOfBlock) {
+    RotationTransforms.blockRotationToWorldRotation(rotation, rotationOfBlock);
+  },
     
     
     
     client: {
         load: function() {},
-        worldRotationToBlockRotation: function (rotation, rotationOfBlock) {
-          Logger.Log(rotationOfBlock, "@seao");
-          if(rotationOfBlock == 3) {
-            return rotation;
-          }
-          let e;
-          for(let i = 0; i < MetaRenderer.rotationMap[3].length; i++) {
-            if(MetaRenderer.rotationMap[3][i] == rotation) e = i;
-          }
-          return MetaRenderer.rotationMap[rotationOfBlock][e];
-        },
-        blockRotationToWorldRotation: function (rotation, rotationOfBlock) {
-          Logger.Log(rotationOfBlock, "@sas");
-          if(rotationOfBlock == 3) {
-            return rotation;
-          }
-      let e;
-      for(let i = 0; i < MetaRenderer.rotationMap[rotationOfBlock].length; i++) {
-        if(MetaRenderer.rotationMap[rotationOfBlock][i] == rotation) e = i;
-      }
-      Logger.Log(e, "@e");
-      Logger.Log(MetaRenderer.rotationMap[3][e], "@sashok");
-      return MetaRenderer.rotationMap[3][e];
-    },
-    
     events: {
             // события, принимающие пакеты на стороне клиента, в данном случае this будет клиентским экземпляром, получившим этот пакет
             gtmachine_rotate: function(packetData, packetExtra, connectedClient) {
@@ -118,11 +75,11 @@ abstract class Machine implements TileEntity.TileEntityPrototype {
                 //packetData.sound.stop();
             },
             gterror: function() {
-            let container = new UI.Container();
-			    container.openAs(errorimage);
+            
             }
     }
-    prepareConnect() : {
+    }
+    prepareConnect() : void {
       this.enabled = true;
       this.correct = true;
       this.connectable = true:
@@ -130,7 +87,7 @@ abstract class Machine implements TileEntity.TileEntityPrototype {
       this.itemconnectable = true;
       this.fluidconnectable = false;
     }
-    preparePipe() : {
+    preparePipe() : void {
       if(this.connectable) {
       Logger.Log(this, "fui");
       this.data.connectEncounter = 0;
@@ -141,7 +98,7 @@ abstract class Machine implements TileEntity.TileEntityPrototype {
 			}
     }
     }
-    connectTick() : {
+    connectTick() : void {
       if(this.connectable) {
       if(this.data.connectEncounter == 4) {
 			  this.data.connectEncounter = 0;
@@ -161,26 +118,91 @@ abstract class Machine implements TileEntity.TileEntityPrototype {
 			}
     }
     }
-    receive(hatch, type, fluid, sidepre) : Fluid {
-      if(hatchs.some(element => return element === hatch) && (hatch instanceof InputHatch || hatch instanceof InputBus) && fluid.amount > 0) return fluidStorage.addFluid(fluid);
+    getCapacity(index : number) : number {
+        //if(!index) return this.fluidStorage.getLimit("steam"); 
+        // установим лимит хранилища энергии в 2 миллиона (2e6 - это способ записи числа 2000000)
+        return this.fluidStorage.getLimit(index);
+    },
+    getCapacity(fluid : FluidStack) : number {
+        if(!fluid) return this.fluidStorage.getLimit("steam"); // установим лимит хранилища энергии в 2 миллиона (2e6 - это способ записи числа 2000000)
+        return this.fluidStorage.getLimit(fluid);
+    },
+    canReceive(side: number, type : Machine.Type) : boolean {
+      return true;
+      // side != 0 выведет true, если сторона любая, кроме нижней.
+    },
+    canExtract(side: number, type : Machine.Type) : boolean {
+      return false;
+        // выведет true при подключении блока для выхода энергии с нижней стор.
+    },
+    receive(fluid : Machine.FluidStack, sidepre: number) : Fluid {
+      //if(hatchs.some(element => return element === hatch) && (hatch instanceof InputHatch || hatch instanceof InputBus) && fluid.amount > 0) 
+     //if(fluid.amount > 0)
+     //this.sidepre = PipeNetBuilder.sideToNeighboring(sidepre);
+     
+     return this.fluidStorage.receiveFluid(fluid);
+     //if(type == Type.ITEM) return fluidStorage.receiveFluid(fluid);
   },
-  receive(hatch : InputBus, type, item : Item, sidepre : Vec3) : Fluid {
-      if(hatchs.some(element => return element === hatch && item.amount > 0)) return container.addItem(item);
+  receive(item : ItemInstance, sidepre : number) : Fluid {
+      /*if(hatchs.some(element => return element === hatch && item.amount > 0))*/
+      let id == null;
+      for(let i in slots) {
+        if(slots[i].id == item.id && slots[i].data == item.data) {
+          item.count = Math.min(item.count, Item.getMaxStack(item.id));
+          item.count = Math.min(item.count, Item.getMaxStack(item.id) - this.container.getSlot(item).count);
+          id == "input" + i;
+          break;
+        }
+      }
+      
+      this.sidepre = PipeNetBuilder.sideToNeighboring(sidepre);
+      
+      this.container.setSlot(id, item);
+      
+      return item.count;
   },
-  
-  provide(stack : Stack | ItemInstance) {
-    for(let i in hatchs) {
-    if(fluid.amount > 0) this.deliver(i, fluid);
-    }
-  }
-  provide(hatch : InputBus | InputHatch | EnergyHatch, stack : Stack | ItemInstance) {
-      if(hatchs.some(element => return element === hatch) && typeof hatch == typeofHatch(typeof stack) && fluid.amount > 0) hatch.receive(fluid);
+  /*receive(items : ItemInstances, sidepre : number) : Fluid {
+      /*if(hatchs.some(element => return element === hatch && item.amount > 0))/
+      for(let i in slots) {
+        //if slots[i] =
+      }
+      this.sidepre = PipeNetBuilder.sideToNeighboring(sidepre);
+      
+      item.count = Math.min(item.count, Item.getMaxStack(item.id));
+      item.count = Math.min(item.count, Item.getMaxStack(item.id) - this.container.getSlot(item).count);
+      
+      this.container.addItem(item);
+      
+      return item.count;
+  },*/
+  provide(stack : ItemInstance, src: any) {
+      /*if(hatchs.some(element => return element === hatch) && typeof hatch == typeofHatch(typeof stack) && fluid.amount > 0)*/
+      
+      for(let i in slotsResult) {
+        if(slots[i].id == item.id && slots[i].data == item.data) {
+          
+          let output = Math.min(stack.count, Item.getMaxStack(item.id));
+      
+          this.container.addItem(src.add(this, output, "steam", {x: this.x, y: this.y, z: this.z}) - output);
+          
+          id == "output" + i;
+          break;
+        }
+      }
+      
+      //fluidStorage.receive(fluid);
   },
-  provide(hatchindex : number, stack : Stack | ItemInstance) : Fluid {
-      if(hatchs[hatchindex] instanceof InputBus | InputHatch | EnergyHatch && typeof hatch == typeofHatch(typeof stack) && fluid.amount > 0) hatchs[hatchindex].receive(fluid);
+  provide(stack : FluidStack, src : any) : Fluid {
+      /*if(hatchs[hatchindex] instanceof InputBus | InputHatch | EnergyHatch && typeof hatch == typeofHatch(typeof stack) && fluid.amount > 0)*/
+      //fluidStorage.receive(fluid);
+      //let output = Math.min(this.getCapacity(), this.fluidStorage.getAmount("steam"));
+      
+      this.fluidStorage.addLiquid("steam", src.add(this, output, "steam", {x: this.x, y: this.y, z: this.z}) - output, this.sidepre);
+      
   },
-  provide(position: Vec3, stack : Stack | ItemInstance) : Fluid {
+  /*provide(position: Vec3, stack : Stack | ItemInstance) : Fluid {
      let hatch = blockSource.getBlockEntity(position);
-     if(hatch instanceof InputBus | InputHatch | EnergyHatch) this.deliver(hatch, fluid);
-  },
-}}
+     //*if(hatch instanceof InputBus | InputHatch | EnergyHatch)
+     this.deliver(hatch, fluid);
+  },*/
+}

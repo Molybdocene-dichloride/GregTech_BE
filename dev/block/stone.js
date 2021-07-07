@@ -18,6 +18,7 @@ let StoneDictionary = {
 		Logger.Log("$*", inverted);
 		Logger.Log(inverted2);
             	IDRegistry.genBlockID(id);
+            this.stones[id].id = BlockID[id];
     		Block.createBlock(id, [{name: variants.name, texture: [[inverted + "_STONE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_SMOOTH", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_STONE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_SMOOTH", 0]], inCreative: true}], "stone");
     	ToolAPI.registerBlockMaterial(id, "stone", variants.level, true);
 		Block.registerDropFunction(id, function(blockCoords, blockID, blockData, diggingLevel, region) {
@@ -27,18 +28,11 @@ let StoneDictionary = {
 			return [[blockID, 1, blockData]];
 		});
 	},
-	generateStone: function(coords, id, variant, random) {
-    		let sizze = random.nextInt(5);
-    		let size = sizze + 2
-		for(let x = -size; x <= size; x++) {
-    			for(let y = -size; y <= size; y++) {
-      				for(let z = -size; z <= size; z++) {
-					if(x * x + y * y + z * z <= size * size) {
-						World.setBlock(coords.x + x, coords.y + y, coords.z + z, id, variant);
-					}
-				}
-    		}
-		}
+	generateStoneOld: function(coords, id, data, random) {
+		GenerationDictionary.generateSphere(coords, 2, 7, id, data, random, null, 1, OreDictionary.blocks);
+	},
+	generateStonePerlin: function(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids) {
+		GenerationDictionary.generateChunkPerlin(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids);
 	},
 	addToCreative: function() {
 		for(let i in this.stones) {
@@ -54,8 +48,10 @@ StoneDictionary.registerStone("granite", {
 	level: 3,
 	name: "granite_black",
 	dimension: 0,
+	rarity: 0.2,
 	name2: "granite_red",
-	dimension2: 0
+	dimension2: 0,
+	rarity2: 0.2
 });
 StoneDictionary.registerStone("mineral", {
 	hardness: 3.0,
@@ -63,7 +59,9 @@ StoneDictionary.registerStone("mineral", {
 	level: 1,
 	name: "marble",
 	dimension: 0,
+	rarity: 0.5,
 	name2: "basalt",
-	dimension2: 0
+	dimension2: 0,
+	rarity2: 0.5,
 });
 //StoneDictionary.addToCreative();

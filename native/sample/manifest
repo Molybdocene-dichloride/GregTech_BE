@@ -2,12 +2,13 @@
     "shared": {
         "name": "gregtech",
 		"include": [
-			"shared_headers"
+			
 		]
     },
 
     "depends": [
     	"innercore",
-    	"nativejs"
+    	"nativejs",
+    	"callbacks"
 	]
 }

@@ -1,9 +1,9 @@
 abstract class LowMultiblockMachine extends Machine implements IMultiblockLogic {
-  shape: Shape;
-  getShape() {
+  shape: Machine.Shape;
+  getShape() : Machine.Shape {
     return shape;
   }
-  setShape(shape : Shape) {
+  setShape(shape : Shape) : void {
     this.shape = shape;
   }
   getBlock(position: Vec3) : Tile {
@@ -12,15 +12,15 @@ abstract class LowMultiblockMachine extends Machine implements IMultiblockLogic 
   checkBlocks() : boolean {
     return shape.checkBlocks();
   },
-  init(shape) {
+  init(shape: MultiblockMachine.Shape) : void {
     super.init();
     prepareMultiblock(shape);
   }
-  tick() {
+  tick() : void {
     super.tick();
     this.provideMultiblock();
   }
-  prepareMultiblock(shape) : void {
+  prepareMultiblock(shape: Machine.Shape) : void {
     setShape(shape);
     
     if(shape.checkBlocks) {
@@ -47,15 +47,34 @@ abstract class LowMultiblockMachine extends Machine implements IMultiblockLogic 
   preparePipe() : void {}
   connectTick() : void {}
   //providePipe() : void {}
-  receive(hatch, type, fluid, sidepre) : Fluid {},
-  receive(hatch : InputBus, type, item : Item, sidepre : Vec3) : Fluid {},
+  receive(fluid : Machine.FluidStack, sidepre: number) : Fluid {},
+  receive(item : ItemInstance, sidepre : number) : Fluid {},
   
-  provide(stack : Stack | ItemInstance) {}
-  provide(hatch : InputBus | InputHatch | EnergyHatch, stack : Stack | ItemInstance) {},
-  provide(hatchindex : number, stack : Stack | ItemInstance) : Fluid {},
-  provide(position: Vec3, stack : Stack | ItemInstance) : Fluid {},
+  provide(stack : ItemInstance, src: any)) : void {},
+  provide(stack : FluidStack, src : any) : void {},
 }
 
+abstract class Hatch /*extends ElectricMachine*/ implements IHatchLogic {
+  
+}
+abstract class InputHatch /*extends ElectricMachine*/ implements IHatchLogic {
+  
+}
+abstract class OutputHatch /*extends ElectricMachine*/ implements IHatchLogic {
+  
+}
+abstract class InputBus /*extends ElectricMachine*/ implements IHatchLogic {
+  
+}
+abstract class OutputBus /*extends ElectricMachine*/ implements IHatchLogic {
+  
+}
+abstract class DynamoHatch /*extends ElectricMachine */implements IHatchLogic {
+  
+}
+abstract class EnergyHatch /*extends ElectricMachine*/ implements IHatchLogic {
+  
+}
 /*abstract class MultiblockMachine extends  ElectricMachine implements IMultiblockLogic {
   shape: Shape;
   hatchs: Hatch[];

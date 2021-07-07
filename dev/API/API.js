@@ -1,6 +1,9 @@
 
 const Flags = WRAP_NATIVE("Flags");
+const Flag = WRAP_NATIVE("Flags");
+const setLoadingTip = ModAPI.requireGlobal("MCSystem.setLoadingTip");
 
+setLoadingTip("Register textures");
 var copyed = null;
 let IconTransformator = {
   ARGBtoRGBA: function (colour) {
@@ -529,11 +532,11 @@ let GENERATE_LENSE = createFlag(37);
 let HIGH_SIFTER_OUTPUT = createFlag(38);
 
 //all
-let STD_SOLID = GENERATE_PLATE | GENERATE_ROD | GENERATE_BOLT_SCREW | GENERATE_LONG_ROD;
-let STD_GEM = GENERATE_ORE | STD_SOLID | GENERATE_LENSE;
+let STD_SOLID = Flag.pack4(GENERATE_PLATE, GENERATE_ROD, GENERATE_BOLT_SCREW, GENERATE_LONG_ROD);
+let STD_GEM = Flag.pack3(GENERATE_ORE, STD_SOLID, GENERATE_LENSE);
 let STD_METAL = GENERATE_PLATE;
-let EXT_METAL = STD_METAL | GENERATE_ROD | GENERATE_BOLT_SCREW | GENERATE_LONG_ROD;
-let EXT2_METAL = EXT_METAL | GENERATE_GEAR | GENERATE_FOIL | GENERATE_FINE_WIRE;
+let EXT_METAL = Flag.pack4(STD_METAL, GENERATE_ROD, GENERATE_BOLT_SCREW, GENERATE_LONG_ROD);
+let EXT2_METAL = Flag.pack4(EXT_METAL, GENERATE_GEAR, GENERATE_FOIL, GENERATE_FINE_WIRE);
 
 //tool
 let GENERATE_MORTAR = createFlag(89);
@@ -550,7 +553,7 @@ function addTypeForGenerate(oreprefix, flag, type, icon_set, icon_set2, icon_set
 function generateClientMaterial(name, type, flags, colour, material_set) {
   if(type == "MARKER") return;
   for(let i in types) {
-    if(Flags.hasFlag(flags, types[i].flag)) {
+    if(Flags.hasFlag(flags, types[i].flag) || (invoretypes[name] && i == "dustImpure")) {
       		if(!(type == "DUST" || type == "SOLID" || type == "INGOT" || type == "GEM")) {
 					if(i == "dust" || i == "dustSmall" || i == "dustTiny") {
 						continue;
@@ -652,8 +655,10 @@ function generateClientMaterial(name, type, flags, colour, material_set) {
 
 
 let oretypes = [];
+let invoretypes = [];
 function addBlockForOreGenerate(name) {
   oretypes[this.oretypes.length] = name;
+  invoretypes[name] = name;
 }
 function generateClientOre(name, icon_set, colour) {
   for(let i in oretypes) {
@@ -1484,6 +1489,22 @@ addTypeForGenerate("frameGt", GENERATE_FRAME, "block", [
         {u: 0, v: 15}, {u: 1, v: 15}, {u: 2, v: 15}, {u: 3, v: 15}, {u: 4, v: 15}, {u: 5, v: 15}, {u: 6, v: 15}, {u: 7, v: 15}, {u: 8, v: 15}, {u: 9, v: 15}, {u: 10, v: 15}, {u: 11, v: 15}, {u: 12, v: 15}, {u: 13, v: 15}, {u: 14, v: 15}, {u: 15, v: 15},
   ]);
 
+addBlockForOreGenerate("stone");
+addBlockForOreGenerate("granite");
+addBlockForOreGenerate("diorite");
+addBlockForOreGenerate("andesite");
+addBlockForOreGenerate("gravel");
+addBlockForOreGenerate("bedrock");
+addBlockForOreGenerate("netherrack");
+addBlockForOreGenerate("endstone");
+addBlockForOreGenerate("sandstone");
+addBlockForOreGenerate("sandstone_red");
+
+addBlockForOreGenerate("granite_red");
+addBlockForOreGenerate("granite_black");
+addBlockForOreGenerate("marble");
+addBlockForOreGenerate("basalt");
+
 generateClientMaterial("aluminium", "INGOT", Flags.pack5(EXT2_METAL, GENERATE_SMALL_GEAR, GENERATE_ORE, GENERATE_RING, GENERATE_FRAME), 0x80C8F0, IconTransformator.UV.DULL);
 generateClientMaterial("americium", "INGOT", Flags.pack3(STD_METAL, GENERATE_ROD, GENERATE_LONG_ROD), 0xC8C8C8, IconTransformator.UV.METALLIC);
 generateClientMaterial("antimony", "INGOT", 
@@ -1665,7 +1686,7 @@ generateClientMaterial("talc", "DUST", GENERATE_ORE, 0x5AB45A, IconTransformator
 generateClientMaterial("tantalite", "DUST", GENERATE_ORE, 0x915028, IconTransformator.UV.METALLIC);
 generateClientMaterial("tungstate", "DUST", GENERATE_ORE, 0x373223, IconTransformator.UV.DULL);
 generateClientMaterial("tetrahedrite", "DUST", GENERATE_ORE, 0xC82000, IconTransformator.UV.DULL);
-generateClientMaterial("wroughtiron", "INGOT", 
+generateClientMaterial("wrought_iron", "INGOT", 
 Flags.pack5(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING, GENERATE_LONG_ROD, DISABLE_DECOMPOSITION), 0xC8B4B4, IconTransformator.UV.METALLIC);
 generateClientMaterial("wulfenite", "DUST", GENERATE_ORE, 0xFF8000, IconTransformator.UV.DULL);
 generateClientMaterial("water", "FLUID", 
@@ -1676,7 +1697,7 @@ generateClientMaterial("uvarovite", "DUST", 0, 0xB4FFB4, IconTransformator.UV.GE
 
 generateClientMaterial("andesite", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
 generateClientMaterial("basalt", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
-generateClientMaterial("black_granite", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("granite_black", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
 generateClientMaterial("diorite", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
 generateClientMaterial("endstone", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.DULL);
 generateClientMaterial("granite", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
@@ -1684,13 +1705,13 @@ generateClientMaterial("gravel", "DUST", NO_SMASHING, 0xC8C800, IconTransformato
 generateClientMaterial("marble", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.FINE);
 generateClientMaterial("netherrack", "DUST", NO_SMASHING, 0x232323, IconTransformator.UV.ROUGH);
 generateClientMaterial("sandstone", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("bedrock", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("sand", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
 generateClientMaterial("stone", "DUST", 
 Flags.pack5(
 MORTAR_GRINDABLE, GENERATE_GEAR, GENERATE_PLATE, NO_SMASHING, NO_RECYCLING), 0xB4FFB4, IconTransformator.UV.ROUGH);
-generateClientMaterial("red_granite", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
-generateClientMaterial("red_sandstone", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
-generateClientMaterial("red_granite", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
-generateClientMaterial("red_sandstone", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("granite_red", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("sandstone_red", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
 
 
 generateClientMaterial("lava", "FLUID", 0, 0xC8C800, IconTransformator.UV.FLUID);
@@ -1730,11 +1751,11 @@ Flags.pack5(GENERATE_ORE, FLAMMABLE, NO_SMELTING, NO_SMASHING, MORTAR_GRINDABLE)
 generateClientMaterial("pitchblende", "DUST", GENERATE_ORE, 0xC8D200, IconTransformator.UV.DULL);
 
 
-generateClientMaterial("red_garnet", "GEM", 
+generateClientMaterial("garnet_red", "GEM", 
 Flags.pack2(Flags.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE)), 0xC85050, IconTransformator.UV.RUBY);
 generateClientMaterial("redstone", "DUST", GENERATE_ORE, 0xC80000, IconTransformator.UV.ROUGH);
 
-generateClientMaterial("yellow_garnet", "GEM", Flags.pack2(Flags.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE)), 0xC8C850, IconTransformator.UV.RUBY);
+generateClientMaterial("garnet_yellow", "GEM", Flags.pack2(Flags.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE)), 0xC8C850, IconTransformator.UV.RUBY);
 generateClientMaterial("flint", "GEM", 
 Flags.pack2(NO_SMASHING, MORTAR_GRINDABLE), 0x001E00, IconTransformator.UV.FLINT);
 generateClientMaterial("vanadium_magnetite", "DUST", GENERATE_ORE, 0x23233C, IconTransformator.UV.METALLIC);
@@ -1744,29 +1765,9 @@ generateClientMaterial("vanadium_magnetite", "DUST", GENERATE_ORE, 0x23233C, Ico
 
 generateClientMaterial("red_alloy", "INGOT", Flags.pack2(GENERATE_PLATE, GENERATE_FINE_WIRE), 0xC80000, IconTransformator.UV.DULL);
 
-
-
-
-
-addBlockForOreGenerate("stone");
-addBlockForOreGenerate("granite");
-addBlockForOreGenerate("diorite");
-addBlockForOreGenerate("andesite");
-addBlockForOreGenerate("gravel");
-addBlockForOreGenerate("bedrock");
-addBlockForOreGenerate("netherrack");
-addBlockForOreGenerate("endstone");
-addBlockForOreGenerate("sandstone");
-addBlockForOreGenerate("sandstone_red");
-
-addBlockForOreGenerate("granite_red");
-addBlockForOreGenerate("granite_black");
-addBlockForOreGenerate("marble");
-addBlockForOreGenerate("basalt");
-
-
 generateClientOre("copper", IconTransformator.UV.METALLIC, 0xFFAAAB);
 generateClientOre("tin", IconTransformator.UV.DULL, 0xDCDCDC);
+generateClientOre("rutile", IconTransformator.UV.GEM_HORIZONTAL, 0xD40D5C);
 generateClientOre("iron", IconTransformator.UV.METALLIC, 0xAAAAAA);
 generateClientOre("coal", IconTransformator.UV.ROUGH, 0x464646);
 generateClientOre("lignite", IconTransformator.UV.LIGNITE, 0x644646);
@@ -1835,6 +1836,8 @@ generateClientOre("wulfenite", IconTransformator.UV.DULL, 0xFF8000);
 generateClientOre("molybdenite", IconTransformator.UV.DULL, 0x191919);
 generateClientOre("molybdenum", IconTransformator.UV.DULL, 0xAAAADD);
 generateClientOre("powellite", IconTransformator.UV.DULL, 0xFFFF00);
+generateClientOre("nether_quartz", IconTransformator.UV.QUARTZ, 0xE6D2D2);
+generateClientOre("jasper", IconTransformator.UV.EMERALD, 0xC85050);
 generateClientOre("scheelite", IconTransformator.UV.DULL, 0xC88C14);
 generateClientOre("tungstate", IconTransformator.UV.DULL, 0x373223);
 generateClientOre("lithium", IconTransformator.UV.DULL, 0xCBCBCB);
@@ -2050,7 +2053,7 @@ generateClientTool("beryllium", IconTransformator.UV.METALLIC, 0x64B464, "copper
 generateClientTool("steel", IconTransformator.UV.DULL, 0x505050, "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
 generateClientTool("copper", IconTransformator.UV.SHINY, 0xFF8000, "copper", IconTransformator.UV.WOOD, 0x896727, 0, false);
 generateClientTool("bronze", IconTransformator.UV.DULL, 0xFF8000, "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
-generateClientTool("wroughtiron", IconTransformator.UV.METALLIC, 0xC8B4B4, "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
+generateClientTool("wrought_iron", IconTransformator.UV.METALLIC, 0xC8B4B4, "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
 generateClientTool("diamond", IconTransformator.UV.DIAMOND, 0xC8FFFF, "copper", IconTransformator.UV.WOOD, 0x896727, 0, false);
 
 addCasing("MACHINE_BRONZE", ["BOTTOM", "TOP", "SIDE"]);
@@ -2068,15 +2071,250 @@ addMachineForGenerate(["MACHINE_BRONZEBRICKS", "MACHINE_STEELBRICKS"],  ["bronze
 addMachineForGenerate(["MACHINE_STEELBRICKS"],  ["steel"], "boiler_lava", ["FRONT"]);
 addMachineForGenerate(["MACHINE_BRONZEBRICKS"],  ["bronze"], "boiler_solar", ["TOP"]);
 
+setLoadingTip("loading API");
 
+function Set(hashFunction) {
+        //custom hash function or default to JSON.stringify
+        this.hashFunction = hashFunction || JSON.stringify;
+        //initialize private variables: empty set with length 0
+        var _length = 0,
+            _set = [];
 
+        /**
+         * Simple function which finds a value in the set if it exists and returns undefined if not in the set
+         *
+         * @param value
+         * @returns {*}
+         */
+        this.get = function (value) {
+            return _set[value];
+        };
 
-const Flag = WRAP_NATIVE("Flags");
-const setLoadingTip = ModAPI.requireGlobal("MCSystem.setLoadingTip");
-setLoadingTip("GTAPI: loading API");
+        /**
+         * Helper function to return the set object
+         *
+         * @returns {{}}
+         */
+        this.getSet = function () {
+            return _set;
+        };
+
+        /**
+         * Function which takes in a list of values to put into the set and adds them if they don't exist.
+         *
+         * @param {...value} var_args
+         */
+        this.add = function () {
+            function addOne(value) {
+                if (this.get(value) === undefined) {
+                    _length++;
+                    _set[value] = value;
+                }
+            }
+
+            Array.prototype.forEach.call(arguments, function (val) {
+                addOne.call(this, val);
+            }, this);
+            
+        };
+
+        /**
+         * returns the number of items in the set
+         *
+         * @returns {number}
+         */
+        this.size = function () {
+            return _length;
+        };
+
+        /**
+         * Deletes a given element from the set if it exists. Returns true if the element was deleted, returns false if
+         * the element was not found in the set.
+         *
+         * @param element
+         */
+        this.remove = function (element) {
+            if (this.isInSet(element)) {
+                delete _set[element];
+                _length -= 1;
+                return true;
+            }
+            return false;
+        };
+
+        /**
+         * For debuging: prints the set out to the console
+         */
+        this.print = function () {
+            console.log(_set);
+        };
+
+        /**
+         * Converts the set to an array
+         *
+         * @returns {Array}
+         */
+        this.toArray = function () {
+            var array = [];
+
+            for (var element in _set) {
+                if (_set.hasOwnProperty(element))
+                    array.push(_set[element])
+            }
+
+            return array;
+        }
+}
+
+Set.prototype.cardinality = function () {
+        return this.size();
+    };
+
+    /**
+     * Returns a boolean checking if the set is empty
+     *
+     * @returns {boolean}
+     */
+    Set.prototype.isEmpty = function () {
+        return !this.size();
+    };
+
+    /**
+     * Returns a boolean checking if a given element is in the set
+     *
+     * @param element
+     * @returns {boolean}
+     */
+    Set.prototype.isInSet = function (element) {
+        return this.get(element) !== undefined;
+    };
+
+    /**
+     * Iterates over the elements in the set using a provided function with optional arguments value, index
+     *
+     * @param fn - callback to be invoked each iteration, with parameters value and index
+     * @param self - this function context for callback
+     */
+    Set.prototype.iterate = function (fn, self) {
+        var set = this.getSet(),
+            index = 0;
+
+        for (var element in set) {
+            fn.call(self, set[element], index);
+            index += 1;
+        }
+    };
+
+    /**
+     * Iterates over the elements in the set using fn callback, if callback is true the function immediately returns true
+     * else it returns false. The callback is invoked with value and index parameters.
+     *
+     * @param fn
+     * @param self
+     * @returns {boolean}
+     */
+    Set.prototype.some = function (fn, self) {
+        var set = this.getSet(),
+            index = 0;
+
+        for (var element in set) {
+            if (fn.call(self, set[element], index))
+                return true;
+            index += 1;
+        }
+
+        return false;
+    };
+
+    /**
+     * Returns the union set between this set and set2
+     *
+     * @param set2
+     * @returns {JsSet}
+     */
+    Set.prototype.union = function (set2) {
+        set2.iterate(function (val) {
+            this.add(val);
+        }, this);
+        return this; //return this to make it chainable
+    };
+
+    /**
+     * Returns the smaller set between this and set2
+     *
+     * @param set2
+     * @returns {JsSet}
+     */
+    Set.prototype.getSmallerSet = function (set2) {
+        return this.size() <= set2.size() ? this : set2;
+    };
+
+    /**
+     * Returns the intersection set between this and set2
+     *
+     * @param set2
+     * @returns {Set}
+     */
+    Set.prototype.intersection = function (set2) {
+        //initialize new set to return intersection
+        var intersectionSet = new Set(this.hashFunction),
+            smallerSet = this.getSmallerSet(set2), //find the smaller set to iterate over
+            largerSet = smallerSet === this ? set2 : this;
+
+        smallerSet.iterate(function (val) {
+            if (largerSet.isInSet(val)) {
+                intersectionSet.add(val);
+            }
+        });
+
+        return intersectionSet;
+    };
+
+    /**
+     * Return the difference set between this and set2
+     *
+     * @param set2
+     * @returns {JsSet}
+     */
+    Set.prototype.difference = function (set2) {
+        set2.iterate(function (val) {
+            this.remove(val);
+        }, this);
+        return this; //return this to make it chainable
+    };
+
+    /**
+     * Checks if subset is subset of this
+     *
+     * @param subset
+     */
+    Set.prototype.subset = function (subset) {
+        return subset.some(function (val) {
+            return this.isInSet(val);
+        }, this);
+    };
+
+    /**
+     *
+     * @returns {*}
+     */
+    Set.prototype.pop = function () {
+        var set = this.getSet(),
+            keys = Object.keys(set);
+        var random = set[keys[Math.floor(Math.random() * keys.length)]];
+        this.remove(random);
+        return random;
+    };
 
 String.prototype.replaceAt = function(index, replacement) {
     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+Set.prototype.push = function(value) {
+    return this.add(value);
+}
+Set.prototype.splice = function(value, count) {
+    //for()
+    return this.remove(value);
 }
 
 Object.defineProperty(Array.prototype, 'includes', {

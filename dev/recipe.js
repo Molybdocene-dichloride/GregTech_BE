@@ -1,5 +1,5 @@
-setLoadingTip("GTRecipes: register Recipes");
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["aluminium"]);
+setLoadingTip("Recipes:");
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["aluminium"]); //А
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["americium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["antimony"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["arsenic"]);
@@ -68,23 +68,61 @@ RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["tanzanite"
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["topaz"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["charcoal"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["glass"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["wroughtiron"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["wrought_iron"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["wulfenite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["water"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["yellow_limonite"]); 
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["uraninite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["uvarovite"]); 
+//A
 
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["amethyst"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["amethyst"]);//A
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["apatite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["bauxite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["bentonite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["blaze"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["ender_eye"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["monazite"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["olivine"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["opal"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lapis"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lignite"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["red_garnet"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["yellow_garnet"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["pitchblende"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["garnet_red"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["redstone"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["garnet_yellow"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["flint"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["vanadium_magnetite"]);
+
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["andesite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["basalt"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["granite_black"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["diorite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["endstone"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["granite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["gravel"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["marble"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["netherrack"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["sandstone"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["bedrock"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["sand"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["stone"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["granite_red"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["flint"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["sandstone_red"]);
 
 
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lava"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["clay"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["charcoal"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["glass"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["wheat"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["brick"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["steam"]);
+
+RecipeDictionary.registerAlloy(MaterialDictionary.dict["battery_alloy"]); //A
+RecipeDictionary.registerAlloy(MaterialDictionary.dict["bronze"]); //A
 RecipeDictionary.registerAlloy(MaterialDictionary.dict["red_alloy"]);
-
 
 
 
@@ -155,7 +193,7 @@ Callback.addCallback("ServerPlayerTick", function(playerUid, isPlayerDead) {
     // playerUid - сущность игрока
 
     // isPlayerDead - дополнительный параметр - мертв ли данный игрок
-    var client = Network.getClientForPlayer(playerUid);
+    /*var client = Network.getClientForPlayer(playerUid);
     if (client != null) {
       let player = Entity.getPosition(playerUid);
        let source = BlockSource.getDefaultForActor(playerUid);
@@ -203,8 +241,124 @@ Callback.addCallback("ServerPlayerTick", function(playerUid, isPlayerDead) {
          }
        }
     // что то сделать
+    }*/
+    
+    let client = Network.getClientForPlayer(playerUid);
+    if (client != null) {
+       let player = Entity.getPosition(playerUid);
+       let source = BlockSource.getDefaultForActor(playerUid);
+       let ents = source.fetchEntitiesInAABB(player.x - 24, player.y - 64, player.z - 24, player.x + 24, player.y + 64, player.z + 24, 64);
+       
+       for(let i in ents) {
+         let t = Entity.getCompoundTag(ents[i]);
+         
+         let p = t.getCompoundTag("Item");
+         
+         if(p && p.getString("Name").length() > 15 && p.getString("Name").substring(15) == "gtmetaitem1") {
+           if(MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].form == "dustPure" || MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].form == "dustImpure") {
+           let tile = source.getBlock(Math.floor(t.getListTag("Pos").getFloat(0)), Math.floor(t.getListTag("Pos").getFloat(1)), Math.floor(t.getListTag("Pos").getFloat(2)));
+            let tileentity = source.getBlockEntity(Math.floor(t.getListTag("Pos").getFloat(0)), Math.floor(t.getListTag("Pos").getFloat(1)), Math.floor(t.getListTag("Pos").getFloat(2)));
+             if(tile.id == 118 && tileentity.getCompoundTag() != null) {
+           Logger.Log(MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].id, "asq");
+           Logger.Log(p.getShort("Count"), "zasqw");
+           for(let r in p.getAllKeys()) {
+             Logger.Log(p.getAllKeys()[r], "zeakopi");
+             Logger.Log(p.getValueType(p.getAllKeys()[r]), "zeakopi");
+           }
+           Logger.Log(p.getByte("Count"), "zasqw");
+           Logger.Log(MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].id, "zasqwi");
+Logger.Log(MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].data, "zasqyw");
+          Entity.setDroppedItem(ents[i],
+          MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].id,
+          p.getByte("Count"),
+          MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].data, null);
+          
+          source.setBlock(Math.floor(t.getListTag("Pos").getFloat(0)), Math.floor(t.getListTag("Pos").getFloat(1)), Math.floor(t.getListTag("Pos").getFloat(2)), 118, tile.data - 2);
+             }}
+         }
+       }
     }
 });
+Logger.Log(MaterialDictionary.firsts["frameGt"].id, "id");
+    Logger.Log(MaterialDictionary.firsts["frameGt"].data, "data");
+let playerposes = {};
+/*Callback.addCallback("ServerPlayerTick", function(playerUid, isPlayerDead) {
+  
+  let client = Network.getClientForPlayer(playerUid);
+  if (client != null) {
+    let playerpos = Entity.getPosition(playerUid);
+    playerpos.y -= 0.6;
+    let player = new PlayerActor(playerUid);
+    let source = BlockSource.getDefaultForActor(playerUid);
+    if(playerposes[playerUid] != null) {
+      
+      Logger.Log(playerposes[playerUid].x, "xx");
+  Logger.Log(playerposes[playerUid].y, "yy");
+  Logger.Log(playerposes[playerUid].z, "zz");
+  
+      Logger.Log(playerpos.x, "x");
+  Logger.Log(playerpos.y, "y");
+  Logger.Log(playerpos.z, "z");
+  
+    Logger.Log(Math.floor(playerpos.x), "ax");
+  Logger.Log(Math.floor(playerpos.y), "ay");
+  Logger.Log(Math.floor(playerpos.z), "az");
+  
+    let xChange = playerpos.x - playerposes[playerUid].x;
+    let yChange = playerpos.y - playerposes[playerUid].y;
+    let zChange = playerpos.z - playerposes[playerUid].z;
+    
+    /*Logger.Log(source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)), "cad7");
+    Logger.Log(MaterialDictionary.firsts["frameGt"], "cad7");*
+    Logger.Log(MaterialDictionary.firsts["frameGt"].id, "id");
+    Logger.Log(MaterialDictionary.firsts["frameGt"].data, "data");
+    if(Math.abs(xChange) >= Math.abs(yChange) && Math.abs(xChange) >= Math.abs(zChange)) {
+      let chet = 0;
+      if(xChange < 0) chet = - 0.5;
+      if(xChange > 0) chet = 0.5;
+      Logger.Log(source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).id, "cad7");
+      Logger.Log(source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).data, "cad73");
+      if((source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).id == MaterialDictionary.firsts["frameGt"].id && source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).data >= MaterialDictionary.firsts["frameGt"].data) || MaterialDictionary.ids["frameGt"].includes(source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).id)) {
+      
+          //Entity.setPosition(playerUid, playerposes[playerUid].x, playerpos.y + 0.8, playerposes[playerUid].z);
+          
+          Entity.setVelocity(Entity.getVelocity(playerUid).x, 0.4, Entity.getVelocity(playerUid).z);
+          
+          Entity.setVelocity(Entity.getVelocity(playerUid).x, Math.max(Entity.getVelocity(playerUid).y, -0.15), Entity.getVelocity(playerUid).z);
+        }
+    }
+    if(Math.abs(yChange) >= Math.abs(xChange) && Math.abs(yChange) >= Math.abs(zChange)) {
+      let chet = 0;
+      if(yChange < 0) chet = - 0.5;
+      if(yChange > 0) chet = 0.5;
+      Logger.Log(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y+ chet), Math.floor(playerpos.z)).id, "cad7er");
+      Logger.Log(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y+ chet), Math.floor(playerpos.z)).data, "cad73");
+      if((source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y+ chet), Math.floor(playerpos.z)).id == MaterialDictionary.firsts["frameGt"].id && source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y + chet), Math.floor(playerpos.z)).data >= MaterialDictionary.firsts["frameGt"].data) || MaterialDictionary.ids["frameGt"].includes(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y + chet), Math.floor(playerpos.z)).id)) {
+      
+          //Entity.setPosition(playerUid, playerposes[playerUid].x, playerpos.y + 0.8, playerposes[playerUid].z);
+          
+          Entity.setVelocity(Entity.getVelocity(playerUid).x, 0.4, Entity.getVelocity(playerUid).z);
+        }
+    }
+    if(Math.abs(zChange) >= Math.abs(xChange) && Math.abs(zChange) >= Math.abs(yChange)) {
+      let chet = 0;
+      if(zChange < 0) chet = -0.5;
+      if(zChange > 0) chet = 0.5;
+      Logger.Log(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).id, "cad73");
+      Logger.Log(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).data, "cad73");
+      if((source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).id == MaterialDictionary.firsts["frameGt"].id && source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).data >= MaterialDictionary.firsts["frameGt"].data) || MaterialDictionary.ids["frameGt"].includes(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).id)) {
+      
+          //Entity.setPosition(playerUid, playerposes[playerUid].x, playerpos.y + 0.8, playerposes[playerUid].z);
+          
+          Entity.setVelocity(Entity.getVelocity(playerUid).x, 0.4, Entity.getVelocity(playerUid).z);
+          
+        }
+    }
+  }
+    playerposes[playerUid] = Entity.getPosition(playerUid);
+    playerposes[playerUid].y -= 0.6;
+  }
+});*/
 
 Recipes.removeWorkbenchRecipe(5, 4, 0);
 Recipes.removeWorkbenchRecipe(5, 4, 1);
@@ -228,6 +382,7 @@ Recipes.removeWorkbenchRecipe(286, 1, -1);
 Recipes.removeWorkbenchRecipe(292, 1, -1);
 Recipes.removeWorkbenchRecipe(293, 1, -1);
 Recipes.removeWorkbenchRecipe(294, 1, -1);
+Recipes.removeWorkbenchRecipe(359, 1, -1);
 
 Recipes.removeWorkbenchRecipe(380, 1, -1);
 Recipes.removeWorkbenchRecipe(410, 1, -1);
@@ -235,9 +390,25 @@ Recipes.removeWorkbenchRecipe(297, 1, -1);
 Recipes.removeWorkbenchRecipe(101, 16, -1);
 Recipes.removeWorkbenchRecipe(330, 3, -1);
 
+Recipes.removeWorkbenchRecipe(325, 1, -1);
+
 Recipes.removeWorkbenchRecipe(280, 4, 0);
 
+Recipes.removeWorkbenchRecipe(167, 1, -1);
+Recipes.removeWorkbenchRecipe(147, 1, -1);
+Recipes.removeWorkbenchRecipe(148, 1, -1);
+Recipes.removeWorkbenchRecipe(84, 1, -1);
+Recipes.removeWorkbenchRecipe(328, 1, -1);
 
+Recipes.removeWorkbenchRecipe(306, 1, -1);
+Recipes.removeWorkbenchRecipe(307, 1, -1);
+Recipes.removeWorkbenchRecipe(308, 1, -1);
+Recipes.removeWorkbenchRecipe(309, 1, -1);
+
+Recipes.removeWorkbenchRecipe(314, 1, -1);
+Recipes.removeWorkbenchRecipe(315, 1, -1);
+Recipes.removeWorkbenchRecipe(316, 1, -1);
+Recipes.removeWorkbenchRecipe(317, 1, -1);
 
 Recipes.addShaped({id: 5, count: 2, data: 0}, ["l"], ['l', 17, 0]);
 Recipes.addShaped({id: 5, count: 2, data: 1}, ["l"], ['l', 17, 1]);
@@ -256,8 +427,6 @@ Recipes.addShaped({id: 280, count: 2, data: 3}, ["l", "l"], ['l', 5, 3]);
 Recipes.addShaped({id: 280, count: 2, data: 4}, ["l", "l"], ['l', 5, 4]);
 Recipes.addShaped({id: 280, count: 2, data: 5}, ["l","l"], ['l', 5, 5]);
 
-
-
 RecipeDictionary.addToolShaped(["hammer"], ["i i", "i_i", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 380, data: 0, count: 1});
 
 RecipeDictionary.addToolShaped(["wrench"], ["i_i", "ici", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}, 'c', {type: "common", id: 54, data: 0}], {type: "common", id: 410, data: 0, count: 1});
@@ -266,6 +435,33 @@ RecipeDictionary.addToolShaped(["wrench"], [" _ ", "iii", "iii"],  ['i', {type: 
 
 RecipeDictionary.addToolShaped(["hammer"], ["ii ", "ii_", "ii "],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 330, data: 0, count: 1});
 
+RecipeDictionary.addToolShaped(["hammer"], ["ii ", "ii_"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 167, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["ii_"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 147, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", " i "],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 325, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", "iii", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 307, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["iii", "i_i", "i i"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 308, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", "i i"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 309, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["iii", "i_i"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 306, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", "iii", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 315, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["iii", "i_i", "i i"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 316, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", "i i"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 317, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["iii", "i_i"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 314, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["ii_"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 148, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer", "wrench"], [" _ ", "i_i", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 328, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer", "file"], ["_i", "i_"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 359, data: 0, count: 1});
 
 RecipeDictionary.addToolShaped(["mortar"], ["_i"],  ['i', {type: "common", id: 54, data: 0}], {type: "material", material: MaterialDictionary.dict["wheat"], form: "dust"});
 

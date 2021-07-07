@@ -70,12 +70,14 @@ let MaterialDictionary = {
     lastdata: 0,
     firsted: true,
     firsts: [],
+    ids: [],
     //string
     registerForm: function(id, flag, form) {
       if(!this.types[id]) this.types[id] = {};
       //this.startData[form] = Object.keys(this.types[id]).length * 1000;
       this.types[id][form] = flag;
       this.invdata[form] = [];
+      this.ids[form] = [];
     },
     registerMaterial: function(material) {
         setLoadingTip("GTMaterials:" + material.name);
@@ -90,7 +92,7 @@ let MaterialDictionary = {
         	if(type == "block") {
         	    id = "gtmetablock";
         	    limit = 16;
-        	    
+        	 
         	} else if(type == "item") {
         	    id = "gtmetaitem";
         	    limit = 32000;
@@ -109,6 +111,7 @@ let MaterialDictionary = {
             } else if(type == "block") {
                 //data = data;
                 this.firsts[form] = {id: BlockID[id + count], data: data};
+                 //this.ids[form][count] = id + count;
             }
 			for(let e = 0; e < Object.keys(this.dict).length; e++) {
 				let material = this.dict[Object.keys(this.dict)[e]];
@@ -139,15 +142,22 @@ let MaterialDictionary = {
 Logger.Log(material.name, "zuuia");
         Logger.Log(form, "zoosia");
         Logger.Log(type, "za");
-				if(material.hasFlag(this.types[type][form])) {
+				if(material.hasFlag(this.types[type][form]) || (OreDictionary.evblocks[material.name] && form == "dustImpure")) {
+				  
 				    /*if(i == Object.keys(this.types[type]).length - 1 && e == Object.keys(this.dict).length - 1) {
 				        Logger.Log(e, "zoosia");
 					    limited = true;
 					    }*/
+					    Logger.Log(material.name, "ploiai");
+					    Logger.Log(form, "iiiizoa");
 		                let arr = this.limit(data, id, count, limit, bigdata, limited, material, form, type);
 		                count = arr[0];
 		                data = arr[1];
 		                limited = false;
+                		} else {
+                		  Logger.Log(material.name, "zia");
+                      Logger.Log(form, "zoa");
+                      Logger.Log(type, "ziia");
                 		}
 			}
 		}
@@ -203,18 +213,11 @@ Logger.Log(material.name, "zuuia");
     },
     blockvariables: [],
     limit: function(data, id, count, limit, bigdata, limited, material, form, type) {
-        if(data == 0) {
-            if(type == "block") {
-                IDRegistry.genBlockID(id + count);
-            this.data[BlockID[id + count]] = [];
-                //this.blockvariables = [];
-            } else if(type == "item") {
-			IDRegistry.genItemID(id + count);
-			this.data[ItemID[id + count]] = [];
-            }
-        } 
+        
+        Logger.Log(type)
         if(data == limit) {
 			    if(type == "block") {
+			      Logger.Log(form, "zoщioa");
 				    //Block.createBlock(id + (count), this.createvariables(this.blockvariables));
 				//this.blockvariables = [];
 			    } else if(type == "item") {
@@ -222,8 +225,24 @@ Logger.Log(material.name, "zuuia");
 				}
 			count++;
 			data = 0;
-		} else {
+		}
+		
+		if(data == 0) {
+            if(type == "block") {
+                IDRegistry.genBlockID(id + count);
+            this.data[BlockID[id + count]] = [];
+            this.ids[form][count] = BlockID[id + count];
+                //this.blockvariables = [];
+            } else if(type == "item") {
+			IDRegistry.genItemID(id + count);
+			this.data[ItemID[id + count]] = [];
+            }
+        }
+		//i{
 		    if(type == "block") {
+		      
+		          Logger.Log(form, "seres");
+		          Logger.Log(material.name, "sereees");
 		            this.data[BlockID[id + count]][data] = {material: material, form: form};
 		            this.invdata[form][material.name] = {id: BlockID[id + count], data: data};
 		            
@@ -231,10 +250,11 @@ Logger.Log(material.name, "zuuia");
 		    } else if(type == "item") {
 		            this.data[ItemID[id + count]][data] = {material: material, form: form};
 		            this.invdata[form][material.name] = {id: ItemID[id + count], data: data};
+		            //this.enddata[form] = data;
 		    }
             data++;
             bigdata++;
-            if(limited) {
+            /*if(limited) {
 				if(type == "block") {
 				    //Block.createBlock(id + (count), this.createvariables(this.blockvariables));
 				    //Logger.Log("endblock");
@@ -243,8 +263,8 @@ Logger.Log(material.name, "zuuia");
 				    Item.createItem(id + (count), material.name + form,  [material.name + form, 0],  {isTech: true});
 			    }
 			    data = 0;
-            }
-		}
+            }*/
+		//}
 		return [count, data];
     },
     createvariables: function(blockvariables) {
@@ -525,15 +545,10 @@ Logger.Log(java.lang.Long.toBinaryString(GENERATE_BOLT_SCREW) );
 Logger.Log(java.lang.Long.toBinaryString(GENERATE_RING));
 Logger.Log(java.lang.Long.toBinaryString(GENERATE_SPRING) );
 Logger.Log(java.lang.Long.toBinaryString(GENERATE_FINE_WIRE));
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_ROTOR) );
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_ROTOR));
 Logger.Log(java.lang.Long.toBinaryString(GENERATE_SMALL_GEAR));
 Logger.Log(java.lang.Long.toBinaryString(GENERATE_DENSE));
 Logger.Log(java.lang.Long.toBinaryString(GENERATE_SPRING_SMALL), "hukok");
-
-
-
-
-
 
 function Material(name, formula, type, materialGenerationFlags, pointMelting, pointBoiling) {
   this.name = name;
@@ -575,4 +590,6 @@ Logger.Log(materialGenerationFlags, "тогрута");
 	
 	this.formulatext = "";
 	this.formulatext = concater(this.formulatext, this);
+	
+	this.usablename = this.name[0].toUpperCase() + this.name.substring(1);
 }

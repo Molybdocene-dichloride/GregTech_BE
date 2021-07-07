@@ -1,3 +1,29 @@
+namespace RotationTransforms {
+  worldRotationToBlockRotation: function (rotation, rotationOfBlock) {
+    Logger.Log(rotationOfBlock, "@seao");
+    if(rotationOfBlock == 3) {
+      return rotation;
+    }
+    let e;
+    for(let i = 0; i < MetaRenderer.rotationMap[3].length; i++) {
+      if(MetaRenderer.rotationMap[3][i] == rotation) e = i;
+    }
+    return MetaRenderer.rotationMap[rotationOfBlock][e];
+  },
+  blockRotationToWorldRotation: function (rotation, rotationOfBlock) {
+          Logger.Log(rotationOfBlock, "@sas");
+          if(rotationOfBlock == 3) {
+            return rotation;
+          }
+      let e;
+      for(let i = 0; i < MetaRenderer.rotationMap[rotationOfBlock].length; i++) {
+        if(MetaRenderer.rotationMap[rotationOfBlock][i] == rotation) e = i;
+      }
+      Logger.Log(e, "@e");
+      Logger.Log(MetaRenderer.rotationMap[3][e], "@sashok");
+      return MetaRenderer.rotationMap[3][e];
+    },
+}
 namespace Machine {
   export interface IRecipe {
     isSteam();
@@ -87,6 +113,11 @@ namespace Machine {
   } & {
      [key: string]: Machine.Recipe 
   }
+  
+  let ItemInstances = {
+     [key: string]: ItemInstance
+  }
+  
   export abstract class FuelMap(minInputs, maxInputs) implements IRecipeMap {
     this.minInputs : number = 0;
     this.maxInputs : number = 0;
@@ -132,6 +163,11 @@ namespace Machine {
     }
 }
   
+  export enum Type {
+    FLUID,
+    ITEM,
+    ENERGY
+  }
   export class ElectricStack {
     id: string = 0,
     amount: number = 0,
@@ -150,18 +186,36 @@ namespace Machine {
     }
   }
   export class FluidStack {
-    id: string = 0,
-    amount: number = 0,
-    limit: number = 0,
-    
+    private id: string = null,
+    private amount: number = 0,
+    private limit: number = 0,
+    constId: boolean = false,
+    constructor(amount: number, limit: number) {
+      this.amount = amount;
+      this.limit = limit;
+      //this.constId = constId;
+    }
     constructor(id: string, amount: number, limit: number) {
+      this(id, amount, limit, false);
+    }
+    constructor(id: string, amount: number, limit: number, constId: boolean) {
       this.id = id;
       this.amount = amount;
       this.limit = limit;
-      
+      this.constId = constId;
     }
+    
     constructor(id: string, limit: number) {
-      this(id, 0, limit);
+      this(id, null, limit, true);
+    }
+    setId(id) {
+      if(!constId) this.id = id;
+    }
+    setAmount(amount) {
+      if(!constId) this.data = data;
+    }
+    setLimit(limit) {
+      if(!constId) this.limit = limit;
     }
   }
   export class ElectricStorage {
@@ -237,6 +291,10 @@ prepareStack(index : number, id : number, limit: number) : void {
   limits[index] = limit;
   stacks[index] = new Machine.FluidStack(id, 0, limit);
 }
+prepareStack(index: number, stack : ElectricStack) : void {
+  limits[index] = stack.limit;
+  stacks[index] = stack;
+}
 prepareStack(index: number, stack : ElectricStack, isZero: boolean) : void {
   if(isZero) stack.amount = 0;
   limits[index] = stack.limit;
@@ -270,8 +328,8 @@ prepareStack(index: number, stack : ElectricStack, isZero: boolean) : void {
   getLimit() : number {
     return limit;
   }
-  getLimit(slot) : number {
-    return limits[slot];
+  getLimit(index: number) : number {
+    return limits[index];
   }
 setAmount(index: number, amount: number): number {
   let oamount = Math.limit(slots[index].limit, amount);
@@ -291,32 +349,49 @@ isEmpty(index: number): boolean {
   return slots[index].amount == 0;
 }
 addLiquid(index: number, amount: number): number {
-  let oamount = Math.limit(slots[index].limit - slots[index].amount, amount);
+  let oamount = Math.min(slots[index].limit - slots[index].amount, amount);
   slots[index].amount += oamount;
   return amount - oamount;
 }
-addLiquid(index: number, stack): Machine.FluidStack {
-  let oamount = Math.limit(slots[index].limit - slots[index].amount, stack.amount);
+addLiquid(index: number, stack: Machine.FluidStack): Machine.FluidStack {
+  let oamount = Math.min(slots[index].limit - slots[index].amount, stack.amount);
   slots[index].amount += oamount;
-  stack.amount -= (oamount);
+  stack.amount -= oamount;
   return stack;
 }
 getliquid(index: number, amount: number): Machine.FluidStack {
-  let oamount = Math.limit(slots[index].amount, amount);
+  let oamount = Math.min(slots[index].amount, amount);
   slots[index].amount -= oamount;
   return oamount;
 }
-getliquid(index: number, stack) : Machine.FluidStack {
-  let oamount = Math.limit(slots[slot].amount, stack.amount);
-  slots[slot].amount -= oamount;
-  stack.amount = (oamount);
+getliquid(index: number, stack: Machine.FluidStack) : Machine.FluidStack {
+  let oamount = Math.min(slots[index].amount, stack.amount);
+  slots[index].amount -= oamount;
+  stack.amount = oamount;
   return stack;
+}
+prepareStack(index: number, limit: number) : void {
+  limit[index] = limit;
+  slots[index] = new Machine.FluidStack(0, limit);
 }
 prepareStack(index: number, id: number, limit: number) : void {
   limit[index] = limit;
   slots[index] = new Machine.FluidStack(id, 0, limit);
 }
-prepareStack(index: number, stack, isZero: boolean) : void {
+prepareStack(index: number, id: number, limit: number, constId: boolean) : void {
+  limit[index] = limit;
+  slots[index] = new Machine.FluidStack(id, 0, limit, constId);
+}
+
+prepareStack(index: number, stack: Machine.FluidStack) : void {
+  this.prepareStack(index, stack, false);
+}
+prepareStack(index: number, stack: Machine.FluidStack, constId: boolean) : void {
+  limit[index] = stack.limit;
+  slots[index] = stack;
+  stack.constId = constId;
+}
+prepareStack(index: number, stack: Machine.FluidStack, isZero: boolean) : void {
   if(isZero) stack.amount = 0;
   limit[index] = stack.limit;
   slots[index] = stack;
@@ -328,88 +403,5 @@ addValidator() : void {
 addValidator(index: number) : void {
   
 }
-  }
-}
-
-
-
-namespace MultiblockMachine {
-  export interface IMultiblockLogic {
-    shape: MultiblockMachine.Shape;
-    getShape() : MultiblockMachine.Shape;
-    setShape() : MultiblockMachine.Shape;
-    getBlock(position: Vec3) : Tile;
-    checkBlocks() : boolean;
-    
-    provideMultiblock(): void;
-  }
-  
-  export interface IHatchMultiblockLogic implements IMultiblockLogic {
-    energyHatchs: Hatch[];
-    dynamoHatchs: Hatchs[];
-    inputHatchs: Hatch[];
-    outputHatchs: Hatch[];
-    inputBuses: Hatch[];
-    outputBuses: Hatch[];
-    mufflerHatchs: Hatch[];
-    
-    getHatch(Vec3 position) : Hatch;
-    getEnergyHatchs?() : EnergyHatch[];
-    getDynamoHatchs?(): DynamoHatch[];
-    getInputHatchs(): InputHatch[];
-    getOutputHatchs(): OutputHatch[];
-    getInputBuses(): InputBus[];
-    getOutputBuses(): OutputBus[];
-    getMufflerHatchs?(): MufflerHatch[];
-  }
-  
-  export abstract class Shape {
-    blockSource: BlockSource,
-    position: Vec3,
-    size: Vec3,
-    casing: Tile,
-    constructor(position: Vec3, size: Vec3, casing: Tile, blockSource: BlockSource) {
-      this.casing = casing;
-      this.blockSource = blockSource;
-      this.size = size;
-      this.position = position;
-    }
-    //"x_y_z": tile {id, data}
-    getBlockSource() : BlockSource {
-      return blockSource;
-    },
-    getBlock(position: Vec3) : Tile {
-      return blockSource.getBlock(this.position.x + position.x, this.position.y + position.y, this.position.z + position.z);
-    },
-    abstract checkBlocks() : boolean,
-    abstract getHatch(position: Vec3) : Hatch,
-  }
-  export abstract class BoxShape extends Shape {
-    constructor(position: Vec3, size: Vec3, casing: casing, blockSource: source) {
-      super(position, size, casing, blockSource);
-    }
-    
-    getBlock(position: Vec3) : Tile {
-      if(position.x > this.size.x & position.y > this.size.y & position.z > this.size.z) {
-          return null;
-        }
-      return super.getBlock(position);
-    }
-    
-    checkBlocks() : boolean {
-      let is = true
-      for(let i = 0; i < size.x; i++) {
-        for(let j = 0; j < size.y; j++) {
-      for(let j = 0; j < size.z; j++) {
-  
-        let block = blockSource.getBlock(this.position.x + i, this.position.y + j, this.position.z + k)
-        if(!(block.id == casing.id && block.data == casing.data)) {
-          is = false;
-        }
-      }
-        }
-      }
-      return is;
-    }
   }
 }

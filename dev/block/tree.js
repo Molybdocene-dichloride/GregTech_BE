@@ -1,5 +1,5 @@
 let BiomeHelper = {
-  TAIGA_BIOMES: [5, 19, 32, 33]
+  TAIGA_BIOMES: {5: 5, 19: 19, 32: 32, 33: 33, 160: 160, 161: 161}
 };
 TreeDictionary = {
   NARROWED: 0,
@@ -94,7 +94,7 @@ Block.createBlock("gttree", variable, "gtwood");
         Logger.Log("shifts", tree.shape.width / 2 - 0.5);
         for(let xa = x - Math.floor(tree.shape.width / 2); xa < x + Math.floor(tree.shape.width / 2) + 1; xa++) {
           for(let za = z - Math.floor(tree.shape.width / 2); za < z + Math.floor(tree.shape.width / 2) + 1; za++) {
-            if(yy - y == leavesheight) {
+            if(yy - y == leavesheight && za != z && xa != x) {
               World.setBlock(xa, yy, za, BlockID.gttree, data + 1);
             }
             }
@@ -133,15 +133,14 @@ TreeDictionary.addToCreative();
 Callback.addCallback("GenerateChunkUniversal", function (chunkX, chunkZ, random, dimension) {
   if(dimension != 0) return;
 	let biome = World.getBiome((chunkX + 0.5) * 16, (chunkZ + 0.5) * 16);
-	for(let biom in TreeDictionary.trees["rubber"].generation.biomes) {
-  if(biome == biom) {
-	if(Math.random() < TreeDictionary.trees["rubber"].generation.rarity){
-			var coords = GenerationUtils.findSurface(chunkX*16 + random.nextInt(16), 96, chunkZ*16 + random.nextInt(16));
-			if(World.getBlockID(coords.x, coords.y, coords.z) == 2){
-			  Logger.Log();
-				TreeDictionary.generateTree(coords.x, coords.y + 1, coords.z, random, TreeDictionary.trees["rubber"])
-			}
-	}
-  }
+	Logger.Log(biome, "zas");
+    if(TreeDictionary.trees["rubber"].generation.biomes[biome]) {
+	    if(Math.random() < TreeDictionary.trees["rubber"].generation.rarity) {
+  			let coords = GenerationUtils.findSurface(chunkX*16 + random.nextInt(16), 96, chunkZ*16 + random.nextInt(16));
+			  if(World.getBlockID(coords.x, coords.y, coords.z) == 2) {
+			    
+				  TreeDictionary.generateTree(coords.x, coords.y + 1, coords.z, random, TreeDictionary.trees["rubber"])
+			  }
+    }
 	}
 }, "gt_tree");

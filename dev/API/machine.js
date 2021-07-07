@@ -280,7 +280,7 @@ let MachineDictionary = {
   registerMaterial: function(material, rate, temperature) {
     this.materials[material.name] = {material: material, rate: rate, temperature: temperature, type: "liquid"};
   },
-  getPipeType: function () {
+  getPipeType: function() {
     if(blockID == BlockID.gtblockpipe) {
       for(let i in Object.keys(this.materials)) {
         if(OreDictionary.isInnerDiapozone(blockData, i * this.sizes.length, (i + 1) * this.sizes.length)) {

@@ -21,7 +21,7 @@ long long createFlag(long long id) {
 }
 long long pack(int num, ...) {
 	va_list argptr;
-	long vac = 0;
+	long long vac = 0;
 	/* инициализация argptr */
 	va_start (argptr, num);
 	for(; num; num--) {

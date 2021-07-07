@@ -1,4 +1,19 @@
-setLoadingTip("GTMaterials: register Materials");
+setLoadingTip("register Materials");
+
+OreDictionary.registerChangeableBlock({id: 1, data: 0, texture: "stone", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: 1, data: 1, texture: "granite", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: 1, data: 3, texture: "diorite", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: 1, data: 5, texture: "andesite", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: 13, data: 0, texture: "gravel", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: 7, data: 0, texture: "bedrock", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: 87, data: 0, texture: "netherrack", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: 121, data: 0, texture: "endstone", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: 24, data: 0, texture: "sandstone", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: 179, data: 0, texture: "sandstone_red", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+    
+OreDictionary.registerChangeableBlock({id: StoneDictionary.stones[stone].id, data: 0, texture: StoneDictionary.stones[stone].name, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: StoneDictionary.stones[stone].id, data: 8, texture: StoneDictionary.stones[stone].name2, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+
 MaterialDictionary.registerForm("item", 0, "ingot");
 MaterialDictionary.registerForm("item", 0, "dust");
 MaterialDictionary.registerForm("item", GENERATE_PLATE, "plate");
@@ -31,11 +46,11 @@ MaterialDictionary.registerForm("block", GENERATE_FRAME, "frameGt");
 
 MaterialDictionary.registerMaterial(new Material("_NULL", of(), "MARKER", 0));
 
-MaterialDictionary.registerMaterial(new Material("aluminium", Elements.Al, "INGOT", Flag.pack5(EXT2_METAL, GENERATE_SMALL_GEAR, GENERATE_ORE, GENERATE_RING, GENERATE_FRAME), 933.25, 2773.15)); //
+MaterialDictionary.registerMaterial(new Material("aluminium", Elements.Al, "INGOT", Flag.pack5(EXT2_METAL, GENERATE_SMALL_GEAR, GENERATE_ORE, GENERATE_RING, GENERATE_FRAME), 933.25, 2773.15)); //WA
 MaterialDictionary.registerMaterial(new Material("americium", Elements.Am, "INGOT", Flag.pack3(STD_METAL, GENERATE_ROD, GENERATE_LONG_ROD), 1473.15, 2873.15));
 MaterialDictionary.registerMaterial(new Material("antimony", Elements.Sb, "INGOT", 
 Flag.pack2(EXT_METAL, MORTAR_GRINDABLE), 903.78, 1908));
-MaterialDictionary.registerMaterial(new Material("arsenic", Elements.As, "DUST", 0, TemperaturePoints.NO, 887));
+MaterialDictionary.registerMaterial(new Material("arsenic", Elements.As, "DUST", 0, TemperaturePoints.NO, 887)); //w
 MaterialDictionary.registerMaterial(new Material("barium", Elements.Ba, "INGOT", STD_METAL, 983.15, 2118));
 MaterialDictionary.registerMaterial(new Material("beryllium", Elements.Be, "INGOT",Flag.pack2(STD_METAL, GENERATE_ORE), 1558.15, 3243.15));
 MaterialDictionary.registerMaterial(new Material("bismuth", Elements.Bi, "INGOT", GENERATE_ORE, 544.45, 1833.15));
@@ -117,10 +132,10 @@ Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
 MaterialDictionary.registerMaterial(new Material("banded_iron", of(new MaterialStack(MaterialDictionary.dict["iron"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("barite", of(new MaterialStack(MaterialDictionary.dict["barium"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("bastnasite",  of(new MaterialStack(MaterialDictionary.dict["cerium"], 1), new MaterialStack(MaterialDictionary.dict["carbon"], 1), new MaterialStack(MaterialDictionary.dict["fluorine"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE));
-MaterialDictionary.registerMaterial(new Material("battery_alloy", of(new MaterialStack(MaterialDictionary.dict["lead"], 4), new MaterialStack(MaterialDictionary.dict["antimony"], 1)), "INGOT", EXT_METAL));
+MaterialDictionary.registerMaterial(new Material("battery_alloy", of(new MaterialStack(MaterialDictionary.dict["lead"], 4), new MaterialStack(MaterialDictionary.dict["antimony"], 1)), "INGOT", EXT_METAL)); //A
 MaterialDictionary.registerMaterial(new Material("blue_topaz", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["fluorine"], 2), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "GEM", Flag.pack5(GENERATE_ORE, STD_GEM, NO_SMASHING, NO_SMELTING,  HIGH_SIFTER_OUTPUT))) ;
 MaterialDictionary.registerMaterial(new Material("bronze", of(new MaterialStack(MaterialDictionary.dict["tin"], 1), new MaterialStack(MaterialDictionary.dict["copper"], 3)), "INGOT", 
-Flag.pack2(Flag.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), Flag.pack3(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_LONG_ROD))));
+Flag.pack2(Flag.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), Flag.pack3(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_LONG_ROD)))); //A
 MaterialDictionary.registerMaterial(new Material("brown_limonite", of(new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["hydrogen"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("certus_quartz", of(), "GEM", 
 Flag.pack4(STD_SOLID, NO_SMELTING, CRYSTALLISABLE, GENERATE_ORE)));
@@ -203,8 +218,8 @@ MaterialDictionary.registerMaterial(new Material("talc", of(new MaterialStack(Ma
 MaterialDictionary.registerMaterial(new Material("tantalite", of(new MaterialStack(MaterialDictionary.dict["manganese"], 1), new MaterialStack(MaterialDictionary.dict["tantalum"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "DUST", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("tungstate", of(new MaterialStack(MaterialDictionary.dict["tungsten"], 1), new MaterialStack(MaterialDictionary.dict["lithium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("tetrahedrite", of(new MaterialStack(MaterialDictionary.dict["copper"], 3), new MaterialStack(MaterialDictionary.dict["antimony"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 3), new MaterialStack(MaterialDictionary.dict["iron"], 1)), "DUST", GENERATE_ORE));
-MaterialDictionary.registerMaterial(new Material("wroughtiron", of(new MaterialStack(MaterialDictionary.dict["iron"], 1)), "INGOT", 
-Flag.pack5(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING, GENERATE_LONG_ROD, DISABLE_DECOMPOSITION)));
+MaterialDictionary.registerMaterial(new Material("wrought_iron", of(new MaterialStack(MaterialDictionary.dict["iron"], 1)), "INGOT", 
+Flag.pack5(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING, GENERATE_LONG_ROD, DISABLE_DECOMPOSITION))); //A
 MaterialDictionary.registerMaterial(new Material("wulfenite", of(new MaterialStack(MaterialDictionary.dict["lead"], 1), new MaterialStack(MaterialDictionary.dict["molybdenum"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("water", of(new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "FLUID", 
 Flag.pack2(NO_RECYCLING, DISABLE_DECOMPOSITION)));
@@ -214,7 +229,7 @@ MaterialDictionary.registerMaterial(new Material("uvarovite", of(new MaterialSta
 
 MaterialDictionary.registerMaterial(new Material("andesite", of(), "DUST", NO_SMASHING));
 MaterialDictionary.registerMaterial(new Material("basalt", of(), "DUST", NO_SMASHING));
-MaterialDictionary.registerMaterial(new Material("black_granite", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("granite_black", of(), "DUST", NO_SMASHING));
 MaterialDictionary.registerMaterial(new Material("diorite", of(), "DUST", NO_SMASHING));
 MaterialDictionary.registerMaterial(new Material("endstone", of(), "DUST", NO_SMASHING));
 MaterialDictionary.registerMaterial(new Material("granite", of(), "DUST", NO_SMASHING));
@@ -222,12 +237,12 @@ MaterialDictionary.registerMaterial(new Material("gravel", of(), "DUST", NO_SMAS
 MaterialDictionary.registerMaterial(new Material("marble", of(), "DUST", NO_SMASHING));
 MaterialDictionary.registerMaterial(new Material("netherrack", of(), "DUST", NO_SMASHING));
 MaterialDictionary.registerMaterial(new Material("sandstone", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("bedrock", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("sand", of(), "DUST", NO_SMASHING));
 MaterialDictionary.registerMaterial(new Material("stone", of(), "DUST", 
 Flag.pack5(MORTAR_GRINDABLE, GENERATE_GEAR, GENERATE_PLATE, NO_SMASHING, NO_RECYCLING) ));
-MaterialDictionary.registerMaterial(new Material("red_granite", of(), "DUST", NO_SMASHING));
-MaterialDictionary.registerMaterial(new Material("red_sandstone", of(), "DUST", NO_SMASHING));
-MaterialDictionary.registerMaterial(new Material("red_granite", of(), "DUST", NO_SMASHING));
-MaterialDictionary.registerMaterial(new Material("red_sandstone", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("granite_red", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("sandstone_red", of(), "DUST", NO_SMASHING));
 
 
 MaterialDictionary.registerMaterial(new Material("lava", of(), "FLUID", 0));
@@ -244,8 +259,7 @@ Flag.pack3(NO_RECYCLING, GENERATE_FLUID_BLOCK, DISABLE_DECOMPOSITION)));
 
 
 
-MaterialDictionary.registerMaterial(new Material("amethyst", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 4), new MaterialStack(MaterialDictionary.dict["iron"], 1)), "GEM", 
-Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("amethyst", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 4), new MaterialStack(MaterialDictionary.dict["iron"], 1)), "GEM", Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT))); //A
 MaterialDictionary.registerMaterial(new Material("apatite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 5), new MaterialStack(MaterialDictionary.dict["phosphate"], 3), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "GEM", Flag.pack4(GENERATE_ORE, NO_SMASHING, NO_SMELTING, CRYSTALLISABLE)));
 MaterialDictionary.registerMaterial(new Material("bauxite", of(new MaterialStack(MaterialDictionary.dict["rutile"], 2), new MaterialStack(MaterialDictionary.dict["aluminium"], 16), new MaterialStack(MaterialDictionary.dict["hydrogen"], 10), new MaterialStack(MaterialDictionary.dict["oxygen"], 11)), "DUST", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("bentonite", of(new MaterialStack(MaterialDictionary.dict["sodium"], 1), new MaterialStack(MaterialDictionary.dict["magnesium"], 6), new MaterialStack(MaterialDictionary.dict["silicon"], 12), new MaterialStack(MaterialDictionary.dict["hydrogen"], 4), new MaterialStack(MaterialDictionary.dict["water"], 5), new MaterialStack(MaterialDictionary.dict["oxygen"], 36)), "DUST", GENERATE_ORE));
@@ -263,11 +277,11 @@ MaterialDictionary.registerMaterial(new Material("lignite", of(new MaterialStack
 MaterialDictionary.registerMaterial(new Material("pitchblende", of(new MaterialStack(MaterialDictionary.dict["uraninite"], 3), new MaterialStack(MaterialDictionary.dict["thorium"], 1), new MaterialStack(MaterialDictionary.dict["lead"], 1)), "DUST", GENERATE_ORE));
 
 
-MaterialDictionary.registerMaterial(new Material("red_garnet", of(new MaterialStack(MaterialDictionary.dict["pyrope"], 3), new MaterialStack(MaterialDictionary.dict["almandine"], 5), new MaterialStack(MaterialDictionary.dict["spessartine"], 8)), "GEM", 
+MaterialDictionary.registerMaterial(new Material("garnet_red", of(new MaterialStack(MaterialDictionary.dict["pyrope"], 3), new MaterialStack(MaterialDictionary.dict["almandine"], 5), new MaterialStack(MaterialDictionary.dict["spessartine"], 8)), "GEM", 
 Flag.pack2(Flag.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flag.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE))));
 MaterialDictionary.registerMaterial(new Material("redstone", of(new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["pyrite"], 5), new MaterialStack(MaterialDictionary.dict["ruby"], 1), new MaterialStack(MaterialDictionary.dict["mercury"], 3)), "DUST", GENERATE_ORE));
 
-MaterialDictionary.registerMaterial(new Material("yellow_garnet", of(new MaterialStack(MaterialDictionary.dict["andradite"], 5), new MaterialStack(MaterialDictionary.dict["grossular"], 8), new MaterialStack(MaterialDictionary.dict["uvarovite"], 3)), "GEM", 
+MaterialDictionary.registerMaterial(new Material("garnet_yellow", of(new MaterialStack(MaterialDictionary.dict["andradite"], 5), new MaterialStack(MaterialDictionary.dict["grossular"], 8), new MaterialStack(MaterialDictionary.dict["uvarovite"], 3)), "GEM", 
 Flag.pack2(Flag.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flag.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE))));
 MaterialDictionary.registerMaterial(new Material("flint",  of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", 
 Flag.pack2(NO_SMASHING, MORTAR_GRINDABLE)));
@@ -276,8 +290,7 @@ MaterialDictionary.registerMaterial(new Material("vanadium_magnetite",  of(new M
 
 
 
-MaterialDictionary.registerMaterial(new Material("red_alloy", of(new MaterialStack(MaterialDictionary.dict["copper"], 1), new MaterialStack(MaterialDictionary.dict["redstone"], 4)), "INGOT", 
-Flag.pack2(GENERATE_PLATE, GENERATE_FINE_WIRE)));
+MaterialDictionary.registerMaterial(new Material("red_alloy", of(new MaterialStack(MaterialDictionary.dict["copper"], 1), new MaterialStack(MaterialDictionary.dict["redstone"], 4)), "INGOT", Flag.pack2(GENERATE_PLATE, GENERATE_FINE_WIRE)));
 
 MaterialDictionary.addMaterials();
 //MaterialDictionary.registerMaterial(new Material("amber", "Al2O3", "gem", "",  0x0000FF, ));
@@ -288,65 +301,49 @@ MaterialDictionary.addMaterials();
 invertedIDs.invertIDs();
 MaterialDictionary.addToCreative();
 
-setLoadingTip("GTMaterials: register Ores");
-OreDictionary.registerChangeableBlock({id: 1, data: 0, texture: "stone"});
-OreDictionary.registerChangeableBlock({id: 1, data: 1, texture: "granite"});
-OreDictionary.registerChangeableBlock({id: 1, data: 3, texture: "diorite"});
-OreDictionary.registerChangeableBlock({id: 1, data: 5, texture: "andesite"});
-OreDictionary.registerChangeableBlock({id: 13, data: 0, texture: "gravel"});
-OreDictionary.registerChangeableBlock({id: 7, data: 0, texture: "bedrock"});
-OreDictionary.registerChangeableBlock({id: 87, data: 0, texture: "netherrack"});
-OreDictionary.registerChangeableBlock({id: 121, data: 0, texture: "endstone"});
-OreDictionary.registerChangeableBlock({id: 24, data: 0, texture: "sandstone"});
-OreDictionary.registerChangeableBlock({id: 179, data: 0, texture: "sandstone_red"});
-for(let stone in StoneDictionary.stones) {
-    OreDictionary.registerChangeableBlock({id: stone, data: 0, texture: StoneDictionary.stones[stone].name});
-    OreDictionary.registerChangeableBlock({id: stone, data: 8, texture: StoneDictionary.stones[stone].name2});
-}
+setLoadingTip("register Ores");
+OreDictionary.registerOre(MaterialDictionary.dict.copper, {level: 1, isgen: true, 0: { minimalheight: 40, maximalheight: 55, rarity: 14}, 1: { minimalheight: 55, maximalheight: 130, rarity: 16}, 2: { minimalheight: 55, maximalheight: 130, rarity: 14}});
 
-
-OreDictionary.registerOre(MaterialDictionary.dict.copper, {level: 1, isgen: true, minimalheight: 60, maximalheight: 120, rarity: 32});
-
-OreDictionary.registerOre(MaterialDictionary.dict.tin, {level: 1, isgen: true, minimalheight: 60, maximalheight: 120, rarity: 32});
-OreDictionary.registerOre(MaterialDictionary.dict.iron, {level: 2, isgen: true, minimalheight: 40, maximalheight: 80, rarity: 16});
-OreDictionary.registerOre(MaterialDictionary.dict.coal, {level: 1, isgen: true, minimalheight: 60, maximalheight: 100, rarity: 24});
+OreDictionary.registerOre(MaterialDictionary.dict.tin, {level: 1, isgen: true, 0: {minimalheight: 60, maximalheight: 140, rarity: 16}, 1: {minimalheight: 60, maximalheight: 140, rarity: 16}, 2: {minimalheight: 60, maximalheight: 140, rarity: 16}});
+OreDictionary.registerOre(MaterialDictionary.dict.iron, {level: 2, isgen: true, 0: {minimalheight: 40, maximalheight: 80, rarity: 28}, 1: {minimalheight: 40, maximalheight: 80, rarity: 28}, 2: {minimalheight: 30, maximalheight: 80, rarity: 27}});
+OreDictionary.registerOre(MaterialDictionary.dict.coal, {level: 1, isgen: true, 0: {minimalheight: 25, maximalheight: 100, rarity: 24}});
 OreDictionary.registerOre(MaterialDictionary.dict.lignite, {level: 0, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.magnetite, {level: 1, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.vanadium_magnetite, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.redstone, {level: 2, isgen: true, minimalheight: 5, maximalheight: 20, rarity: 8});
-OreDictionary.registerOre(MaterialDictionary.dict.gold, {level: 2, isgen: true, minimalheight: 20, maximalheight: 40, rarity: 8});
+OreDictionary.registerOre(MaterialDictionary.dict.vanadium_magnetite, {level: 2, isgen: true, 0: {minimalheight: 4, maximalheight: 9, rarity: 8}});
+OreDictionary.registerOre(MaterialDictionary.dict.redstone, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 25, rarity: 9}, 1: {minimalheight: 5, maximalheight: 20, rarity: 8}});
+OreDictionary.registerOre(MaterialDictionary.dict.gold, {level: 2, isgen: true, 0: {minimalheight: 20, maximalheight: 40, rarity: 8}, 1: {minimalheight: 20, maximalheight: 40, rarity: 8}, 2: {minimalheight: 20, maximalheight: 40, rarity: 8}});
 OreDictionary.registerOre(MaterialDictionary.dict.graphite, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.diamond, {level: 3, isgen: true, minimalheight: 5, maximalheight: 10, rarity: 2});
-OreDictionary.registerOre(MaterialDictionary.dict.bismuth, {level: 1, isgen: true, minimalheight: 80, maximalheight: 120, rarity: 8});
-OreDictionary.registerOre(MaterialDictionary.dict.lead, {level: 1, isgen: true, minimalheight: 40, maximalheight: 80, rarity: 16});
-OreDictionary.registerOre(MaterialDictionary.dict.zinc, {level: 1, isgen: true, minimalheight: 30, maximalheight: 60, rarity: 12});
-OreDictionary.registerOre(MaterialDictionary.dict.silver, {level: 2, isgen: true, minimalheight: 20, maximalheight: 40, rarity: 8});
-OreDictionary.registerOre(MaterialDictionary.dict.nickel, {level: 2, isgen: true, minimalheight: 20, maximalheight: 40, rarity: 8});
-OreDictionary.registerOre(MaterialDictionary.dict.lapis, {level: 2, isgen: true, minimalheight: 20, maximalheight: 40, rarity: 4});
-OreDictionary.registerOre(MaterialDictionary.dict.emerald, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.ruby, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.sapphire, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.green_sapphire, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.olivine, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.topaz, {level: 3, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.tanzanite, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.amethyst, {level: 3, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.opal, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.blue_topaz, {level: 3, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.amber, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.jasper, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.fools_ruby, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.red_garnet, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.yellow_garnet, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.sulfur, {level: 2, isgen: true, minimalheight: 5, maximalheight: 15, rarity: 8});
-OreDictionary.registerOre(MaterialDictionary.dict.nether_quartz, {level: 2, isgen: false/*,minimalheight: 5, maximalheight: 15, rarity: 8*/});
+OreDictionary.registerOre(MaterialDictionary.dict.diamond, {level: 3, isgen: true, 0: {minimalheight: 5, maximalheight: 10, rarity: 2}, 1: {minimalheight: 5, maximalheight: 10, rarity: 2}});
+OreDictionary.registerOre(MaterialDictionary.dict.bismuth, {level: 1, isgen: true, 0: {minimalheight: 30, maximalheight: 120, rarity: 10}, 1: {minimalheight: 90, maximalheight: 128, rarity: 10}});
+OreDictionary.registerOre(MaterialDictionary.dict.lead, {level: 1, isgen: true, 0: {minimalheight: 50, maximalheight: 95, rarity: 18}, 1: {minimalheight: 50, maximalheight: 95, rarity: 16}, 2: {minimalheight: 50, maximalheight: 95, rarity: 16}});
+OreDictionary.registerOre(MaterialDictionary.dict.zinc, {level: 1, isgen: true, 0: {minimalheight: 30, maximalheight: 50, rarity: 15}, 1: {minimalheight: 30, maximalheight: 60, rarity: 15}, 2: {minimalheight: 30, maximalheight: 50, rarity: 15}});
+OreDictionary.registerOre(MaterialDictionary.dict.silver, {level: 2, isgen: true, 0: {minimalheight: 20, maximalheight: 40, rarity: 8}, 1: {minimalheight: 20, maximalheight: 40, rarity: 8}, 2: {minimalheight: 20, maximalheight: 40, rarity: 8}});
+OreDictionary.registerOre(MaterialDictionary.dict.nickel, {level: 2, isgen: true, 0:  {minimalheight: 20, maximalheight: 90, rarity: 16}, 1: {minimalheight: 20, maximalheight: 90, rarity: 16}, 2: {minimalheight: 20, maximalheight: 90, rarity: 16}});
+OreDictionary.registerOre(MaterialDictionary.dict.lapis, {level: 2, isgen: true, 0: {minimalheight: 20, maximalheight: 40, rarity: 4}});
+OreDictionary.registerOre(MaterialDictionary.dict.emerald, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.ruby, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.sapphire, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.green_sapphire, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.olivine, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.topaz, {level: 3, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.tanzanite, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 15, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.amethyst, {level: 3, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.opal, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.blue_topaz, {level: 3, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.amber, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.jasper, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.fools_ruby, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.garnet_red, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.garnet_yellow, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.sulfur, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 35, rarity: 10}, 1: {minimalheight: 10, maximalheight: 60, rarity: 32}});
+OreDictionary.registerOre(MaterialDictionary.dict.nether_quartz, {level: 2, isgen: true, 1: {minimalheight: 30, maximalheight: 120, rarity: 32}});
 OreDictionary.registerOre(MaterialDictionary.dict.brown_limonite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.yellow_limonite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.banded_iron, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.malachite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.cassiterite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.tetrahedrite, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.stibnite, {level: 2, sgenn: false});
+OreDictionary.registerOre(MaterialDictionary.dict.stibnite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.chalcopyrite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.pyrite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.bauxite, {level: 2, isgen: false});
@@ -365,8 +362,8 @@ OreDictionary.registerOre(MaterialDictionary.dict.garnierite, {level: 3, isgen: 
 OreDictionary.registerOre(MaterialDictionary.dict.cobaltite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.cooperite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.palladium, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.iridium, {level: 3, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.platinum, {level: 2, isgen: false});
+OreDictionary.registerOre(MaterialDictionary.dict.iridium, {level: 3, isgen: true, 3: {minimalheight: 20, maximalheight: 40, rarity: 8}});
+OreDictionary.registerOre(MaterialDictionary.dict.platinum, {level: 2, isgen: true, 3: {minimalheight: 20, maximalheight: 40, rarity: 8}});
 OreDictionary.registerOre(MaterialDictionary.dict.pitchblende, {level: 3, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.uraninite, {level: 3, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.uranium, {level: 3, isgen: false});
@@ -403,8 +400,6 @@ OreDictionary.registerOre(MaterialDictionary.dict.beryllium, {level: 2, isgen: f
 OreDictionary.registerOre(MaterialDictionary.dict.thorium, {level: 2, isgen: false});
 
 OreDictionary.registerOre(MaterialDictionary.dict.rutile, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.steel, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.wroughtiron, {level: 2, isgen: false});
 //OreDictionary.addToCreative();
 
 //Logger.Log(Object.keys(OreDictionary.invdata[BlockID.gtblockores0]).length, "sharovar");
@@ -419,62 +414,66 @@ Item.registerNameOverrideFunction(BlockID["gtblockores" + smallid], function(ite
     return "Small" + OreDictionary.ores[i].name + " ore";
   }
 });*/
-setLoadingTip("GTMaterials: register CodeVein aka OreMixVeins");
-OreDictionary.registerVein(new OreMixVein("lignite", [0], MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.coal, 50, 130, 160, 8, 32));
+setLoadingTip("register OreMixVeins");
+OreDictionary.registerVein(new OreMixVein("lignite", [0], MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.coal, 50, 130, 160, 8, 30, 1, new CovarianceMatrix([[5, 0, 0], [0, 5, 0], [0, 0, 5]])));
 
-OreDictionary.registerVein(new OreMixVein("coal", [0], MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.lignite, 50, 80, 80, 6, 32));
+OreDictionary.registerVein(new OreMixVein("coal", [0], MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.lignite, 50, 80, 80, 6, 32, 2, new CovarianceMatrix([[5, 1, 4], [2, 5, 1], [0, 0, 5]])));
 
-OreDictionary.registerVein(new OreMixVein( "magnetite",  [0], MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.iron, MaterialDictionary.dict.vanadium_magnetite, 50, 120, 160, 3, 32));
+OreDictionary.registerVein(new OreMixVein( "magnetite", {0: 0, 1: 1}, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.iron, MaterialDictionary.dict.vanadium_magnetite, 50, 120, 160, 3, 32, 5, new CovarianceMatrix([[5, 1, 1], [1, 5, 2], [3, 2, 5]])));
 
-OreDictionary.registerVein(new OreMixVein("gold", [0], MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.vanadium_magnetite, MaterialDictionary.dict.gold, 60, 80, 160, 3, 32));
+OreDictionary.registerVein(new OreMixVein("gold", [0], MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.vanadium_magnetite, MaterialDictionary.dict.gold, 60, 80, 160, 3, 32, 3, new CovarianceMatrix([[5, 4, 1], [1, 5, 3], [2, 2, 5]])));
 
-OreDictionary.registerVein(new OreMixVein( "iron", [0], MaterialDictionary.dict.brown_limonite, MaterialDictionary.dict.yellow_limonite, MaterialDictionary.dict.banded_iron, MaterialDictionary.dict.malachite, 10, 40, 120, 4, 24));
+OreDictionary.registerVein(new OreMixVein( "iron", {0: 0, 1: 1}, MaterialDictionary.dict.brown_limonite, MaterialDictionary.dict.yellow_limonite, MaterialDictionary.dict.banded_iron, MaterialDictionary.dict.malachite, 10, 40, 120, 4, 24, 4, new CovarianceMatrix([[4, 2, 2], [1, 4, 0], [1, 2, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "cassiterite", [0], MaterialDictionary.dict.tin, MaterialDictionary.dict.tin, MaterialDictionary.dict.cassiterite, MaterialDictionary.dict.tin, 40, 120, 50, 5, 24));
+OreDictionary.registerVein(new OreMixVein( "cassiterite", {0: 0, 2: 2}, MaterialDictionary.dict.tin, MaterialDictionary.dict.tin, MaterialDictionary.dict.cassiterite, MaterialDictionary.dict.tin, 40, 120, 50, 5, 24, 0, new CovarianceMatrix([[4, 1, 1], [2, 4, 0], [0, 0, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "tetrahedrite", [0], MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.copper, MaterialDictionary.dict.stibnite, 80, 120, 70, 4, 24));
+OreDictionary.registerVein(new OreMixVein( "tetrahedrite", {0: 0, 1: 1}, MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.copper, MaterialDictionary.dict.stibnite, 80, 120, 70, 4, 24, 1, new CovarianceMatrix([[4, 1, 1], [1, 4, 1], [1, 1, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "copper", [0], MaterialDictionary.dict.chalcopyrite, MaterialDictionary.dict.iron, MaterialDictionary.dict.pyrite, MaterialDictionary.dict.copper, 10, 30, 80, 4, 24));
+OreDictionary.registerVein(new OreMixVein( "copper", {0: 0, 1: 1}, MaterialDictionary.dict.chalcopyrite, MaterialDictionary.dict.iron, MaterialDictionary.dict.pyrite, MaterialDictionary.dict.copper, 10, 30, 80, 4, 24, 1, new CovarianceMatrix([[4, 1, 2], [0, 1.5, 0], [1, 3, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "bauxite", [0], MaterialDictionary.dict.bauxite, MaterialDictionary.dict.bauxite, MaterialDictionary.dict.aluminium, MaterialDictionary.dict.ilmenite, 50, 90, 80, 4, 24));
+OreDictionary.registerVein(new OreMixVein( "bauxite", [0], MaterialDictionary.dict.bauxite, MaterialDictionary.dict.bauxite, MaterialDictionary.dict.aluminium, MaterialDictionary.dict.ilmenite, 50, 90, 80, 4, 24, 2, new CovarianceMatrix([[4, 0, 1], [1, 4, 0], [1, 0, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "salts", [0], MaterialDictionary.dict.rock_salt, MaterialDictionary.dict.salt, MaterialDictionary.dict.lepidolite, MaterialDictionary.dict.spodumene, 50, 60, 50, 3, 24));
+OreDictionary.registerVein(new OreMixVein( "salts", [0], MaterialDictionary.dict.rock_salt, MaterialDictionary.dict.salt, MaterialDictionary.dict.lepidolite, MaterialDictionary.dict.spodumene, 50, 60, 50, 3, 24, 1, new CovarianceMatrix([[4, 0, 1], [0, 4, 1], [1, 1, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "redstone", [0], MaterialDictionary.dict.redstone, MaterialDictionary.dict.redstone, MaterialDictionary.dict.ruby, MaterialDictionary.dict.cinnabar, 10, 40, 60, 3, 24));
+OreDictionary.registerVein(new OreMixVein( "redstone", {0: 0, 1: 1}, MaterialDictionary.dict.redstone, MaterialDictionary.dict.redstone, MaterialDictionary.dict.ruby, MaterialDictionary.dict.cinnabar, 10, 40, 60, 3, 24, 4, new CovarianceMatrix([[4, 1, 1], [1, 4, 1], [2, 0, 2]])));
 
-OreDictionary.registerVein(new OreMixVein( "soapstone", [0], MaterialDictionary.dict.soapstone, MaterialDictionary.dict.talc, MaterialDictionary.dict.glauconite, MaterialDictionary.dict.pentlandite, 10, 40, 40, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "sulfur", {1: 1}, MaterialDictionary.dict.sulfur, MaterialDictionary.dict.sulfur, MaterialDictionary.dict.pyrite, MaterialDictionary.dict.sapphire, 5, 20, 60, 3, 24, 3, new CovarianceMatrix([[4, 1, 1], [2, 4, 0], [1, 0, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "nickel", [0], MaterialDictionary.dict.garnierite, MaterialDictionary.dict.nickel, MaterialDictionary.dict.cobaltite, "pentlandite", 10, 40, 40, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "nether_quartz", {1: 1}, MaterialDictionary.dict.nether_quartz, MaterialDictionary.dict.nether_quartz, MaterialDictionary.dict.nether_quartz, MaterialDictionary.dict.nether_quartz, 40, 80, 60, 3, 24, 2, new CovarianceMatrix([[4, 1, 1], [1, 4, 1], [1, 1, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "platinum", [0], MaterialDictionary.dict.cooperite, MaterialDictionary.dict.palladium, MaterialDictionary.dict.platinum, MaterialDictionary.dict.iridium, 40, 50, 5, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "soapstone", [0], MaterialDictionary.dict.soapstone, MaterialDictionary.dict.talc, MaterialDictionary.dict.glauconite, MaterialDictionary.dict.pentlandite, 10, 40, 40, 3, 16, 0, new CovarianceMatrix([[3, 1, 1], [2, 3, 0], [1, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein("pitchblende", [0], MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, 10, 40, 40, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "nickel", {0: 0, 1: 1, 2: 2}, MaterialDictionary.dict.garnierite, MaterialDictionary.dict.nickel, MaterialDictionary.dict.cobaltite, MaterialDictionary.dict.pentlandite, 10, 40, 40, 3, 16, 1, new CovarianceMatrix([[3, 1, 0], [1, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "uranium", [0], MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uranium, MaterialDictionary.dict.uranium, 20, 30, 20, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "platinum", {0: 0, 2: 2}, MaterialDictionary.dict.cooperite, MaterialDictionary.dict.palladium, MaterialDictionary.dict.platinum, MaterialDictionary.dict.iridium, 40, 50, 5, 3, 16, 2, new CovarianceMatrix([[3, 2, 0.5], [0, 3, 2], [1, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "monazite", [0], MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.monazite, MaterialDictionary.dict.neodymium, 20, 40, 30, 3, 16));
+OreDictionary.registerVein(new OreMixVein("pitchblende", [0], MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, 10, 40, 40, 3, 16, 1, new CovarianceMatrix([[3, 1, 2], [0, 3, 0], [0, 1, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "molybdenum", [0], MaterialDictionary.dict.wulfenite, MaterialDictionary.dict.molybdenite, MaterialDictionary.dict.molybdenum, MaterialDictionary.dict.powellite, 20, 50, 5, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "uranium", [0], MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uranium, MaterialDictionary.dict.uranium, 20, 30, 20, 3, 16, 2, new CovarianceMatrix([[3, 1, 0], [1, 3, 1], [1, 1, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "tungstate", [0], MaterialDictionary.dict.scheelite, MaterialDictionary.dict.scheelite, MaterialDictionary.dict.tungstate, MaterialDictionary.dict.lithium, 20, 50, 10, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "monazite", [0], MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.monazite, MaterialDictionary.dict.neodymium, 20, 40, 30, 3, 16, 2, new CovarianceMatrix([[3, 1, 0], [1, 3, 2], [0, 1, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "sapphire", [0], MaterialDictionary.dict.almandine, MaterialDictionary.dict.pyrope, MaterialDictionary.dict.sapphire, MaterialDictionary.dict.green_sapphire, 10, 40, 60, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "molybdenum", {0: 0, 2: 2}, MaterialDictionary.dict.wulfenite, MaterialDictionary.dict.molybdenite, MaterialDictionary.dict.molybdenum, MaterialDictionary.dict.powellite, 20, 50, 5, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "manganese", [0], MaterialDictionary.dict.grossular, MaterialDictionary.dict.spessartine, MaterialDictionary.dict.pyrolusite, MaterialDictionary.dict.tantalite, 20, 30, 20, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "tungstate", {0: 0, 2: 2}, MaterialDictionary.dict.scheelite, MaterialDictionary.dict.scheelite, MaterialDictionary.dict.tungstate, MaterialDictionary.dict.lithium, 20, 50, 10, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "quartz", [0], MaterialDictionary.dict.quartzite, MaterialDictionary.dict.barite, MaterialDictionary.dict.certus_quartz, MaterialDictionary.dict.certus_quartz, 40, 80, 60, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "sapphire", [0], MaterialDictionary.dict.almandine, MaterialDictionary.dict.pyrope, MaterialDictionary.dict.sapphire, MaterialDictionary.dict.green_sapphire, 10, 40, 60, 3, 16, 0, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "diamond", [0], MaterialDictionary.dict.graphite, MaterialDictionary.dict.graphite, MaterialDictionary.dict.diamond, MaterialDictionary.dict.coal, 5, 20, 40, 2, 16));
+OreDictionary.registerVein(new OreMixVein( "manganese", {0: 0, 2: 2}, MaterialDictionary.dict.grossular, MaterialDictionary.dict.spessartine, MaterialDictionary.dict.pyrolusite, MaterialDictionary.dict.tantalite, 20, 30, 20, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "olivine", [0], MaterialDictionary.dict.bentonite, MaterialDictionary.dict.magnesite, MaterialDictionary.dict.olivine, MaterialDictionary.dict.glauconite, 10, 40, 60, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "quartz", [0], MaterialDictionary.dict.quartzite, MaterialDictionary.dict.barite, MaterialDictionary.dict.certus_quartz, MaterialDictionary.dict.certus_quartz, 40, 80, 60, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "apatite", [0], MaterialDictionary.dict.apatite, MaterialDictionary.dict.apatite, MaterialDictionary.dict.phosphorus, MaterialDictionary.dict.pyrochlore, 40, 60, 60, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "diamond", [0], MaterialDictionary.dict.graphite, MaterialDictionary.dict.graphite, MaterialDictionary.dict.diamond, MaterialDictionary.dict.coal, 5, 20, 40, 2, 16, 2, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "galena", [0], MaterialDictionary.dict.galena, MaterialDictionary.dict.galena, MaterialDictionary.dict.silver, MaterialDictionary.dict.lead, 30, 60, 40, 5, 16));
+OreDictionary.registerVein(new OreMixVein( "olivine", {0: 0, 2: 2}, MaterialDictionary.dict.bentonite, MaterialDictionary.dict.magnesite, MaterialDictionary.dict.olivine, MaterialDictionary.dict.glauconite, 10, 40, 60, 3, 16, 0, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "lapis", [0], MaterialDictionary.dict.lazurite, MaterialDictionary.dict.sodalite, MaterialDictionary.dict.lapis, MaterialDictionary.dict.calcite, 20, 50, 40, 5, 16));
+OreDictionary.registerVein(new OreMixVein( "apatite", [0], MaterialDictionary.dict.apatite, MaterialDictionary.dict.apatite, MaterialDictionary.dict.phosphorus, MaterialDictionary.dict.pyrochlore, 40, 60, 60, 3, 16, 3, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "beryllium", [0], MaterialDictionary.dict.beryllium, MaterialDictionary.dict.beryllium, MaterialDictionary.dict.emerald, MaterialDictionary.dict.thorium, 5, 30, 30, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "galena", [0], MaterialDictionary.dict.galena, MaterialDictionary.dict.galena, MaterialDictionary.dict.silver, MaterialDictionary.dict.lead, 30, 60, 40, 5, 16, 2, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
+
+OreDictionary.registerVein(new OreMixVein( "lapis", {0: 0, 2: 2}, MaterialDictionary.dict.lazurite, MaterialDictionary.dict.sodalite, MaterialDictionary.dict.lapis, MaterialDictionary.dict.calcite, 20, 50, 40, 5, 16, 2, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
+
+OreDictionary.registerVein(new OreMixVein( "beryllium", {0: 0, 2: 2}, MaterialDictionary.dict.beryllium, MaterialDictionary.dict.beryllium, MaterialDictionary.dict.emerald, MaterialDictionary.dict.thorium, 5, 30, 30, 3, 16, 1, new CovarianceMatrix([[4, 0, 3], [0.2, 3, 0], [0.1, 0.1, 4]])));
 
 setLoadingTip("GTTool: register tool");
 ToolDictionary.registerType({name: "hammer", blockTypes: ["stone"], damage: 3, flag: 0});
@@ -526,7 +525,7 @@ ToolDictionary.registerMaterial({material: MaterialDictionary.dict["flint"], mat
     miningspeed: 6,
     attackdamage: 6,
     enchantability: 0, flag: 0});
-    ToolDictionary.registerMaterial({material: MaterialDictionary.dict["wroughtiron"], material2: MaterialDictionary.dict["copper"], durability: 38400, 
+    ToolDictionary.registerMaterial({material: MaterialDictionary.dict["wrought_iron"], material2: MaterialDictionary.dict["copper"], durability: 38400, 
     level: 2,
     miningspeed: 6,
     attackdamage: 6,
@@ -558,10 +557,10 @@ Item.registerIconOverrideFunction(invertedIDs.itemID[id], function(item){
 Item.registerNameOverrideFunction(invertedIDs.itemID[id], function(item){
     let material = MaterialDictionary.data[item.id][item.data].material;
   let form = MaterialDictionary.data[item.id][item.data].form;
-  
    if(form == undefined) return "unknown";
    if(material == undefined) return "unknown " + form;
-   return material.name[0].toUpperCase() + material.name.substring(1) + " " + form + "\n" + material.formulatext;
+   
+   return material.usablename + " " + form + "\n" + material.formulatext;
 });
 }}
 
@@ -686,7 +685,7 @@ let uiw = new UI.StandardWindow({
      },
      drawing: [],
   elements: {
-    	"slot0": {type: "slot", x: 467, y: 146, size: 60},
+    "slot0": {type: "slot", x: 467, y: 146, size: 60},
 		"slot1": {type: "slot", x: 537, y: 146, size: 60},
 		"slot2": {type: "slot", x: 607, y: 146, size: 60},
 		"slot3": {type: "slot", x: 467, y: 214, size: 60},
@@ -722,9 +721,13 @@ TileEntity.registerPrototype(BlockID.cheetahtable, {
     
   },
   tick: function() {
-    Logger.Log("zakotyui", "ass");
+    Logger.Log("zakotyui", 
+    this.container
+    );
     let rec = Recipes.provideRecipe(this.container, "workbench");
+    Logger.Log("zakotyi", rec);
     if(rec) {
+      Logger.Log("zakokotyy", rec);
       this.container.setSlot("recipeSlot", rec.id, rec.count, rec.data);
     } else {
       this.container.setSlot("recipeSlot", 0, 0, 0);
@@ -736,6 +739,9 @@ TileEntity.registerPrototype(BlockID.cheetahtable, {
   client: {
     load: function() {},
   },
+  getGuiScreen: function () {
+    return uiw;
+  },
   getScreenName: function(player, coords) {
       return "workbench"
     },
@@ -746,3 +752,369 @@ TileEntity.registerPrototype(BlockID.cheetahtable, {
     },
 });
 
+//Создадим UID blockWorkbench
+IDRegistry.genBlockID("blockWorkbench");
+
+//Создаем наш верстак
+Block.createBlock("blockWorkbench", [
+	{name: "workbench", texture: [["crafting_table", 0]], inCreative: true}
+]);
+
+//Регистрируем его как tileEntity
+TileEntity.registerPrototype(BlockID.blockWorkbench, {
+  useNetworkItemContainer: true,
+  sourcesForCleaning: null,
+  isOpened: false,
+  tickk: 0,
+	//Функция тика
+	tick: function() {
+	  Logger.Log(Network.inRemoteWorld(), "tguiu");
+		//Если интерфейс открыт
+if(this.tickk % 10 == 0) {
+Logger.Log(this.isOpened, "dedil");
+Logger.Log(this.tickk % 10 == 0, "dedsad");
+     this.container.sendEvent("isOpened", {});
+    Logger.Log(this.isOpened, "dedes");
+		/*if(this.isOpened) {
+			//Узнаем результат крафта
+			let res = RecipeDictionary.getBySources([this.container.getSlot("slot0"), this.container.getSlot("slot1"), this.container.getSlot("slot2"), this.container.getSlot("slot3"), this.container.getSlot("slot4"), this.container.getSlot("slot5"), this.container.getSlot("slot6"), this.container.getSlot("slot7"), this.container.getSlot("slot8")]);
+			//Если он есть
+//Logger.Log(res, "derrr");
+			if (res) {
+			//Отрисовываем его
+				this.container.setSlot("resultSlot", res.result.id, res.result.count, res.result.data);
+				this.sourcesForCleaning = res.cleaning;
+			}
+			else {
+				//Иначе рисуем пустой слот
+				this.container.setSlot("resultSlot", 0, 0, 0);
+			}
+		}*/
+		
+}
+    this.container.sendChanges();
+
+
+		Logger.Log(this.tickk, "dedes");
+		this.tickk++;
+	},
+	
+	getGuiScreen: function(){
+		return workbenchGui;
+	},
+	getScreenName: function(player, coords) {
+      return "workbench"
+    },
+    // это событие вызывается на стороне клиента, this в данном случае не определен, по переданному имени, которое вернул метод getScreenName, возвращает окно, которое нужно открыть
+    getScreenByName: function(screenName) {
+      Logger.Log("vg", uiw);
+      return workbenchGui;
+    },
+	click: function (id, count, data, coords, player) {
+	  this.pl = new PlayerActor(player);
+	},
+	destroy: function () {
+	  this.uid = null;
+	},
+	client: {
+	  load: function () {
+	    Logger.Log(Network.inRemoteWorld(), "tguiuiu");
+	  },
+    containerEvents: {
+    // события контейнера на стороне сервера, в данном случае this - серверный экземпляр, получивший пакет
+    isOpened: function(container, window, windowContent, eventData) {
+      // доступный только здесь метод:
+      //this.container.sendResponseEvent("eventName", someData)
+      Logger.Log(window.isOpened(), "zaer");
+      container.sendEvent("isOpened", {isOpened: window.isOpened()});
+}
+  }
+    },
+    
+    containerEvents: {
+
+      // события контейнера на стороне сервера, в данном случае this - серверный экземпляр, получивший пакет
+      isOpened: function(eventData, connectedClient) {
+        Logger.Log(this, "zubazh");
+        this.isOpened = eventData.isOpened;
+      },
+      cleanSources: function(eventData, connectedClient) {
+        
+        if(this.resultForCleaning.length == 0 || this.sourcesForCleaning.length == 0) return;
+        Logger.Log(this, "zazh");
+  
+
+        this.container.setSlot("resultSlot", this.container.getSlot("resultSlot").id, this.container.getSlot("resultSlot").count - this.resultForCleaning.count + 1, this.container.getSlot("resultSlot").data, this.container.getSlot("resultSlot").extra);
+        
+        this.pl.addItemToInventory(this.container.getSlot("resultSlot").id, this.resultForCleaning.count- 1, this.container.getSlot("resultSlot").data, this.container.getSlot("resultSlot").extra, true);
+        
+        for(let i in this.sourcesForCleaning) {
+          Logger.Log("slat the", "zubazh");
+
+					this.container.setSlot("slot" + this.sourcesForCleaning[i], this.container.getSlot("slot" + this.sourcesForCleaning[i]).id, this.container.getSlot("slot" + this.sourcesForCleaning[i]).count - 1, this.container.getSlot("slot" + this.sourcesForCleaning[i]).data, this.container.getSlot("slot" + this.sourcesForCleaning[i]).extra);
+				}
+				this.container.validateAll();
+				this.sourcesForCleaning = [];
+				this.resultForCleaning = [];
+      },
+      performCrafting: function(eventData, connectedClient) {
+        Logger.Log("saxerd");
+        
+        let arr = [{id: this.container.getSlot("slot0").id, data: this.container.getSlot("slot0").data, count: this.container.getSlot("slot0").count, extra: this.container.getSlot("slot0").extra, index: 0}, {id: this.container.getSlot("slot1").id, data: this.container.getSlot("slot1").data, count: this.container.getSlot("slot1").count, extra: this.container.getSlot("slot1").extra, index: 1}, {id: this.container.getSlot("slot2").id, data: this.container.getSlot("slot2").data, count: this.container.getSlot("slot2").count, extra: this.container.getSlot("slot2").extra, index: 2}, {id: this.container.getSlot("slot3").id, data: this.container.getSlot("slot3").data, count: this.container.getSlot("slot3").count, extra: this.container.getSlot("slot3").extra, index: 3}, {id: this.container.getSlot("slot4").id, data: this.container.getSlot("slot4").data, count: this.container.getSlot("slot4").count, extra: this.container.getSlot("slot4").extra, index: 4}, {id: this.container.getSlot("slot5").id, data: this.container.getSlot("slot5").data, count: this.container.getSlot("slot5").count, extra: this.container.getSlot("slot5").extra, index: 5}, {id: this.container.getSlot("slot6").id, data: this.container.getSlot("slot6").data, count: this.container.getSlot("slot6").count, extra: this.container.getSlot("slot6").extra, index: 6}, {id: this.container.getSlot("slot7").id, data: this.container.getSlot("slot7").data, count: this.container.getSlot("slot7").count, extra: this.container.getSlot("slot7").extra, index: 7}, {id: this.container.getSlot("slot8").id, data: this.container.getSlot("slot8").data, count: this.container.getSlot("slot8").count, extra: this.container.getSlot("slot8").extra, index: 8}];
+        let spliced = new Set();
+        if(this.container.getSlot("slot0").id == 0 && this.container.getSlot("slot1").id == 0 && this.container.getSlot("slot2").id == 0) {
+          spliced.push(0);
+          spliced.push(1);
+          spliced.push(2);
+          Logger.Log(0, "derter");
+          Logger.Log(1, "derter");
+          Logger.Log(2, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derase");
+          }
+        }
+        if(this.container.getSlot("slot3").id == 0 && this.container.getSlot("slot4").id == 0 && this.container.getSlot("slot5").id == 0) {
+          
+          spliced.push(3);
+          spliced.push(4);
+          spliced.push(5);
+          Logger.Log(3, "derter");
+          Logger.Log(4, "derter");
+          Logger.Log(5, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        if(this.container.getSlot("slot6").id == 0 && this.container.getSlot("slot7").id == 0 && this.container.getSlot("slot8").id == 0) {
+          
+          spliced.push(6);
+          spliced.push(7);
+          spliced.push(8);
+          Logger.Log(6, "derter");
+          Logger.Log(7, "derter");
+          Logger.Log(8, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        
+        if(this.container.getSlot("slot0").id == 0 && this.container.getSlot("slot3").id == 0 && this.container.getSlot("slot6").id == 0) {
+          
+          spliced.push(0);
+          spliced.push(3);
+          spliced.push(6);
+          Logger.Log(0, "derter");
+          Logger.Log(3, "derter");
+          Logger.Log(6, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        if(this.container.getSlot("slot1").id == 0 && this.container.getSlot("slot4").id == 0 && this.container.getSlot("slot7").id == 0) {
+          
+          spliced.push(1);
+          spliced.push(4);
+          spliced.push(7);
+          Logger.Log(1, "derter");
+          Logger.Log(4, "derter");
+          Logger.Log(7, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        if(this.container.getSlot("slot2").id == 0 && this.container.getSlot("slot5").id == 0 && this.container.getSlot("slot8").id == 0) {
+          
+          spliced.push(2);
+          spliced.push(5);
+          spliced.push(8);
+          Logger.Log(2, "derter");
+          Logger.Log(5, "derter");
+          Logger.Log(8, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        let spliceda = spliced.toArray();
+        Logger.Log(arr, "splicedpre");
+        for(let i = 0; i < spliceda.length; i++) {
+          arr[spliceda[i]] = null;
+          Logger.Log(spliceda[i], "derase");
+        }
+        for(let i = 0; i < arr.length; i++) {
+          if(arr[i] == null) {
+            arr.splice(i, 1);
+              i -= 1;
+          }
+        }
+        Logger.Log(arr, "spliced");
+        
+        let res = RecipeDictionary.getBySources(arr);
+			  //Если он есть
+        //Logger.Log(res, "derrr");
+			  if (res) {
+			  //Отрисовываем его
+				this.container.setSlot("resultSlot", res.result.id, res.result.count, res.result.data);
+				this.sourcesForCleaning = res.cleaning;
+				this.resultForCleaning = res.result
+			  } else {
+				  //Иначе рисуем пустой слот
+				  this.container.setSlot("resultSlot", 0, 0, 0);
+				  
+				  this.sourcesForCleaning = [];
+				  this.resultForCleaning = [];
+			  }
+      }
+    },
+    events: {
+      
+    }
+});
+
+//И так, мы видим, что наш верстак отображает результат крафта, когда он возможен.
+
+//Создадим интерфейс:
+
+//Создаем обычное окно
+var workbenchGui = new UI.StandartWindow();
+//Задаем его свойства
+workbenchGui.setContent({
+	standart: {
+		header: {
+			text: {
+				text: "workbench"
+			},
+		},
+		inventory: {
+			standart: true
+		},
+		background: {
+			standart: true
+		},
+		minHeight: 600
+	},
+	elements: {
+		//Создаем слоты
+		"slot0": {type: "slot", x: 467, y: 146, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		},
+		"slot1": {type: "slot", x: 537, y: 146, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		},
+		"slot2": {type: "slot", x: 607, y: 146, size: 60, 
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		  
+		},
+		"slot3": {type: "slot", x: 467, y: 214, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		},
+		"slot4": {type: "slot", x: 537, y: 214, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		  
+		},
+		"slot5": {type: "slot", x: 607, y: 214, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		},
+		"slot6": {type: "slot", x: 467, y: 283, size: 60, 
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		},
+		"slot7": {type: "slot", x: 537, y: 283, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		},
+		"slot8": {type: "slot", x: 607, y: 283, size: 60, 
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		},
+		//Слот для результата
+		"resultSlot": {type: "slot", x: 698, y: 212, size: 60,
+				//При обычном клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  if(oldID == 0) return;
+				  if(container.getParent().getSlot("resultSlot").id == 0) return;
+				  if(container.getParent().getSlot("resultSlot").id != oldID) return;
+				  Logger.Log(container.getParent().getSlot("resultSlot").id, "zeak");
+				  
+				  container.getParent().sendEvent("cleanSources", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		}
+	},
+});

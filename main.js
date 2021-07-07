@@ -2,7 +2,7 @@
 BUILD INFO:
   dir: dev
   target: main.js
-  files: 16
+  files: 18
 */
 
 
@@ -11,36 +11,20 @@ BUILD INFO:
 
 IMPORT("ToolLib");
 IMPORT("SoundAPI");
+IMPORT("Vector");
 
 
 
 
 // file: API/API.js
 
-let invertedIDs = {
-    itemID: {},
-    blockID: {},
-    invertIDs: function() {
-        for(let item in ItemID) {
-            this.itemID[ItemID[item]] = item;
-        }
-        for(let item in BlockID) {
-            this.blockID[BlockID[item]] = item;
-        }
-    },
-    isNumericIDisItemID: function(id) {
-        if(this.itemID[id] != null) {
-            return true;
-        }
-        return false;
-    },
-    isNumericIDisBlockID: function(id) {
-        if(this.blockID[id] != null) {
-            return true;
-        }
-        return false;
-    },
-};
+
+const Flags = WRAP_NATIVE("Flags");
+const Flag = WRAP_NATIVE("Flags");
+const setLoadingTip = ModAPI.requireGlobal("MCSystem.setLoadingTip");
+
+setLoadingTip("Register textures");
+var copyed = null;
 let IconTransformator = {
   ARGBtoRGBA: function (colour) {
     r = (colour >> 16) & 0xFF
@@ -62,6 +46,21 @@ let IconTransformator = {
     METALLIC: {
       name: "METALLIC",
       ORE: [{u: 4, v: 2}, {u: 12, v: 2}, {u: 13, v: 2}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 1, v: 8}, {u: 2, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 4, v: 10}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}],
+      SMALL_ORE: [{u: 7, v: 2}, {u: 8, v: 2}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 13, v: 11},  {u: 14, v: 11}, {u: 2, v: 12}, {u: 3, v: 12},  {u: 4, v: 12}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13},  {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 7, v: 14},  {u: 8, v: 14}]
+    },
+    FLUID: {
+      name: "FLUID",
+      ORE: [{u: 4, v: 2}, {u: 12, v: 2}, {u: 13, v: 2}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 1, v: 8}, {u: 2, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 4, v: 10}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}],
+      SMALL_ORE: [{u: 7, v: 2}, {u: 8, v: 2}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 13, v: 11},  {u: 14, v: 11}, {u: 2, v: 12}, {u: 3, v: 12},  {u: 4, v: 12}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13},  {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 7, v: 14},  {u: 8, v: 14}]
+    },
+    GAS: {
+      name: "GAS",
+      ORE: [{u: 4, v: 2}, {u: 12, v: 2}, {u: 13, v: 2}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 1, v: 8}, {u: 2, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 4, v: 10}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}],
+      SMALL_ORE: [{u: 7, v: 2}, {u: 8, v: 2}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 13, v: 11},  {u: 14, v: 11}, {u: 2, v: 12}, {u: 3, v: 12},  {u: 4, v: 12}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13},  {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 7, v: 14},  {u: 8, v: 14}]
+    },
+     SAND: {
+      name: "SAND",
+      ORE: [{u: 0, v: 0}, {u: 1, v: 0}, {u: 14, v: 0}, {u: 15, v: 0}, {u: 0, v: 1}, {u: 8, v: 1}, {u: 9, v: 1}, {u: 14, v: 1}, {u: 15, v: 1}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 14, v: 2}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 2, v: 6}, {u: 3, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 14, v: 6}, {u: 2, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 9, v: 10}, {u: 12, v: 10}, {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 1, v: 14}, {u: 0, v: 15}, {u: 1, v: 15}, {u: 15, v: 15}],
       SMALL_ORE: [{u: 7, v: 2}, {u: 8, v: 2}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 13, v: 11},  {u: 14, v: 11}, {u: 2, v: 12}, {u: 3, v: 12},  {u: 4, v: 12}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13},  {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 7, v: 14},  {u: 8, v: 14}]
     },
     SHINY: {
@@ -111,7 +110,11 @@ LIGNITE: {
       SMALL_ORE: [{u: 7, v: 2}, {u: 8, v: 2}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 13, v: 11},  {u: 14, v: 11}, {u: 2, v: 12}, {u: 3, v: 12},  {u: 4, v: 12}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13},  {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 7, v: 14},  {u: 8, v: 14}]
     },
     
-    
+    NETHERSTAR: {
+      name: "NETHERSTAR",
+      ORE: [{u: 6, v: 1}, {u: 7, v: 1}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 13, v: 10}, {u: 14, v: 10}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 13, v: 11}, {u: 14, v: 11}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 1, v: 13}, {u: 2, v: 13}, {u: 1, v: 14}, {u: 2, v: 14}],
+      SMALL_ORE: [{u: 7, v: 2}, {u: 8, v: 2}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 13, v: 11},  {u: 14, v: 11}, {u: 2, v: 12}, {u: 3, v: 12},  {u: 4, v: 12}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13},  {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 7, v: 14},  {u: 8, v: 14}]
+    },
     
     GEM_HORIZONTAL: {
       name: "GEM_HORIZONTAL",
@@ -125,6 +128,11 @@ LIGNITE: {
     },
     DIAMOND: {
       name: "DIAMOND",
+      ORE: [{u: 6, v: 1}, {u: 7, v: 1}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 13, v: 10}, {u: 14, v: 10}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 13, v: 11}, {u: 14, v: 11}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 1, v: 13}, {u: 2, v: 13}, {u: 1, v: 14}, {u: 2, v: 14}],
+      SMALL_ORE: [{u: 7, v: 2}, {u: 8, v: 2}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 13, v: 11},  {u: 14, v: 11}, {u: 2, v: 12}, {u: 3, v: 12},  {u: 4, v: 12}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13},  {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 7, v: 14},  {u: 8, v: 14}]
+    },
+    GLASS: {
+      name: "GLASS",
       ORE: [{u: 6, v: 1}, {u: 7, v: 1}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 13, v: 10}, {u: 14, v: 10}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 13, v: 11}, {u: 14, v: 11}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 1, v: 13}, {u: 2, v: 13}, {u: 1, v: 14}, {u: 2, v: 14}],
       SMALL_ORE: [{u: 7, v: 2}, {u: 8, v: 2}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 13, v: 11},  {u: 14, v: 11}, {u: 2, v: 12}, {u: 3, v: 12},  {u: 4, v: 12}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13},  {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 7, v: 14},  {u: 8, v: 14}]
     },
@@ -191,41 +199,109 @@ LIGNITE: {
       this.name = "layering_transform";
       this.layer = layer;
       //this.act = function (ctexture) {}
-    }
+    },
+    BlockingLayering: function(layer, layerb) {
+      this.name = "blockinglayering_transform";
+      this.layer = layer;
+      this.layerb = layerb;
+      //this.act = function (ctexture) {}
+    },
+    AdvLayering: function (layer) {
+      this.name = "advlayering_transform";
+      this.layer = layer;
+      //this.act = function (ctexture) {}
+      this.act = function (ccolour, u, v) {}
+    },
+    LayerMultiply: function (layer) {
+      this.name = "layer_transform";
+      this.layer = layer;
+      this.act = function (ccolour, u, v) {
+        let colour = this.layer.getPixel(u, v);
+        let A1 = ((ccolour >> 24) & 0xff);
+        let R1 = ((ccolour >> 16) & 0xff);
+        let G1 = ((ccolour >>  8) & 0xff);
+        let B1 = ((ccolour      ) & 0xff);
+        
+        let A2 = ((colour >> 24) & 0xff);
+        let R2 = ((colour >> 16) & 0xff);
+        let G2 = ((colour >>  8) & 0xff);
+        let B2 = ((colour      ) & 0xff);
+        
+        let A1n = A1 / 255.0;
+        let R1n = R1 / 255.0;
+        let G1n = G1 / 255.0;
+        let B1n = B1 / 255.0;
+        
+        let A2n = A2 / 255.0;
+        let R2n = R2 / 255.0;
+        let G2n = G2 / 255.0;
+        let B2n = B2 / 255.0;
+        
+        let Amn = 1;
+        //A2n;
+        let Rmn = R1n * R2n;
+        let Gmn = G1n * G2n;
+        let Bmn = B1n * B2n;
+        
+        let Am = Amn * 255;
+        let Rm = Rmn * 255;
+        let Gm = Gmn * 255;
+        let Bm = Bmn * 255;
+        
+        return (Am & 0xff) << 24 | (Rm & 0xff) << 16 | (Gm & 0xff) << 8 | (Bm & 0xff);
+      };
+    },
   },
   //Bitmap android Bitmap
-  transformIcon: function(bitmap, uvs, action) {
-    let copyed = bitmap.copy(android.graphics.Bitmap.Config.ARGB_8888, true)
+  transformIcon: function(bitmap, uvs, action, n) {
+    //if(n) throw bitmap.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+    var copye = null;
+    copye = bitmap.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+
     if(action.name == "colour_transform") {
     for(let uv in uvs) {
       /*"copyed.setPixel(uvs[uv].u, uvs[uv].v, this.RGBAtoARGB(action.act(this.ARGBtoRGBA(copyed.getPixel(uvs[uv].u, uvs[uv].v)))));*/
-      copyed.setPixel(uvs[uv].u, uvs[uv].v, action.act(copyed.getPixel(uvs[uv].u, uvs[uv].v)));
+      copye.setPixel(uvs[uv].u, uvs[uv].v, action.act(copye.getPixel(uvs[uv].u, uvs[uv].v)));
+      //throw copye;
     }
     } else if(action.name == "layering_transform") {
       for(let uv in uvs) {
-        copyed.setPixel(uvs[uv].u, uvs[uv].v, action.layer.getPixel(uvs[uv].u, uvs[uv].v));
+        copye.setPixel(uvs[uv].u, uvs[uv].v, action.layer.getPixel(uvs[uv].u, uvs[uv].v));
+      }
+    } else if(action.name == "blockinglayering_transform") {
+      for(let uv in uvs) {
+        let ig = false;
+        for(let i in action.layerb) {
+          if(action.layerb[i].u == uvs[uv].u && action.layerb[i].v == uvs[uv].v) ig = true;
+        }
+        if(!ig) copye.setPixel(uvs[uv].u, uvs[uv].v, action.layer.getPixel(uvs[uv].u, uvs[uv].v));
+      }
+    } else if(action.name == "advlayering_transform") {
+      let canvas = new android.graphics.Canvas(copye);
+        let paint = new android.graphics.Paint(android.graphics.Paint.FILTER_BITMAP_FLAG);
+        canvas.drawBitmap(action.layer, 0, 0, paint);
+    } else if(action.name == "layer_transform") {
+      for(let uv in uvs) {
+        copye.setPixel(uvs[uv].u, uvs[uv].v, action.act(copye.getPixel(uvs[uv].u, uvs[uv].v), uvs[uv].u, uvs[uv].v));
       }
     }
-    return copyed;
+    return copye;
   }
 }
-
-/*;*/
-
 let coords = {
-  ALLOY_SMELTER:  [{u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, {u: 12, v: 2}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3},
+  ALLOY_SMELTER_FRONT: [{u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, {u: 12, v: 2}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3},
 {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4},
 {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5},
 {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6},
 {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7}
 ], 
-FURNACE:  [{u: 3, v: 2}, {u: 4, v: 2}, {u: 5, v: 2}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, {u: 12, v: 2}, 
+FURNACE_FRONT:  [{u: 3, v: 2}, {u: 4, v: 2}, {u: 5, v: 2}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, {u: 12, v: 2}, 
 {u: 2, v: 3}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3},
 {u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
 {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, 
 {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, 
 {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7}],
-MACERATOR: [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
+MACERATOR_FRONT: [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
 {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5},
 {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
 {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
@@ -236,7 +312,17 @@ MACERATOR: [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}
   {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12},
   {u: 2, v: 13}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13},
 ],
-COMPRESSOR:  [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
+COMPRESSOR_FRONT:  [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
+{u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5},
+{u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+{u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+{u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+{u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+  {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+  {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11},
+  {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12},
+],
+HAMMER_FRONT:  [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
 {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5},
 {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
 {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
@@ -247,18 +333,7 @@ COMPRESSOR:  [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 
   {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12},
   {u: 2, v: 13}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13},
 ],
-HAMMER:  [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
-{u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5},
-{u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
-{u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
-{u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
-{u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
-  {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
-  {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11},
-  {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12},
-  {u: 2, v: 13}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13},
-],
- EXTRACTOR: [{u: 3, v: 1}, {u: 4, v: 1}, {u: 5, v: 1}, {u: 10, v: 1}, {u: 11, v: 1}, {u: 12, v: 1},
+ EXTRACTOR_FRONT: [{u: 3, v: 1}, {u: 4, v: 1}, {u: 5, v: 1}, {u: 10, v: 1}, {u: 11, v: 1}, {u: 12, v: 1},
 {u: 3, v: 2}, {u: 4, v: 2}, {u: 5, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, {u: 12, v: 2},
 {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3},
 {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4},
@@ -272,7 +347,21 @@ HAMMER:  [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, 
   {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12},
   {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13},
   {u: 3, v: 14}, {u: 4, v: 14}, {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14}, {u: 11, v: 14}, {u: 12, v: 14}],
-  BOILER: [
+  EXTRACTOR_SIDE: [
+{u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2},
+{u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3},
+{u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4},
+{u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5},
+{u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6},
+{u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7},
+{u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8},
+{u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9},
+  {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10},
+  {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11},
+  {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12},
+   {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13},
+ ],
+  BOILER_FRONT: [
     {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10},
 {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, 
 {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11},
@@ -281,6 +370,32 @@ HAMMER:  [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, 
 {u: 2, v: 13}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13}, 
 {u: 2, v: 14}, {u: 3, v: 14}, {u: 4, v: 14}, {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14}, {u: 11, v: 14}, {u: 12, v: 14}, {u: 13, v: 14},
 {u: 2, v: 15}, {u: 3, v: 15}, {u: 4, v: 15}, {u: 5, v: 15}, {u: 6, v: 15}, {u: 7, v: 15}, {u: 8, v: 15}, {u: 9, v: 15}, {u: 10, v: 15}, {u: 11, v: 15}, {u: 12, v: 15}, {u: 13, v: 15}, 
+  ],
+  BOILER_LAVA_FRONT: [
+     {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+    {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+    {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11}, 
+{u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, 
+{u: 2, v: 13}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13}, 
+{u: 2, v: 14}, {u: 3, v: 14}, {u: 4, v: 14}, {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14}, {u: 11, v: 14}, {u: 12, v: 14}, {u: 13, v: 14},
+  ],
+  BOILER_SOLAR_TOP: [
+     {u: 0, v: 0}, {u: 1, v: 0}, {u: 2, v: 0}, {u: 3, v: 0}, {u: 4, v: 0}, {u: 5, v: 0}, {u: 6, v: 0}, {u: 7, v: 0}, {u: 8, v: 0}, {u: 9, v: 0}, {u: 10, v: 0}, {u: 11, v: 0},  {u: 12, v: 0}, {u: 13, v: 0}, {u: 14, v: 0}, {u: 15, v: 0},
+        {u: 0, v: 1}, {u: 1, v: 1}, {u: 2, v: 1}, {u: 3, v: 1}, {u: 4, v: 1}, {u: 5, v: 1}, {u: 6, v: 1}, {u: 7, v: 1}, {u: 8, v: 1}, {u: 9, v: 1}, {u: 10, v: 1}, {u: 11, v: 1}, {u: 12, v: 1}, {u: 13, v: 1}, {u: 14, v: 1}, {u: 15, v: 1},
+        {u: 0, v: 2}, {u: 1, v: 2}, {u: 2, v: 2}, {u: 3, v: 2}, {u: 4, v: 2}, {u: 5, v: 2}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2},  {u: 12, v: 2}, {u: 13, v: 2}, {u: 14, v: 2}, {u: 15, v: 2},
+        {u: 0, v: 3}, {u: 1, v: 3}, {u: 2, v: 3}, {u: 3, v: 3}, {u: 4, v: 3},    {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3},  {u: 12, v: 3}, {u: 13, v: 3}, {u: 14, v: 3}, {u: 15, v: 3},
+      {u: 0, v: 4}, {u: 1, v: 4}, {u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 14, v: 4},   {u: 15, v: 4}, 
+      {u: 0, v: 5}, {u: 1, v: 5}, {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, {u: 14, v: 5}, {u: 15, v: 5},
+         {u: 0, v: 6}, {u: 1, v: 6}, {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},    {u: 12, v: 6}, {u: 13, v: 6},    {u: 14, v: 6}, {u: 15, v: 6},
+        {u: 0, v: 7}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 15, v: 7},
+      {u: 0, v: 8}, {u: 1, v: 8}, {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8}, {u: 15, v: 8},
+      {u: 0, v: 9}, {u: 1, v: 9}, {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9}, {u: 15, v: 9},
+      {u: 0, v: 10}, {u: 1, v: 10}, {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10}, {u: 15, v: 10},
+     {u: 0, v: 11}, {u: 1, v: 11}, {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11}, {u: 14, v: 11}, {u: 15, v: 11},
+      {u: 0, v: 12}, {u: 1, v: 12}, {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 14, v: 12}, {u: 15, v: 12},
+     {u: 0, v: 13}, {u: 1, v: 13}, {u: 2, v: 13}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13}, {u: 14, v: 13}, {u: 15, v: 13},
+      {u: 0, v: 14}, {u: 1, v: 14}, {u: 2, v: 14}, {u: 3, v: 14}, {u: 4, v: 14}, {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14}, {u: 11, v: 14},  {u: 12, v: 14}, {u: 13, v: 14}, {u: 14, v: 14}, {u: 15, v: 14},
+        {u: 0, v: 15}, {u: 1, v: 15}, {u: 2, v: 15}, {u: 3, v: 15}, {u: 4, v: 15}, {u: 5, v: 15}, {u: 6, v: 15}, {u: 7, v: 15}, {u: 8, v: 15}, {u: 9, v: 15}, {u: 10, v: 15}, {u: 11, v: 15}, {u: 12, v: 15}, {u: 13, v: 15}, {u: 14, v: 15}, {u: 15, v: 15},
   ],
   PIPE_PUT: [
     {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4},
@@ -294,22 +409,2009 @@ HAMMER:  [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, 
   ]
 }
 
-let layer = new IconTransformator.Action.Layering();
-layer.layer = android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/iconsets/OVERLAY_PIPE.png");
 
-let alloy_smelterbitma = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/bronze_hull.png"), coords.PIPE_PUT, layer);
-let fil = new java.io.File(__dir__ + "res/terrain-atlas/generated/bronze_hull_put.png");
-let fOu = new java.io.FileOutputStream(fil);
-alloy_smelterbitma.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, fOu);
-fOu.flush();
-fOu.close();
+let createFlag = function(id) {
+  Logger.Log(id, "desk");
+  Logger.Log(1 << id, "deqw");
+  Logger.Log(Flags.createFlag(id), "deqw");
+	return Flags.createFlag(id);
+};
 
-let alloy_smeltema = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/bronzebrick_hull.png"), coords.PIPE_PUT, layer);
-let filq = new java.io.File(__dir__ + "res/terrain-atlas/generated/bronzebrick_hull_put.png");
-let fOuq = new java.io.FileOutputStream(filq);
-alloy_smeltema.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, fOuq);
-fOuq.flush();
-fOuq.close();
+
+let SOFT_MATERIAL = createFlag(39); //mallet instead hammer.
+
+let DECOMPOSITION_BY_ELECTROLYZING = createFlag(40);
+
+        /**
+         * Enables centrifuge decomposition recipe generation
+         */
+let DECOMPOSITION_BY_CENTRIFUGING = createFlag(41);
+
+        /**
+         * Add to material if it has constantly burning aura
+         */
+let BURNING = createFlag(7);
+
+        /**
+         * Add to material if it is some kind of flammable
+         */
+let FLAMMABLE = createFlag(42);
+
+        /**
+         * Add to material if it is some kind of explosive
+         */
+let EXPLOSIVE = createFlag(4);
+
+        /**
+         * Add to material to disable it's unification fully
+         */
+let NO_UNIFICATION = createFlag(5);
+
+        /**
+         * Add to material if any of it's items cannot be recycled to get scrub
+         */
+let NO_RECYCLING = createFlag(6);
+
+        /**
+         * Disables decomposition recipe generation for this material and all materials that has it as component
+         */
+let DISABLE_DECOMPOSITION = createFlag(43);
+
+        /**
+         * Decomposition recipe requires hydrogen as additional input. Amount is equal to input amount
+         */
+let DECOMPOSITION_REQUIRES_HYDROGEN = createFlag(8);
+
+let GENERATE_FLUID_BLOCK = createFlag(44);
+
+        /**
+         * Add this flag to enable plasma generation for this material
+         */
+let GENERATE_PLASMA = createFlag(9);
+
+        /**
+         * Marks material state as gas
+         * Examples: Air, Argon, Refinery Gas, Oxygen, Hydrogen
+         */
+let STATE_GAS = createFlag(10);
+//dust
+let GENERATE_ORE = createFlag(11);
+
+        /**
+         * Generate a plate for this material
+         * If it's dust material, dust compressor recipe into plate will be generated
+         * If it's metal material, bending machine recipes will be generated
+         * If block is found, cutting machine recipe will be also generated
+         */
+let GENERATE_PLATE = createFlag(12);
+
+        /**
+         * Add to material if it cannot be worked by any other means, than smashing or smelting. This is used for coated Materials.
+         */
+let NO_WORKING = createFlag(13);
+        /**
+         * Add to material if it cannot be used for regular Metal working techniques since it is not possible to bend it.
+         */
+let NO_SMASHING = createFlag(14);
+
+        /**
+         * Add to material if it's impossible to smelt it
+         */
+let NO_SMELTING = createFlag(15);
+
+        /**
+         * Add to material if it is outputting less in an Induction Smelter.
+         */
+let INDUCTION_SMELTING_LOW_OUTPUT = createFlag(16);
+
+        /**
+         * Add to material if it melts into fluid (and it will also generate fluid for this material)
+         */
+let SMELT_INTO_FLUID = createFlag(17);
+
+        /**
+         * This will prevent material from creating Shapeless recipes for dust to block and vice versa
+         * Also preventing extruding and alloy smelting recipes via SHAPE_EXTRUDING/MOLD_BLOCK
+         */
+let EXCLUDE_BLOCK_CRAFTING_RECIPES = createFlag(18);
+
+        /**
+         * This will prevent material from creating Shapeless recipes for dust to block and vice versa
+         */
+let EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES = createFlag(46);
+
+let EXCLUDE_PLATE_COMPRESSOR_RECIPE = createFlag(19);
+
+//solid
+let GENERATE_ROD = createFlag(20);
+let GENERATE_GEAR = createFlag(21);
+let GENERATE_LONG_ROD = createFlag(22);
+let MORTAR_GRINDABLE = createFlag(24);
+let GENERATE_FRAME = createFlag(45);
+//ingot
+let GENERATE_FOIL = createFlag(25);
+let GENERATE_BOLT_SCREW = createFlag(26);
+let GENERATE_RING = createFlag(27);
+let GENERATE_SPRING = createFlag(28);
+let GENERATE_FINE_WIRE = createFlag(29);
+let GENERATE_ROTOR = createFlag(30);
+let GENERATE_SMALL_GEAR = createFlag(31);
+let GENERATE_DENSE = createFlag(32);
+
+let GENERATE_SPRING_SMALL = createFlag(33);
+        /**
+         * Add this to your Material if you want to have its Ore Calcite heated in a Blast Furnace for more output. Already listed are:
+         * Iron, Pyrite, PigIron, WroughtIron.
+         */
+let BLAST_FURNACE_CALCITE_DOUBLE = createFlag(35);
+let BLAST_FURNACE_CALCITE_TRIPLE = createFlag(36);
+
+//gem
+let CRYSTALLISABLE = createFlag(34);
+let GENERATE_LENSE = createFlag(37);
+let HIGH_SIFTER_OUTPUT = createFlag(38);
+
+//all
+let STD_SOLID = Flag.pack4(GENERATE_PLATE, GENERATE_ROD, GENERATE_BOLT_SCREW, GENERATE_LONG_ROD);
+let STD_GEM = Flag.pack3(GENERATE_ORE, STD_SOLID, GENERATE_LENSE);
+let STD_METAL = GENERATE_PLATE;
+let EXT_METAL = Flag.pack4(STD_METAL, GENERATE_ROD, GENERATE_BOLT_SCREW, GENERATE_LONG_ROD);
+let EXT2_METAL = Flag.pack4(EXT_METAL, GENERATE_GEAR, GENERATE_FOIL, GENERATE_FINE_WIRE);
+
+//tool
+let GENERATE_MORTAR = createFlag(89);
+
+let unpreparedTexturesDir = __dir__ + "res/";
+let preparedTexturesDir = __dir__ + "_/";
+new java.io.File(preparedTexturesDir + "terrain-atlas/").mkdirs();
+new java.io.File(preparedTexturesDir + "items-opaque/").mkdirs();
+
+let types = [];
+function addTypeForGenerate(oreprefix, flag, type, icon_set, icon_set2, icon_set_override, icon_set_override2) {
+  types[oreprefix] = {oreprefix: oreprefix, type: type, flag: flag, icon_set: icon_set, icon_set2: icon_set2, icon_set_override: icon_set_override};
+}
+function generateClientMaterial(name, type, flags, colour, material_set) {
+  if(type == "MARKER") return;
+  for(let i in types) {
+    if(Flags.hasFlag(flags, types[i].flag) || (invoretypes[name] && i == "dustImpure")) {
+      		if(!(type == "DUST" || type == "SOLID" || type == "INGOT" || type == "GEM")) {
+					if(i == "dust" || i == "dustSmall" || i == "dustTiny") {
+						continue;
+					}
+				}
+				if(!(type == "SOLID" || type == "INGOT" || type == "GEM")) {
+					if(i == "block") {
+						continue;
+					}
+				}
+				if(type != "INGOT") {
+					if(i == "ingot" || i == "nugget") {
+						continue;
+					}	
+				}
+				if(type != "GEM") {
+					if(i == "gem") {
+						continue;
+					}	
+				}
+    if(types[i].type == "item") {
+      
+      /*"let alloy_smelterlayer = new IconTransformator.Action.Layering();
+      java.lang.System.out.println( unpreparedTexturesDir + "items-opaque/materialicons/" + material_set.name + "/" + types[i].oreprefix + "_OVERLAY.png");
+  alloy_smelterlayer.layer = android.graphics.BitmapFactory.decodeFile(unpreparedTexturesDir + "items-opaque/materialicons/" + material_set.name + "/" + types[i].oreprefix + "_OVERLAY.png");
+  let materialbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(unpreparedTexturesDir + "items-opaque/materialicons/" + material_set.name + "/" + types[i].oreprefix + ".png"), types[i].icon_set, alloy_smelterlayer);
+    
+    let file = new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + i + ".png");
+    let cOut = new java.io.FileOutputStream(file);
+  materialbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cOut);
+  cOut.flush();
+  cOut.close();*/
+  let sete = null;
+  if(types[i].icon_set_override != null && types[i].icon_set_override[material_set.name] != null) {
+    sete = types[i].icon_set_override[material_set.name];
+  } else {
+    sete = types[i].icon_set;
+  }
+  let copperlayer = new IconTransformator.Action.ColourMultiply(colour);
+    let materialbitma = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(unpreparedTexturesDir + "items-opaque/materialicons/" + material_set.name + "/" + types[i].oreprefix + ".png"), sete, copperlayer);
+    
+    let fileo = new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + i + ".png");
+    let cOutt = new java.io.FileOutputStream(fileo);
+  materialbitma.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cOutt);
+  cOutt.flush();
+  cOutt.close();
+  
+    if(types[i].icon_set2) {
+      let alloy_smelterlayer = new IconTransformator.Action.AdvLayering();
+      java.lang.System.out.println( unpreparedTexturesDir + "items-opaque/materialicons/" + material_set.name + "/" + types[i].oreprefix + "_OVERLAY.png");
+  alloy_smelterlayer.layer = android.graphics.BitmapFactory.decodeFile(unpreparedTexturesDir + "items-opaque/materialicons/" + material_set.name + "/" + types[i].oreprefix + "_OVERLAY.png");
+  let materialbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(preparedTexturesDir + "items-opaque/" + name + "_" + i + ".png"), types[i].icon_set2, alloy_smelterlayer);
+    
+    let file = new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + i + ".png");
+    let cOut = new java.io.FileOutputStream(file);
+  materialbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cOut);
+  cOut.flush();
+  cOut.close();
+    }
+    } else { //block
+      
+      let file = null;
+  if(types[i].oreprefix == "block" && (material_set.name == "DIAMOND" || material_set.name == "GEM_VERTICAL" || material_set.name == "GEM_HORIZONTAL" || material_set.name == "RUBY" || material_set.name == "OPAL" || material_set.name == "EMERALD" || material_set.name == "FLINT" || material_set.name == "NETHERSTAR" || material_set.name == "QUARTZ")) {
+    file = unpreparedTexturesDir + "terrain-atlas/materialicons/" + material_set.name + "/" + types[i].oreprefix + "3.png";
+  } else if(types[i].oreprefix == "block" && (material_set.name == "METALLIC" || material_set.name == "SHINY" || material_set.name == "MAGNETIC" || material_set.name == "DULL")) {
+    file = unpreparedTexturesDir + "terrain-atlas/materialicons/" + material_set.name + "/" + types[i].oreprefix + "5.png";
+  } else if(types[i].oreprefix != "block") {
+    file = unpreparedTexturesDir + "terrain-atlas/materialicons/" + material_set.name + "/" + types[i].oreprefix + ".png";
+  } else {
+    file = unpreparedTexturesDir + "terrain-atlas/materialicons/" + material_set.name + "/" + types[i].oreprefix + "2.png";
+  }
+  //try {
+    //throw new java.io.File(file).exists();
+    //throw android.graphics.BitmapFactory.decodeFile(file).copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+  //} catch(e) {
+    //throw e;
+  //}
+  
+  let copperlayer = new IconTransformator.Action.ColourMultiply(colour);
+  let materialbitma = null;
+  try {
+     materialbitma = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(file), types[i].icon_set, copperlayer, true);
+    } catch(e) {
+        throw file;
+    }
+    try {
+    throw preparedTexturesDir + "terrain-atlas/" + name + "_" + i + ".png";
+    } catch(e) {
+    } 
+    let fileo = new java.io.File(preparedTexturesDir + "terrain-atlas/" + name + "_" + i + ".png");
+    let cOutt = new java.io.FileOutputStream(fileo);
+  materialbitma.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cOutt);
+  cOutt.flush();
+  cOutt.close();
+    }
+    }
+  }
+}
+
+
+let oretypes = [];
+let invoretypes = [];
+function addBlockForOreGenerate(name) {
+  oretypes[this.oretypes.length] = name;
+  invoretypes[name] = name;
+}
+function generateClientOre(name, icon_set, colour) {
+  for(let i in oretypes) {
+      let copperlayer = new IconTransformator.Action.ColourMultiply(colour);
+  
+    let copperbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(unpreparedTexturesDir + "terrain-atlas/materialicons/" + icon_set.name + "/ore.png"), icon_set.ORE, copperlayer);
+    let file = new java.io.File(preparedTexturesDir + "terrain-atlas/" + name + "_ore.png");
+    
+    let copperbitmaps = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(unpreparedTexturesDir + "terrain-atlas/materialicons/" + icon_set.name + "/oreSmall.png"), icon_set.SMALL_ORE, copperlayer);
+    let files = new java.io.File(preparedTexturesDir + "terrain-atlas/" + name + "_oreSmall.png");
+    
+  let cOut = new java.io.FileOutputStream(file);
+  copperbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cOut);
+  cOut.flush();
+  cOut.close();
+  
+  let cOu = new java.io.FileOutputStream(files);
+  copperbitmaps.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cOu);
+  cOu.flush();
+  cOu.close();
+  
+  
+  
+  let alloy_smelterlayer = new IconTransformator.Action.Layering();
+  alloy_smelterlayer.layer = android.graphics.BitmapFactory.decodeFile(preparedTexturesDir + "terrain-atlas/" + name + "_ore.png");
+  //if(FileTools.isExists(__dir__ + "res/terrain-atlas/" + oretypes[i].toUpperCase() + "_STONE.png")) {
+  alloy_smelterbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(unpreparedTexturesDir + "terrain-atlas/iconsets/" + oretypes[i].toUpperCase() + "_STONE.png"), icon_set.ORE, alloy_smelterlayer);
+  //}
+  //if(oretypes[i]) throw oretypes[i].toUpperCase();
+  let ffile = new java.io.File(preparedTexturesDir + "terrain-atlas/" + oretypes[i] + "_" + name + "_ore.png");
+  let ffOut = new java.io.FileOutputStream(ffile);
+  alloy_smelterbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, ffOut);
+  ffOut.flush();
+  ffOut.close();
+  
+  /*let oremodel = new BlockRenderer.Model();
+  oremodel.addBox(0, 0, 0, 1, 1, 1, this.stones[i].texture + "_" + material.name + "_ore", 0);
+  let icRenderModel = new ICRender.Model(); 
+  icRenderModel.addEntry(oremodel);
+  BlockRenderer.setStaticICRender(BlockID["gtblockores" + (Math.floor((this.ores.length - 1) / this.countByID) * 2)], this.counter * this.stones.length + i, icRenderModel);*/
+  //Logger.Log(oretypes[i], "shirinkium");
+  //variationbig[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" + material.name + "_ore"};
+  //Logger.Log("big", "shirinkium");
+  //Logger.Log("big", "shirinkium");
+  
+  let alloy_smelterlayers = new IconTransformator.Action.Layering();
+    alloy_smelterlayers.layer = android.graphics.BitmapFactory.decodeFile(preparedTexturesDir + "terrain-atlas/" + name + "_oreSmall.png");
+  let alloy_smelterbitmaps = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(unpreparedTexturesDir + "terrain-atlas/iconsets/" + oretypes[i].toUpperCase() + "_STONE.png"), icon_set.SMALL_ORE, alloy_smelterlayers);
+  
+  let ffiles = new java.io.File(preparedTexturesDir + "terrain-atlas/" + oretypes[i] + "_" + name + "_oreSmall.png");
+  let ffOuts = new java.io.FileOutputStream(ffiles);
+  alloy_smelterbitmaps.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, ffOuts);
+  ffOuts.flush();
+  ffOuts.close();
+    }
+  }
+
+
+
+
+let tooltypes = [];
+function addToolTypeGenerate(name, head, stick, flag, texture_pos_head, texture_pos_head_overlay, texture_pos_stick, texture_pos_stick_overlay, handle, colour2) {
+  if(texture_pos_head_overlay == "_") {
+    texture_pos_head_overlay = texture_pos_head;
+  }
+  if(texture_pos_stick == "_stick") {
+    texture_pos_stick = [
+          {u: 12, v: 2}, {u: 13, v: 2}, 
+    {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, 
+    {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, 
+    {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5},
+    {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6},
+    {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7},
+    {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8},
+    {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9},
+    {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10},
+    {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11},
+    {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12},
+    {u: 1, v: 13}, {u: 2, v: 13}, {u: 3, v: 13},
+    {u: 1, v: 14}, {u: 2, v: 14},
+    ];
+  }
+  if(texture_pos_stick_overlay == "_") {
+    texture_pos_stick_overlay = texture_pos_stick;
+  }
+  tooltypes[this.tooltypes.length] = {name: name, head: head, stick: stick, flag: flag, texture_pos_head: texture_pos_head, texture_pos_head_overlay: texture_pos_head_overlay, texture_pos_stick: texture_pos_stick, texture_pos_stick_overlay: texture_pos_stick_overlay, handle: handle, colour2: colour2};
+}
+function generateClientTool(name, material_set, colour, name2, material_set2, colour2, flags, soft) {
+  for(let i in tooltypes) {
+    if(Flags.hasFlag(flags, tooltypes[i].flag)) continue;
+    let colourlayer = new IconTransformator.Action.ColourMultiply(colour);
+    let colourlayer2 = new IconTransformator.Action.ColourMultiply(colour2);
+    
+    let dir = unpreparedTexturesDir + "items-opaque/materialicons/" + material_set.name.toUpperCase() + "/";
+    let dir2 = unpreparedTexturesDir + "items-opaque/materialicons/" + material_set.name.toUpperCase() + "/";
+    //let dirr = dir + tooltypes[i].name.toUpperCase() + "/" + tooltypes[i].head + "png"
+    let iii = new java.io.File(dir + tooltypes[i].head + ".png");
+    if(!iii.exists()) {
+        dir = unpreparedTexturesDir + "items-opaque/iconsets/";
+        
+    }
+    
+    let sss;
+    if(tooltypes[i].head == "hammer" && soft) {
+        //dirStick = dir2 + "handleMallet.png"
+      
+      sss = new java.io.File(dir2 + "handleMallet.png");
+    } else if(tooltypes[i].stick == "_stick") {
+        //dirStick = dir2 + "stick.png";
+        sss = new java.io.File(dir2 + "stick.png");
+      } else {
+        sss = new java.io.File(dir2 + tooltypes[i].stick + ".png");
+      }
+    if(!sss.exists()) {
+        dir2 = unpreparedTexturesDir + "items-opaque/iconsets/";
+        
+    }
+    let dirStick = null;
+    if(tooltypes[i].stick != null) {
+      if(tooltypes[i].head == "hammer" && soft) {
+        dirStick = dir2 + "handleMallet.png"
+      } else if(tooltypes[i].stick == "_stick") {
+        dirStick = dir2 + "stick.png";
+      } else {
+        dirStick = dir2 + tooltypes[i].stick + ".png";
+      }
+    }
+
+    if(tooltypes[i].texture_pos_head_overlay) {
+      let overlay = new IconTransformator.Action.AdvLayering();
+  overlay.layer = android.graphics.BitmapFactory.decodeFile(new java.io.File(dir + tooltypes[i].head + "_OVERLAY" + ".png"));
+  
+ let toolbladebitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(new java.io.File(dir + tooltypes[i].head + ".png")), tooltypes[i].texture_pos_head_overlay, overlay);
+    
+    let filem = new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + ".png");
+    let cto = new java.io.FileOutputStream(filem);
+  toolbladebitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cto);
+  cto.flush();
+  cto.close();
+      } else {
+        let toolbladebitmap = android.graphics.BitmapFactory.decodeFile(new java.io.File(dir + tooltypes[i].head + ".png"));
+        
+        let filem = new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + ".png");
+    let cto = new java.io.FileOutputStream(filem);
+  toolbladebitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cto);
+  cto.flush();
+  cto.close();
+      }
+      
+    let toolbladebitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + ".png")), tooltypes[i].texture_pos_head, colourlayer);
+    
+    let file = new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + ".png");
+    let cOut = new java.io.FileOutputStream(file);
+  toolbladebitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cOut);
+  cOut.flush();
+  cOut.close();
+  let pcolour = colour2;
+      if(tooltypes[i].colour2 != null) pcolour = tooltypes[i].colour2;
+      if(tooltypes[i].stick != null) {
+        let alloy_smelterlayer = new IconTransformator.Action.ColourMultiply(pcolour);
+  //alloy_smelterlayer.colour = android.graphics.BitmapFactory.decodeFile(new java.io.File(dirStick));
+  //alloy_smelterlayer.layerb = tooltypes[i].texture_pos_head;
+ let toolbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(new java.io.File(dirStick)), tooltypes[i].texture_pos_stick, alloy_smelterlayer);
+    
+    let fil = new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + "st.png");
+    let ct = new java.io.FileOutputStream(fil);
+  toolbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, ct);
+  ct.flush();
+  ct.close();
+        if(tooltypes[i].handle == "stick") {
+      let alloy_smelterlayer = new IconTransformator.Action.BlockingLayering();
+  alloy_smelterlayer.layer = android.graphics.BitmapFactory.decodeFile(new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + "st.png"));
+  alloy_smelterlayer.layerb = tooltypes[i].texture_pos_head;
+ let toolbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + ".png")), tooltypes[i].texture_pos_stick, alloy_smelterlayer);
+    
+    let fil = new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + ".png");
+    let ct = new java.io.FileOutputStream(fil);
+  toolbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, ct);
+  ct.flush();
+  ct.close();
+        } else if(tooltypes[i].handle == "handle") {
+          let alloy_smelterlayer = new IconTransformator.Action.Layering();
+  alloy_smelterlayer.layer = android.graphics.BitmapFactory.decodeFile(new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + "st.png"));
+  alloy_smelterlayer.layerb = tooltypes[i].texture_pos_head;
+ let toolbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + ".png")), tooltypes[i].texture_pos_stick, alloy_smelterlayer);
+    
+    let fil = new java.io.File(preparedTexturesDir + "items-opaque/" + name + "_" + tooltypes[i].name + ".png");
+    let ct = new java.io.FileOutputStream(fil);
+  toolbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, ct);
+  ct.flush();
+  ct.close();
+        }
+        }
+      
+}
+}
+
+function addCasing(casing, types) {
+  for(let i in types) {
+    let r = new java.io.FileInputStream(__dir__ + "res/terrain-atlas/iconsets/" + casing + "_" + types[i] + ".png");
+    new java.io.File(__dir__ + "_/terrain-atlas/" + casing + "_" + types[i] + ".png").createNewFile();
+    let w = new java.io.FileOutputStream(__dir__ + "_/terrain-atlas/" + casing + "_" + types[i] + ".png");
+    let cursor = null;
+    while((cursor = r.read()) != -1) {
+      w.write(cursor);
+    }
+    r.close();
+    w.close();
+  }
+}
+function addMachineTier(mat) {
+  
+}
+function addMachineForGenerate(casing, mater, type, sides) {
+  for(let mat in mater) {
+    let isFront = false;
+    let isSide = false;
+    let isTop = false;
+    let isBottom = false;
+    for(let side in sides) {
+      if(sides[side] == "FRONT") isFront = true;
+      if(sides[side] == "SIDE") isSide = true;
+      if(sides[side] == "TOP") isTop = true;
+      if(sides[side] == "BOTTOM") isBottom = true;
+      let sidecas = sides[side];
+      let comp = "_"
+  
+  let alloy_smelterlayer = new IconTransformator.Action.Layering();
+        if(type == "boiler" || type == "boiler_lava" || type == "boiler_solar") {
+          if(type == "boiler_solar" && sides[side] == "TOP") {
+            sides[side] = "";
+            comp = "";
+          }
+          alloy_smelterlayer.layer = android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/iconsets/" + String.toUpperCase(type) + comp + sides[side] + ".png");
+          //throw new java.io.File(__dir__ + "res/terrain-atlas/iconsets/" + String.toUpperCase(type) + comp + sides[side] + ".png").exists();
+        } else {
+          alloy_smelterlayer.layer = android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/iconsets/OVERLAY_" + sides[side] + "_STEAM_" + String.toUpperCase(type) + ".png");
+  }
+  
+  //if(comp == "") throw sidecas;
+  comp = "_";
+  
+  sides[side] = sidecas;
+  if(sidecas == "FRONT") sidecas = "SIDE";
+  
+  //if(type == "boiler_solar") throw String.toUpperCase(type) + "_" + sides[side];
+  
+  let alloy_smelterbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/iconsets/" + casing[mat] + comp + sidecas + ".png"), coords[String.toUpperCase(type) + "_" + sides[side]], alloy_smelterlayer);
+  
+  let file = new java.io.File(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + sides[side] + ".png");
+  let fOut = new java.io.FileOutputStream(file);
+  alloy_smelterbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, fOut);
+  fOut.flush();
+  fOut.close();
+  
+        let alloy_smelterlaye = new IconTransformator.Action.Layering();
+  if(type == "boiler" || type == "boiler_solar" || type == "boiler_lava") {
+          alloy_smelterlaye.layer = android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/iconsets/" + type.toUpperCase() + "_" + sides[side] + "_ACTIVE.png");
+        } else {
+  alloy_smelterlaye.layer = android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/iconsets/OVERLAY_" + sides[side] + "_STEAM_" + String.toUpperCase(type) + "_ACTIVE.png");
+  }
+  if(!(type == "boiler_solar" && sides[side] == "TOP")) {
+  let alloy_smelterbitma = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/iconsets/" + casing[mat] + "_" + sidecas + ".png"), coords[String.toUpperCase(type) + "_" + sides[side]], alloy_smelterlaye);
+  let fil = new java.io.File(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + sides[side] + "_ACTIVE.png");
+  let fOu = new java.io.FileOutputStream(fil);
+  alloy_smelterbitma.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, fOu);
+  fOu.flush();
+  fOu.close();
+  }}
+ 
+  
+    if(!isFront) {
+    let r = new java.io.FileInputStream(__dir__ + "res/terrain-atlas/iconsets/" + casing[mat] + "_SIDE.png");
+    new java.io.File(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + "FRONT.png").createNewFile();
+    let w = new java.io.FileOutputStream(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + "FRONT.png");
+    let cursor = null;
+    while((cursor = r.read()) != -1) {
+      w.write(cursor);
+    }
+    r.close();
+    w.close();
+    }
+    if(!isSide) {
+    let r = new java.io.FileInputStream(__dir__ + "res/terrain-atlas/iconsets/" + casing[mat] + "_SIDE.png");
+    new java.io.File(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + "SIDE.png").createNewFile();
+    let w = new java.io.FileOutputStream(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + "SIDE.png");
+    let cursor = null;
+    while((cursor = r.read()) != -1) {
+      w.write(cursor);
+    }
+    r.close();
+    w.close();
+    }
+    if(!isTop) {
+    let r = new java.io.FileInputStream(__dir__ + "res/terrain-atlas/iconsets/" + casing[mat] + "_TOP.png");
+    new java.io.File(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + "TOP.png").createNewFile();
+    let w = new java.io.FileOutputStream(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + "TOP.png");
+    let cursor = null;
+    while((cursor = r.read()) != -1) {
+      w.write(cursor);
+    }
+    r.close();
+    w.close();
+    }
+    if(!isBottom) {
+    let r = new java.io.FileInputStream(__dir__ + "res/terrain-atlas/iconsets/" + casing[mat] + "_BOTTOM.png");
+    new java.io.File(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + "BOTTOM.png").createNewFile();
+    let w = new java.io.FileOutputStream(__dir__ + "_/terrain-atlas/" + mater[mat] + "_" + type + "_" + "BOTTOM.png");
+    let cursor = null;
+    while((cursor = r.read()) != -1) {
+      w.write(cursor);
+    }
+    r.close();
+    w.close();
+    }
+      
+  }
+}
+
+
+addTypeForGenerate("ingot", 0, "item", [
+  {u: 10, v: 2}, {u: 11, v: 2},
+  {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3},
+  {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
+  {u: 1, v: 5}, {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, {u: 14, v: 5},
+  {u: 0, v: 6}, {u: 1, v: 6}, {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 14, v: 6}, {u: 15, v: 6},
+  {u: 0, v: 7}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 15, v: 7},
+  {u: 0, v: 8}, {u: 1, v: 8}, {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8}, {u: 15, v: 8},
+    {u: 0, v: 9}, {u: 1, v: 9}, {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9}, {u: 15, v: 9},
+  {u: 0, v: 10}, {u: 1, v: 10}, {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10},
+  {u: 1, v: 11}, {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11},
+  {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12},
+  {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13},
+  ]);
+addTypeForGenerate("dust", 0, "item", [
+   {u: 7, v: 3}, {u: 8, v: 3}, 
+   {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4},
+   {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5},
+   {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},
+   {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+   {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+   {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+   {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+   {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+   {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12},
+   {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13},
+  ]);
+addTypeForGenerate("plate", GENERATE_PLATE, "item", [
+    {u: 4, v: 2}, {u: 5, v: 2}, {u: 6, v: 2}, 
+    {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3},
+    {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 14, v: 4},
+    {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, {u: 14, v: 5},
+    {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 14, v: 6},
+     {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+     {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+     {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+     {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+      {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+      {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12},
+      {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13},
+      {u: 9, v: 14}, {u: 10, v: 14}, {u: 11, v: 14},
+  ]);
+addTypeForGenerate("plateDense", GENERATE_DENSE, "item", [
+     {u: 4, v: 2}, {u: 5, v: 2}, {u: 6, v: 2}, 
+    {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3},
+    {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 14, v: 4},
+    {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, {u: 14, v: 5},
+    {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 14, v: 6},
+     {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+     {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+     {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+     {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+      {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10},
+      {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 12},
+      {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13},
+      {u: 9, v: 14}, {u: 10, v: 14}, {u: 11, v: 14},
+  ]);
+addTypeForGenerate("stick", GENERATE_ROD, "item", [
+    {u: 12, v: 2}, {u: 13, v: 2}, 
+    {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, 
+    {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, 
+    {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5},
+    {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6},
+    {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7},
+    {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8},
+    {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9},
+    {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10},
+    {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11},
+    {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12},
+    {u: 1, v: 13}, {u: 2, v: 13}, {u: 3, v: 13},
+    {u: 1, v: 14}, {u: 2, v: 14},
+  ]);
+addTypeForGenerate("stickLong", GENERATE_LONG_ROD, "item", [
+   {u: 14, v: 0}, {u: 15, v: 0}, 
+   {u: 13, v: 1}, {u: 14, v: 1}, 
+    {u: 12, v: 2}, {u: 13, v: 2}, 
+    {u: 11, v: 3}, {u: 12, v: 3},
+    {u: 10, v: 4}, {u: 11, v: 4},
+    {u: 9, v: 5}, {u: 10, v: 5},
+    {u: 8, v: 6}, {u: 9, v: 6},
+    {u: 7, v: 7}, {u: 8, v: 7},
+    {u: 6, v: 8}, {u: 7, v: 8},
+    {u: 5, v: 9}, {u: 6, v: 9},
+    {u: 4, v: 10}, {u: 5, v: 10},
+    {u: 3, v: 11}, {u: 4, v: 11},
+    {u: 2, v: 12}, {u: 3, v: 12},
+    {u: 1, v: 13}, {u: 2, v: 13},
+    {u: 0, v: 14}, {u: 1, v: 14},
+    {u: 0, v: 15},
+  ]);
+addTypeForGenerate("dustSmall", 0, "item", [
+   {u: 7, v: 5}, {u: 8, v: 5},
+   {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, 
+   {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7},
+   {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8},
+   {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9},
+      {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10},
+   {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11},
+  ]);
+addTypeForGenerate("dustTiny", 0, "item", [
+  {u: 7, v: 6}, {u: 8, v: 6},
+   {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, 
+   {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8},
+   {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9},
+   {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10},
+  ]);
+addTypeForGenerate("foil", GENERATE_FOIL, "item", [
+  {u: 6, v: 1}, {u: 7, v: 1}, {u: 8, v: 1}, {u: 9, v: 1},
+   {u: 5, v: 2}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2},
+   {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3},
+   {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, 
+   {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5},
+   {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+   {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+   {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+   {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9},
+   {u: 1, v: 10}, {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10},
+      {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11},
+    {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12},
+    {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13},
+    {u: 4, v: 14}, {u: 5, v: 14}, {u: 6, v: 14},
+  ]);
+addTypeForGenerate("wireFine", GENERATE_FINE_WIRE, "item", [
+    {u: 5, v: 0}, 
+    {u: 5, v: 1}, 
+    {u: 5, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, 
+    {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, 
+    {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4},
+   {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+   {u: 3, v: 6}, {u: 4, v: 6}, {u: 11, v: 6}, {u: 12, v: 6},
+   {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+   {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+   {u: 3, v: 9}, {u: 4, v: 9}, {u: 11, v: 9}, {u: 12, v: 9},
+   {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10},
+   {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11},
+   {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12},
+   {u: 7, v: 13}, {u: 8, v: 13},
+  ]);
+addTypeForGenerate("gearGtSmall", GENERATE_SMALL_GEAR, "item", [
+  {u: 7, v: 3}, {u: 8, v: 3},
+  {u: 4, v: 4}, {u: 5, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 10, v: 4}, {u: 11, v: 4},
+  {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5},
+  {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6},
+  {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+  {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8},
+  {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9},
+  {u: 4, v: 10}, {u: 5, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 10, v: 10}, {u: 11, v: 10},
+  {u: 4, v: 11}, {u: 5, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 10, v: 11}, {u: 11, v: 11},
+  {u: 7, v: 12}, {u: 8, v: 12},
+  ]);
+addTypeForGenerate("gearGt", GENERATE_GEAR, "item", [
+    {u: 6, v: 1}, {u: 7, v: 1}, {u: 8, v: 1}, {u: 9, v: 1},
+  {u: 3, v: 2}, {u: 4, v: 2}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 11, v: 2}, {u: 12, v: 2},
+  {u: 2, v: 3}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3},
+  {u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
+  {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+  {u: 1, v: 6}, {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 14, v: 6},
+   {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7}, {u: 14, v: 7},
+    {u: 1, v: 8}, {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8},
+     {u: 1, v: 9}, {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9},
+   {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10},
+    {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11},
+    {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12},
+    {u: 3, v: 13}, {u: 4, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 11, v: 13}, {u: 12, v: 13},
+    {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14},
+  ]);
+addTypeForGenerate("ring", GENERATE_RING, "item", [
+    {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3},
+    {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4},
+    {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+    {u: 3, v: 6}, {u: 4, v: 6}, {u: 11, v: 6}, {u: 12, v: 6},
+    {u: 3, v: 7}, {u: 4, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+    {u: 3, v: 8}, {u: 4, v: 8}, {u: 11, v: 8}, {u: 12, v: 8},
+    {u: 3, v: 9}, {u: 4, v: 9}, {u: 11, v: 9}, {u: 12, v: 9},
+    {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10},
+    {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11},
+    {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12},
+  ]);
+addTypeForGenerate("bolt", GENERATE_BOLT_SCREW, "item", [
+  {u: 10, v: 5},
+  {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},
+  {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7},
+  {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8},
+  {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9},
+  {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10},
+  {u: 6, v: 11},
+  ]);
+addTypeForGenerate("screw", GENERATE_BOLT_SCREW, "item", [
+  {u: 9, v: 4},
+  {u: 9, v: 5}, {u: 10, v: 5},
+  {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},
+  {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+  {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8},
+  {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9},
+  {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10},
+  {u: 5, v: 11}, {u: 6, v: 11}
+  ]);
+//MaterialDictionary.registerForm(ItemID.gtmetaitem01, GENERATE_TURBINE_BLADE, "gear");
+addTypeForGenerate("nugget", 0, "item", [
+  {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4},
+  {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, 
+  {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6},
+  {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7},
+  {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, 
+  {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, 
+  {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10},
+  {u: 7, v: 11}, {u: 8, v: 11},
+  ], null);
+
+addTypeForGenerate("gem", 0, "item", [
+     {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2},
+      {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3},
+       {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4},
+      {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5},
+       {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 14, v: 6},
+        {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7}, {u: 14, v: 7},
+         {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8},
+          {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9},
+           {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10},
+            {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11},
+             {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12},
+         {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13},
+         {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14},
+  ], null, {"DIAMOND": [
+     {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2},
+      {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3},
+       {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4},
+      {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5},
+       {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6},
+        {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+         {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+          {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+           {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+            {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+             {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12},
+         {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13},
+         {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14},
+    ], "FLINT": [
+      {u: 8, v: 2}, {u: 9, v: 2},
+      {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3},
+       {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4},
+      {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5},
+       {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},
+        {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+         {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8},
+          {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+           {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+            {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+             {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12},
+         {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13},
+         {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14},
+      ], "EMERALD": [
+         {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2},
+      {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3},
+       {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4},
+      {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5},
+       {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+        {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+         {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+          {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+           {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+            {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+             {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12},
+         {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13},
+         {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5},
+        ], "GEM_HORIZONTAL": [
+       {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
+      {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, {u: 14, v: 5},
+       {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 14, v: 6},
+        {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7}, {u: 14, v: 7},
+         {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8},
+          {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9},
+           {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10},
+            {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11}, {u: 14, v: 11},
+             {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12},
+          ], "GEM_VERTICAL": [
+             {u: 5, v: 2},  {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, 
+      {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, 
+       {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4},
+      {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+       {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6},
+        {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+         {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8},
+          {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9},
+          {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10},
+            {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+             {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12},
+         {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, 
+         {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14}, {u: 10, v: 14}, 
+          ], "LAPIS": [
+             {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, 
+      {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, 
+      {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, 
+      {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5},
+       {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+        {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+         {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8},
+          {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9},
+           {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10},
+            {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11},
+             {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12},
+         {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13},
+            ], "QUARTZ": [
+               {u: 3, v: 2}, {u: 4, v: 2}, {u: 5, v: 2}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, 
+      {u: 2, v: 3}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3},
+      {u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4},
+      {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+       {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+        {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7}, {u: 14, v: 7},
+         {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8},
+          {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9},
+           {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10},
+           {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11}, {u: 14, v: 11},
+           {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 14, v: 12},
+         {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13},
+         {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14}, {u: 11, v: 14}, {u: 12, v: 14},
+    ], "LIGNITE": [
+      {u: 9, v: 3}, {u: 10, v: 3},
+      {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4},
+      {u: 4, v: 5}, {u: 5, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+      {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+      {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+      {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8},
+     {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9},
+     {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10},
+     {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11},
+     {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12},
+     {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13},
+      ], "NETHERSTAR": [
+     {u: 8, v: 3}, {u: 9, v: 3},
+       {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4},
+      {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5},
+     {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6},
+     {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+         {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8},
+       {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+       {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10},
+       {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11},
+       {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12},
+       {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13},
+       {u: 8, v: 14},
+      ]});
+addTypeForGenerate("lens", GENERATE_LENSE, "item", [
+  {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2},
+  {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3},
+  {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4},
+  {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+  {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+   {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+    {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+     {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+   {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10},
+   {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+   {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12},
+   {u: 6, v: 13}, {u:7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13},
+  ], null);
+
+addTypeForGenerate("crushed", GENERATE_ORE, "item", [
+  {u: 6, v: 3}, {u: 9, v: 3},
+  {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4},
+  {u: 3, v: 5}, {u: 5, v: 5}, {u: 7, v: 5}, {u: 9, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+   {u: 2, v: 6}, {u: 4, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+   {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 13, v: 7},
+    {u: 1, v: 8}, {u: 2, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+    {u: 1, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 10, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9},
+     {u: 2, v: 10}, {u: 3, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10},
+      {u: 1, v: 11}, {u: 2, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 11, v: 11}, {u: 13, v: 11},
+       {u: 2, v: 12}, {u: 3, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12},
+       {u: 4, v: 13}, {u: 5, v: 13}, {u: 7, v: 13}, {u: 9, v: 13}, {u: 11, v: 13}, {u: 12, v: 13},
+    {u: 5, v: 14}, {u: 6, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14},
+  ], [
+  {u: 6, v: 3}, {u: 9, v: 3},
+  {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4},
+  {u: 3, v: 5}, {u: 5, v: 5}, {u: 7, v: 5}, {u: 9, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+   {u: 2, v: 6}, {u: 4, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+   {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 13, v: 7},
+    {u: 1, v: 8}, {u: 2, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+    {u: 1, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 10, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9},
+     {u: 2, v: 10}, {u: 3, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10},
+      {u: 1, v: 11}, {u: 2, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 11, v: 11}, {u: 13, v: 11},
+       {u: 2, v: 12}, {u: 3, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12},
+       {u: 4, v: 13}, {u: 5, v: 13}, {u: 7, v: 13}, {u: 9, v: 13}, {u: 11, v: 13}, {u: 12, v: 13},
+    {u: 5, v: 14}, {u: 6, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14},
+  ], null);
+addTypeForGenerate("crushedPurified", GENERATE_ORE, "item", [
+  {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3},
+  {u: 4, v: 4}, {u: 5, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 11, v: 4},
+  {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 8, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+   {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 12, v: 6},
+   
+   {u: 2, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+   
+    {u: 1, v: 8}, {u: 2, v: 8}, {u: 3, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8},
+    {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+    
+     {u: 2, v: 10}, {u: 3, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 11, v: 10}, {u: 14, v: 10},
+     
+      {u: 1, v: 11}, {u: 2, v: 11}, {u: 3, v: 11}, {u: 5, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 14, v: 11},
+      
+       {u: 2, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12},
+       {u: 4, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 11, v: 13}, {u: 12, v: 13},
+    {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 9, v: 14}, {u: 10, v: 14},
+  ], null);
+addTypeForGenerate("crushedCentrifuged", GENERATE_ORE, "item", [
+    {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6},
+    
+    {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7},
+    
+    {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8},
+    
+   {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+   
+   {u: 1, v: 10}, {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10},
+   
+   {u: 1, v: 11}, {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11}, {u: 14, v: 11},
+   
+   {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12},
+   
+   {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13},
+   
+   {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14},
+  ], null);
+addTypeForGenerate("dustImpure", GENERATE_ORE, "item", [
+   {u: 7, v: 3}, {u: 8, v: 3}, 
+   {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4},
+   {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5},
+   {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},
+   {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+   {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+   {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+   {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+   {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+   {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12},
+   {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13},
+  ], [
+   {u: 7, v: 3}, {u: 8, v: 3}, 
+   {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4},
+   {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5},
+   {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},
+   {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+   {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+   {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+   {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+   {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+   {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12},
+   {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13},
+    ]);
+addTypeForGenerate("dustPure", GENERATE_ORE, "item", [
+   {u: 7, v: 3}, {u: 8, v: 3}, 
+   {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4},
+   {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5},
+   {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},
+   {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+   {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+   {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+   {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+   {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+   {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12},
+   {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13},
+  ], [
+    {u: 7, v: 3}, {u: 8, v: 3}, 
+   {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4},
+   {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5},
+   {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},
+   {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7},
+   {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+   {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+   {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+   {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11},
+   {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12},
+   {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13},
+    ]);
+
+addTypeForGenerate("block", 0, "block", [
+         {u: 0, v: 0}, {u: 1, v: 0}, {u: 2, v: 0}, {u: 3, v: 0}, {u: 4, v: 0}, {u: 5, v: 0}, {u: 6, v: 0}, {u: 7, v: 0}, {u: 8, v: 0}, {u: 9, v: 0}, {u: 10, v: 0}, {u: 11, v: 0},  {u: 12, v: 0}, {u: 13, v: 0}, {u: 14, v: 0}, {u: 15, v: 0},
+        {u: 0, v: 1}, {u: 1, v: 1}, {u: 2, v: 1}, {u: 3, v: 1}, {u: 4, v: 1}, {u: 5, v: 1}, {u: 6, v: 1}, {u: 7, v: 1}, {u: 8, v: 1}, {u: 9, v: 1}, {u: 10, v: 1}, {u: 11, v: 1}, {u: 12, v: 1}, {u: 13, v: 1}, {u: 14, v: 1}, {u: 15, v: 1},
+        {u: 0, v: 2}, {u: 1, v: 2}, {u: 2, v: 2}, {u: 3, v: 2}, {u: 4, v: 2}, {u: 5, v: 2}, {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2},  {u: 12, v: 2}, {u: 13, v: 2}, {u: 14, v: 2}, {u: 15, v: 2},
+        {u: 0, v: 3}, {u: 1, v: 3}, {u: 2, v: 3}, {u: 3, v: 3}, {u: 4, v: 3},    {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3},  {u: 12, v: 3}, {u: 13, v: 3}, {u: 14, v: 3}, {u: 15, v: 3},
+      {u: 0, v: 4}, {u: 1, v: 4}, {u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 14, v: 4},   {u: 15, v: 4}, 
+      {u: 0, v: 5}, {u: 1, v: 5}, {u: 2, v: 5}, {u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, {u: 14, v: 5}, {u: 15, v: 5},
+         {u: 0, v: 6}, {u: 1, v: 6}, {u: 2, v: 6}, {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},    {u: 12, v: 6}, {u: 13, v: 6},    {u: 14, v: 6}, {u: 15, v: 6},
+        {u: 0, v: 7}, {u: 1, v: 7}, {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7}, {u: 14, v: 7}, {u: 15, v: 7},
+      {u: 0, v: 8}, {u: 1, v: 8}, {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8}, {u: 15, v: 8},
+      {u: 0, v: 9}, {u: 1, v: 9}, {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9}, {u: 15, v: 9},
+      {u: 0, v: 10}, {u: 1, v: 10}, {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10}, {u: 14, v: 10}, {u: 15, v: 10},
+     {u: 0, v: 11}, {u: 1, v: 11}, {u: 2, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11}, {u: 14, v: 11}, {u: 15, v: 11},
+      {u: 0, v: 12}, {u: 1, v: 12}, {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 5, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 14, v: 12}, {u: 15, v: 12},
+     {u: 0, v: 13}, {u: 1, v: 13}, {u: 2, v: 13}, {u: 3, v: 13}, {u: 4, v: 13}, {u: 5, v: 13}, {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13}, {u: 14, v: 13}, {u: 15, v: 13},
+      {u: 0, v: 14}, {u: 1, v: 14}, {u: 2, v: 14}, {u: 3, v: 14}, {u: 4, v: 14}, {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14}, {u: 11, v: 14},  {u: 12, v: 14}, {u: 13, v: 14}, {u: 14, v: 14}, {u: 15, v: 14},
+        {u: 0, v: 15}, {u: 1, v: 15}, {u: 2, v: 15}, {u: 3, v: 15}, {u: 4, v: 15}, {u: 5, v: 15}, {u: 6, v: 15}, {u: 7, v: 15}, {u: 8, v: 15}, {u: 9, v: 15}, {u: 10, v: 15}, {u: 11, v: 15}, {u: 12, v: 15}, {u: 13, v: 15}, {u: 14, v: 15}, {u: 15, v: 15},
+]);
+addTypeForGenerate("frameGt", GENERATE_FRAME, "block", [
+      {u: 0, v: 0}, {u: 1, v: 0}, {u: 2, v: 0}, {u: 3, v: 0}, {u: 4, v: 0}, {u: 5, v: 0}, {u: 6, v: 0}, {u: 7, v: 0}, {u: 8, v: 0}, {u: 9, v: 0}, {u: 10, v: 0}, {u: 11, v: 0},  {u: 12, v: 0}, {u: 13, v: 0}, {u: 14, v: 0}, {u: 15, v: 0},
+        {u: 0, v: 1}, {u: 1, v: 1}, {u: 2, v: 1}, {u: 3, v: 1}, {u: 4, v: 1}, {u: 5, v: 1}, {u: 6, v: 1}, {u: 7, v: 1}, {u: 8, v: 1}, {u: 9, v: 1}, {u: 10, v: 1}, {u: 11, v: 1}, {u: 12, v: 1}, {u: 13, v: 1}, {u: 14, v: 1}, {u: 15, v: 1},
+        {u: 0, v: 2}, {u: 1, v: 2}, {u: 2, v: 2}, {u: 3, v: 2}, {u: 12, v: 2}, {u: 13, v: 2}, {u: 14, v: 2}, {u: 15, v: 2},
+        {u: 0, v: 3}, {u: 1, v: 3}, {u: 2, v: 3}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 14, v: 3}, {u: 15, v: 3},
+      {u: 0, v: 4}, {u: 1, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 14, v: 4}, {u: 15, v: 4},
+      {u: 0, v: 5}, {u: 1, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 14, v: 5}, {u: 15, v: 5},
+         {u: 0, v: 6}, {u: 1, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 14, v: 6}, {u: 15, v: 6},
+        {u: 0, v: 7}, {u: 1, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 14, v: 7}, {u: 15, v: 7},
+      {u: 0, v: 8}, {u: 1, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 14, v: 8}, {u: 15, v: 8},
+      {u: 0, v: 9}, {u: 1, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 14, v: 9}, {u: 15, v: 9},
+      {u: 0, v: 10}, {u: 1, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 14, v: 10}, {u: 15, v: 10},
+     {u: 0, v: 11}, {u: 1, v: 11}, {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 14, v: 11}, {u: 15, v: 11},
+      {u: 0, v: 12}, {u: 1, v: 12}, {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 14, v: 12}, {u: 15, v: 12},
+     {u: 0, v: 13}, {u: 1, v: 13}, {u: 2, v: 13}, {u: 3, v: 13}, {u: 12, v: 13}, {u: 13, v: 13}, {u: 14, v: 13}, {u: 15, v: 13},
+      {u: 0, v: 14}, {u: 1, v: 14}, {u: 2, v: 14}, {u: 3, v: 14}, {u: 4, v: 14}, {u: 5, v: 14}, {u: 6, v: 14}, {u: 7, v: 14}, {u: 8, v: 14}, {u: 9, v: 14}, {u: 10, v: 14}, {u: 11, v: 14},  {u: 12, v: 14}, {u: 13, v: 14}, {u: 14, v: 14}, {u: 15, v: 14},
+        {u: 0, v: 15}, {u: 1, v: 15}, {u: 2, v: 15}, {u: 3, v: 15}, {u: 4, v: 15}, {u: 5, v: 15}, {u: 6, v: 15}, {u: 7, v: 15}, {u: 8, v: 15}, {u: 9, v: 15}, {u: 10, v: 15}, {u: 11, v: 15}, {u: 12, v: 15}, {u: 13, v: 15}, {u: 14, v: 15}, {u: 15, v: 15},
+  ]);
+
+addBlockForOreGenerate("stone");
+addBlockForOreGenerate("granite");
+addBlockForOreGenerate("diorite");
+addBlockForOreGenerate("andesite");
+addBlockForOreGenerate("gravel");
+addBlockForOreGenerate("bedrock");
+addBlockForOreGenerate("netherrack");
+addBlockForOreGenerate("endstone");
+addBlockForOreGenerate("sandstone");
+addBlockForOreGenerate("sandstone_red");
+
+addBlockForOreGenerate("granite_red");
+addBlockForOreGenerate("granite_black");
+addBlockForOreGenerate("marble");
+addBlockForOreGenerate("basalt");
+
+generateClientMaterial("aluminium", "INGOT", Flags.pack5(EXT2_METAL, GENERATE_SMALL_GEAR, GENERATE_ORE, GENERATE_RING, GENERATE_FRAME), 0x80C8F0, IconTransformator.UV.DULL);
+generateClientMaterial("americium", "INGOT", Flags.pack3(STD_METAL, GENERATE_ROD, GENERATE_LONG_ROD), 0xC8C8C8, IconTransformator.UV.METALLIC);
+generateClientMaterial("antimony", "INGOT", 
+Flags.pack2(EXT_METAL, MORTAR_GRINDABLE), 0xDCDCC8, IconTransformator.UV.SHINY);
+generateClientMaterial("arsenic", "DUST", 0, 0xDDDDDD, IconTransformator.UV.SAND);
+generateClientMaterial("barium", "INGOT", STD_METAL, 0x64B464, IconTransformator.UV.METALLIC);
+generateClientMaterial("beryllium", "INGOT",Flags.pack2(STD_METAL, GENERATE_ORE), 0x64B464, IconTransformator.UV.METALLIC);
+generateClientMaterial("bismuth",  "INGOT", GENERATE_ORE, 0x64A0A0, IconTransformator.UV.METALLIC);
+generateClientMaterial("boron", "DUST", 0, 0xD2F0D2, IconTransformator.UV.SAND);
+generateClientMaterial("cadmium", "INGOT", 0, 0x505060, IconTransformator.UV.SHINY);
+generateClientMaterial("calcium", "INGOT", 0, 0xDDDDAA, IconTransformator.UV.METALLIC);
+generateClientMaterial("carbon", "INGOT", 0, 0x333333, IconTransformator.UV.DULL);
+generateClientMaterial("cerium", "INGOT", 0, 0xEEEEEE, IconTransformator.UV.METALLIC);
+generateClientMaterial("cobalt", "INGOT", 
+Flags.pack2(GENERATE_ORE, STD_METAL), 0x2929BC, IconTransformator.UV.METALLIC);
+generateClientMaterial("copper", "INGOT", 
+Flags.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_DENSE), 0xFFAAAB, IconTransformator.UV.SHINY);
+generateClientMaterial("chlorine", "FLUID",  STATE_GAS, 0xFF8000, IconTransformator.UV.FLUID);
+generateClientMaterial("chrome", "INGOT",  
+Flags.pack3(EXT2_METAL, GENERATE_RING, GENERATE_ROTOR), 0xFF8000, IconTransformator.UV.FLUID);
+generateClientMaterial("gallium", "INGOT", GENERATE_PLATE, 0xFFFF00, IconTransformator.UV.SHINY);
+generateClientMaterial("gold", "INGOT", 
+Flags.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES), 0xFFFF00, IconTransformator.UV.SHINY);
+generateClientMaterial("fluorine", "FLUID", STATE_GAS, 0xFFFFAA, IconTransformator.UV.FLUID);
+generateClientMaterial("iridium", "INGOT", 
+Flags.pack5(GENERATE_ORE, EXT2_METAL, GENERATE_ORE, GENERATE_RING, GENERATE_ROTOR), 0xFFFFFF, IconTransformator.UV.DULL);
+generateClientMaterial("iron", "INGOT", 
+Flags.pack3(Flags.pack3(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE), Flags.pack3(GENERATE_RING, GENERATE_DENSE, GENERATE_FRAME), Flags.pack3(GENERATE_LONG_ROD, GENERATE_PLASMA, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES)), 0xAAAAAA, IconTransformator.UV.METALLIC);
+generateClientMaterial("lead", "INGOT", 
+Flags.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_DENSE), 0x8C648C, IconTransformator.UV.DULL);
+generateClientMaterial("magnesium", "INGOT", Flags.pack2(STD_METAL, GENERATE_ORE), 0xFFBBBB, IconTransformator.UV.METALLIC);
+generateClientMaterial("manganese", "INGOT", GENERATE_FOIL, 0xEEEEEE, IconTransformator.UV.DULL);
+generateClientMaterial("lithium", "INGOT", 
+Flags.pack2(STD_METAL, GENERATE_ORE), 0xCBCBCB, IconTransformator.UV.DULL);
+generateClientMaterial("mercury", "FLUID", SMELT_INTO_FLUID, 0xFFDDDD, IconTransformator.UV.FLUID);
+generateClientMaterial("molybdenum", "INGOT", GENERATE_ORE, 0xAAAADD, IconTransformator.UV.SHINY);
+generateClientMaterial("neodymium", "INGOT", Flags.pack3(STD_METAL, GENERATE_ROD, GENERATE_ORE), 0x777777, IconTransformator.UV.METALLIC);
+generateClientMaterial("nickel", "INGOT",
+Flags.pack4(STD_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_PLASMA), 0xAAAAFF, IconTransformator.UV.METALLIC);
+generateClientMaterial("niobium", "INGOT", STD_METAL, 0xAAAAFF, IconTransformator.UV.METALLIC);
+generateClientMaterial("nitrogen", "FLUID", 
+Flags.pack2(STATE_GAS, GENERATE_PLASMA), 0x90AAEE, IconTransformator.UV.FLUID);
+generateClientMaterial("oxygen", "FLUID", 
+Flags.pack2(STATE_GAS, GENERATE_PLASMA), 0x90AAEE, IconTransformator.UV.FLUID);
+generateClientMaterial("hydrogen", "FLUID", STATE_GAS, 0x00FFAA, IconTransformator.UV.FLUID);
+generateClientMaterial("palladium", "INGOT",
+Flags.pack3(EXT2_METAL, GENERATE_ORE, GENERATE_FLUID_BLOCK), 0xCED0DD, IconTransformator.UV.METALLIC);
+generateClientMaterial("phosphorus", "DUST", GENERATE_ORE, 0xC8C800, IconTransformator.UV.DULL);
+generateClientMaterial("platinum", "INGOT", 
+Flags.pack3(EXT2_METAL, GENERATE_ORE, GENERATE_FLUID_BLOCK), 0xFFFF99, IconTransformator.UV.SHINY);
+generateClientMaterial("potassium", "INGOT", EXT_METAL, 0xFFFF99, IconTransformator.UV.METALLIC);
+generateClientMaterial("titanium", "INGOT", 
+Flags.pack2(EXT2_METAL, MORTAR_GRINDABLE), 0xDCDCFF, IconTransformator.UV.SHINY);
+generateClientMaterial("silver", "INGOT", 
+Flags.pack3(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE), 0xDCDCFF, IconTransformator.UV.SHINY);
+generateClientMaterial("silicon", "INGOT", 
+Flags.pack3(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE), 0xDCDCFF, IconTransformator.UV.SHINY);
+generateClientMaterial("sodium", "INGOT", STD_METAL,  0x000096, IconTransformator.UV.METALLIC);
+generateClientMaterial("sulfur", "DUST", 
+Flags.pack4(NO_SMASHING, NO_SMELTING, FLAMMABLE, GENERATE_ORE), 0xC8C800, IconTransformator.UV.DULL);
+generateClientMaterial("tantalum", "INGOT", 
+Flags.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), 0xDCDCDC, IconTransformator.UV.DULL);
+generateClientMaterial("tin", "INGOT", 
+Flags.pack5(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING, GENERATE_ROTOR, GENERATE_ORE), 0xDCDCDC, IconTransformator.UV.DULL);
+generateClientMaterial("thorium", "INGOT", 
+Flags.pack2(STD_METAL, GENERATE_ORE), 0x001E00, IconTransformator.UV.SHINY);
+generateClientMaterial("tungsten", "INGOT", EXT2_METAL, 0x001E00, IconTransformator.UV.METALLIC);
+generateClientMaterial("uranium", "INGOT", 
+Flags.pack2(STD_METAL, GENERATE_ORE), 0x32F032, IconTransformator.UV.METALLIC);
+generateClientMaterial("uranium235", "INGOT", Flags.pack3(STD_METAL, GENERATE_ORE, GENERATE_ROD), 0x32F032, IconTransformator.UV.METALLIC);
+generateClientMaterial("vanadium", "INGOT", STD_METAL, 0x323232, IconTransformator.UV.METALLIC);
+generateClientMaterial("zinc", "INGOT", 
+Flags.pack4(STD_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_FOIL), 0xFAF0F0, IconTransformator.UV.METALLIC);
+
+
+
+
+
+
+
+
+generateClientMaterial("almandine", "DUST", GENERATE_ORE, 0xFF0000, IconTransformator.UV.ROUGH);
+generateClientMaterial("amber", "GEM", 
+Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT),  0xBD4949, IconTransformator.UV.RUBY);
+generateClientMaterial("banded_iron", "DUST", GENERATE_ORE, 0x915A5A, IconTransformator.UV.DULL);
+generateClientMaterial("barite", "DUST", GENERATE_ORE, 0xE6EBFF, IconTransformator.UV.DULL);
+generateClientMaterial("bastnasite", "DUST", GENERATE_ORE, 0xC86E2D, IconTransformator.UV.FINE);
+generateClientMaterial("battery_alloy", "INGOT", EXT_METAL, 0x9C7CA0, IconTransformator.UV.DULL);
+generateClientMaterial("blue_topaz", "GEM", 
+Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT), 0x0000FF, IconTransformator.UV.GEM_HORIZONTAL);
+generateClientMaterial("bronze", "INGOT", 
+Flags.pack2(Flags.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), 
+Flags.pack3(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_LONG_ROD)), 0xFF8000, IconTransformator.UV.METALLIC);
+generateClientMaterial("brown_limonite", "DUST", GENERATE_ORE, 0xC86400, IconTransformator.UV.METALLIC);
+generateClientMaterial("certus_quartz", "GEM", Flags.pack4(STD_SOLID, NO_SMELTING, CRYSTALLISABLE, GENERATE_ORE), 0xD2D2E6, IconTransformator.UV.QUARTZ);
+generateClientMaterial("coal", "GEM", 
+Flags.pack2(Flags.pack3(GENERATE_ORE, FLAMMABLE, NO_SMELTING),
+Flags.pack3(NO_SMASHING, MORTAR_GRINDABLE, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES)), 0x464646, IconTransformator.UV.ROUGH);
+generateClientMaterial("calcite", "DUST", GENERATE_ORE, 0xFAE6DC, IconTransformator.UV.DULL);
+generateClientMaterial("cassiterite", "DUST", GENERATE_ORE, 0xDCDCDC, IconTransformator.UV.METALLIC);
+generateClientMaterial("chalcopyrite", "DUST", GENERATE_ORE, 0xA07828, IconTransformator.UV.DULL);
+generateClientMaterial("cinnabar", "DUST", GENERATE_ORE, 0x960000, IconTransformator.UV.ROUGH);
+generateClientMaterial("cobaltite", "DUST", GENERATE_ORE, 0x5050FA, IconTransformator.UV.METALLIC);
+generateClientMaterial("cooperite", "DUST", GENERATE_ORE, 0xFFFFC8, IconTransformator.UV.METALLIC);
+generateClientMaterial("dark_ash", "DUST", DISABLE_DECOMPOSITION, 0xFF0000, IconTransformator.UV.SAND);
+generateClientMaterial("ash", "DUST", DISABLE_DECOMPOSITION, 0x969696, IconTransformator.UV.SAND);
+generateClientMaterial("diamond", "GEM", 
+Flags.pack3(Flags.pack4(GENERATE_ROD, GENERATE_BOLT_SCREW, GENERATE_LENSE, GENERATE_GEAR),
+Flags.pack4(NO_SMASHING, NO_SMELTING, FLAMMABLE, HIGH_SIFTER_OUTPUT), 
+Flags.pack3(GENERATE_ORE, DISABLE_DECOMPOSITION, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES)), 0xC8FFFF, IconTransformator.UV.DIAMOND);
+generateClientMaterial("emerald", "GEM", 
+Flags.pack5(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES), 0x50FF50, IconTransformator.UV.EMERALD);
+generateClientMaterial("ender_pearl", "GEM",
+Flags.pack4(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING, NO_SMELTING), 0x50FF50, IconTransformator.UV.GEM_VERTICAL);
+generateClientMaterial("galena", "DUST", GENERATE_ORE, 0x643C64, IconTransformator.UV.DULL);
+generateClientMaterial("garnierite", "DUST", GENERATE_ORE, 0x32C846, IconTransformator.UV.METALLIC);
+generateClientMaterial("glauconite", "DUST", GENERATE_ORE, 0x82B43C, IconTransformator.UV.DULL);
+generateClientMaterial("glowstone", "DUST", 
+Flags.pack4(NO_SMASHING, SMELT_INTO_FLUID, GENERATE_PLATE, EXCLUDE_PLATE_COMPRESSOR_RECIPE), 0xFFFF00, IconTransformator.UV.SHINY);
+generateClientMaterial("graphite", "INGOT", 
+Flags.pack4(GENERATE_PLATE, GENERATE_ORE, NO_SMELTING, FLAMMABLE), 0x808080, IconTransformator.UV.DULL);
+generateClientMaterial("green_sapphire", "GEM", Flags.pack5(GENERATE_ORE, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_LENSE), 0x64C882, IconTransformator.UV.GEM_VERTICAL);
+generateClientMaterial("andradite", "DUST", GENERATE_ORE, 0xC86400, IconTransformator.UV.ROUGH);
+generateClientMaterial("grossular", "DUST", GENERATE_ORE, 0xC86400, IconTransformator.UV.ROUGH);
+generateClientMaterial("gunpowder", "DUST", 
+Flags.pack4(FLAMMABLE, EXPLOSIVE, NO_SMELTING, NO_SMASHING), 0x808080, IconTransformator.UV.SAND);
+generateClientMaterial("quartzite", "GEM", 
+Flags.pack3(NO_SMELTING, CRYSTALLISABLE, GENERATE_ORE), 0xD2E6D2, IconTransformator.UV.QUARTZ);
+generateClientMaterial("ilmenite", "DUST", GENERATE_ORE,  0x463732, IconTransformator.UV.METALLIC);
+generateClientMaterial("jasper", "GEM", 
+Flags.pack3(STD_GEM, NO_SMELTING, HIGH_SIFTER_OUTPUT),  0xC85050, IconTransformator.UV.EMERALD);
+generateClientMaterial("lazurite", "GEM", GENERATE_ORE, 0x6478FF, IconTransformator.UV.LAPIS);
+generateClientMaterial("lepidolite", "DUST", GENERATE_ORE, 0xF0328C, IconTransformator.UV.FINE);
+generateClientMaterial("magnesite", "DUST", GENERATE_ORE, 0xFAFAB4, IconTransformator.UV.METALLIC);
+generateClientMaterial("magnetite", "DUST", GENERATE_ORE, 0x1E1E1E, IconTransformator.UV.METALLIC);
+generateClientMaterial("malachite", "DUST", 
+Flags.pack2(GENERATE_ORE, INDUCTION_SMELTING_LOW_OUTPUT), 0x055F05, IconTransformator.UV.DULL);
+generateClientMaterial("molybdenite", "DUST", GENERATE_ORE, 0x191919, IconTransformator.UV.METALLIC);
+generateClientMaterial("nether_quartz", "GEM", 
+Flags.pack5(STD_SOLID, NO_SMELTING, CRYSTALLISABLE, GENERATE_ORE, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES), 0xE6D2D2, IconTransformator.UV.QUARTZ);
+generateClientMaterial("nether_star", "GEM",
+Flags.pack4(STD_SOLID, GENERATE_LENSE, NO_SMASHING, NO_SMELTING),  0xFFFFFF, IconTransformator.UV.NETHERSTAR);
+generateClientMaterial("pentlandite", "DUST", GENERATE_ORE, 0xFFFF00, IconTransformator.UV.DULL);
+generateClientMaterial("phosphate", "DUST", 
+Flags.pack5(GENERATE_ORE, NO_SMASHING, NO_SMELTING, FLAMMABLE, EXPLOSIVE), 0xA59605, IconTransformator.UV.DULL);
+generateClientMaterial("powellite", "DUST", GENERATE_ORE, 0xFFFF00, IconTransformator.UV.DULL);
+generateClientMaterial("pyrite", "DUST", GENERATE_ORE, 0x967828, IconTransformator.UV.ROUGH);
+generateClientMaterial("pyrochlore", "DUST", GENERATE_ORE, 0x783264, IconTransformator.UV.METALLIC);
+generateClientMaterial("pyrolusite", "DUST", GENERATE_ORE, 0x9696AA, IconTransformator.UV.DULL);
+generateClientMaterial("pyrope", "DUST", GENERATE_ORE, 0x783264, IconTransformator.UV.METALLIC);
+generateClientMaterial("salt", "DUST", GENERATE_ORE, 0xFFFFFF, IconTransformator.UV.FINE);
+generateClientMaterial("silicon_dioxide", "DUST", Flags.pack3(NO_SMASHING | NO_SMELTING | CRYSTALLISABLE),  0x9C7CA0, IconTransformator.UV.DULL);
+
+generateClientMaterial("soapstone", "DUST", GENERATE_ORE, 0x5F915F, IconTransformator.UV.DULL);
+generateClientMaterial("spessartine", "DUST", GENERATE_ORE, 0xFF6464, IconTransformator.UV.DULL);
+generateClientMaterial("spodumene", "DUST", GENERATE_ORE, 0xBEAAAA, IconTransformator.UV.DULL);
+generateClientMaterial("rare_earth", "DUST", 0, 0x808064, IconTransformator.UV.ROUGH);
+generateClientMaterial("rock_salt", "DUST", GENERATE_ORE, 0xF0C8C8, IconTransformator.UV.FINE);
+generateClientMaterial("ruby", "GEM", 
+Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT), 0xBD4949, IconTransformator.UV.RUBY);
+generateClientMaterial("fools_ruby", "GEM", 
+Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT), 0xBD4949, IconTransformator.UV.RUBY);
+generateClientMaterial("rutile", "GEM",  
+Flags.pack3(STD_GEM, GENERATE_ORE, DISABLE_DECOMPOSITION), 0xD40D5C, IconTransformator.UV.GEM_HORIZONTAL);
+generateClientMaterial("sapphire", "GEM", 
+Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT), 0x6464C8, IconTransformator.UV.GEM_HORIZONTAL);
+generateClientMaterial("sodalite", "GEM", GENERATE_ORE, 0x1414FF, IconTransformator.UV.LAPIS);
+generateClientMaterial("tanzanite", "GEM", 
+Flags.pack5(EXT_METAL, GENERATE_ORE, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT), 0x4000C8, IconTransformator.UV.GEM_VERTICAL);
+generateClientMaterial("topaz", "GEM", 
+Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT), 0xFF8000, IconTransformator.UV.GEM_HORIZONTAL);
+generateClientMaterial("steel", "INGOT", 
+Flags.pack3(Flags.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), 
+Flags.pack3(GENERATE_ROTOR, GENERATE_SMALL_GEAR, GENERATE_DENSE), 
+Flags.pack3(DISABLE_DECOMPOSITION, GENERATE_FRAME, GENERATE_LONG_ROD)), 0x505050, IconTransformator.UV.METALLIC);
+generateClientMaterial("stibnite", "DUST", GENERATE_ORE, 0x464646, IconTransformator.UV.METALLIC);
+generateClientMaterial("scheelite", "DUST", GENERATE_ORE, 0xC88C14, IconTransformator.UV.DULL);
+generateClientMaterial("talc", "DUST", GENERATE_ORE, 0x5AB45A, IconTransformator.UV.DULL);
+generateClientMaterial("tantalite", "DUST", GENERATE_ORE, 0x915028, IconTransformator.UV.METALLIC);
+generateClientMaterial("tungstate", "DUST", GENERATE_ORE, 0x373223, IconTransformator.UV.DULL);
+generateClientMaterial("tetrahedrite", "DUST", GENERATE_ORE, 0xC82000, IconTransformator.UV.DULL);
+generateClientMaterial("wrought_iron", "INGOT", 
+Flags.pack5(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING, GENERATE_LONG_ROD, DISABLE_DECOMPOSITION), 0xC8B4B4, IconTransformator.UV.METALLIC);
+generateClientMaterial("wulfenite", "DUST", GENERATE_ORE, 0xFF8000, IconTransformator.UV.DULL);
+generateClientMaterial("water", "FLUID", 
+Flags.pack2(NO_RECYCLING, DISABLE_DECOMPOSITION), 0xFF8000, IconTransformator.UV.FLUID);
+generateClientMaterial("yellow_limonite", "DUST", GENERATE_ORE, 0xC8C800, IconTransformator.UV.METALLIC);
+generateClientMaterial("uraninite", "DUST", GENERATE_ORE, 0x232323, IconTransformator.UV.METALLIC);
+generateClientMaterial("uvarovite", "DUST", 0, 0xB4FFB4, IconTransformator.UV.GEM_VERTICAL);
+
+generateClientMaterial("andesite", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("basalt", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("granite_black", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("diorite", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("endstone", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.DULL);
+generateClientMaterial("granite", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("gravel", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.METALLIC);
+generateClientMaterial("marble", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.FINE);
+generateClientMaterial("netherrack", "DUST", NO_SMASHING, 0x232323, IconTransformator.UV.ROUGH);
+generateClientMaterial("sandstone", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("bedrock", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("sand", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("stone", "DUST", 
+Flags.pack5(
+MORTAR_GRINDABLE, GENERATE_GEAR, GENERATE_PLATE, NO_SMASHING, NO_RECYCLING), 0xB4FFB4, IconTransformator.UV.ROUGH);
+generateClientMaterial("granite_red", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("sandstone_red", "DUST", NO_SMASHING, 0xC8C800, IconTransformator.UV.ROUGH);
+
+
+generateClientMaterial("lava", "FLUID", 0, 0xC8C800, IconTransformator.UV.FLUID);
+generateClientMaterial("clay", "DUST", MORTAR_GRINDABLE, 0xC8C800, IconTransformator.UV.ROUGH);
+generateClientMaterial("charcoal", "GEM",
+Flags.pack4(FLAMMABLE, NO_SMELTING, NO_SMASHING, MORTAR_GRINDABLE), 0xC8C800, IconTransformator.UV.LIGNITE);
+generateClientMaterial("glass", "GEM",
+Flags.pack2(Flags.pack3(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_RECYCLING, SMELT_INTO_FLUID, EXCLUDE_BLOCK_CRAFTING_RECIPES)), 0xC8C800, IconTransformator.UV.GLASS);
+generateClientMaterial("wheat", "DUST", 0, 0xC8C800, IconTransformator.UV.FINE);
+generateClientMaterial("brick", "DUST",
+Flags.pack2(EXCLUDE_BLOCK_CRAFTING_RECIPES, DECOMPOSITION_BY_CENTRIFUGING), 0xC8C800, IconTransformator.UV.GLASS);
+generateClientMaterial("steam", "FLUID",
+Flags.pack3(NO_RECYCLING, GENERATE_FLUID_BLOCK, DISABLE_DECOMPOSITION), 0xC8C800, IconTransformator.UV.FLUID);
+
+
+
+
+generateClientMaterial("amethyst", "GEM", 
+Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT), 0xD232D2, IconTransformator.UV.FLINT);
+generateClientMaterial("apatite", "GEM", 
+Flags.pack4(GENERATE_ORE, NO_SMASHING, NO_SMELTING, CRYSTALLISABLE), 0xC8C8FF, IconTransformator.UV.DIAMOND);
+generateClientMaterial("bauxite", "DUST", GENERATE_ORE, 0xC86400, IconTransformator.UV.DULL);
+generateClientMaterial("bentonite", "DUST", GENERATE_ORE, 0xF5D7D2, IconTransformator.UV.ROUGH);
+generateClientMaterial("blaze", "DUST",
+Flags.pack4(NO_SMELTING, SMELT_INTO_FLUID, MORTAR_GRINDABLE, BURNING), 0xFFC800, IconTransformator.UV.DULL);
+generateClientMaterial("ender_eye", "GEM",
+Flags.pack4(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING, NO_SMELTING), 0x50FF50, IconTransformator.UV.GEM_VERTICAL);
+generateClientMaterial("monazite", "GEM", 
+Flags.pack4(GENERATE_ORE, NO_SMASHING, NO_SMELTING, CRYSTALLISABLE), 0x324632, IconTransformator.UV.DIAMOND); // ? - lantanoids rateearh
+generateClientMaterial("olivine", "GEM",
+Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT), 0x66FF66, IconTransformator.UV.RUBY);
+generateClientMaterial("opal", "GEM",
+Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT), 0x0000FF, IconTransformator.UV.OPAL);
+generateClientMaterial("lapis", "GEM", GENERATE_ORE, 0x4646DC, IconTransformator.UV.LAPIS);
+generateClientMaterial("lignite", "GEM", 
+Flags.pack5(GENERATE_ORE, FLAMMABLE, NO_SMELTING, NO_SMASHING, MORTAR_GRINDABLE), 0x644646, IconTransformator.UV.LIGNITE);
+generateClientMaterial("pitchblende", "DUST", GENERATE_ORE, 0xC8D200, IconTransformator.UV.DULL);
+
+
+generateClientMaterial("garnet_red", "GEM", 
+Flags.pack2(Flags.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE)), 0xC85050, IconTransformator.UV.RUBY);
+generateClientMaterial("redstone", "DUST", GENERATE_ORE, 0xC80000, IconTransformator.UV.ROUGH);
+
+generateClientMaterial("garnet_yellow", "GEM", Flags.pack2(Flags.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE)), 0xC8C850, IconTransformator.UV.RUBY);
+generateClientMaterial("flint", "GEM", 
+Flags.pack2(NO_SMASHING, MORTAR_GRINDABLE), 0x001E00, IconTransformator.UV.FLINT);
+generateClientMaterial("vanadium_magnetite", "DUST", GENERATE_ORE, 0x23233C, IconTransformator.UV.METALLIC);
+
+
+
+
+generateClientMaterial("red_alloy", "INGOT", Flags.pack2(GENERATE_PLATE, GENERATE_FINE_WIRE), 0xC80000, IconTransformator.UV.DULL);
+
+generateClientOre("copper", IconTransformator.UV.METALLIC, 0xFFAAAB);
+generateClientOre("tin", IconTransformator.UV.DULL, 0xDCDCDC);
+generateClientOre("rutile", IconTransformator.UV.GEM_HORIZONTAL, 0xD40D5C);
+generateClientOre("iron", IconTransformator.UV.METALLIC, 0xAAAAAA);
+generateClientOre("coal", IconTransformator.UV.ROUGH, 0x464646);
+generateClientOre("lignite", IconTransformator.UV.LIGNITE, 0x644646);
+generateClientOre("magnetite", IconTransformator.UV.METALLIC, 0x1E1E1E);
+generateClientOre("vanadium_magnetite", IconTransformator.UV.METALLIC, 0x23233C);
+generateClientOre("redstone", IconTransformator.UV.ROUGH, 0xC80000);
+generateClientOre("gold", IconTransformator.UV.SHINY, 0xFFFF00);
+generateClientOre("graphite", IconTransformator.UV.DULL, 0x808080);
+generateClientOre("diamond", IconTransformator.UV.DIAMOND, 0xC8FFFF);
+generateClientOre("bismuth", IconTransformator.UV.METALLIC, 0x64A0A0);
+generateClientOre("lead", IconTransformator.UV.DULL, 0x8C648C);
+generateClientOre("zinc", IconTransformator.UV.DULL, 0xFAF0F0);
+generateClientOre("silver", IconTransformator.UV.SHINY, 0xDCDCFF);
+generateClientOre("nickel", IconTransformator.UV.METALLIC, 0xAAAAFF);
+generateClientOre("lapis", IconTransformator.UV.LAPIS, 0x4646DC);
+generateClientOre("emerald", IconTransformator.UV.EMERALD, 0x50FF50);
+generateClientOre("ruby", IconTransformator.UV.RUBY, 0xBD4949);
+generateClientOre("sapphire", IconTransformator.UV.GEM_HORIZONTAL, 0x6464C8);
+generateClientOre("green_sapphire", IconTransformator.UV.GEM_VERTICAL, 0x64C882);
+generateClientOre("coal", IconTransformator.UV.ROUGH, 0x464646);
+generateClientOre("olivine", IconTransformator.UV.RUBY, 0x66FF66);
+generateClientOre("topaz", IconTransformator.UV.GEM_HORIZONTAL, 0xFF8000);
+generateClientOre("tanzanite", IconTransformator.UV.GEM_VERTICAL, 0x4000C8);
+generateClientOre("amethyst", IconTransformator.UV.FLINT, 0xD232D2);
+generateClientOre("opal", IconTransformator.UV.OPAL, 0x0000FF);
+generateClientOre("blue_topaz", IconTransformator.UV.GEM_HORIZONTAL, 0x0000FF);
+generateClientOre("amber", IconTransformator.UV.RUBY, 0xBD4949);
+generateClientOre("fools_ruby", IconTransformator.UV.RUBY, 0xBD4949);
+generateClientOre("red_garnet", IconTransformator.UV.RUBY, 0xC85050);
+generateClientOre("yellow_garnet", IconTransformator.UV.RUBY, 0xC8C850);
+generateClientOre("sulfur", IconTransformator.UV.DULL, 0xC8C800);
+generateClientOre("brown_limonite", IconTransformator.UV.METALLIC, 0xC86400);
+generateClientOre("yellow_limonite", IconTransformator.UV.METALLIC, 0xC8C800);
+generateClientOre("banded_iron", IconTransformator.UV.DULL, 0x915A5A);
+generateClientOre("malachite", IconTransformator.UV.DULL, 0x055F05);
+generateClientOre("cassiterite", IconTransformator.UV.METALLIC, 0xDCDCDC);
+generateClientOre("tetrahedrite", IconTransformator.UV.DULL, 0xC82000);
+generateClientOre("stibnite", IconTransformator.UV.METALLIC, 0x464646);
+generateClientOre("chalcopyrite", IconTransformator.UV.DULL, 0xA07828);
+generateClientOre("pyrite", IconTransformator.UV.ROUGH, 0x967828);
+generateClientOre("bauxite", IconTransformator.UV.DULL, 0xC86400);
+generateClientOre("aluminium", IconTransformator.UV.DULL, 0x80C8F0);
+generateClientOre("ilmenite", IconTransformator.UV.METALLIC, 0x463732);
+generateClientOre("salt", IconTransformator.UV.FINE, 0xFFFFFF);
+generateClientOre("rock_salt", IconTransformator.UV.FINE, 0xF0C8C8);
+generateClientOre("lepidolite", IconTransformator.UV.DULL, 0xF0328C); //
+generateClientOre("spodumene", IconTransformator.UV.DULL, 0xBEAAAA);
+generateClientOre("cinnabar", IconTransformator.UV.ROUGH, 0x960000);
+generateClientOre("soapstone", IconTransformator.UV.DULL, 0x5F915F);
+generateClientOre("talc", IconTransformator.UV.DULL, 0x5AB45A);
+generateClientOre("glauconite", IconTransformator.UV.DULL, 0x82B43C);
+generateClientOre("pentlandite", IconTransformator.UV.DULL, 0xFFFF00);
+generateClientOre("garnierite", IconTransformator.UV.METALLIC, 0x32C846);
+generateClientOre("cobaltite", IconTransformator.UV.METALLIC, 0x2929BC);
+generateClientOre("cooperite", IconTransformator.UV.METALLIC, 0xFFFFC8);
+generateClientOre("palladium", IconTransformator.UV.METALLIC, 0xCED0DD);
+generateClientOre("iridium", IconTransformator.UV.DULL, 0xFFFFFF);
+generateClientOre("platinum", IconTransformator.UV.SHINY, 0xFFFF99);
+generateClientOre("pitchblende", IconTransformator.UV.DULL, 0xC8D200);
+generateClientOre("uraninite", IconTransformator.UV.METALLIC, 0x232323);
+generateClientOre("uranium", IconTransformator.UV.METALLIC, 0x32F032);
+generateClientOre("bastnasite", IconTransformator.UV.FINE, 0xC86E2D);
+generateClientOre("monazite", IconTransformator.UV.DIAMOND, 0x324632);
+generateClientOre("neodymium", IconTransformator.UV.DULL, 0x777777);
+generateClientOre("wulfenite", IconTransformator.UV.DULL, 0xFF8000);
+generateClientOre("molybdenite", IconTransformator.UV.DULL, 0x191919);
+generateClientOre("molybdenum", IconTransformator.UV.DULL, 0xAAAADD);
+generateClientOre("powellite", IconTransformator.UV.DULL, 0xFFFF00);
+generateClientOre("nether_quartz", IconTransformator.UV.QUARTZ, 0xE6D2D2);
+generateClientOre("jasper", IconTransformator.UV.EMERALD, 0xC85050);
+generateClientOre("scheelite", IconTransformator.UV.DULL, 0xC88C14);
+generateClientOre("tungstate", IconTransformator.UV.DULL, 0x373223);
+generateClientOre("lithium", IconTransformator.UV.DULL, 0xCBCBCB);
+generateClientOre("almandine", IconTransformator.UV.DULL, 0xFF0000);
+generateClientOre("pyrope", IconTransformator.UV.DULL, 0xFF0000);
+generateClientOre("grossular", IconTransformator.UV.DULL, 0xC86400);
+generateClientOre("spessartine", IconTransformator.UV.DULL, 0xFF6464);
+generateClientOre("pyrolusite", IconTransformator.UV.DULL, 0x9696AA);
+generateClientOre("tantalite", IconTransformator.UV.DULL, 0x915028);
+generateClientOre("quartzite", IconTransformator.UV.DULL, 0xD2E6D2);
+generateClientOre("certus_quartz", IconTransformator.UV.DULL, 0xD2D2E6);
+generateClientOre("barite", IconTransformator.UV.DULL, 0xE6EBFF);
+generateClientOre("bentonite", IconTransformator.UV.DULL, 0xF5D7D2);
+generateClientOre("magnesite", IconTransformator.UV.METALLIC, 0xFAFAB4);
+generateClientOre("apatite", IconTransformator.UV.DIAMOND, 0xC8C8FF);
+generateClientOre("phosphorus", IconTransformator.UV.DULL, 0xC8C800);
+generateClientOre("pyrochlore", IconTransformator.UV.METALLIC, 0x783264);
+generateClientOre("galena", IconTransformator.UV.DULL, 0x643C64);
+generateClientOre("sodalite", IconTransformator.UV.LAPIS, 0x1414FF);
+generateClientOre("lazurite", IconTransformator.UV.LAPIS, 0x6478FF);
+generateClientOre("calcite", IconTransformator.UV.DULL, 0xFAE6DC);
+generateClientOre("beryllium", IconTransformator.UV.METALLIC, 0x64B464);
+generateClientOre("thorium", IconTransformator.UV.SHINY, 0x001E00);
+
+
+
+addToolTypeGenerate("hammer", "toolHeadHammer", "_stick", 0, [
+   {u: 10, v: 0}, 
+  {u: 9, v: 1}, {u: 10, v: 1}, {u: 11, v: 1},
+  {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2},
+  {u: 11, v: 2}, {u: 12, v: 2},
+  {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3},
+  {u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3},
+  {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 14, v: 4},
+  {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, {u: 14, v: 5}, {u: 15, v: 5},
+   {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6}, {u: 14, v: 6},
+   {u: 11, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+   {u: 12, v: 8}
+   ], null, "_stick", null, "stick");
+addToolTypeGenerate("file", "toolHeadFile", "HANDLE_FILE", 0, [
+  {u: 3, v: 1}, 
+  {u: 2, v: 2}, {u: 3, v: 2}, {u: 4, v: 2},
+  {u: 1, v: 3}, {u: 2, v: 3}, {u: 3, v: 3}, {u: 4, v: 3}, {u: 5, v: 3},
+    {u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4},
+{u: 3, v: 5}, {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, 
+ {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6},
+ {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7},
+  {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, 
+  {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9},
+  {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10},
+  {u: 10, v: 11}, {u: 11, v: 11}
+  ], null, [
+      {u: 10, v: 6}, 
+      {u: 9, v: 7}, {u: 10, v: 7}, 
+      {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, 
+      {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9},
+        {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+          {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11}, {u: 14, v: 11},
+          {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 14, v: 12},
+          {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13}, {u: 14, v: 13}, 
+          {u: 11, v: 14}, {u: 12, v: 14}, {u: 13, v: 14},
+    ], null, "handle", 0x6478FF);
+addToolTypeGenerate("axe", "toolHeadAxe", "_stick", 0, [
+  {u: 9, v: 0}, {u: 10, v: 0},
+  {u: 8, v: 1}, {u: 9, v: 1}, {u: 10, v: 1},  {u: 11, v: 1}, 
+  {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, 
+  {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3}, {u: 9, v: 3}, {u: 10, v: 3},
+   {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4},  {u: 10, v: 4}, {u: 11, v: 4}, 
+   {u: 7, v: 5}, {u: 8, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5},
+   {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+    {u: 11, v: 7}, {u: 12, v: 7},
+  ], null, "_stick", null, "stick");
+addToolTypeGenerate("hoe", "toolHeadHoe", "_stick", 0, [
+  {u: 7, v: 0}, {u: 8, v: 0}, {u: 9, v: 0}, 
+  {u: 6, v: 1}, {u: 7, v: 1}, {u: 8, v: 1}, {u: 9, v: 1}, {u: 10, v: 1}, 
+  {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2},
+  {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3},
+  {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4},
+  {u: 12, v: 5}
+  ], null, "_stick", null, "stick");
+addToolTypeGenerate("pickaxe", "toolHeadPickaxe", "_stick", 0, [
+  {u: 6, v: 1}, {u: 7, v: 1}, {u: 8, v: 1}, 
+  {u: 9, v: 1}, {u: 10, v: 1}, 
+  {u: 5, v: 2},  {u: 6, v: 2}, {u: 7, v: 2}, {u: 8, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, 
+  {u: 11, v: 3}, {u: 12, v: 4}, {u: 13, v: 4},
+  {u: 12, v: 5}, {u: 13, v: 5}, {u: 14, v: 5},
+  {u: 12, v: 6}, {u: 13, v: 6}, {u: 14, v: 6},
+  {u: 12, v: 7}, {u: 13, v: 7}, {u: 14, v: 7},
+  {u: 12, v: 8}, {u: 13, v: 8}, {u: 14, v: 8},
+  {u: 12, v: 9}, {u: 13, v: 9}, {u: 14, v: 9},
+    {u: 13, v: 10}
+  ], null, "_stick", null, "stick");
+addToolTypeGenerate("shovel", "toolHeadShovel", "_stick", 0, [
+   {u: 11, v: 1}, {u: 12, v: 1}, {u: 13, v: 1},
+    {u: 10, v: 2}, {u: 11, v: 2}, {u: 12, v: 2}, {u: 13, v: 2},  {u: 14, v: 2}, 
+    
+    {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 14, v: 3},
+    
+     {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 14, v: 4},
+       {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, 
+       {u: 11, v: 6}, {u: 12, v: 6},
+         {u: 11, v: 7},
+  ], null, "_stick", null, "stick");
+addToolTypeGenerate("sword", "toolHeadSword", "HANDLE_SWORD", 0, [
+  {u: 13, v: 0}, {u: 14, v: 0}, {u: 15, v: 0}, 
+{u: 12, v: 1}, {u: 13, v: 1}, {u: 14, v: 1}, {u: 15, v: 1}, 
+{u: 11, v: 2}, {u: 12, v: 2}, {u: 13, v: 2}, {u: 14, v: 2}, {u: 15, v: 2},
+{u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3}, {u: 14, v: 3}, 
+{u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, 
+{u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5},
+   {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6},
+ {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7},
+{u: 5, v: 8}, {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8},
+{u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9},
+{u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10},
+{u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11},
+{u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12},
+{u: 2, v: 13}, {u: 3, v: 13},
+], null, [
+  {u: 2, v: 6}, {u: 3, v: 6}, 
+  {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, 
+  {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, 
+  {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, 
+  {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10},
+  {u: 3, v: 11}, {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, 
+  {u: 2, v: 12}, {u: 3, v: 12}, {u: 4, v: 12}, {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, 
+  {u: 0, v: 13}, {u: 1, v: 13}, {u: 2, v: 13}, {u: 3, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, 
+  {u: 0, v: 14}, {u: 1, v: 14}, {u: 2, v: 14}, 
+  {u: 0, v: 14}, {u: 1, v: 14}, {u: 2, v: 14}, 
+  ], null, "handle");
+addToolTypeGenerate("mortar", "MORTAR", null, GENERATE_MORTAR, [
+    {u: 11, v: 2}, {u: 12, v: 2}, 
+    {u: 10, v: 3}, {u: 11, v: 3}, {u: 12, v: 3}, {u: 13, v: 3},
+    {u: 10, v: 4}, {u: 11, v: 4}, {u: 12, v: 4}, {u: 13, v: 4}, {u: 14, v: 4}, 
+      {u: 9, v: 5}, {u: 10, v: 5}, {u: 11, v: 5}, {u: 12, v: 5}, {u: 13, v: 5}, {u: 14, v: 5},
+      {u: 8, v: 6}, {u: 9, v: 6}, {u: 10, v: 6}, {u: 11, v: 6}, {u: 12, v: 6}, {u: 13, v: 6},
+       {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, {u: 10, v: 7}, {u: 11, v: 7}, 
+       
+       {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}
+  ], [
+    {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, 
+    
+    {u: 3, v: 6}, {u: 4, v: 6}, {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, 
+    {u: 2, v: 7}, {u: 3, v: 7}, {u: 4, v: 7}, {u: 5, v: 7}, {u: 6, v: 7}, {u: 12, v: 7}, {u: 13, v: 7},
+       {u: 2, v: 8}, {u: 3, v: 8}, {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 11, v: 8}, {u: 12, v: 8}, {u: 13, v: 8},
+     {u: 2, v: 9}, {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9}, {u: 13, v: 9},
+  {u: 3, v: 10}, {u: 4, v: 10}, {u: 5, v: 10}, {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10},
+  {u: 4, v: 11}, {u: 5, v: 11}, {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11},
+   {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12},
+    ], null, null, "null");
+addToolTypeGenerate("screwdriver", "toolHeadScrewdriver", "HANDLE_SCREWDRIVER", 0, [
+     {u: 2, v: 2}, {u: 3, v: 2}, 
+     {u: 2, v: 3}, {u: 3, v: 3}, {u: 4, v: 3},
+      {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, 
+      {u: 4, v: 5}, {u: 5, v: 5}, {u: 6, v: 5},
+       {u: 5, v: 6}, {u: 6, v: 6}, {u: 7, v: 6}, 
+       {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7},
+        {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, 
+        {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9},
+         {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, 
+         {u: 10, v: 11}, {u: 11, v: 11}
+  ], null, [
+      {u: 10, v: 6}, 
+      {u: 9, v: 7}, {u: 10, v: 7}, 
+      {u: 8, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, 
+      {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, {u: 10, v: 9}, {u: 11, v: 9}, {u: 12, v: 9},
+        {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, {u: 10, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+          {u: 9, v: 11}, {u: 10, v: 11}, {u: 11, v: 11}, {u: 12, v: 11}, {u: 13, v: 11}, {u: 14, v: 11},
+          {u: 9, v: 12}, {u: 10, v: 12}, {u: 11, v: 12}, {u: 12, v: 12}, {u: 13, v: 12}, {u: 14, v: 12},
+          {u: 10, v: 13}, {u: 11, v: 13}, {u: 12, v: 13}, {u: 13, v: 13}, {u: 14, v: 13}, 
+          {u: 11, v: 14}, {u: 12, v: 14}, {u: 13, v: 14},
+    ], null, "handle", 0x6478FF);
+addToolTypeGenerate("wirecutter", "WIRE_CUTTER", null, 0, [
+   {u: 6, v: 2}, {u: 9, v: 2},
+    {u: 5, v: 3}, {u: 6, v: 3}, {u: 7, v: 3}, {u: 8, v: 3},  {u: 9, v: 3}, {u: 10, v: 3}, 
+    {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4},  {u: 9, v: 4}, {u: 10, v: 4}, 
+       {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5},  {u: 9, v: 5}, {u: 10, v: 5}, 
+          {u: 7, v: 6}, {u: 8, v: 6}
+  ], [
+     {u: 6, v: 6}, {u: 9, v: 6},
+    {u: 5, v: 7}, {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7},  {u: 9, v: 7}, {u: 10, v: 7}, 
+    {u: 4, v: 8}, {u: 5, v: 8}, {u: 6, v: 8}, {u: 9, v: 8}, {u: 10, v: 8}, {u: 11, v: 8}, 
+       {u: 3, v: 9}, {u: 4, v: 9}, {u: 5, v: 9}, {u: 10, v: 9},  {u: 11, v: 9}, {u: 12, v: 9}, 
+      {u: 2, v: 10}, {u: 3, v: 10}, {u: 4, v: 10}, {u: 11, v: 10}, {u: 12, v: 10}, {u: 13, v: 10},
+       {u: 1, v: 11}, {u: 2, v: 11}, {u: 3, v: 11}, {u: 12, v: 11},  {u: 13, v: 11}, {u: 14, v: 11},
+        {u: 1, v: 12}, {u: 2, v: 12}, {u: 13, v: 12}, {u: 14, v: 12}, 
+    ], null, null, "null");
+addToolTypeGenerate("wrench", "WRENCH", null, 0, [ 
+      {u: 5, v: 1}, {u: 6, v: 1}, {u: 9, v: 1}, {u: 10, v: 1},
+      {u: 4, v: 2}, {u: 5, v: 2}, {u: 6, v: 2}, {u: 9, v: 2}, {u: 10, v: 2}, {u: 11, v: 2}, 
+      
+      {u: 4, v: 3}, {u: 5, v: 3}, {u: 6, v: 3}, {u: 9, v: 3}, {u: 10, v: 3}, {u: 11, v: 3},
+      
+      {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v: 4}, {u: 7, v: 4}, {u: 8, v: 4}, {u: 9, v: 4}, {u: 10, v: 4}, {u: 11, v: 4},  
+      {u: 5, v: 5}, {u: 6, v: 5}, {u: 7, v: 5}, {u: 8, v: 5}, {u: 9, v: 5}, {u: 10, v: 5}, 
+      
+      {u: 6, v: 6}, {u: 7, v: 6}, {u: 8, v: 6}, {u: 9, v: 6}, 
+      {u: 6, v: 7}, {u: 7, v: 7}, {u: 8, v: 7}, {u: 9, v: 7}, 
+      {u: 6, v: 8}, {u: 7, v: 8}, {u: 8, v: 8}, {u: 9, v: 8}, 
+      {u: 6, v: 9}, {u: 7, v: 9}, {u: 8, v: 9}, {u: 9, v: 9}, 
+      {u: 6, v: 10}, {u: 7, v: 10}, {u: 8, v: 10}, {u: 9, v: 10}, 
+      {u: 6, v: 11}, {u: 7, v: 11}, {u: 8, v: 11}, {u: 9, v: 11}, 
+      {u: 6, v: 12}, {u: 7, v: 12}, {u: 8, v: 12}, {u: 9, v: 12}, 
+ {u: 6, v: 13}, {u: 7, v: 13}, {u: 8, v: 13}, {u: 9, v: 13}, 
+      {u: 7, v: 14}, {u: 8, v: 14},
+  ], null, null, null, "null");
+
+generateClientTool("flint", IconTransformator.UV.FLINT, 0x002040,  "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
+generateClientTool("iron", IconTransformator.UV.METALLIC, 0xAAAAAA, "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
+generateClientTool("aluminium", IconTransformator.UV.METALLIC, 0x80C8F0, "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
+generateClientTool("cobalt", IconTransformator.UV.METALLIC, 0x2929BC, "copper", IconTransformator.UV.WOOD, 0x896727, 0, false);
+generateClientTool("beryllium", IconTransformator.UV.METALLIC, 0x64B464, "copper", IconTransformator.UV.WOOD, 0x896727, 0, false);
+generateClientTool("steel", IconTransformator.UV.DULL, 0x505050, "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
+generateClientTool("copper", IconTransformator.UV.SHINY, 0xFF8000, "copper", IconTransformator.UV.WOOD, 0x896727, 0, false);
+generateClientTool("bronze", IconTransformator.UV.DULL, 0xFF8000, "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
+generateClientTool("wrought_iron", IconTransformator.UV.METALLIC, 0xC8B4B4, "copper", IconTransformator.UV.WOOD, 0x896727, GENERATE_MORTAR, false);
+generateClientTool("diamond", IconTransformator.UV.DIAMOND, 0xC8FFFF, "copper", IconTransformator.UV.WOOD, 0x896727, 0, false);
+
+addCasing("MACHINE_BRONZE", ["BOTTOM", "TOP", "SIDE"]);
+addCasing("MACHINE_BRONZEBRICKS", ["BOTTOM", "TOP", "SIDE"]);
+addCasing("MACHINE_STEEL", ["BOTTOM", "TOP", "SIDE"]);
+addCasing("MACHINE_STEELBRICKS", ["BOTTOM", "TOP", "SIDE"]);
+
+addMachineForGenerate(["MACHINE_BRONZEBRICKS", "MACHINE_STEELBRICKS"],  ["bronze", "steel"], "alloy_smelter", ["FRONT"]);
+addMachineForGenerate(["MACHINE_BRONZEBRICKS", "MACHINE_STEELBRICKS"],  ["bronze", "steel"], "furnace", ["FRONT"]);
+addMachineForGenerate(["MACHINE_BRONZE", "MACHINE_STEEL"],  ["bronze", "steel"], "hammer", ["FRONT"]);
+addMachineForGenerate(["MACHINE_BRONZE", "MACHINE_STEEL"],  ["bronze", "steel"], "macerator", ["FRONT"]);
+addMachineForGenerate(["MACHINE_BRONZE", "MACHINE_STEEL"],  ["bronze", "steel"], "compressor", ["FRONT"]);
+addMachineForGenerate(["MACHINE_BRONZE", "MACHINE_STEEL"],  ["bronze", "steel"], "extractor", ["SIDE", "FRONT"]);
+addMachineForGenerate(["MACHINE_BRONZEBRICKS", "MACHINE_STEELBRICKS"],  ["bronze", "steel"], "boiler", ["FRONT"]);
+addMachineForGenerate(["MACHINE_STEELBRICKS"],  ["steel"], "boiler_lava", ["FRONT"]);
+addMachineForGenerate(["MACHINE_BRONZEBRICKS"],  ["bronze"], "boiler_solar", ["TOP"]);
+
+setLoadingTip("loading API");
+
+function Set(hashFunction) {
+        //custom hash function or default to JSON.stringify
+        this.hashFunction = hashFunction || JSON.stringify;
+        //initialize private variables: empty set with length 0
+        var _length = 0,
+            _set = [];
+
+        /**
+         * Simple function which finds a value in the set if it exists and returns undefined if not in the set
+         *
+         * @param value
+         * @returns {*}
+         */
+        this.get = function (value) {
+            return _set[value];
+        };
+
+        /**
+         * Helper function to return the set object
+         *
+         * @returns {{}}
+         */
+        this.getSet = function () {
+            return _set;
+        };
+
+        /**
+         * Function which takes in a list of values to put into the set and adds them if they don't exist.
+         *
+         * @param {...value} var_args
+         */
+        this.add = function () {
+            function addOne(value) {
+                if (this.get(value) === undefined) {
+                    _length++;
+                    _set[value] = value;
+                }
+            }
+
+            Array.prototype.forEach.call(arguments, function (val) {
+                addOne.call(this, val);
+            }, this);
+            
+        };
+
+        /**
+         * returns the number of items in the set
+         *
+         * @returns {number}
+         */
+        this.size = function () {
+            return _length;
+        };
+
+        /**
+         * Deletes a given element from the set if it exists. Returns true if the element was deleted, returns false if
+         * the element was not found in the set.
+         *
+         * @param element
+         */
+        this.remove = function (element) {
+            if (this.isInSet(element)) {
+                delete _set[element];
+                _length -= 1;
+                return true;
+            }
+            return false;
+        };
+
+        /**
+         * For debuging: prints the set out to the console
+         */
+        this.print = function () {
+            console.log(_set);
+        };
+
+        /**
+         * Converts the set to an array
+         *
+         * @returns {Array}
+         */
+        this.toArray = function () {
+            var array = [];
+
+            for (var element in _set) {
+                if (_set.hasOwnProperty(element))
+                    array.push(_set[element])
+            }
+
+            return array;
+        }
+}
+
+Set.prototype.cardinality = function () {
+        return this.size();
+    };
+
+    /**
+     * Returns a boolean checking if the set is empty
+     *
+     * @returns {boolean}
+     */
+    Set.prototype.isEmpty = function () {
+        return !this.size();
+    };
+
+    /**
+     * Returns a boolean checking if a given element is in the set
+     *
+     * @param element
+     * @returns {boolean}
+     */
+    Set.prototype.isInSet = function (element) {
+        return this.get(element) !== undefined;
+    };
+
+    /**
+     * Iterates over the elements in the set using a provided function with optional arguments value, index
+     *
+     * @param fn - callback to be invoked each iteration, with parameters value and index
+     * @param self - this function context for callback
+     */
+    Set.prototype.iterate = function (fn, self) {
+        var set = this.getSet(),
+            index = 0;
+
+        for (var element in set) {
+            fn.call(self, set[element], index);
+            index += 1;
+        }
+    };
+
+    /**
+     * Iterates over the elements in the set using fn callback, if callback is true the function immediately returns true
+     * else it returns false. The callback is invoked with value and index parameters.
+     *
+     * @param fn
+     * @param self
+     * @returns {boolean}
+     */
+    Set.prototype.some = function (fn, self) {
+        var set = this.getSet(),
+            index = 0;
+
+        for (var element in set) {
+            if (fn.call(self, set[element], index))
+                return true;
+            index += 1;
+        }
+
+        return false;
+    };
+
+    /**
+     * Returns the union set between this set and set2
+     *
+     * @param set2
+     * @returns {JsSet}
+     */
+    Set.prototype.union = function (set2) {
+        set2.iterate(function (val) {
+            this.add(val);
+        }, this);
+        return this; //return this to make it chainable
+    };
+
+    /**
+     * Returns the smaller set between this and set2
+     *
+     * @param set2
+     * @returns {JsSet}
+     */
+    Set.prototype.getSmallerSet = function (set2) {
+        return this.size() <= set2.size() ? this : set2;
+    };
+
+    /**
+     * Returns the intersection set between this and set2
+     *
+     * @param set2
+     * @returns {Set}
+     */
+    Set.prototype.intersection = function (set2) {
+        //initialize new set to return intersection
+        var intersectionSet = new Set(this.hashFunction),
+            smallerSet = this.getSmallerSet(set2), //find the smaller set to iterate over
+            largerSet = smallerSet === this ? set2 : this;
+
+        smallerSet.iterate(function (val) {
+            if (largerSet.isInSet(val)) {
+                intersectionSet.add(val);
+            }
+        });
+
+        return intersectionSet;
+    };
+
+    /**
+     * Return the difference set between this and set2
+     *
+     * @param set2
+     * @returns {JsSet}
+     */
+    Set.prototype.difference = function (set2) {
+        set2.iterate(function (val) {
+            this.remove(val);
+        }, this);
+        return this; //return this to make it chainable
+    };
+
+    /**
+     * Checks if subset is subset of this
+     *
+     * @param subset
+     */
+    Set.prototype.subset = function (subset) {
+        return subset.some(function (val) {
+            return this.isInSet(val);
+        }, this);
+    };
+
+    /**
+     *
+     * @returns {*}
+     */
+    Set.prototype.pop = function () {
+        var set = this.getSet(),
+            keys = Object.keys(set);
+        var random = set[keys[Math.floor(Math.random() * keys.length)]];
+        this.remove(random);
+        return random;
+    };
+
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+Set.prototype.push = function(value) {
+    return this.add(value);
+}
+Set.prototype.splice = function(value, count) {
+    //for()
+    return this.remove(value);
+}
+
+Object.defineProperty(Array.prototype, 'includes', {
+    value: function(searchElement, fromIndex) {
+
+      if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+      }
+
+      // 1. Let O be ? ToObject(this value).
+      var o = Object(this);
+
+      // 2. Let len be ? ToLength(? Get(O, "length")).
+      var len = o.length >>> 0;
+
+      // 3. If len is 0, return false.
+      if (len === 0) {
+        return false;
+      }
+
+      // 4. Let n be ? ToInteger(fromIndex).
+      //    (If fromIndex is undefined, this step produces the value 0.)
+      var n = fromIndex | 0;
+
+      // 5. If n ≥ 0, then
+      //  a. Let k be n.
+      // 6. Else n < 0,
+      //  a. Let k be len + n.
+      //  b. If k < 0, let k be 0.
+      var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+
+      function sameValueZero(x, y) {
+        return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
+      }
+
+      // 7. Repeat, while k < len
+      while (k < len) {
+        // a. Let elementK be the result of ? Get(O, ! ToString(k)).
+        // b. If SameValueZero(searchElement, elementK) is true, return true.
+        if (sameValueZero(o[k], searchElement)) {
+          return true;
+        }
+        // c. Increase k by 1.
+        k++;
+      }
+
+      // 8. Return false
+      return false;
+    }
+  });
+  
+let invertedIDs = {
+    itemID: {},
+    blockID: {},
+    invertIDs: function() {
+        for(let item in ItemID) {
+            this.itemID[ItemID[item]] = item;
+        }
+        for(let item in BlockID) {
+            this.blockID[BlockID[item]] = item;
+        }
+    },
+    isNumericIDisItemID: function(id) {
+        if(this.itemID[id] != null) {
+            return true;
+        }
+        return false;
+    },
+    isNumericIDisBlockID: function(id) {
+        if(this.blockID[id] != null) {
+            return true;
+        }
+        return false;
+    },
+};
+
+
 
 let tileToUpdate = null;
 let MetaRenderer = {
@@ -323,15 +2425,21 @@ let MetaRenderer = {
     ],
   getEntityYaw: ModAPI.requireGlobal("Entity.getYaw"),
   getEntityPitch: ModAPI.requireGlobal("Entity.getPitch"),
-   invalidateModel: function (coords, block, texture, rotatedtexture, puts) {
-     Logger.Log(coords.side, "ast");
-     let array = [texture.arr[rotatedtexture[0]], texture.arr[rotatedtexture[1]], texture.arr[rotatedtexture[2]], texture.arr[rotatedtexture[3]], texture.arr[rotatedtexture[4]], texture.arr[rotatedtexture[5]]];
+   invalidateModel: function (coords, texture, rotatedtexture, puts) {
+     Logger.Log(texture.textures[rotatedtexture[0]], "ast");
+     Logger.Log(texture.textures[rotatedtexture[1]], "Astartes");
+     Logger.Log(texture.textures[rotatedtexture[2]], "ast");
+     Logger.Log(texture.textures[rotatedtexture[3]], "Astartes");
+     Logger.Log(texture.textures[rotatedtexture[4]], "ast");
+     Logger.Log(texture.textures[rotatedtexture[5]], "Astartes");
+     
+     let array = [texture.textures[rotatedtexture[0]], texture.textures[rotatedtexture[1]], texture.textures[rotatedtexture[2]], texture.textures[rotatedtexture[3]], texture.textures[rotatedtexture[4]], texture.textures[rotatedtexture[5]]];
      //Logger.Log(World.getTileEntity(coords.x, coords.y, coords.z).data.put.length, "xenaft");
-      for(let put in puts) {
+      /*for(let put in puts) {
         Logger.Log(puts[put], "xen");
       if(puts[put] === null || puts[put] === undefined) continue;
 	    puts[put] = [array[puts[put]][0] + "_put", array[puts[put]][1]];
-      }
+      }*/
      Logger.Log(array[coords.side], "ds");
     let model = BlockRenderer.createTexturedBlock(array);
     let ic = new ICRender.Model();
@@ -387,13 +2495,13 @@ let MetaRenderer = {
     BlockRenderer.mapAtCoords(coords.x, coords.y, coords.z, ic);
   },
   getBlockRotation: function(player, isFull) {
-		var pitch = this.getEntityPitch(player);
+		let pitch = this.getEntityPitch(player);
 
 		if(isFull){
 			if(pitch < -45) return 0;
 			if(pitch > 45) return 1;
 		}
-		var rotation = Math.floor((this.getEntityYaw(player)-45)%360 / 90);
+		let rotation = Math.floor((this.getEntityYaw(player)-45)%360 / 90);
 		if(rotation < 0) rotation += 4;
 		rotation = [3, 1, 2, 0][rotation];
 		return rotation + 2;
@@ -431,10 +2539,30 @@ Callback.addCallback("tick", function() {
 
 // file: API/meta.js
 
+
+TemperaturePoints = {
+  NO: -0.1,
+  ABSOLUTE_ZERO: 0, //temperature couldn't and impossible be same or lower!
+  CELCIUS_ZERO: 273.15,
+  PLANK: 1.4167841616e32, //events for same and higher temperature is unknown and indescribable, is couldn't to use.
+}
+
+let concater = function(formulareal, material) {
+    
+	if(!material.formula.protons) {
+		for(let i in material.formula) {
+			concater(formulareal, material.formula[i].material);
+			formulareal = formulareal.concat(material.formula[i].count);
+		}
+	} else if(!material.formula.neutrons) {
+		formulareal = formulareal.concat(material.formula.formula);
+	} else if(material.formula.neutrons) {
+		formula = formulareal.concat(material.formula.formula);
+	}
+	return formulareal;
+}
+
 IDRegistry.genBlockID("gtblockpipe");
-IDRegistry.genBlockID("gttree");
-Block.createBlock("gttree", [
-     {name: "_", texture: [["bedrock", 0], ["bedrock", 0], ["bedrock", 0], ["bedrock", 0], ["bedrock", 0], ["bedrock", 0]], inCreative: true}], Block.createSpecialType({explosionres: 20000}));
 IDRegistry.genItemID("gtmetatool01");
 Item.createItem("gtmetatool01", "_",  {name: "stick", meta: 0}, {stack: 1, isTech: true});
 Item.setToolRender(ItemID.gtmetatool01, true);
@@ -475,7 +2603,7 @@ function damageEntityInR(entity, x, y, z) {
 	return 0;
 }
 //APIs
-var MaterialDictionary = {
+let MaterialDictionary = {
     types: {},
     dict: {},
     data: [],
@@ -483,27 +2611,29 @@ var MaterialDictionary = {
     lastdata: 0,
     firsted: true,
     firsts: [],
+    ids: [],
     //string
     registerForm: function(id, flag, form) {
       if(!this.types[id]) this.types[id] = {};
       //this.startData[form] = Object.keys(this.types[id]).length * 1000;
       this.types[id][form] = flag;
       this.invdata[form] = [];
+      this.ids[form] = [];
     },
     registerMaterial: function(material) {
+        setLoadingTip("GTMaterials:" + material.name);
         this.dict[material.name] = material;
     },
     //Material
     addMaterials: function() {
 	for(let preid in this.types) {
-	        Logger.Log("****", preid);
         	let type = preid;
         	let id;
         	let limit;
         	if(type == "block") {
         	    id = "gtmetablock";
         	    limit = 16;
-        	    
+        	 
         	} else if(type == "item") {
         	    id = "gtmetaitem";
         	    limit = 32000;
@@ -522,11 +2652,13 @@ var MaterialDictionary = {
             } else if(type == "block") {
                 //data = data;
                 this.firsts[form] = {id: BlockID[id + count], data: data};
+                 //this.ids[form][count] = id + count;
             }
 			for(let e = 0; e < Object.keys(this.dict).length; e++) {
 				let material = this.dict[Object.keys(this.dict)[e]];
+				setLoadingTip("GTMaterials:" + material.name);
 				//Logger.Log(material.name, "dsd,");
-				if(material.type == "MARKER") continue;
+				if(material.type == "MARKER" || material.type == "FLUID") continue;
 				if(!(material.type == "DUST" || material.type == "SOLID" || material.type == "INGOT" || material.type == "GEM")) {
 					if(form == "dust" || form == "smallpiledust" || form == "tinypiledust") {
 						continue;
@@ -547,16 +2679,26 @@ var MaterialDictionary = {
 						continue;
 					}	
 				}
-				if(material.hasFlag(this.types[type][form])) {
-				    Logger.Log(e, "zoom");
+				
+Logger.Log(material.name, "zuuia");
+        Logger.Log(form, "zoosia");
+        Logger.Log(type, "za");
+				if(material.hasFlag(this.types[type][form]) || (OreDictionary.evblocks[material.name] && form == "dustImpure")) {
+				  
 				    /*if(i == Object.keys(this.types[type]).length - 1 && e == Object.keys(this.dict).length - 1) {
 				        Logger.Log(e, "zoosia");
 					    limited = true;
 					    }*/
+					    Logger.Log(material.name, "ploiai");
+					    Logger.Log(form, "iiiizoa");
 		                let arr = this.limit(data, id, count, limit, bigdata, limited, material, form, type);
 		                count = arr[0];
 		                data = arr[1];
 		                limited = false;
+                		} else {
+                		  Logger.Log(material.name, "zia");
+                      Logger.Log(form, "zoa");
+                      Logger.Log(type, "ziia");
                 		}
 			}
 		}
@@ -567,25 +2709,18 @@ var MaterialDictionary = {
     },
     addToCreative: function() {
     for(let id in this.data) {
+        Item.setCategory(id, Native.ItemCategory.FOOD);
         if(invertedIDs.isNumericIDisItemID(id)) {
 	        for(let data in this.data[id]) {
-	            Logger.Log(data, "7890");
-	            Logger.Log(this.data[id][data].material.name, "1234567890");
-	            Logger.Log(this.data[id][data].form, "1234567890_");
-	            Logger.Log(invertedIDs.itemID[id], "err_");
 		        Item.addToCreative(invertedIDs.itemID[id], 1, data);
 	        }
         } else {
-            Logger.Log("startblock", this.getBlockIDbyNumberID(id));
             this.blockvariables = [];
             
             for(let i in this.data[id]) {
 	            this.blockvariables[i] = this.data[id][i];
-	            Logger.Log(this.data[id][i].material.name);
-                Logger.Log(this.data[id][i].form);
             }
 			Block.createBlock(invertedIDs.blockID[id], this.createvariables(this.blockvariables));
-			Logger.Log("endblock");
 			//this.blockvariables = [];
         }
     }
@@ -619,23 +2754,11 @@ var MaterialDictionary = {
     },
     blockvariables: [],
     limit: function(data, id, count, limit, bigdata, limited, material, form, type) {
-        Logger.Log(data, "zuked");
-        if(data == 0) {
-            Logger.Log("lss", id + (count));
-            if(type == "block") {
-                IDRegistry.genBlockID(id + count);
-            this.data[BlockID[id + count]] = [];
-			Logger.Log(BlockID[id + count], "_rtrt");
-                //this.blockvariables = [];
-            } else if(type == "item") {
-			IDRegistry.genItemID(id + count);
-			this.data[ItemID[id + count]] = [];
-		    Logger.Log(ItemID[id + count], "_rtrtas");
-            }
-        } 
+        
+        Logger.Log(type)
         if(data == limit) {
-            Logger.Log("l", id + (count));
 			    if(type == "block") {
+			      Logger.Log(form, "zoщioa");
 				    //Block.createBlock(id + (count), this.createvariables(this.blockvariables));
 				//this.blockvariables = [];
 			    } else if(type == "item") {
@@ -643,10 +2766,24 @@ var MaterialDictionary = {
 				}
 			count++;
 			data = 0;
-		} else {
-		    Logger.Log(material.name, "ssx");
-		           Logger.Log(form, "zzs");
+		}
+		
+		if(data == 0) {
+            if(type == "block") {
+                IDRegistry.genBlockID(id + count);
+            this.data[BlockID[id + count]] = [];
+            this.ids[form][count] = BlockID[id + count];
+                //this.blockvariables = [];
+            } else if(type == "item") {
+			IDRegistry.genItemID(id + count);
+			this.data[ItemID[id + count]] = [];
+            }
+        }
+		//i{
 		    if(type == "block") {
+		      
+		          Logger.Log(form, "seres");
+		          Logger.Log(material.name, "sereees");
 		            this.data[BlockID[id + count]][data] = {material: material, form: form};
 		            this.invdata[form][material.name] = {id: BlockID[id + count], data: data};
 		            
@@ -654,11 +2791,11 @@ var MaterialDictionary = {
 		    } else if(type == "item") {
 		            this.data[ItemID[id + count]][data] = {material: material, form: form};
 		            this.invdata[form][material.name] = {id: ItemID[id + count], data: data};
+		            //this.enddata[form] = data;
 		    }
             data++;
             bigdata++;
-            if(limited) {
-                Logger.Log("dopped", id + (count));
+            /*if(limited) {
 				if(type == "block") {
 				    //Block.createBlock(id + (count), this.createvariables(this.blockvariables));
 				    //Logger.Log("endblock");
@@ -667,22 +2804,27 @@ var MaterialDictionary = {
 				    Item.createItem(id + (count), material.name + form,  [material.name + form, 0],  {isTech: true});
 			    }
 			    data = 0;
-            }
-		}
-		Logger.Log(data, "zuled");
+            }*/
+		//}
 		return [count, data];
     },
     createvariables: function(blockvariables) {
         let variables = [];
         for(let variable in blockvariables) {
-            variables[variable] = {name: blockvariables[variable].material.name + " " + blockvariables[variable].form, texture: [[blockvariables[variable].material.name + "_" + blockvariables[variable].form, 0]],     inCreative: true};
+            variables[variable] = {name: blockvariables[variable].material.name + " " + blockvariables[variable].form, texture: [[blockvariables[variable].material.name + "_" + blockvariables[variable].form, 0]], inCreative: true};
         }
         return variables;
     },
-    preOverriding : function() {
+    getTexture : function(item) {
 /*Item.registerNameOverrideFunction("gtmetaitem01", function(item, name){
 			return MaterialDictionary.types[type][item.data];
-    });*/ 
+    });*/
+    let material = MaterialDictionary.data[item.id][item.data].material;
+ let form = MaterialDictionary.data[item.id][item.data].form;
+  Logger.Log(form, "fered");
+if(form == undefined) return {name: "unknown"};
+   if(material == undefined) return {name: "unknown_" + form};
+    return {name: material.name + "_" + form};
   },
   genItem: function(material, form, count) {
     let data;
@@ -696,7 +2838,7 @@ var MaterialDictionary = {
       }
     }
     
-    var xtra = new ItemExtraData();
+    let xtra = new ItemExtraData();
 xtra.putString("name", material.name);
     return {
       id: id,
@@ -727,7 +2869,6 @@ xtra.putString("name", material.name);
   upgradeItem: function(material, item) {
     var xtra = new ItemExtraData();
  xtra.putString("name", material.name);
-Logger.Log("_", "$$");
     item.extra = xtra;
     return item;
 },
@@ -881,179 +3022,104 @@ function MaterialStack(material, count) {
 function of() {
     let stacks = []; 
     for(let i in arguments) {
-      Logger.Log(arguments[i].material.name, "catsia");
         stacks[i] == arguments[i];
     }
 	return stacks;
 }
 
-let createFlag = function(id) {
-	return 1 << id;
-};
-
-let DECOMPOSITION_BY_ELECTROLYZING = createFlag(40);
-
-        /**
-         * Enables centrifuge decomposition recipe generation
-         */
-let DECOMPOSITION_BY_CENTRIFUGING = createFlag(41);
-
-        /**
-         * Add to material if it has constantly burning aura
-         */
-let BURNING = createFlag(7);
-
-        /**
-         * Add to material if it is some kind of flammable
-         */
-let FLAMMABLE = createFlag(42);
-
-        /**
-         * Add to material if it is some kind of explosive
-         */
-let EXPLOSIVE = createFlag(4);
-
-        /**
-         * Add to material to disable it's unification fully
-         */
-let NO_UNIFICATION = createFlag(5);
-
-        /**
-         * Add to material if any of it's items cannot be recycled to get scrub
-         */
-let NO_RECYCLING = createFlag(6);
-
-        /**
-         * Disables decomposition recipe generation for this material and all materials that has it as component
-         */
-let DISABLE_DECOMPOSITION = createFlag(43);
-
-        /**
-         * Decomposition recipe requires hydrogen as additional input. Amount is equal to input amount
-         */
-let DECOMPOSITION_REQUIRES_HYDROGEN = createFlag(8);
-
-let GENERATE_FLUID_BLOCK = createFlag(44);
-
-        /**
-         * Add this flag to enable plasma generation for this material
-         */
-let GENERATE_PLASMA = createFlag(9);
-
-        /**
-         * Marks material state as gas
-         * Examples: Air, Argon, Refinery Gas, Oxygen, Hydrogen
-         */
-let STATE_GAS = createFlag(10);
+Logger.Log(java.lang.Long.toBinaryString(DECOMPOSITION_BY_ELECTROLYZING) , "qwest");
+Logger.Log( java.lang.Long.toBinaryString(DECOMPOSITION_BY_CENTRIFUGING) , "qwest");
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  BURNING), "$") ;
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  FLAMMABLE) , "sa") ;
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  EXPLOSIVE) , "ass") ;
+Logger.Log( java.lang.Long.toBinaryString(NO_UNIFICATION) ) ;
+Logger.Log( 
+java.lang.Long.toBinaryString( NO_RECYCLING ));
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  DISABLE_DECOMPOSITION ));
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  DECOMPOSITION_REQUIRES_HYDROGEN ));
+Logger.Log(
+java.lang.Long.toBinaryString(
+  GENERATE_FLUID_BLOCK) );
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  GENERATE_PLASMA));
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  STATE_GAS ));
 //dust
-let GENERATE_ORE = createFlag(11);
-
-        /**
-         * Generate a plate for this material
-         * If it's dust material, dust compressor recipe into plate will be generated
-         * If it's metal material, bending machine recipes will be generated
-         * If block is found, cutting machine recipe will be also generated
-         */
-let GENERATE_PLATE = createFlag(12);
-
-        /**
-         * Add to material if it cannot be worked by any other means, than smashing or smelting. This is used for coated Materials.
-         */
-let NO_WORKING = createFlag(13);
-        /**
-         * Add to material if it cannot be used for regular Metal working techniques since it is not possible to bend it.
-         */
-let NO_SMASHING = createFlag(14);
-
-        /**
-         * Add to material if it's impossible to smelt it
-         */
-let NO_SMELTING = createFlag(15);
-
-        /**
-         * Add to material if it is outputting less in an Induction Smelter.
-         */
-let INDUCTION_SMELTING_LOW_OUTPUT = createFlag(16);
-
-        /**
-         * Add to material if it melts into fluid (and it will also generate fluid for this material)
-         */
-let SMELT_INTO_FLUID = createFlag(17);
-
-        /**
-         * This will prevent material from creating Shapeless recipes for dust to block and vice versa
-         * Also preventing extruding and alloy smelting recipes via SHAPE_EXTRUDING/MOLD_BLOCK
-         */
-let EXCLUDE_BLOCK_CRAFTING_RECIPES = createFlag(18);
-
-        /**
-         * This will prevent material from creating Shapeless recipes for dust to block and vice versa
-         */
-let EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES = createFlag(46);
-
-let EXCLUDE_PLATE_COMPRESSOR_RECIPE = createFlag(19);
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  GENERATE_ORE));
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  GENERATE_PLATE ));
+Logger.Log(java.lang.Long.toBinaryString(NO_WORKING ));
+Logger.Log(java.lang.Long.toBinaryString(NO_SMASHING ));
+Logger.Log(java.lang.Long.toBinaryString(NO_SMELTING ));
+Logger.Log(java.lang.Long.toBinaryString(INDUCTION_SMELTING_LOW_OUTPUT) ) ;
+Logger.Log(java.lang.Long.toBinaryString(SMELT_INTO_FLUID) );
+Logger.Log(java.lang.Long.toBinaryString(EXCLUDE_BLOCK_CRAFTING_RECIPES) );
+Logger.Log( 
+java.lang.Long.toBinaryString(
+  EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES));
+Logger.Log(java.lang.Long.toBinaryString(EXCLUDE_PLATE_COMPRESSOR_RECIPE) );
 
 //solid
-let GENERATE_ROD = createFlag(20);
-let GENERATE_GEAR = createFlag(21);
-let GENERATE_LONG_ROD = createFlag(22);
-let MORTAR_GRINDABLE = createFlag(24);
-let GENERATE_FRAME = createFlag(45);
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_ROD ));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_GEAR));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_LONG_ROD) );
+Logger.Log(java.lang.Long.toBinaryString(MORTAR_GRINDABLE) );
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_FRAME) );
 //ingot
-let GENERATE_FOIL = createFlag(25);
-let GENERATE_BOLT_SCREW = createFlag(26);
-let GENERATE_RING = createFlag(27);
-let GENERATE_SPRING = createFlag(28);
-let GENERATE_FINE_WIRE = createFlag(29);
-let GENERATE_ROTOR = createFlag(30);
-let GENERATE_SMALL_GEAR = createFlag(31);
-let GENERATE_DENSE = createFlag(32);
-let GENERATE_SPRING_SMALL = createFlag(33);
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_FOIL));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_BOLT_SCREW) );
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_RING));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_SPRING) );
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_FINE_WIRE));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_ROTOR));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_SMALL_GEAR));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_DENSE));
+Logger.Log(java.lang.Long.toBinaryString(GENERATE_SPRING_SMALL), "hukok");
 
-        /**
-         * Add this to your Material if you want to have its Ore Calcite heated in a Blast Furnace for more output. Already listed are:
-         * Iron, Pyrite, PigIron, WroughtIron.
-         */
-let BLAST_FURNACE_CALCITE_DOUBLE = createFlag(35);
-let BLAST_FURNACE_CALCITE_TRIPLE = createFlag(36);
-
-//gem
-let CRYSTALLISABLE = createFlag(34);
-let GENERATE_LENSE = createFlag(37);
-let HIGH_SIFTER_OUTPUT = createFlag(38);
-
-//all
-let STD_SOLID = GENERATE_PLATE | GENERATE_ROD | GENERATE_BOLT_SCREW | GENERATE_LONG_ROD;
-let STD_GEM = GENERATE_ORE | STD_SOLID | GENERATE_LENSE;
-let STD_METAL = GENERATE_PLATE;
-let EXT_METAL = STD_METAL | GENERATE_ROD | GENERATE_BOLT_SCREW | GENERATE_LONG_ROD;
-let EXT2_METAL = EXT_METAL | GENERATE_GEAR | GENERATE_FOIL | GENERATE_FINE_WIRE;
-
-function Material(name, formula, type, materialGenerationFlags, level, durability, attackdamage, miningspeed, turbineefficiency, optimalgasflow, colourRGB, icon_set) {
+function Material(name, formula, type, materialGenerationFlags, pointMelting, pointBoiling) {
   this.name = name;
   this.formula = formula;
   this.type = type;
-	this.durability = durability;
-	this.level = level;
-	this.attackdamage = attackdamage;
-	this.miningspeed = miningspeed; 
-	this.turbineefficiency = turbineefficiency;
-	this.optimalgasflow = optimalgasflow;
-	this.colourRGB = colourRGB;
-	this.icon_set = icon_set;
+  this.pointBoiling = pointBoiling;
+  this.pointMelting = pointMelting;
 	this.verifyMaterialBits = function(materialBits) {
 		return materialBits;
 	};
 	this.materialGenerationFlags = this.verifyMaterialBits(materialGenerationFlags);
+Logger.Log(name, "т");
+Logger.Log(materialGenerationFlags, "т");
+	Logger.Log(java.lang.Long.toBinaryString(materialGenerationFlags), "тогруты");
 	this.addFlag = function(materialGenerationFlags) {
 		let combined = 0;
 		for (let materialGenerationFlag in materialGenerationFlags) {
             		combined |= materialGenerationFlag;
         	}
+        	
+    //Logger.Log(Flag.pack(materialGenerationFlags, generationFlag), "deqoi");
+        	
 		this.materialGenerationFlags |= verifyMaterialBits(combined);
 	};
 	this.hasFlag = function(generationFlag) {
-        	return (materialGenerationFlags & generationFlag) >= generationFlag;
+	  
+Logger.Log(materialGenerationFlags, "тогрута");
+         Logger.Log(Flag.hasFlag(materialGenerationFlags, generationFlag), "deqoi");
+         Logger.Log((materialGenerationFlags & generationFlag) >= generationFlag, "deqator");
+        	return Flag.hasFlag(materialGenerationFlags, generationFlag);
 	};
 	this.genItem = function(form, count) {
 		MaterialDictionary.genItem(this, form, count);
@@ -1062,7 +3128,11 @@ function Material(name, formula, type, materialGenerationFlags, level, durabilit
 	this.upgradeItem = function(item, form) {
 		MaterialDictionary.upgradeItem(this, item, form);
 	};
-  
+	
+	this.formulatext = "";
+	this.formulatext = concater(this.formulatext, this);
+	
+	this.usablename = this.name[0].toUpperCase() + this.name.substring(1);
 }
 
 
@@ -1070,66 +3140,90 @@ function Material(name, formula, type, materialGenerationFlags, level, durabilit
 
 // file: API/tool.js
 
-Callback.addCallback('DestroyBlockStart', function (coords, block, player) {
-    var item = Player.getCarriedItem();
-	  if (item.id == ItemID.gtmetatool01) {
-Logger.Log(typeof String(item.extra.getString("name")).valueOf());
-var t = false;
-/*for(var p in ToolType) {
-  Logger.Log
-}*/
-for(var e in ToolType) {
-  Logger.Log(ToolType[e], "dy");
-    if(ToolDictionary.getTypeByData(item.data) == ToolType[e]) t = true;
+Callback.addCallback('DestroyBlockStart', function (coords, block, playerUid) {
+  let player = new PlayerActor(playerUid);
+    let item = player.getInventorySlot(player.getSelectedSlot());
+	  if(item.id == ItemID.gtmetatool01) {
+	    let name = "_NULL";
+    if(item.extra) name = item.extra.getString("name");
+    let t = false;
 
-}
-
-if(t) {
-  Logger.Log(ToolDictionary.getTypeByData(item.data), "dy");
-ToolLib.setTool(ItemID.gtmetatool01, String(item.extra.getString("name")).valueOf(), ToolDictionary.getTypeByData(item.data));
-	  } else {
-Logger.Log(ToolDictionary.getTypeByData(item.data), "dy");
-ToolLib.setTool(ItemID.gtmetatool01, String(item.extra.getString("name")).valueOf(), "gt" + ToolDictionary.getTypeByData(item.data));
-	  }
-}
-let i = -1;
-for(let c = 0; c < 38; c++) {
-  if(block.id == BlockID["gtblockores" + c]) i = c;
-}
-  if(i >= 0 & i % 2 == 0) {
-    for(let l = 0; l < OreDictionary.stones.length; l++) {
-    if(block.data == l) {
+    for(let e in ToolType) {
+      Logger.Log(ToolType[e], "dy");
+      if(ToolDictionary.getTypeByData(item.data) == ToolType[e]) t = true;
+        
+      }
+      Logger.Log(String(name).valueOf(), "rexofone");
+      ToolLib.setTool(ItemID.gtmetatool01, String(name).valueOf(), ToolDictionary.getTypeByData(item.data));
+    }
+    let i = -1;
+    /*for(let c = 0; c < 38; c++) {
+    if(block.id == BlockID["gtblockores" + c]) i = c;
+    }*/
+    if(OreDictionary.number[block.id]) i = OreDictionary.number[block.id];
+    if(i >= 0 && i % 2 == 0) {
       ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invdata[block.id].level + 1, false);
       Block.createSpecialType({
-	base: 1,
-	solid: true,
-	destroytime: 3,
-	explosionres: 15,
-	lightopacity: 15,
-	renderlayer: 2,
-	translucency: 0
-}, "gtore");
-
-    }
-    }
-  } else if(i >= 0) {
-    for(let l = 0; l < OreDictionary.blocks.length; l++) {
-    if(block.data == l) {
-      ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invdat[block.id].level + 1, false);
+	          base: 1,
+	          solid: true,
+	          destroytime: 3,
+	          explosionres: 15,
+	          lightopacity: 15,
+	          renderlayer: 2,
+	          translucency: 0
+      }, "gtore");
+    } else if(i >= 0) {
+      Logger.Log(OreDictionary.invdat[block.id].level, "sertyui");
+      ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invdat[block.id].level, false);
       Block.createSpecialType({
-	base: 1,
-	solid: true,
-	destroytime: 3,
-	explosionres: 15,
-	lightopacity: 15,
-	renderlayer: 2,
-	translucency: 0
-}, "gtore");
-
+	      base: 1,
+	      solid: true,
+	      destroytime: 3,
+	      explosionres: 15,
+	      lightopacity: 15,
+	      renderlayer: 2,
+	      translucency: 0
+      }, "gtore");
     }
-    }
-  }
+    if(block.id == BlockID["gttree"]) {
+      Logger.Log("gttree", "zaeqo");
+          if(block.data == 0 || block.data == 2 || block.data == 4) {
+            ToolAPI.registerBlockMaterial(block.id, "wood", 0, false);
+            Block.createSpecialType({
+	            base: 1,
+	            solid: true,
+	            destroytime: 3,
+	            explosionres: 15,
+	            lightopacity: 15,
+	            renderlayer: 2,
+	            translucency: 0
+              }, "gtwood");
+          } else {
+            ToolAPI.registerBlockMaterial(block.id, "plant", 0, false);
+            Block.createSpecialType({
+	            base: 1,
+	            solid: false,
+	            destroytime: 0.2,
+	            explosionres: 1,
+	            lightopacity: 15,
+	            renderlayer: 2,
+	            translucency: 0,
+	            sound: "grass",
+	            renderallfaces: true,
+              }, "gtplant");
+              
+          }
+        }
 });
+Block.registerDropFunction(BlockID.gttree, function(coords, id, data, dig, enchant, item) {
+    if(data == 1) {
+      if(item.id == 359) return [[id, 1, data]];
+      if(Math.random() < 0.04) return [[id, 1, 3]];
+      if(Math.random() > 0.06 && Math.random() < 0.08) return [[280, 1, 0]];
+      return [[0, 0, 0]];
+    }
+    return [[id, 1, data]];
+})
 /*
 type:  type {
 	name:
@@ -1153,21 +3247,22 @@ let ToolDictionary = {
     registerType: function(type) {
     this.invdata[type.name] = {id: ItemID.gtmetatool01, data: this.types.length};
     type.toolDamage = 0;
-    type.onDestroy = function(item, coords, block){
+    type.onDestroy = function(item, coords, block) {
       ToolDictionary.damageTool(item);
       return true;
     },
-type.onBroke = function(item){return true;},
+type.onBroke = function(item){return false;},
 type.onAttack = function(item, mob){
-ToolDictionary.damageTool(item);
+    ToolDictionary.damageTool(item);
 		return true;
 	},
 ToolType["gt" + type.name] = type;
-this.types[this.types.length] = ToolType["gt" + type];
+this.types[this.types.length] = ToolType["gt" + type.name];
+Logger.Log(this.types[this.types.length - 1].name, this.types.length - 1);
     },
     //after registertype
     registerMaterial: function(tool) {
-        if(tool.material.type == "MARKER" || tool.material.type == "FLUID" || tool.material.type == "DUST") return;
+        if(tool.material.type == "FLUID" || tool.material.type == "DUST") return;
         //this.materials[material.name] = material;
         this.materials[tool.material.name] = tool;
         tool.name = tool.material.name;
@@ -1179,21 +3274,25 @@ this.types[this.types.length] = ToolType["gt" + type];
 ToolAPI.addToolMaterial(tool.name, tool);
     },
     getTypeByData: function(data) {
-      return ToolDictionary.types[data];
+      return this.types[data];
     },
 upgradeTool: function(material, tool) {
-    var xtra = new ItemExtraData();
+    let xtra = new ItemExtraData();
     /*xtra.setCustomName("§R" +
     material.name[0].toUpperCase() + material.name.substring(1) + " " + form + "\n" + material.formula);*/
  xtra.putString("name", material.name);
-Logger.Log(xtra.getString("name"), "fuk");
+Logger.Log(material.name, "fuk");
   xtra.putInt("damage", 0);
     tool.extra = xtra;
     return tool;
 },
 damageTool: function(tool, slot) {
-    Logger.Log(tool.extra.getInt("damage"), "damaged");
     let name;
+    if(tool.extra) {
+      Logger.Log(tool.extra.getInt("damage"), "damaged");
+    } else {
+      Logger.Log(0, "damaged");
+    }
   if(tool.extra != null) {
   if(tool.extra.getInt("damage") != null) {
     tool.extra.putInt("damage", tool.extra.getInt("damage") + 50);
@@ -1204,20 +3303,749 @@ tool.extra.putInt("damage", 0 + 50);
   tool.extra = new ItemExtraData();
   tool.extra.putInt("damage", 0 + 50);
 }
+if(tool.extra.getString("name") == null) tool.extra.putString("name", "_NULL");
 name = tool.extra.getString("name");
-if(name == null) name = "_NULL";
 Logger.Log(name, "naming");
 Logger.Log(tool.extra.getInt("damage"), "дамаг");
-if(tool.extra.getInt("damage") > MaterialDictionary.dict[name].durability) {
+Logger.Log(MaterialDictionary.dict[name].durability, "дurability");
+if(tool.extra.getInt("damage") >= ToolAPI.toolMaterials[name].durability) {
 tool.id = tool.count = tool.data = 0;
+tool.extra = null;
 }
 },
 addToCreative: function() {
+    Item.setCategory(ItemID.gtmetatool01, Native.ItemCategory.TOOL);
     for(let i in this.types) {
         Item.addToCreative(ItemID.gtmetatool01, 1, i);
     }
 }
 };
+
+
+
+
+// file: API/generation.js
+
+let MathExp = {
+  factorial: function(number) {
+    let num = 1;
+    for(let i = 2; i < number; i++) {
+      num *= i;
+    }
+    return num;
+  },
+  trapp: function(matrix) {
+    let unescapei = 0;
+    for(let i = 0; i < matrix.size().x; i++) {
+      unescapei += matrix[i][i]
+    }
+    return unescapei;
+  },
+  calcP: function(matrices, ii) {
+    Logger.Log(ii, "&iikj");
+    let p = this.trapp(matrices[ii]);
+    Logger.Log(p, "puiui");
+    for(let i = 1; i <= ii - 1; i++) {
+      Logger.Log(i, "&jjjju");
+      let qw = this.trapp(matrices[ii - i]);
+      Logger.Log(qw, "opcode");
+      p -= qw * this.calcP(matrices, i);
+    }
+    Logger.Log(p / ii, "lololo");
+    return p / ii;
+  },
+  calcQ: function(matrices, n, k, m) {
+    if(m == 0) return this.calcP(matrices, k);
+    if(k == n) {
+      let rtyrt = this.calcP(matrices, k) * this.calcQ(matrices, n, 1, m - 1);
+      Logger.Log(rtyrt, "&pedlik");
+      return rtyrt;
+    } else {
+      Logger.Log(m, "&&&&&&&u");
+    Logger.Log(k, "&&&&&&&u");
+    let rtyrt = this.calcP(matrices, k) * this.calcQ(matrices, n, 1, m - 1) + this.calcQ(matrices, n, k + 1, m - 1);
+    //Logger.Log(p / ii, "lololo");
+    Logger.Log(rtyrt, "&pedlik");
+    return rtyrt;
+    }
+    return 0;
+  }
+}
+//Square matrix 
+function CovarianceMatrix(elements, covariance) {
+  //this.covarianceMatrix = true;
+  this.sizeX = elements.length || elements.size().x;
+  Logger.Log(elements, "iuytff");
+  Logger.Log(this.sizeX, "iuytff");
+  this.sizeY = elements.length || elements.size().y;
+  Logger.Log(covariance);
+  switch (covariance) {
+    case null:
+    switch (elements.sizeX) {
+      case undefined:
+      Logger.Log("aqwerty54");
+      for(let i in elements) {
+        this[i] = {};
+        for(let j in elements) {
+          this[i][j] = elements[i][j];
+          Logger.Log(this[i][j], "aqwerty");
+        }
+      }
+      break;
+      case null:
+      Logger.Log("aqwerty54");
+      for(let i in elements) {
+        this[i] = {};
+        for(let j in elements) {
+          this[i][j] = elements[i][j];
+          Logger.Log(this[i][j], "aqwerty");
+        }
+      }
+      break;
+      default:
+      Logger.Log("aqwerty54s");
+      for(let i = 0; i < elements.size().x; i++) {
+        this[i] = {};
+        for(let j = 0; j < elements.size().x; j++) {
+          this[i][j] = elements[i][j];
+          Logger.Log(this[i][j], "aqwerty");
+        }
+      }
+      break;
+    }
+    break;
+    case undefined:
+    switch (elements.sizeX) {
+      case undefined:
+      Logger.Log("aqwerty54");
+      for(let i in elements) {
+        this[i] = {};
+        for(let j in elements) {
+          this[i][j] = elements[i][j];
+          Logger.Log(this[i][j], "aqwerty");
+        }
+      }
+      break;
+      case null:
+      Logger.Log("aqwerty54");
+      for(let i in elements) {
+        this[i] = {};
+        for(let j in elements) {
+          this[i][j] = elements[i][j];
+          Logger.Log(this[i][j], "aqwerty");
+        }
+      }
+      break;
+      default:
+      Logger.Log("aqwerty54s");
+        for(let i = 0; i < elements.size().x; i++) {
+        this[i] = {};
+        for(let j = 0; j < elements.size().x; j++) {
+          this[i][j] = elements[i][j];
+          Logger.Log(this[i][j], "aqwerty");
+        }
+      }
+      break;
+    }
+    break;
+  default:
+    Logger.Log("aqwerty6654");
+    for(let i in elements) {
+      this[i] = {};
+      for(let j in elements) {
+        if(i == j) {
+          this[i][i] = elements[i];
+        } else {
+          this[i][j] = covariance[i + "_" + j];
+        }
+      }
+    }
+  break;
+  }
+  this.length = this.sizeX;
+  this.determinant = function() {
+    if(this.size().x != this.size().y) throw new Error("The determinant only exists for square matrices! This matrix:" + this.toString());
+    switch(this.size().x) {
+      case 1:
+      return this[0][0];
+      case 2:
+      return this[0][0] * this[1][1] - this[0][1] * this[1][0];
+      case 3:
+      return this[0][0] * this[1][1] * this[2][2] + this[0][1] * this[1][2] * this[2][0] + this[0][2] * this[1][0] * this[2][1] - this[0][2] * this[1][1] * this[2][0] - this[0][0] * this[2][1] * this[1][2] - this[2][2] * this[1][0] * this[0][1];
+      default:
+      return this.gauss();
+    }
+  }
+  this.gauss = function() {
+    let newmatrix = new CovarianceMatrix(this);
+    let re = 0;
+    for(let i = 0; i < this.size().x; i++) {
+      if(i == 0) continue;
+      for(let a = 0; a < i; a++) {
+        let smk = -newmatrix[i][a] / newmatrix[a][a];
+        for(let j = 0; j < this.size().y; j++) {
+          newmatrix[i][j] = newmatrix[i][j] + newmatrix[a][j] * smk;
+        }
+      }
+    }
+    Logger.Log(newmatrix.toString(), "cedron");
+    let det = 1;
+    for(let i = 0; i < newmatrix.size().x; i++) {
+        det *= newmatrix[i][i];
+    }
+    return Math.pow(-1, re) * det;
+  }
+  this.inverse = function() {
+    let det = this.determinant();
+    if(!det) throw new Error("The determinant equal zero, inversion is impossible! This matrix:" + this.toString());
+    let newmatrix = this.transposite().matrixOfAlgebraicComplements();
+    
+    return newmatrix.division(det);
+  }
+  this.transposite = function() {
+    let newmatrix = this.copy();
+    for(let x = 0; x < this.size().x; x++) {
+    for(let y = 0; y < this.size().y; y++) {
+        newmatrix[x][y] = this[y][x];
+      }
+    }
+    return newmatrix;
+  }
+  this.minor = function(xx, yy) {
+    Logger.Log(xx, "xx");
+    Logger.Log(yy, "yy");
+    Logger.Log(this.toString(), "toStr");
+    let newmatrix = NEW_ZERO_MATRIX_(this.size().x - 1, this.size().y - 1);
+    let xl = 0;
+    let yl = 0;
+    for(let x = 0; x < this.size().x; x++) {
+      if(x == xx) {
+        continue;
+      }
+      
+      for(let y = 0; y < this.size().y; y++) {
+        if(y == yy) {
+          continue;
+        }
+        Logger.Log(x, "xuiix");
+        Logger.Log(y, "yuiiy");
+        newmatrix[xl][yl] = this[x][y];
+        
+        Logger.Log("derrwx", xl);
+        Logger.Log("derrwy", yl);
+        Logger.Log("derrwinfo", newmatrix[xl][yl]);
+         yl++;
+      }
+      yl = 0;
+      xl++;
+    }
+    return newmatrix.determinant();
+  }
+  //matrix of algebraic complements
+  this.matrixOfAlgebraicComplements = function() {
+    let newmatrix = this.copy();
+    for(let x = 0; x < this.size().x; x++) {
+    for(let y = 0; y < this.size().y; y++) {
+        newmatrix[x][y] = Math.pow(-1, x+y) * this.minor(x, y);
+      }
+    }
+    return newmatrix;
+  }
+  this.multiply = function(number) {
+    let newmatrix = this.copy();
+    for(let x = 0; x < this.size().x; x++) {
+    for(let y = 0; y < this.size().y; y++) {
+        newmatrix[x][y] = newmatrix[x][y] * number;
+      }
+    }
+    return newmatrix;
+  }
+  this.multiplyM = function(matrix) {
+    let newmatrix = this.copy();
+    for(let x = 0; x < this.size().x; x++) {
+      for(let y = 0; y < this.size().y; y++) {
+        let t = 0;
+        for(let aa = 0; aa < this.size().x; aa++) {
+          t += this[x][aa] * matrix[aa][y];
+        }
+        newmatrix[x][y] = t;
+      }
+    }
+    return newmatrix;
+  }
+  this.summationM = function(matrix) {
+    let newmatrix = this.copy();
+    for(let x = 0; x < this.size().x; x++) {
+    for(let y = 0; y < this.size().y; y++) {
+        newmatrix[x][y] += matrix[x][y];
+        
+        Logger.Log(matrix[x][y], "during");
+      }
+    }
+    Logger.Log(newmatrix.toString(), "durings");
+    return newmatrix;
+  }
+  this.division = function(number) {
+    let newmatrix = this.copy();
+    for(let x = 0; x < this.size().x; x++) {
+    for(let y = 0; y < this.size().y; y++) {
+        newmatrix[x][y] = newmatrix[x][y] / number;
+      }
+    }
+    return newmatrix;
+  }
+  this.exponentiation = function(number) {
+    if(this.size().x != this.size().y) throw new Error("The exponentiation only exists for square matrices! This matrix:" + this.toString());
+    
+    let newmatrix = this.copy();
+    for(let i = 1; i < number; i++) {
+      newmatrix = newmatrix.multiplyM(this);
+    }
+    return newmatrix;
+  }
+  //e^matrix
+  this.exp = function(number, t, eps) {
+    let isnull = true;
+    for(let x = 0; x < this.size().x; x++) {
+      for(let y = 0; y < this.size().y; y++) {
+        if(this[x][y] != 0) isnull = false;
+      }
+    }
+    
+    if(isnull) return 1;
+    
+    let matrices = [];
+    matrices[0] = NEW_ZERO_MATRIX_(this.size().x, this.size().y);
+
+    matrices[1] = this.copy();
+    for(let i = 2; i < number + 1; i++) {
+      matrices[i] = this.exponentiation(i);
+    
+      Logger.Log(matrices[i].toString(), "derrvabium");
+    }
+    
+    let biggest = NEW_ZERO_MATRIX_(matrices[0].size().x, matrices[0].size().y);
+    for(let i = 0; i < number; i++) {
+        let big = Math.pow(t, i) / MathExp.factorial(i);
+        
+        big = matrices[i].multiply(big);
+        Logger.Log(big, "biggy");
+        biggest = biggest.summationM(big); 
+        Logger.Log(biggest, "biggest");
+    }
+    return biggest;
+  }
+  this.size = function() {
+    return {x: this.sizeX, y: this.sizeY};
+  }
+  this.copy = function() {
+    return new CovarianceMatrix(this);
+  }
+  this.toString = function() {
+    let str = "";
+    Logger.Log(str, "rtes");
+    for(let x = 0; x < this.size().x; x++) {
+      Logger.Log(str, "zaweujnrq");
+    for(let y = 0; y < this.size().y; y++) {
+        Logger.Log(this[x][y], "asewq");
+        str += this[x][y] + " ";
+      }
+      Logger.Log(str, "zawerq");
+      if(x < this.size().x - 1) str += "\n"
+      Logger.Log(str, "zaweyhrq");
+    }
+    return str;
+  }
+  
+  
+  //static
+  
+}
+function NEW_ZERO_MATRIX_(x, y) {
+    let elems = [];
+    for(let i = 0; i < x; i++) {
+      elems[i] = [];
+      for(let j = 0; j < y; j++) {
+        elems[i][j] = 0;
+      }
+    }
+    return new CovarianceMatrix(elems);
+  }
+  //static
+function NEW_IDENTITY_MATRIX_(x, y) {
+    let elems = [];
+    for(let i = 0; i < x; i++) {
+      elems[i] = [];
+      for(let j = 0; j < y; j++) {
+        if(i == j) {
+          elems[i][j] = 1;
+        } else {
+          elems[i][j] = 0;
+        }
+      }
+      Logger.Log(elems.length, "dertyu");
+    }
+    return new CovarianceMatrix(elems);
+  }
+/*let ar = NEW_ZERO_MATRIX_(2, 2);
+Logger.Log(ar.toString(), "dekeri");
+Logger.Log(ar.size().x, "derer");
+Logger.Log(ar.size().y, "dereir");
+Logger.Log(ar.determinant(), "determinant");
+
+let rtw = ar.multiply(2);
+Logger.Log(rtw.toString(), "dekeri");
+Logger.Log(rtw.size().x, "derer");
+Logger.Log(rtw.size().y, "dereir");
+Logger.Log(rtw.determinant(), "determinant");
+
+let rtu = ar.division(2);
+Logger.Log(rtu.toString(), "dekeri");
+Logger.Log(rtu.size().x, "derer");
+Logger.Log(rtu.size().y, "dereir");
+Logger.Log(rtu.determinant(), "determinant");
+
+let rtl = ar.exponentiation(20);
+Logger.Log(rtl.toString(), "dekeri");
+Logger.Log(rtl.size().x, "derer");
+Logger.Log(rtl.size().y, "dereir");
+Logger.Log(rtl.determinant(), "determinant");
+
+
+let ear = NEW_IDENTITY_MATRIX_(2, 2);
+Logger.Log(ear.toString(), "dekeri");
+Logger.Log(ear.size().x, "derer");
+Logger.Log(ear.size().y, "dereir");
+Logger.Log(ear.determinant(), "determinant");
+
+let ueazc = new CovarianceMatrix([[6, 1, 2], [9, 2, 2], [1, 1, 9]]);
+
+Logger.Log(ueazc.exp(3, 1, 0.01), "*****34");
+
+Logger.Log(ueazc.exp(7, 1, 0.01), "*****34");
+
+Logger.Log(ueazc.exp(34, 1, 0.01), "*****34")
+
+let uear = new CovarianceMatrix([[6, 1, 2, 1], [1, 9, 2, 2], [1, 1, 8, 9], [1, 2, 8, 9]]);
+let rtdu = uear.transposite();
+Logger.Log(rtdu.toString(), "jjdekeri");
+Logger.Log(rtdu.size().x, "derer");
+Logger.Log(rtdu.size().y, "dereir");
+Logger.Log(rtdu.determinant(), "ghhhhhh");
+let rtdo = uear.inverse();
+Logger.Log(rtdo.toString(), "jjdekeri");
+Logger.Log(rtdo.size().x, "derer");
+Logger.Log(rtdo.size().y, "dereir");
+Logger.Log(rtdo.determinant(), "ghhhhhhhu");
+
+let rtd = ear.multiply(2);
+Logger.Log(rtd.toString(), "dekeri");
+Logger.Log(rtd.size().x, "derer");
+Logger.Log(rtd.size().y, "dereir");
+Logger.Log(rtd.determinant(), "determinant");
+
+
+let rta = ear.division(2);
+Logger.Log(rta.toString(), "dekeri");
+Logger.Log(rta.size().x, "derer");
+Logger.Log(rta.size().y, "dereir");
+Logger.Log(rta.determinant(), "determinant");
+
+let rtt = ear.exponentiation(20);
+Logger.Log(rtt.toString(), "dekeri");
+Logger.Log(rtt.size().x, "derer");
+Logger.Log(rtt.size().y, "dereir");
+Logger.Log(rtt.determinant(), "determinant");
+
+let ratt = ar.multiplyM(ear);
+Logger.Log(ratt.toString(), "dekeri");
+Logger.Log(ratt.size().x, "derer");
+Logger.Log(ratt.size().y, "dereir");
+Logger.Log(ratt.determinant(), "determinant");*/
+
+let GenerationDictionary = {
+  CHUNKSIZE: {x: 16, y: 256, z: 16},
+  CHUNKSIZEXZ: {x: 16, z: 16},
+  rollPercentage: function(pr, random) {
+      if(random) {
+          return pr >= random.nextInt(100);
+      }
+      return pr >= round(Math.random() * 100, 2);
+  },
+  isInnerDiapozone: function(checkInt, start, end) {
+    if(checkInt > start & checkInt < end) {
+      return true;
+    }
+    return false;
+  },
+  randomInInner: function(random, start, end) {
+    return start + random.nextInt(end - start);
+  },
+  randomInInnerGaussian: function(random, start, end) {
+    return start + Math.floor(random.nextGaussian() * (end - start));
+  },
+  findChunkHighSurface: function (chunkX, chunkZ) {
+    let highs = 0;
+    for(let x = 0; x < 16; x++) {
+      for(let z = 0; z < 16; z++) {
+        let high = GenerationUtils.findHighSurface(chunkX * 16 + x, chunkZ * 16 + z);
+      if(high.y > highs) {
+        highs = high.y;
+      }
+      }}
+      return highs;
+  },
+  chunkExcavateForBlockCoords: function(xBlock, zBlock, ids, blockSource) {
+    Logger.Log("dffer", "d");
+    let chunkX = Math.floor(xBlock / 16);
+    let chunkZ = Math.floor(zBlock / 16);
+    this.chunkExcavate(chunkX, chunkZ, ids, blockSource);
+  },
+  chunkExcavate: function(chunkX, chunkZ, ids, blockSource) {
+    let chunkBlockX = chunkX * 16;
+    let chunkBlockZ = chunkZ * 16;
+    if(blockSource) {
+      for(let x = 0; x < 16; x++) {
+        for(let y = 0; y < 95; y++) {
+          for(let z = 0; z < 16; z++) {
+            Logger.Log(blockSource.getBlock(chunkBlockX + x, y, chunkBlockZ + z).id, "doiytr");
+            if(ids.includes(blockSource.getBlock(chunkBlockX + x, y, chunkBlockZ + z).id)) {
+              Logger.Log(blockSource.getBlock(chunkBlockX + x, y, chunkBlockZ + z).id, "d");
+              blockSource.setBlock(chunkBlockX + x, y, chunkBlockZ + z, 0, 0);
+            }
+          }
+        }
+      }
+    } else {
+      for(let x = 0; x < 16; x++) {
+        for(let y = 0; y < 95; y++) {
+          for(let z = 0; z < 16; z++) {
+            Logger.Log(World.getBlock(chunkBlockX + x, y, chunkBlockZ + z).id, "doiytr");
+            if(ids.includes(World.getBlock(chunkBlockX + x, y, chunkBlockZ + z).id)) {
+              Logger.Log(World.getBlock(chunkBlockX + x, y, chunkBlockZ + z).id, "d");
+              World.setBlock(chunkBlockX + x, y, chunkBlockZ + z, 0, 0);
+            }
+          }
+        }
+      }
+    }
+  },
+  //onlyIn - 0 all blocks
+  //1 whitelist
+  //2 blacklist
+  generateSphere: function(coords, min, max, id, data, random, blockSource, onlyIn, ids) {
+    let size = min;
+    if(random) size = random.nextInt(max - min) + min;
+    let is = true;
+    switch (onlyIn) {
+  case 1:
+    for(let x = -size; x < size; x++) {
+      for(let y = -size; y <= size; y++) {
+      	for(let z = -size; z <= size; z++) {
+      	  if(x * x + y * y + z * z <= size * size) {
+      	    let tile = World.getBlock(coords.x + x, coords.y + y, coords.z + z);
+      	    if(!(tile.id + "_" + tile.data in ids)) {
+      	      is = false;
+      	    }
+      	  }
+      	}
+      }
+    }
+    break;
+    case 2:
+      for(let x = -size; x < size; x++) {
+      for(let y = -size; y <= size; y++) {
+      	for(let z = -size; z <= size; z++) {
+      	  if(x * x + y * y + z * z <= size * size) {
+      	    let tile = World.getBlock(coords.x + x, coords.y + y, coords.z + z);
+      	    if((tile.id + "_" + tile.data in ids)) {
+      	      is = false;
+      	    }
+      	  }
+      	}
+      }
+    }
+    break;
+    }
+    if(is) {
+		for(let x = -size; x < size; x++) {
+      for(let y = -size; y <= size; y++) {
+      	for(let z = -size; z <= size; z++) {
+      	  Logger.Log("shiftakes", x * x + y * y + z * z);
+					if(x * x + y * y + z * z <= size * size) {
+						World.setBlock(coords.x + x, coords.y + y, coords.z + z, id, data);
+					}
+				}
+    	}
+		}}
+  },
+  generateDisk: function(coords, id, data, random, min, max, isCenter, rotation, blockSource) {
+    let radius = min;
+    if(random) radius = random.nextInt(max - min) + min;
+    
+    let quart = radius - 0.5;
+    if(!rotation || (rotation && rotation.yaw == 0 && rotation.pitch == 0 && rotation.roll == 0)) {
+		  for(let x = -quart; x <= quart; x++) {
+    		for(let z = -quart; z <= quart; z++) {
+					Logger.Log("shiftskes", x * x + z * z);
+					if(x * x + z * z <= radius * radius) {
+					  if(!isCenter && x == 0 && z == 0) continue;
+						World.setBlock(coords.x + x, coords.y, coords.z + z, id, data);
+					}
+				}
+    	}
+    } else {
+      
+    }
+		},
+  generateBox: function(coords, id, data, min, random, max, rotation, blockSource) {
+    let size = min;
+    if(random) size = random.nextInt(max - min) + min;
+		for(let x = -size; x < size; x++) {
+    	for(let y = -size; y < size; y++) {
+      	for(let z = -size; z < size; z++) {
+			     World.setBlock(coords.x, coords.y, coords.z, id, data);
+		    }
+    	}
+		}
+  },
+  generateRect: function(coords, id, data, min, random, max, rotation, blockSource) {
+    let size = min;
+    if(random) size = random.nextInt(max - min) + min;
+    
+		for(let x = -size; x < size; x++) {
+      for(let z = -size; z < size; z++) {
+			  World.setBlock(coords.x, coords.y, coords.z, id, data);
+		  }
+		}
+  },
+  generateChunkPerlin: function(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids) {
+     GenerationDictionary.generateBoxPerlin({x: coordsChunk.x * 16, y: 5, z: coordsChunk.z * 16}, {x: 16, y: maxPos || OreDictionary.findChunkHighSurface(coordsChunk.x, coordsChunk.z), z: 16}, id, data, seed, scale, octaves, onlyIn, ids);
+  },
+  getStandardGaussianNoise: function(coords, seed) { //SEMI STANDARD
+    return GenerationDictionary.getGaussianProbabilityDensity(coords, seed, new CovarianceMatrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]), 0);
+  },
+  getSemiStandardGaussianNoise: function(coords, seed, center) { //SEMI STANDARD
+    return GenerationDictionary.getGaussianProbabilityDensity(coords, seed, new CovarianceMatrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]), center);
+  },
+  get3SigmaGaussianNoise: function(coords, size, seed, center) {
+    let newsize = new Vector3(size.x / 3, size.y / 3, size.z / 3);
+    return GenerationDictionary.getGaussianProbabilityDensity(coords, seed, new CovarianceMatrix([[Math.pow(newsize.x, 2), 0, 0], [0, Math.pow(newsize.y, 2), 0], [0, 0, Math.pow(newsize.z, 2)]]), center);
+  },
+  getGaussianProbabilityDensityWithSize: function(coords, size, seed, center, percent) {
+    let newsize = new Vector3(size.x + percent * size.x, size.y + percent * size.y, size.z + percent * size.z);
+    return GenerationDictionary.getGaussianProbabilityDensity(coords, seed, new CovarianceMatrix([[Math.pow(newsize.x, 2), 0, 0], [0, Math.pow(newsize.y, 2), 0], [0, 0, Math.pow(newsize.z, 2)]]), center);
+  },
+  //probability density of 3d normal distribution
+  getGaussianProbabilityDensity: function(coords, seed, deviation, center) {
+    if(deviation.determinant() < 0) throw "Eror"
+    
+    let relative = new Vector3(coords.x - center.x, coords.y - center.y, coords.z - center.z);
+    relative[0] = relative.x;
+    relative[1] = relative.y;
+    relative[2] = relative.z;
+
+    Logger.Log(deviation.determinant(), "Zeder");
+
+    Logger.Log(1 / (Math.sqrt(deviation.determinant()) * Math.pow(2 * Math.PI, deviation.size().x / 2)), "oeder");
+    
+    let inv = deviation.inverse();
+    
+    let summ = 0;
+    for(let x = 0; x < inv.size().x; x++) {
+		  for(let y = 0; y < inv.size().y; y++) {
+		    summ += inv[x][y] * relative[x] * relative[y];
+		  }
+    }
+    
+    Logger.Log(-summ/2, "Weder");
+    Logger.Log(Math.exp(-summ/2), "Xeder");
+    
+    Logger.Log(1 / (Math.sqrt(deviation.determinant()) * Math.pow(2 * Math.PI, deviation.size().x / 2)) * Math.exp(-summ/2), "юeder");
+    
+    return 1 / (Math.sqrt(deviation.determinant()) * Math.pow(2 * Math.PI, deviation.size().x / 2)) * Math.exp(-summ/2);
+    
+    
+    //return 1 / (Math.sqrt(deviation.determinant()) * Math.pow(2 * Math.PI, deviation.size().x / 2)) * deviation.inverse().multiply(relative.dot(relative)).division(-2).exp(32, 1, 0.01);
+  },
+  getGaussianProbability: function(coords, seed, deviation, center) {
+    if(deviation.determinant() < 0) throw "Eror";
+    
+    let relative = new Vector3(coords.x - center.x, coords.y - center.y, coords.z - center.z);
+    relative[0] = relative.x;
+    relative[1] = relative.y;
+    relative[2] = relative.z;
+    
+    let inv = deviation.inverse();
+    
+    let summ = 0;
+    for(let x = 0; x < inv.size().x; x++) {
+		  for(let y = 0; y < inv.size().y; y++) {
+		    //summ += inv[x][y] * ;
+		    
+		    
+		    //relative[x] * relative[y];
+		  }
+    }
+    
+    return 1 / (Math.sqrt(deviation.determinant()) * Math.pow(2 * Math.PI, deviation.size().x / 2)) * Math.exp(-summ/2);
+  },
+  generateBoxPerlin: function(coords, size, id, data, seed, scale, octaves, onlyIn, ids) {
+    Logger.Log(GenerationUtils.getPerlinNoise(coords.x + 8, 0, coords.z + 8, seed, 1 / scale, octaves), " -& ");
+    
+    if(GenerationUtils.getPerlinNoise(coords.x + 8, 0, coords.z + 8, seed, 1 / scale, octaves) < 0.6 - 12 / scale) { 
+    // проверка порога отбрасывания чанка
+    return;
+  }
+    Logger.Log("der", " -& ");
+    for(let x = 0; x < size.x; x++) {
+		  for(let y = 0; y < size.y; y++) {
+        for(let z = 0; z < size.z; z++) {
+          let tile = World.getBlock(coords.x + x, coords.y + y, coords.z + z);
+      	    if((tile.id + "_" + tile.data in ids)) {
+      	      //Logger.Log("derhyu", " -& ioploi");
+          if(GenerationUtils.getPerlinNoise(coords.x + x, coords.x + y, coords.z + z, seed, 1 / scale, octaves) > 0.6) World.setBlock(coords.x + x, coords.y + y, coords.z + z, id, data);
+          }
+		    }
+		  }
+		}
+  },
+  generateComplexStructure: function(structure, coords, blockSource, seed) {
+    structure.generate(coords, blockSource);
+  }
+}
+
+function ComplexStructure(coords, dimension) {
+  this.coords = coords;
+  this.dimension = dimension;
+  
+  this.pregenerate = function(blockSource) {
+    
+  }
+  this.generate = function(blockSource) {
+    
+  }
+  this.generated = function(blockSource) {
+    
+  }
+  this.tick = function(blockSource) {
+    
+  }
+  
+  this.generate = function(coords, blockSource) {
+    
+  }
+}
+Callback.addCallback("DestroyBlock", function (coords, tile, playerUid) {
+  Logger.Log(tile.id, "zolotz");
+  if(tile.id != 58) return;
+  GenerationDictionary.chunkExcavateForBlockCoords(coords.relative.x, coords.relative.z, [1, 8, 9, 10, 11, 7, 24, 179, 172, 87, 88, 121], BlockSource.getDefaultForActor(playerUid));
+});
+
+Logger.Log(GenerationDictionary.getGaussianProbabilityDensity(new Vector3(0, 0, 0), 0, new CovarianceMatrix([[5, 0, 0], [0, 5, 0], [0, 0, 5]]), new Vector3(0, 0, 0)), "weakeэ");
+Logger.Log(GenerationDictionary.getGaussianProbabilityDensity(new Vector3(0, 0, 0), 0, new CovarianceMatrix([[5, 0, 0], [0, 5, 0], [0, 0, 5]]), new Vector3(1, 0, 0)), "weakeэ");
+Logger.Log(GenerationDictionary.getGaussianProbabilityDensity(new Vector3(0, 0, 0), 0, new CovarianceMatrix([[5, 0, 0], [0, 5, 0], [0, 0, 5]]), new Vector3(0, 0, 1)), "weakeэ");
+
 
 
 
@@ -1245,14 +4073,17 @@ Size int
 }
 */
 //API for GregTech ore generation
-var OreDictionary = {
+let OreDictionary = {
     blocks: [],
+    number: [],
+    invblocks: [],
+    evblocks: [],
     ores: [],
     data: [],
     dat: [],
     invdata: [],
     invdat: [],
-    smallgens : [],
+    smallgens: [],
     veins: [],
     grids: {},
     sumOfRarites: 0,
@@ -1262,11 +4093,14 @@ var OreDictionary = {
     //stone block for changing to ore
     registerChangeableBlock: function(block) {
         block.number = Object.keys(this.blocks).length;
+        this.invblocks[block.number] = block;
+        this.evblocks[block.texture] = block;
         this.blocks[block.id + "_" + block.data] = block;
         //this.countByID = Math.floor(16 / this.blocks.length);
     //this.IDBycount = Math.floor(this.stones.length / 16);
     },
     registerOre: function (material, smallgen) {
+        setLoadingTip("Ores: " + material.name);
         let variation = [];
         let variationbig = [];
         if(!material.hasFlag(GENERATE_ORE)) {
@@ -1274,8 +4108,7 @@ var OreDictionary = {
         }
     this.ores[this.ores.length] = material;
   this.smallgens[this.smallgens.length] = smallgen;
-  Logger.Log("****5", Object.keys(this.data).length);
-  Logger.Log("****5", this.ores.length);
+  
     this.counter = 0;
     let id = (Math.floor(this.ores.length - 1) * 2) + "";
     let smallid = (Math.floor(this.ores.length - 1) * 2 + 1) + "";
@@ -1285,83 +4118,39 @@ var OreDictionary = {
        
   //!!!!!
   this.data[material.name] = {id: BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)]};
+  Block.registerDropFunction(BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)], function(coords, id, data, diggingLevel, region) {
+    let drop = [];
+	  if(Math.random() > 0.5) {
+	    drop.push([MaterialDictionary.invdata["crushed"][material.name].id, 1, MaterialDictionary.invdata["crushed"][material.name].data]);
+	  } else {
+	    drop.push([MaterialDictionary.invdata["dustImpure"][material.name].id, 1, MaterialDictionary.invdata["dustImpure"][material.name].data]);
+	  }
+	  if(Math.random() < 0.22) {
+	    drop.push([MaterialDictionary.invdata["dustImpure"][OreDictionary.invblocks[data].texture].id, 1, MaterialDictionary.invdata["dustImpure"][OreDictionary.invblocks[data].texture].data]);
+	  } else if(Math.random() > 0.22 && Math.random() < 0.33) {
+	    drop.push([MaterialDictionary.invdata["dust"][OreDictionary.invblocks[data].texture].id, 1, MaterialDictionary.invdata["dust"][OreDictionary.invblocks[data].texture].data]);
+	  }
+	  return drop;
+  });
   this.dat[material.name] = {id: BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)]};
   
   this.invdata[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)]] = material;
   this.invdat[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)]] = material;
   
   for(let i = 0; i < Object.keys(this.blocks).length; i++) {
-  Logger.Log(__dir__ + "res/terrain-atlas/material_sets/" + material.icon_set.name + "/ore.png", "$$()");
-  let copperlayer = new IconTransformator.Action.ColourMultiply(material.colourRGB);
-  
-    let copperbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/material_sets/" + material.icon_set.name + "/ore.png"), material.icon_set.ORE, copperlayer);
-    let file = new java.io.File(__dir__ + "res/terrain-atlas/generated/" + material.name + "_ore.png");
     
-    let copperbitmaps = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/material_sets/" + material.icon_set.name + "/oreSmall.png"), material.icon_set.SMALL_ORE, copperlayer);
-    let files = new java.io.File(__dir__ + "res/terrain-atlas/generated/" + material.name + "_oreSmall.png");
-    
-  let cOut = new java.io.FileOutputStream(file);
-  copperbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cOut);
-  cOut.flush();
-  cOut.close();
   
-  let cOu = new java.io.FileOutputStream(files);
-  copperbitmaps.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, cOu);
-  cOu.flush();
-  cOu.close();
-  
-  let alloy_smelterlayer = new IconTransformator.Action.Layering();
-  alloy_smelterlayer.layer = android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/generated/" + material.name + "_ore.png");
-  let alloy_smelterbitmap = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/" + this.blocks[Object.keys(this.blocks)[i]].texture + ".png"), material.icon_set.ORE, alloy_smelterlayer);
-  
-  let ffile = new java.io.File(__dir__ + "res/terrain-atlas/generated/" + this.blocks[Object.keys(this.blocks)[i]].texture + "_" + material.name + "_ore.png");
-  let ffOut = new java.io.FileOutputStream(ffile);
-  alloy_smelterbitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, ffOut);
-  ffOut.flush();
-  ffOut.close();
-  
-  /*let oremodel = new BlockRenderer.Model();
-  oremodel.addBox(0, 0, 0, 1, 1, 1, this.stones[i].texture + "_" + material.name + "_ore", 0);
-  let icRenderModel = new ICRender.Model(); 
-  icRenderModel.addEntry(oremodel);
-  BlockRenderer.setStaticICRender(BlockID["gtblockores" + (Math.floor((this.ores.length - 1) / this.countByID) * 2)], this.counter * this.stones.length + i, icRenderModel);*/
-  Logger.Log(this.blocks[Object.keys(this.blocks)[i]].texture, "shirinkium");
   variationbig[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" + material.name + "_ore"};
-  Logger.Log("big", "shirinkium");
-  Logger.Log("big", "shirinkium");
-  
-  let alloy_smelterlayers = new IconTransformator.Action.Layering();
-    alloy_smelterlayers.layer = android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/generated/" + material.name + "_oreSmall.png");
-  let alloy_smelterbitmaps = IconTransformator.transformIcon(android.graphics.BitmapFactory.decodeFile(__dir__ + "res/terrain-atlas/" + this.blocks[Object.keys(this.blocks)[i]].texture + ".png"), material.icon_set.SMALL_ORE, alloy_smelterlayers);
-  
-  let ffiles = new java.io.File(__dir__ + "res/terrain-atlas/generated/" + this.blocks[Object.keys(this.blocks)[i]].texture + "_" + material.name + "_oreSmall.png");
-  let ffOuts = new java.io.FileOutputStream(ffiles);
-  alloy_smelterbitmaps.compress(android.graphics.Bitmap.CompressFormat.PNG, 85, ffOuts);
-  ffOuts.flush();
-  ffOuts.close();
-  
-  /*let oremodels = new BlockRenderer.Model();
-  oremodels.addBox(0, 0, 0, 1, 1, 1, this.stones[i].texture + "_" + material.name + "_oreSmall", 0);
-  let icRenderModels = new ICRender.Model(); 
-  icRenderModels.addEntry(oremodels);
-  BlockRenderer.setStaticICRender(BlockID["gtblockores" + (Math.floor((this.ores.length - 1) / this.countByID) * 2 + 1)], this.counter * this.stones.length + i, icRenderModels);*/
+  Logger.Log(this.blocks[Object.keys(this.blocks)[i]].texture, "видиканес");
 variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" + material.name + "_oreSmall"};
-  Logger.Log("small", "shirinkium");
   }
-    Logger.Log("gtblockores" + id);
-    Logger.Log("gtblockores" + smallid);
     IDRegistry.genBlockID("gtblockores" + id);
     Block.createBlock("gtblockores" + id, this.createvariables(material, variationbig), "gtore");
     IDRegistry.genBlockID("gtblockores" + smallid);
     Block.createBlock("gtblockores" + smallid, this.createvariables(material, variation), "gtore");
-  
-  Logger.Log(Math.floor(this.ores.length - 1) * 2 + 1, "shirinkiumSmall");
-  Logger.Log(Math.floor(this.ores.length - 1) * 2, "shirinkiumBig");
-  
-  Logger.Log(smallid, "shirinkiumSmall");
-  Logger.Log(id, "shirinkiumBig");
-  
-  Logger.Log(i, "shirinkium");
+    
+    this.number[BlockID["gtblockores" + id]] = id;
+    this.number[BlockID["gtblockores" + smallid]] = smallid;
     },
     createvariables: function(material, variation) {
         let variables = [];
@@ -1405,6 +4194,9 @@ variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" 
   randomInInner: function(random, start, end) {
     return start + random.nextInt(end - start);
   },
+  randomInInnerGaussian: function(random, start, end) {
+    return start + Math.floor(random.nextGaussian() * (end - start));
+  },
   findChunkHighSurface: function (chunkX, chunkZ) {
     let highs = 0;
     for(let x = 0; x < 16; x++) {
@@ -1418,27 +4210,32 @@ variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" 
   },
   addToCreative() {
     for(let i in this.invdata) {
+      Item.setCategory(i, Native.ItemCategory.FOOD);
       for(let j in this.invdata[i]) {
         Item.addToCreative(i, 1, j);
       }
     }
   }
   };
-  
-  
+
   //code vein
-  function OreMixVein(name, dimensions, primary, secondary, inbetween, sporadic, minimalheight, maximalheight, rarity, density, size) {
+  function OreMixVein(name, dimensions, primary, secondary, inbetween, sporadic, minimalheight, maximalheight, rarity, density, size, sizeing, covariance) {
     this.name = name;
-    this.dimensions= dimensions;
+    this.dimensions = dimensions;
     this.primary = primary;
-  this.secondary = secondary;
+    this.secondary = secondary;
     this.inbetween = inbetween;
-  this.sporadic = sporadic;
+    this.sporadic = sporadic;
     this.minimalheight = minimalheight;
-  this.maximalheight = maximalheight;
+    this.maximalheight = maximalheight;
     this.rarity = rarity;
-  this.density = density;
+    this.density = density;
     this.size = size;
+    this.covariance = covariance;
+    this.sizeing = sizeing;
+    /*checkGen() {
+      GenerationDictionary.get() * density * 
+    }*/
   }
 
 
@@ -1491,424 +4288,19 @@ function FluidStack(id, amount, tag) {
 function ArrayContainer(arr) {
     this.arr = arr;
 };
-function Recipe(inputs, outputs, duration, EUt, postHandler) {
-    this.type = "normal";
-    this.inputs = inputs;
-    this.outputs = outputs;
-    this.duration = duration;
-    this.EUt = EUt;
-    this.isSteam = function() {
-        return this.EUt <= 16;
-    }
-}
-function FuelRecipe(inputs, outputs, duration, EUt, postHandler) {
-    this.type = "fuel";
-    this.inputs = inputs;
-    this.outputs = outputs;
-    this.duration = duration;
-    this.EUt = EUt;
-    this.isSteam = function() {
-        return this.EUt <= 16;
-    }
-}
-function RecipeMap(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs) {
-    this.minInputs = minInputs;
-    this.maxInputs = maxInputs;
-    this.minOutputs = minOutputs;
-    this.maxOutputs = maxOutputs;
-    this.length = 0;
-    this.addRecipe = function(recipe) {
-        this[this.length] = recipe;
-        this.length++;
-    }
-    this.deleteRecipe = function(recipe) {
-        for(let i in this) {
-            if(this[i] == recipe) { 
-                delete this[i];
-                break;
-            }
-        }
-    }
-};
-function FuelMap(minInputs, maxInputs) {
-    this.minInputs = minInputs;
-    this.maxInputs = maxInputs;
-    /*this.minInputs = minInputs;
-    this.maxInputs = maxInputs;*/
-    this.addRecipe = function(recipe) {
-        this[this.length] = recipe;
-        this.length++;
-    }
-    this.deleteRecipe = function(recipe) {
-        for(let i in this) {
-            if(this[i] == recipe) { 
-                delete this[i];
-                break;
-            }
-        }
-    }
-}
-String.prototype.replaceAt = function(index, replacement) {
-    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
-}
-let RecipeDictionary = {
-    RECIPE_FURNACE_MAP: false,
-    recipemaps: {},
-    addFurnace: function(input, output) {
-        let iddatainput = MaterialDictionary.invdata[input.form][input.material.name];
-        let iddataoutput = MaterialDictionary.invdata[output.form][output.material.name];
-        Recipes.addFurnace(iddatainput.id, iddatainput.data, iddataoutput.id, iddataoutput.data);
-    },
-    addShaped: function(mask, input, output, prefix, func) {
-        let iddatainput = [];
-        let f = 0;
-        for(let i in input) {
-            if(i%2 == 0) {
-                iddatainput[f] = input[i];
-                f++;
-            } else {
-                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
-                iddatainput[f] = preiddatainput.id;
-                f++;
-                iddatainput[f] = preiddatainput.data;
-                f++;
-            }
-        }
-        let iddataoutput = {id: MaterialDictionary.invdata[output.form][output.material.name].id, count: output.count, data: MaterialDictionary.invdata[output.form][output.material.name].data};
-        Recipes.addShaped(iddataoutput, mask, iddatainput, func, prefix);
-    },
-    addShapedForTool: function(mask, input, output, prefix, func) {
-        let iddatainput = [];
-        let f = 0;
-        for(let i in input) {
-            if(i%2 == 0) {
-                iddatainput[f] = input[i];
-                f++;
-            } else {
-                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
-                iddatainput[f] = preiddatainput.id;
-                f++;
-                iddatainput[f] = preiddatainput.data;
-                f++;
-            }
-        }
-        function fun(api, field, result) {
-           ToolDictionary.upgradeTool(result);
-           func(api, field, result);
-        }
-        //let iddataoutput = ToolDictionary.invdata[output.type];
-        let iddataoutput = {id: ToolDictionary.invdata[output].id, count: 1, data: ToolDictionary.invdata[output].data};
-            Recipes.addShaped(iddataoutput, mask, iddatainput, fun, prefix);
-    },
-    addShapeless: function(input, output, prefix, func) {
-        let iddatainput = [];
-        let f = 0;
-        for(let i in input) {
-                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
-                iddatainput[f] = preiddatainput.id;
-                f++;
-                iddatainput[f] = preiddatainput.data;
-                f++;
-        }
-        //let iddataoutput = MaterialDictionary.invdata[output.form][output.material.name];
-        let iddataoutput = {id: MaterialDictionary.invdata[output.form][output.material.name].id, count: output.count, data: MaterialDictionary.invdata[output.form][output.material.name].data};
-        Recipes.addShapeless(iddataoutput, iddatainput, func, prefix);
-    },
-    arr_en: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
-    addToolShaped: function(tools, mask, input, output, prefix, func) {
-        let newmask = [];
-        let pos = [];
-        let j = 0;
-        for(let i in mask) {
-            newmask[i] = mask[i];
-            pos[i] = [];
-            let index = 0;
-            while(true) {
-            if(mask[i].indexOf("_", index) != -1) {
-                pos[i][mask[i].indexOf("_", index)] = mask[i].indexOf("_", index);
-                newmask[i] = newmask[i].replaceAt(mask[i].indexOf("_"), this.arr_en[this.arr_en.length - 1 - j]);
-                Logger.Log(this.arr_en[this.arr_en.length - 1 - j], "TRex __");
-                index = mask[i].indexOf("_", index) + 1;
-                j++;
-            } else {
-                break;
-            }
-            }
-        }
-        let iddatainput = [];
-        let f = 0;
-        for(let i in tools) {
-            Logger.Log(this.arr_en[this.arr_en.length - 1 - i], "TRex __");
-            iddatainput[f] = this.arr_en[this.arr_en.length - 1 - i];
-            f++;
-            iddatainput[f] = ToolDictionary.invdata[tools[i]].id;
-            f++;
-            iddatainput[f] = ToolDictionary.invdata[tools[i]].data;
-            f++;
-        }
-        for(let i in input) {
-            if(i%2 == 0) {
-                iddatainput[f] = input[i];
-                f++;
-            } else {
-                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
-                iddatainput[f] = preiddatainput.id;
-                f++;
-                iddatainput[f] = preiddatainput.data;
-                f++;
-            }
-        }
-        //let iddataoutput = MaterialDictionary.invdata[output.form][output.material.name];
-        let iddataoutput = {id: MaterialDictionary.invdata[output.form][output.material.name].id, count: output.count, data: MaterialDictionary.invdata[output.form][output.material.name].data};
-            function fun(api, field, result) {
-              Logger.Log(e, "zips");
-               for (let y in field) {
-				    if (field[y].id ==                             ItemID.gtmetatool01 & field[y].data == hammerindex) {
-                        ToolDictionary.damageTool(field[y]);
-				        
-				    } else {
-                      field[y].count -= 1;
-                    }
-                }
-                func(api, field, result);
-            }
-        Recipes.addShaped(iddataoutput, newmask, iddatainput, fun, prefix);
-    },
-    addToolShapedForTool: function(tools, mask, input, output, prefix, func) {
-        let newmask = [];
-        let pos = [];
-        let j = 0;
-        for(let i in mask) {
-            newmask[i] = mask[i];
-            pos[i] = [];
-            let index = 0;
-            while(true) {
-            if(mask[i].indexOf("_", index) != -1) {
-                pos[i][mask[i].indexOf("_", index)] = mask[i].indexOf("_", index);
-                newmask[i] = newmask[i].replaceAt(mask[i].indexOf("_"), this.arr_en[this.arr_en.length - 1 - j]);
-                Logger.Log(this.arr_en[this.arr_en.length - 1 - j], "TRex __");
-                index = mask[i].indexOf("_", index) + 1;
-                j++;
-            } else {
-                break;
-            }
-            }
-        }
-        let iddatainput = [];
-        let f = 0;
-        for(let i in tools) {
-            iddatainput[f] = this.arr_en[this.arr_en.length - 1 - i];
-            f++;
-            iddatainput[f] = ToolDictionary.invdata[tools[i]].id;
-            f++;
-            iddatainput[f] = ToolDictionary.invdata[tools[i]].data;
-            f++;
-        }
-        for(let i in input) {
-            if(i%2 == 0) {
-                iddatainput[f] = input[i];
-                f++;
-            } else {
-                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
-                iddatainput[f] = preiddatainput.id;
-                f++;
-                iddatainput[f] = preiddatainput.data;
-                f++;
-            }
-        }
-        //let iddataoutput = ToolDictionary.invdata[output.type];
-        let iddataoutput = {id: ToolDictionary.invdata[output].id, count: 1, data: ToolDictionary.invdata[output].data};
-            function fun(api, field, result) {
-              Logger.Log(e, "zips");
-               for (let y in field) {
-				    if (field[y].id ==                             ItemID.gtmetatool01 & field[y].data == hammerindex) {
-                        ToolDictionary.damageTool(field[y]);
-				        
-				    } else {
-                      field[y].count -= 1;
-                    }
-                }
-                ToolDictionary.upgradeTool(result);
-                func(api, field, result);
-            }
-        Recipes.addShaped(iddataoutput, newmask, iddatainput, fun, prefix);
-    },
-    provideFurnaceRecipe: function(container, prefix) {
-      Logger.Log(container, "dero");
-      Logger.Log(container.getSlot("input0"), "derrekpro");
-        return Recipes.getFurnaceRecipeResult(container.getSlot("input0").id, container.getSlot("input0").data, prefix);
-    },
-    provideFurnaceFuel: function(inputs) {
-        let iddata = MaterialDictionary.invdata[inputs[0].material][inputs[0].form];
-        if(Recipes.getFuelBurnDuration(iddata.id, iddata.data) > 0) {
-            return true;
-        }
-        return false;
-    },
-    registerFormHandlingRecipes: function(input, EUt) {
-        if(input.type == "MARKER" || input.type == "FLUID") return;
-        if(input.type == "INGOT") RecipeDictionary.addFurnace({material: input, form: "dust"}, {material: input, form: "ingot"});
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({material: input, form: "impuredust"}, {material: input, form: "ingot"});
-if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({material: input, form: "purifieddust"}, {material: input, form: "ingot"});
-        
-        
-        if(input.type == "INGOT") RecipeDictionary.addToolShaped(["mortar"], ["_", "i"], ['i', {material: input, form: "ingot"}], {material: input, form: "dust", count: 1});
-            if(input.type == "GEM") RecipeDictionary.addToolShaped(["mortar"], ["_", "i"], ['i', {material: input, form: "gem"}], {material: input, form: "dust", count: 1});
-        if(input.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShaped(["mortar"],  ["_", "i"], ['i', {material: input, form: "plate"}], {material: input, form: "dust", count: 1});
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShaped(["hammer"], ["_", "i", "i"],  ['i', {material: input, form: "ingot"}], {material: input, form: "plate", count: 1});
-        if(input.type == "GEM" && input.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShaped(["hammer"], ["_", "i"],  ['i', {material: input, form: "gem"}], {material: input, form: "plate", count: 1});
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShaped(["file"], ["_", "i"],  ['i', {material: input, form: "ingot"}], {material: input, form: "rod", count: 1});
-        RecipeDictionary.addShaped(["ddd", "ddd", "ddd"], ['d', {material: input, form: "tinypiledust"}], {material: input, form: "dust", count: 1});
-        RecipeDictionary.addShaped(["dd", "dd"], ['d', {material: input, form: "smallpiledust"}], {material: input, form: "dust", count: 1});
-        RecipeDictionary.addShaped(["d  ", "  ", "   "], ['d', {material: input, form: "dust"}], {material: input, form: "tinypiledust", count: 9});
-        RecipeDictionary.addShaped([" d ", "   ", "   "], ['d', {material: input, form: "dust"}], {material: input, form: "smallpiledust", count: 4});
-        if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_FOIL)) RecipeDictionary.addToolShaped(["hammer"], ["_p"], ['p', {material: input, form: "plate"}], {material: input, form: "foil", count: 1});
-        if(input.hasFlag(GENERATE_FOIL) && input.hasFlag(GENERATE_FINE_WIRE)) RecipeDictionary.addToolShaped(["wirecutter"], ["_p"], ['p', {material: input, form: "foil"}], {material: input, form: "fine_wire", count: 1});
-        if(input.hasFlag(GENERATE_BOLT_SCREW)) RecipeDictionary.addToolShaped(["file"], ["_p", "p "], ['p', {material: input, form: "bolt"}], {material: input, form: "screw", count: 1});
-        if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_GEAR) && input.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShaped(["screwdriver"], ["rpr", "p_p", "rpr"], ['p', {material: input, form: "plate"}, 'r', {material: input, form: "rod"}], {material: input, form: "gear", count: 1});
-if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_SMALL_GEAR)) RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {material: input, form: "plate"}], {material: input, form: "small_gear", count: 1});
-if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_FRAME)) RecipeDictionary.addToolShaped(["wrench"], ["ppp", "p_p", "ppp"], ['p', {material: input, form: "rod"}], {material: input, form: "frame_box", count: 1});
-if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {material: input, form: "rod"}], {material: input, form: "ring", count: 1});
-        if(input.hasFlag(GENERATE_ORE)) RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {material: input, form: "crushedore"}], {material: input, form: "impuredust", count: 1});
-        if(input.hasFlag(GENERATE_ORE)) RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {material: input, form: "purifiedore"}], {material: input, form: "purifieddust", count: 1});
-        if(input.hasFlag(GENERATE_ORE)) RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {material: input, form: "centrifugedore"}], {material: input, form: "dust", count: 1});
-        
-        
-        
-        if(input.hasFlag(GENERATE_PLATE)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{material: input, form: "plate", count: 1}], [{material: input, form: "dust", count: 1}]));
-        if(input.type == "INGOT") MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{material: input, form: "ingot", count: 1}], [{material: input, form: "dust", count: 1}]));
-        if(input.type == "GEM") MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{material: input, form: "gem", count: 1}], [{material: input, form: "dust", count: 1}]));
-        if(input.type == "INGOT") MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{material: input, form: "nugget", count: 1}], [{material: input, form: "tinypiledust", count: 1}]));
-        if(input.type == "INGOT") MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{material: input, form: "ingot", count: 9}], [{material: input, form: "block", count: 1}]));
-        if(input.type == "GEM") MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{material: input, form: "gem", count: 9}], [{material: input, form: "block", count: 1}]));
-        if(input.type == "INGOT" || input.type == "GEM") MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{material: input, form: "dust", count: 9}], [{material: input, form: "block", count: 1}]));
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_PLATE)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{material: input, form: "ingot", count: 3}], [{material: input, form: "plate", count: 2}]));
-        if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_LONG_ROD)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{material: input, form: "rod", count: 2}], [{material: input, form: "long_rod", count: 1}]));
-        
-    },
-    registerBoilerFuel: function(input, output) {
-      MachineDictionary.steammachines["boiler"].recipes.addRecipe(new FuelRecipe([{material: input, form: "gem", count: 1}], [{material: output, form: "dust", count: 1}]));
-    },
-    registerAlloy: function(output, EUt) {
-      let inputs = output.formula;
-        //if(inputs[0].material.type != "INGOT") return;
-        if(inputs.length == 0) return;
-        //if(output.length == 0) return;
-       for(let i in inputs) {
-         //ifinputs[i].type != "ingot") {}
-       }
-        if(inputs.length == 2) MachineDictionary.steammachines["alloy_smelter"].recipes.addRecipe(new Recipe([{material: inputs[0].material, form: "ingot", count: inputs[0].count}, {material: inputs[1].material, form: "ingot", count: inputs[1].count}], [{material: output, form: "ingot", count: 1}]));
-        
-        let mask = [];
-        for(let i in inputs) {
-            mask.push({material: inputs[i].material, form: "dust"});
-        }
-        RecipeDictionary.addShapeless(mask,  {material: output, form: "dust", count: 1});
-        
-        let omask = [];
-        for(let i in inputs) {
-            omask.push({material: inputs[i].material, form: "tinypiledust"});
-        }
-        RecipeDictionary.addShapeless(omask,  {material: output, form: "tinypiledust", count: 1});
-        
-        let kmask = [];
-        for(let i in inputs) {
-            kmask.push({material: inputs[i].material, form: "smallpiledust"});
-        }
-        RecipeDictionary.addShapeless(kmask,  {material: output, form: "smallpiledust", count: 1});
-    },
-    registerToolRecipe: function(input) {
-        if(ToolDictionary.invdata[input.name]) return;
-        if(!input.material2.hasFlag(GENERATE_ROD)) return;
-        if(!input.material.hasFlag(GENERATE_PLATE)) return;
-        Logger.Log(input.material.name, "rexium");
-        let material = ToolDictionary.materials[input.name].material;
-        let material2 = ToolDictionary.materials[input.name].material2;
-        if(input.material.type == "INGOT") RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["pii", "_s_", " s "], ['p', {material: input, form: "plate"}, 'i', {material: material, form: "ingot"}, 's', {material: material2, form: "rod"}], "pickaxe");
-      if(input.material.type == "GEM") RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["pii", "_s_", " s "], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "gem"}, 's', {material: material2, form: "rod"}], "pickaxe");
-if(input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["_p_", " s ", " s "], ['p', {material: input, form: "plate"}, 's', {material: material2, form: "rod"}], "shovel");
-if(input.material.type == "INGOT" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer"], ["pi", "ps", "_s"], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "ingot"}, 's', {material: material2, form: "rod"}], "axe");
-if(input.material.type == "GEM" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer"], ["pi", "ps", "_s"], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "gem"}, 's', {material: material2, form: "rod"}], "axe");
-if(input.material.type == "INGOT" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer"], ["pi", "_s", " s"], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "ingot"}, 's', {material: material2, form: "rod"}], "hoe");
-if(input.material.type == "GEM" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer"], ["pi", "_s", " s"], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "gem"}, 's', {material: material2, form: "rod"}], "hoe");
-if(input.material.type == "INGOT" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addShapedForTool(["xx ", "xxs", "xx "], ['x', {material: material, form: "ingot"}, 's', {material: material2, form: "rod"}], "hammer");
-if(material.type == "GEM" && material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addShapedForTool(["xx ", "xxs", "xx "], ['x', {material: material, form: "gem"}, 's', {material: material2, form: "rod"}], "hammer");
-if(material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addShapedForTool(["x", "x", "s"], ['x', {material: material, form: "plate"}, 's', {material: material2, form: "rod"}], "file");
-if(material.type == "INGOT") RecipeDictionary.addToolShapedForTool(["hammer"], ["i_i", "iii", " i "], ['i', {material: material, form: "ingot"}], "wrench");
-if(material.type == "GEM") RecipeDictionary.addToolShapedForTool(["hammer"], ["i_i", "iii", " i "], ['i', {material: material, form: "gem"}], "wrench");
 
-if(material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer"], [" p ", "_p_", " s "], ['p', {material: material, form: "plate"}, 's', {material: material2, form: "rod"}], "sword");
-
-if(material.hasFlag(GENERATE_PLATE) && material.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShapedForTool(["file", "hammer", "screwdriver"], ["p_p", "_p_", "rsr"], ['p', {material: material, form: "plate"}, 'r', {material: material, form: "rod"}, 's', {material: material, form: "screw"}], "wirecutter");
-
-if(material.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShapedForTool(["file", "hammer"], [" _r", " r_", "s  "], ['r', {material: material, form: "rod"}, 's', {material: material2, form: "rod"}], "screwdriver");
-
-
-if(material.type == "INGOT") RecipeDictionary.addShapedForTool(["x x", "xxх"], ['x', {material: material, form: "ingot"}], "mortar");
-if(material.type == "GEM") RecipeDictionary.addShapedForTool(["x x", "xxх"], ['x', {material: material, form: "gem"}, 's', {material: material, form: "plate"}], "mortar");
-    },
-    toNotConsumable: function(input) {
-        return {id: input.id, data: input.data, count: 0};
-    },
-    Builder: function() {
-        this.inputs = [];
-        this.outputs = [];
-        this.duration = 0;
-        this.EUt = 0;
-        this.recipes = null;
-        
-        this.setRecipeMap = function(recipes) {
-            this.recipes = recipes;
-            return this;
-        }
-        this.input = function(input) {
-            this.inputs.push(input);
-            return this;
-        }
-        this.notConsumable = function(input) {
-            this.input(RecipeDictionary.toNotConsumable(input));
-            return this;
-        }
-        this.inputs = function(inputs) {
-	        [].push.apply(this.inputs, inputs);
-            return this;
-        }
-        this.output = function(output) {
-            this.outputs.push(output);
-            return this;
-        }
-        this.outputs = function(outputs) {
-            [].push.apply(this.inputs, inputs);
-            return this;
-        }
-        this.duration = function(duration) {
-            this.duration = duration;
-            return this;
-        }
-        this.EUt = function(EUt) {
-            this.EUt = EUt;
-            return this;
-        }
-        this.build = function() {
-            return new Recipe(inputs, outputs, duration, EUt);
-        }
-        this.buildAndRegister = function() {
-            let builded = this.build();
-            recipeMap.addRecipe(builded);
-        
-            return builded;
-        }
-    },
-};
 let MachineDictionary = {
     GENERATOR: true,
     PROCESSING: false,
     casings: {},
     textures: {},
     steammachines: {},
+    invsteammachines: {},
       tiers: [],
       types: [],
       count: 0,
+      count0: 0,
+      count1: 0,
       //steam
       genMachineRendererPipelines: function(isrotated, isFullRotated, ismisks) {
         
@@ -1920,42 +4312,80 @@ let MachineDictionary = {
       registerCasings: function() {
           IDRegistry.genBlockID("gtcasing");
           let variants = [];
-          variants[0] = this.registerCasing("bronze_hull");
-          variants[1] = this.registerCasing("bronze_bricks_hull");
+          variants[0] = this.registerCasing("bronze_hull", "MACHINE_BRONZE_SIDE");
+          variants[1] = this.registerCasing("bronze_bricks_hull", "MACHINE_BRONZEBRICKS_BOTTOM", "MACHINE_BRONZEBRICKS_TOP", "MACHINE_BRONZEBRICKS_SIDE");
           Block.createBlock("gtcasing", variants);
       },
       registerCasing: function(name) {
-          let variant = {name: name, texture: [[name, 0]]};
-          this.casings[name] = name;
+        let textures = [];
+        for(let i in arguments) {
+          if(i == 0) continue;
+          if(typeof arguments[i] == "string") {
+            textures[i - 1] = [arguments[i], 0];
+          }
+        }
+        
+          let variant = {name: name, texture: textures, inCreative: true};
+          this.casings[name] = Object.keys(this.casings).length;
           return variant;
       },
       registerMetalCasing: function(name) {
           let variant = {name: name, texture: [[name, 0]]};
-          this.metalcasings[name] = name;
+          this.metalcasings[name] = Object.keys(this.metalcasings).length;
           return variant;
       },
       registerMultiblockCasing: function(name) {
           let variant = {name: name, texture: [[name, 0]]};
-          this.multiblockcasings[name] = name;
+          this.multiblockcasings[name] = Object.keys(this.multiblockcasings).length;
           return variant;
       },
       registerSteamMachine: function(type, ui) {
-        if(BlockID.gtblockmachine == undefined) {
-            IDRegistry.genBlockID("gtblockmachine");
-        }
+        if(BlockID.gtblockmachine == undefined) IDRegistry.genBlockID("gtblockmachine");
         //type.recipes = new RecipeMap(type.minInputs, type.maxInputs, type.minOutputs, type.maxOutputs);
         /*type.errorSlot = {type: "image", x: число, y: число, bitmap: "bronze_error", scale: 1}*/
-        if(this.steammachines[type.name] == null) {
-         
+             for(let i in type.tier) {
+              if(type.tier[i] == 0) {
+            type.data0 = this.count0;
+            this.invsteammachines[type.data0] = {name: type.name, tier: type.tier[i]};
+            this.count0++;
+            for(let mach in this.steammachines) {
+                  if(this.steammachines[mach].tier[1] == 1) {
+                this.steammachines[mach].data1++;
+                this.invsteammachines[this.steammachines[mach].data1] = {name: this.steammachines[mach].name, tier: this.steammachines[mach].tier[1]};
+              }
+            }
+          }
+              if(type.tier[i] == 1) {
+            type.data1 = this.count0 + this.count1;
+            this.invsteammachines[type.data1] = {name: type.name, tier: type.tier[i]};
+            this.count1++;
+          }
+          }
           this.steammachines[type.name] = type;
-        }
-        //this.steammachines[name][tier] = type;
+          Logger.Log("варп", "₽шлд");
+          for(let mach in this.steammachines) {
+              for(let i in this.steammachines[mach].tier) {
+                 if(this.steammachines[mach].tier[i] == 0) {
+                   Logger.Log(this.steammachines[mach].name, "₽₽₽₽₽₽₽₽₽k₽!!");
+                Logger.Log(this.steammachines[mach].data0, "₽₽₽₽₽₽₽₽₽k₽!!");
+              }
+              if(this.steammachines[mach].tier[i] == 1) {
+                Logger.Log(this.steammachines[mach].name, "₽₽₽₽₽₽₽₽₽!!");
+                Logger.Log(this.steammachines[mach].data1, "₽₽₽₽₽₽₽₽₽₽!!");
+              }
+              }
+            }
+           Logger.Log("варпед", "₽шлд");
+           for(let mach in this.invsteammachines) {
+             Logger.Log(this.invsteammachines[mach].name, "₽₽rrfg₽₽₽!!");
+                Logger.Log(this.invsteammachines[mach].tier, "₽₽₽kju₽!!");
+           }
         for(let tier in type.tier) {
-            type.ui0 = new UI.StandartWindow(ui);
-            type.ui1 = new UI.StandartWindow(ui);
+          Logger.Log(ui, "xer gia");
+            type["ui" + type.tier[tier]] = ui;
             let casing = null;
-            if(type.tier[tier] == 0) casing = "bronze";
-            if(type.tier[tier] == 1) casing = "steel";
+            if(type.tier[tier] == 0) casing = "MACHINE";
+            if(type.tier[tier] == 1) casing = "MACHINE";
         if(false) {
         let alloy_smelterlayer = new IconTransformator.Action.Layering();
         if(type.name == "boiler" || type.name == "solar_boiler" || type.name == "lava_boiler") {
@@ -2002,19 +4432,69 @@ let MachineDictionary = {
         count++;
         
         }
-        if(type.tier[tier] == 0) type.variable = {name: type.name, textures: [[casing + "_" + type.hull, 0]], inCreative: true};
-        if(type.tier[tier] == 1) type.variable1 = {name: type.name, textures: [[casing + "_" + type.hull, 0]], inCreative: true};
+        let tr = null;
+        if(type.tier[tier] == 0) {
+          tr = "bronze";
+        } else if(type.tier[tier] == 1) {
+          tr = "steel";
+        }
+        if(type.tier[tier] == 0) type.variable0 = {name: type.name, textures: [[tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_BOTTOM", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_TOP", 0],  [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_FRONT", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0]], inCreative: true};
+        if(type.tier[tier] == 1) type.variable1 = {name: type.name, textures: [[tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_BOTTOM", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_TOP", 0],  [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_FRONT", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0]], inCreative: true};
+        Logger.Log(tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name, "derrechi");
         }
       },
       addToCreative: function() {
           let variables = [];
+          let tr = 0;
           for(let i in this.steammachines) {
               for(let tier in this.steammachines[i].tier) {
-                  //Logger.Log(this.steammachines[i].variable.name, "her");
-                  if(this.steammachines[i].tier[tier] == 0) variables.push(this.steammachines[i].variable);
-                  if(this.steammachines[i].tier[tier] == 1) variables.push(this.steammachines[i].variable1);
+                  
+                  if(this.steammachines[i].tier[tier] == 0) {
+                    
+                    /*Logger.Log(this.steammachines[i].variable0.textures, "her");
+                  let met = null;
+                  for(let j in this.steammachines[i].variable0.textures) {
+                    if(this.steammachines[i].variable0.textures[j] != null) {
+                      met = this.steammachines[i].variable0.textures[j];
+                    } else {
+                      this.steammachines[i].variable0.textures[j] = met;
+                    }
+                  }*/
+                    
+                    variables.push(this.steammachines[i].variable0);
+                  
+                  
+                  
+                  BlockRenderer.enableCoordMapping(BlockID.gtblockmachine, tr, new ICRender.Model(BlockRenderer.createTexturedBlock(this.steammachines[i].variable0.textures)));
+                  }
               }
+              tr++;
           };
+          for(let i in this.steammachines) {
+              for(let tier in this.steammachines[i].tier) {
+                 
+                  
+                  if(this.steammachines[i].tier[tier] == 1) {
+                   
+                    //Logger.Log(this.steammachines[i].variable.name, "her");
+                  
+                 /* let met = null;
+                  for(let j in this.steammachines[i].variable1.textures) {
+                    if(this.steammachines[i].variable1.textures[j] != null) {
+                      met = this.steammachines[i].variable1.textures[j];
+                    } else {
+                      this.steammachines[i].variable1.textures[j] = met;
+                    }
+                  }*/
+                    
+                    variables.push(this.steammachines[i].variable1);
+                  
+                  BlockRenderer.enableCoordMapping(BlockID.gtblockmachine, tr, new ICRender.Model(BlockRenderer.createTexturedBlock(this.steammachines[i].variable1.textures)));
+                  }
+              }
+              tr++;
+          };
+          
           Block.createBlock("gtblockmachine", variables, Block.createSpecialType({explosionres: 10}));
       },
       //electric
@@ -2031,13 +4511,21 @@ let MachineDictionary = {
   let PipeDictionary = {
   sizes: [],
   materials: {},
+  pipes: [],
+  data: [],
   registerSize: function(size) {
+    size.index = this.sizes.length;
     this.sizes[this.sizes.length] = size;
+    for(let i in this.materials) {
+      this.pipes[this.materials[i].material.name + "_" + size.type] = Object.keys(this.pipes).length;
+      
+    }
+    
   },
   registerMaterial: function(material, rate, temperature) {
     this.materials[material.name] = {material: material, rate: rate, temperature: temperature, type: "liquid"};
   },
-  getPipeType: function () {
+  getPipeType: function() {
     if(blockID == BlockID.gtblockpipe) {
       for(let i in Object.keys(this.materials)) {
         if(OreDictionary.isInnerDiapozone(blockData, i * this.sizes.length, (i + 1) * this.sizes.length)) {
@@ -2051,7 +4539,8 @@ let MachineDictionary = {
     let variables = [];
     for(let m = 0; m < Object.keys(PipeDictionary.materials).length; m++) {
       for(let s = 0; s < PipeDictionary.sizes.length; s++) {
-        variables[m * PipeDictionary.sizes.length + s] = {name: "Pipe", texture: [["bedrock"], 0], inCreative: true};
+        variables[m * PipeDictionary.sizes.length + s] = {name: this.sizes[s].type + " " + Object.keys(PipeDictionary.materials)[m] + " pipe", texture: [["bedrock"], 0], inCreative: true};
+        this.data[m * PipeDictionary.sizes.length + s] = {type: Object.keys(PipeDictionary.materials)[m], size: this.sizes[s]};
       }
     }
     Block.createBlock("gtblockpipe", variables, Block.createSpecialType({explosionres: 20000}));
@@ -2109,13 +4598,1299 @@ function Wire(material) {
 	};
 }
 
-Callback.addCallback('ItemUseNoTarget', function (item, player) {
-    if(item.id == 1) {
-        let compoundTag = new NBT.CompoundTag();
-        compoundTag.putString("red", "red");
-        item.extra.setCompoundTag(0, compoundTag);
-        Logger.Log(item.extra.getCompoundTag(0).getString("red"), "dersa");
+
+
+
+// file: API/recipe.js
+
+function Recipe(inputs, outputs, time, EUt, postHandler) {
+    this.type = "normal";
+    this.inputs = inputs;
+    this.outputs = outputs;
+    this.time = time;
+    this.EUt = EUt || 0;
+    this.isSteam = function() {
+        return this.EUt <= 16;
     }
+}
+function FuelRecipe(inputs, outputs, time, EUt, postHandler) {
+    this.type = "fuel";
+    this.inputs = inputs;
+    this.outputs = outputs;
+    this.time = time;
+    this.EUt = EUt || 0;
+    this.isSteam = function() {
+        return this.EUt <= 16;
+    }
+}
+function RecipeMap(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs, defaultEUt) {
+    this.minInputs = minInputs;
+    this.maxInputs = maxInputs;
+    this.minOutputs = minOutputs;
+    this.maxOutputs = maxOutputs;
+    this.length = 0;
+    this.defaultEUt = defaultEUt;
+    this.get = {};
+    this.addRecipe = function(recipe) {
+        this[this.length] = recipe;
+        let t = "";
+        
+        for(let input in recipe.inputs) {
+          let iddata = null;
+              //Logger.Log("pentazonium", i);
+              if(recipe.inputs[input].type == "material") {
+                Logger.Log("pe", iddata);
+
+              iddata = MaterialDictionary.invdata[recipe.inputs[input].form][recipe.inputs[input].material.name];
+              
+              Logger.Log("eeyue", iddata);
+
+            } else if(recipe.inputs[input].type == "ore") {
+              Logger.Log(recipe.inputs[input].material.name, ".•o°");
+
+              iddata = {id: OreDictionary.data[recipe.inputs[input].material.name].id, data: 0};
+            }
+            
+          t += iddata.id + "_";
+          t += iddata.data + "_";
+          
+        }
+        t = t.substring(0, t.length - 2);
+        
+        
+        if(!this.get[t]) this.get[t] = [];
+        
+        
+        this.get[t].push(recipe);
+        
+        this.length++;
+    }
+    this.deleteRecipe = function(recipe) {
+        for(let i in this) {
+            if(this[i] == recipe) { 
+                delete this[i];
+                break;
+            }
+        }
+    }
+}
+function FuelMap(minInputs, maxInputs, defaultEUt) {
+    this.minInputs = minInputs;
+    this.maxInputs = maxInputs;
+    this.minOutputs = 1;
+    this.maxOutputs = 1;
+    this.length = 0;
+    /*this.minInputs = minInputs;
+    this.maxInputs = maxInputs;*/
+    this.defaultEUt = defaultEUt;
+    this.get = {};
+    this.addRecipe = function(recipe) {
+        this[this.length] = recipe;
+        let t = "";
+        for(let input in recipe.inputs) {
+          let iddata = null;
+              //Logger.Log("pentazonium", i);
+              if(recipe.inputs[input].type == "material") {
+                Logger.Log("pe", iddata);
+
+              iddata = MaterialDictionary.invdata[recipe.inputs[input].form][recipe.inputs[input].material.name];
+              
+              Logger.Log("eeyue", iddata);
+
+            } else if(recipe.inputs[input].type == "ore") {
+              Logger.Log(recipe.inputs[input].material.name, ".•o°");
+
+              iddata = {id: OreDictionary.data[recipe.inputs[input].material.name].id, data: 0};
+            }
+            
+          t += iddata.id + "_";
+          t += recipe.inputs[input].count + "_";
+          t += iddata.data + "_";
+        }
+        t = t.substring(0, t.length - 2);
+        this.get[t] = recipe;
+        
+        this.length++;
+    }
+    this.deleteRecipe = function(recipe) {
+        for(let i in this) {
+            if(this[i] == recipe) { 
+                delete this[i];
+                break;
+            }
+        }
+    }
+}
+
+let RecipeDictionary = {
+    RECIPE_FURNACE_MAP: false,
+    recipes: null,
+    create: function() {
+      let trv = recipes.keySet().iterator();
+      let itt = trv.iterator();
+      while(itt.hasNext()) {
+        let f = itt.next();
+        
+        recipes.get(f).getSortedEntries();
+      }
+    },
+    getBySources: function(slots) {
+      /*let lo = RecipeDictionary.recipes.keySet().iterator();
+      let pllp = 0;
+      while(lo.hasNext()) {
+        let u = lo.next();
+        Logger.Log(u, "ghhh");
+        
+       let sr = RecipeDictionary.recipes.get(u);
+       
+       let itt = sr.iterator();
+      while(itt.hasNext()) {
+        let uu = itt.next();
+        Logger.Log(uu.getSortedEntries()[0], "ghhhggtko");
+        Logger.Log(uu.getSortedEntries()[0].id, "gooo");
+        Logger.Log(uu.getSortedEntries()[0].data, "gsss");
+        Logger.Log(uu.getSortedEntries()[0].count, "gsss");
+       
+        pllp++;
+      }
+      }*/
+      if(slots.length == 0) return null;
+      if(slots.length == 1) {
+        slots[0].index = 1;
+      }
+      if(slots.length == 2) {
+        if(row(slots[0].index) == row(slots[1].index) && row2(slots[0].index) == row2(slots[1].index) + 1) {
+          slots[0].index = 1;
+          slots[1].index = 0;
+        }
+        if(row(slots[0].index) == row(slots[1].index) && row2(slots[0].index) == row2(slots[1].index) + 2) {
+          slots[0].index = 2;
+          slots[1].index = 0;
+        }
+        if(row(slots[0].index) == row(slots[1].index) && row2(slots[0].index) == row2(slots[1].index) - 1) {
+          slots[0].index = 0;
+          slots[1].index = 1;
+        }
+        if(row(slots[0].index) == row(slots[1].index) && row2(slots[0].index) == row2(slots[1].index) + 2) {
+          slots[0].index = 0;
+          slots[1].index = 2;
+        }
+      }
+      
+      let r;
+      let it = RecipeDictionary.recipes.keySet().iterator();
+      while(it.hasNext()) {
+        let u = it.next();
+        Logger.Log(u, "warehouse");
+        
+        let trv = RecipeDictionary.recipes.get(u);
+      if(java.lang.Long.toString(u) == "17") r = u;
+        Logger.Log(trv == null, "xenoss");
+      }
+      
+      let sslot;
+      for(let slot in slots) {
+        if(!sslot || slots[slot].data > sslot.data) {
+          sslot = slots[slot];
+        }
+      }
+      
+      Logger.Log(sslot.id, "xendo");
+      Logger.Log(sslot.data, "xenlo");
+      
+      Logger.Log(Flag.pack2(Flag.recepiee(sslot.data), sslot.id), "xeno");
+      
+      Logger.Log(r, "xeno");
+      
+      Logger.Log(Flag.pack2(Flag.recepiee(sslot.data), sslot.id) == r, "xeno");
+      
+      let trv = RecipeDictionary.recipes.get(new java.lang.Long(Flag.pack2(Flag.recepiee(sslot.data), sslot.id)));
+      let trvminus = RecipeDictionary.recipes.get(new java.lang.Long(Flag.pack2(Flag.recepiee(-1), sslot.id)));
+      
+      Logger.Log(trv == null, "xenoss");
+      
+      let trsv = RecipeDictionary.recipes.get(r);
+      
+        Logger.Log(trsv == null, "xenoss");
+      
+      if(trv == null) return null;
+      
+      let sourcesForCleaning = [];
+        let result;
+      
+      let ittas = trv.iterator();
+      while(ittas.hasNext()) {
+        let trvi = ittas.next();
+        Logger.Log(trvi.getResult().id, "xenos_12");
+      }
+      if(trvminus != null) {
+      let ittaols = trvminus.iterator();
+      while(ittaols.hasNext()) {
+        let trvi = ittaols.next();
+        Logger.Log(trvi.getResult().id, "xenkiopuy_102");
+      }}
+      
+      let itt = trv.iterator();
+      while(itt.hasNext()) {
+        let trvi = itt.next();
+        let eeeeeee = true;
+        Logger.Log(",,,,,,.m", "yyseddly");
+
+        for(let i in slots) {
+          Logger.Log(slots, "deriu");
+          Logger.Log(trvi.getResult().id, "zanaras");
+          Logger.Log(trvi.getResult().data, "zanjiaras");
+          Logger.Log(trvi.getResult().count, "hunki");
+          Logger.Log(i, "leass");
+          let trvim;
+          
+          if(slots[i] != null && trvi.getSortedEntries()[slots[i].index]) {
+          Logger.Log(trvi.getSortedEntries()[slots[i].index].id, "yyseddly");
+          Logger.Log(trvi.getSortedEntries()[slots[i].index].data, "seddl7y");
+          trvim = trvi.getSortedEntries()[slots[i].index];
+          } else {
+            trvim = {id: 0, data: 0, count: 0}
+          }
+          
+          if(slots[i] == null) {
+            Logger.Log("cunnot", slots[i] != null);
+            eeeeeee = false;
+            break;
+          } else if(slots[i] != null && (slots[i].id != trvim.id || (trvim.data != -1 && slots[i].data != trvim.data))) {
+            //return 
+            Logger.Log("cumnnot", slots[i] != null);
+            Logger.Log(slots[i].id, "y777y");
+          Logger.Log(slots[i].data, "s66y");
+          
+            eeeeeee = false;
+            break;
+          } else if(slots[i] != null && slots[i].count >= 1) {
+            
+            Logger.Log("cannot", slots[i] != null);
+            
+            Logger.Log(slots[i].id, "y777y");
+          Logger.Log(slots[i].data, "s66y");
+          
+          
+            sourcesForCleaning.push(i);
+            result = trvi.getResult();
+          }
+        }
+        
+        //Logger.Log(trvi.getSortedEntries()[i].data, "seddl7y");
+        
+        if(eeeeeee) {
+          //result
+          Logger.Log("zases", "daqwasder");
+            break;
+          } else {
+            Logger.Log(sourcesForCleaning.length, "xedasofi");
+            sourcesForCleaning = sourcesForCleaning.slice(sourcesForCleaning.length);
+            Logger.Log(sourcesForCleaning.length, "rered");
+            result = null;
+          }
+        /*if(rtv[i]) {
+          sslot = slots[slot];
+        }*/
+      }
+      
+      if(trvminus != null && result == null) {
+      let itto = trvminus.iterator();
+      while(itto.hasNext()) {
+        let trviminus = itto.next();
+        let eeeeeee = true;
+        Logger.Log(",,,,,,.m", "yyseddly");
+        
+        if(trviminus != null) {
+          for(let i in slots) {
+          //if(trviminus.getSortedEntries()[i].id == 0) continue;
+          
+          let trvim;
+          if(slots[i] != null && trviminus.getSortedEntries()[slots[i].index]) {
+          Logger.Log(trviminus.getSortedEntries()[slots[i].index].id, "yyseddly");
+          Logger.Log(trviminus.getSortedEntries()[slots[i].index].data, "seddl7y");
+          trvim = trviminus.getSortedEntries()[slots[i].index];
+          } else {
+            trvim = {id: 0, data: 0, count: 0}
+          }
+          
+          Logger.Log(i, "leass");
+          Logger.Log(trvim.id, "yyseddly");
+          Logger.Log(trvim.data, "seddl7y");
+            
+          
+          if(slots[i] == null) {
+            Logger.Log("cunnot", slots[i] != null);
+            eeeeeee = false;
+            break;
+          } else if(slots[i] != null && (slots[i].id != trvim.id || (trvim.data != -1 && slots[i].data != trvim.data))) {
+            //return 
+            Logger.Log("cumnnot", slots[i] != null);
+            Logger.Log(slots[i].id, "y777y");
+          Logger.Log(slots[i].data, "s66y");
+          
+            eeeeeee = false;
+            break;
+          } else if(slots[i] != null && slots[i].count >= 1) {
+            
+            Logger.Log("cannopnot", slots[i] != null);
+            
+            Logger.Log(slots[i].id, "y777y");
+          Logger.Log(slots[i].data, "s66y");
+          
+          
+            sourcesForCleaning.push(i);
+            result = trviminus.getResult();
+          }
+        }
+        
+        //Logger.Log(trvi.getSortedEntries()[i].data, "seddl7y");
+        
+        if(eeeeeee) {
+          //result
+          Logger.Log("zases", "daqwasder");
+            break;
+          } else {
+            Logger.Log(sourcesForCleaning.length, "xedasofi");
+            sourcesForCleaning = sourcesForCleaning.slice(sourcesForCleaning.length);
+            Logger.Log(sourcesForCleaning.length, "rered");
+            result = null;
+          }
+          }
+      }
+      }
+      
+      for(let i in sourcesForCleaning) {
+        Logger.Log(sourcesForCleaning[i], "xedasoi");
+      }
+      
+      if(result != null) {
+        Logger.Log(result.id, "xedoi");
+        Logger.Log(result.data, "xsoi");
+        Logger.Log(result.count, "xeoi");
+      }
+      
+      if(result == null) {
+        return null;
+      }
+      return {cleaning: sourcesForCleaning, result: result};
+      /*let it = RecipeDictionary.recipes.values().iterator();
+      while(it.hasNext()) {
+        let u = it.next();
+        Logger.Log(u, "ghhh");
+        let itt = u.iterator();
+      while(itt.hasNext()) {
+        let uu = itt.next();
+        Logger.Log(uu.getSortedEntries()[0], "ghhhggtko");
+        Logger.Log(uu.getSortedEntries()[0].id, "gooo");
+        Logger.Log(uu.getSortedEntries()[0].data, "gsss");
+        Logger.Log(uu.getSortedEntries()[0].count, "gsss");
+      }
+      }*/
+    },
+    
+    
+    SimulatedField: function(slots, prefix, pattern) {
+      this.pattern = pattern;
+      this.slots = slots;
+      this.prefix = prefix;
+      
+      Logger.Log(this.slots[0], "$$lolol");
+      
+      this.getFieldSlot = function(index) {
+        return this.slots[index];
+      }
+      
+      isMatchingSimulatedField = function (field) {
+      for (let y = 0; y < this.pattern.length; y++) {
+            for (let x = 0; x < this.pattern[y].length; x++) {
+                if (!this.pattern[y][x].isMatching(field.getFieldSlot((y * 3) + x))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    isMatchingSimulatedPrefix = function (prefix2) {
+      if (prefix2 == null || prefix2.isEmpty() || prefix2.equals("undefined")) {
+            return this.prefix == null || this.prefix.isEmpty();
+        }
+        return prefix2.contains(this.prefix);
+    }
+    },
+    
+    getSimulatedFieldMasks: function(field) {
+      let chars = new java.util.ArrayList();
+        let shaped = "";
+        for (let i = 0; i < 9; i++) {
+            let slot = field.getFieldSlot(i);
+            Logger.Log(slot.getClass(), "$$lolol");
+            Logger.Log(slot.getCount(), "$$");
+            Logger.Log(slot.getId(), "$$$$");
+            let c = (slot.getCount() > 0 ? slot.getId() : 0);
+            shaped = shaped + c;
+            if (c != 0) {
+                chars.add(java.lang.Character.valueOf(c));
+            }
+        }
+        let shapeless = "$$";
+java.util.Collections.sort(chars);
+        let it = chars.iterator();
+        while (it.hasNext()) {
+            shapeless = shapeless + it.next();
+        }
+        return [shaped, shapeless];
+    },
+    getRecipeByItems: function(field, prefix) {
+      let masks = this.getSimulatedFieldMasks(field);
+        if(recipes.containsKey(masks[0])) {
+            let it = recipes.get(masks[0]).iterator();
+            while (it.hasNext()) {
+                let recipe = it.next();
+                if (recipe.isMatchingSimulatedField(field) && recipe.isMatchingSimulatedPrefix(prefix)) {
+                    return recipe;
+                }
+            }
+        }
+        if (!recipes.containsKey(masks[1])) {
+            return null;
+        }
+        let it2 = recipes.get(masks[1]).iterator();
+        while (it2.hasNext()) {
+            let recipe2 = it2.next();
+            if (recipe2.isMatchingSimulatedField(field)) {
+                return recipe2;
+            }
+        }
+        return null;
+    },
+    addFurnace: function(input, output, prefix) {
+      let iddatainput = null;
+      let iddataoutput = null;
+      if(input.type == "material") {
+        iddatainput = MaterialDictionary.invdata[input.form][input.material.name];
+      } else if(input.type == "common") {
+        iddatainput = {id: input.id, data: input.data};
+      }
+      if(output.type == "material") {
+        iddataoutput = MaterialDictionary.invdata[output.form][output.material.name];
+      } else if(output.type == "common") {
+        iddataoutput = {id: output.id, data: output.data};
+      }
+        Recipes.addFurnace(iddatainput.id, iddatainput.data, iddataoutput.id, iddataoutput.data, prefix);
+    },
+    addFurnaceFuel: function(input, time, output, isCoalBoiler) {
+      setLoadingTip("Recipes: fuel of " + input.name);
+       let iddatainput = MaterialDictionary.invdata[input.form][input.material.name];
+      if(isCoalBoiler) {
+        MachineDictionary.steammachines["boiler"].recipes.addRecipe(new FuelRecipe([{type: "material", material: input.material, form: input.form, count: 1}], [{type: "material", material: output.material, form: output.form, count: 1}], time, 1));
+      }
+        Recipes.addFurnaceFuel(iddatainput.id, iddatainput.data, time);
+    },
+    addShaped: function(mask, input, output, prefix, func) {
+        let iddatainput = [];
+        let f = 0;
+        for(let i in input) {
+            if(i%2 == 0) {
+                iddatainput[f] = input[i];
+                f++;
+            } else {
+              if(input[i].type == "material") {
+                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
+                iddatainput[f] = preiddatainput.id;
+                f++;
+                iddatainput[f] = preiddatainput.data;
+                Logger.Log(iddatainput[f], "typeeer");
+                f++;
+              } else if(input[i].type == "machinep") {
+                let preiddatainput = PipeDictionary.pipes[input[i].typed + "_" + input[i].name];
+                iddatainput[f] = BlockID.gtblockpipe;
+                f++;
+                iddatainput[f] = preiddatainput;
+                Logger.Log(iddatainput[f], "typeshar");
+                f++;
+              } else if(input[i].type == "machine") {
+                let preiddatainput = MachineDictionary.steammachines[input[i].typed][input[i].name];
+                iddatainput[f] = BlockID.gtblockmachine;
+                f++;
+                iddatainput[f] = preiddatainput.data;
+                Logger.Log(iddatainput[f], "tpe");
+                f++;
+              } else if(input[i].type == "casing") {
+                let preiddatainput = MachineDictionary.casings[input[i].typed];
+                iddatainput[f] = BlockID.gtcasing;
+                f++;
+                iddatainput[f] = preiddatainput;
+                Logger.Log(iddatainput[f], "typeer");
+                f++;
+              } else if(input[i].type == "common") {
+                iddatainput[f] = input[i].id;
+                f++;
+                iddatainput[f] = input[i].data;
+                Logger.Log(iddatainput[f], "typhe");
+                f++;
+              }
+            }
+        }
+        let iddataoutput = null;
+        if(output.type == "material") {
+          iddataoutput = {id: MaterialDictionary.invdata[output.form][output.material.name].id, count: output.count, data: MaterialDictionary.invdata[output.form][output.material.name].data};
+        } else if(output.type == "machine_steam") {
+          iddataoutput = {id: BlockID.gtblockmachine, count: output.count, data: MachineDictionary.steammachines[output.name]["data" + output.tier]};
+        } else if(output.type == "casing") {
+          iddataoutput = {id: BlockID.gtblockmachine, count: output.count, data: MachineDictionary.casings[output.typed]};
+        }
+        Recipes.addShaped(iddataoutput, mask, iddatainput, func, prefix);
+    },
+    addShapedForTool: function(mask, input, output, prefix, func) {
+      //setLoadingTip("Recipes: tool of " + input.name);
+        let iddatainput = [];
+        let f = 0;
+        for(let i in input) {
+            if(i%2 == 0) {
+                iddatainput[f] = input[i];
+                f++;
+            } else {
+                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
+                iddatainput[f] = preiddatainput.id;
+                f++;
+                iddatainput[f] = preiddatainput.data;
+                f++;
+            }
+        }
+        function fun(api, field, result) {
+           ToolDictionary.upgradeTool(output.material, result);
+           if(func) func(api, field, result);
+        }
+        //let iddataoutput = ToolDictionary.invdata[output.type];
+        let iddataoutput = {id: ToolDictionary.invdata[output.type].id, count: 1, data: ToolDictionary.invdata[output.type].data};
+            Recipes.addShaped(iddataoutput, mask, iddatainput, fun, prefix);
+    },
+    addShapeless: function(input, output, prefix, func) {
+        let iddatainput = [];
+        let f = 0;
+        for(let i in input) {
+                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
+                iddatainput[f] = preiddatainput.id;
+                f++;
+                iddatainput[f] = preiddatainput.data;
+                f++;
+        }
+        //let iddataoutput = MaterialDictionary.invdata[output.form][output.material.name];
+        let iddataoutput = {id: MaterialDictionary.invdata[output.form][output.material.name].id, count: output.count, data: MaterialDictionary.invdata[output.form][output.material.name].data};
+        Recipes.addShapeless(iddataoutput, iddatainput, func, prefix);
+    },
+    arr_en: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
+    addToolShaped: function(tools, mask, input, output, prefix, func) {
+        let newmask = [];
+        let pos = [];
+        let j = 0;
+        for(let i in mask) {
+            newmask[i] = mask[i];
+            pos[i] = [];
+            let index = 0;
+            while(true) {
+            if(mask[i].indexOf("_", index) != -1) {
+                pos[i][mask[i].indexOf("_", index)] = mask[i].indexOf("_", index);
+                newmask[i] = newmask[i].replaceAt(mask[i].indexOf("_", index), this.arr_en[this.arr_en.length - 1 - j]);
+                index = mask[i].indexOf("_", index) + 1;
+                j++;
+                Logger.Log(index, "assem");
+                Logger.Log(newmask[i], "aem");
+            } else {
+                break;
+            }
+            }
+        }
+        let iddatainput = [];
+        let f = 0;
+        for(let i in tools) {
+            Logger.Log(this.arr_en[this.arr_en.length - 1 - i], "TRex __");
+            Logger.Log(tools[i], "upcore");
+            iddatainput[f] = this.arr_en[this.arr_en.length - 1 - i];
+            f++;
+            iddatainput[f] = ToolDictionary.invdata[tools[i]].id;
+            f++;
+            iddatainput[f] = ToolDictionary.invdata[tools[i]].data;
+            f++;
+        }
+        for(let i in input) {
+            if(i%2 == 0) {
+                iddatainput[f] = input[i];
+                f++;
+            } else {
+              let preiddatainput = null;
+              if(input[i].type == "material") {
+                preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
+              } else if(input[i].type == "common") {
+                preiddatainput = {id: input[i].id, data: input[i].data};
+              }
+                iddatainput[f] = preiddatainput.id;
+                f++;
+                iddatainput[f] = preiddatainput.data;
+                f++;
+            }
+        }
+        //let iddataoutput = MaterialDictionary.invdata[output.form][output.material.name];
+        for(let i in iddatainput) {
+          Logger.Log(iddatainput[i], "edro");
+        }
+        let iddataoutput = null;
+        if(output.type == "material") {
+          Logger.Log(output.form, "zomboss");
+           iddataoutput = {id: MaterialDictionary.invdata[output.form][output.material.name].id, count: output.count, data: MaterialDictionary.invdata[output.form][output.material.name].data};
+        } else if(output.type == "common") {
+          iddataoutput = {id: output.id, count: output.count, data: output.data};
+        } else if(output.type == "machinep") {
+           iddataoutput = {id: BlockID.gtblockpipe, data: PipeDictionary.pipes[output.typed + "_" + output.name], count: output.count};
+        }
+            function fun(api, field, result) {
+               for (let y in field) {
+				    if (field[y].id == ItemID.gtmetatool01) {
+                        ToolDictionary.damageTool(field[y]);
+				              break;
+				    } else {
+                      field[y].count -= 1;
+                    }
+               }
+                if(func) func(api, field, result);
+            }
+        Recipes.addShaped(iddataoutput, newmask, iddatainput, fun, prefix);
+    },
+    addToolShapedForTool: function(tools, mask, input, output, prefix, func) {
+      //setLoadingTip("Recipes: tool of " + input.name);
+      Logger.Log(output.type, "хуйня");
+        let newmask = [];
+        let pos = [];
+        let j = 0;
+        for(let i in mask) {
+            newmask[i] = mask[i];
+            pos[i] = [];
+            let index = 0;
+            while(true) {
+            Logger.Log(index, "aзждm");
+            if(mask[i].indexOf("_", index) != -1) {
+                pos[i][mask[i].indexOf("_", index)] = mask[i].indexOf("_", index);
+                newmask[i] = newmask[i].replaceAt(mask[i].indexOf("_", index), this.arr_en[this.arr_en.length - 1 - j]);
+                Logger.Log(this.arr_en[this.arr_en.length - 1 - j], "TRex __");
+                
+                index = mask[i].indexOf("_", index) + 1;
+                j++;
+                Logger.Log(index, "assem");
+                Logger.Log(newmask[i], "aem");
+            } else {
+                break;
+            }
+            }
+        }
+        let iddatainput = [];
+        let f = 0;
+        for(let i in tools) {
+          Logger.Log(tools[i], "upcore");
+            iddatainput[f] = this.arr_en[this.arr_en.length - 1 - i];
+            f++;
+            iddatainput[f] = ToolDictionary.invdata[tools[i]].id;
+            f++;
+            iddatainput[f] = ToolDictionary.invdata[tools[i]].data;
+            f++;
+        }
+        for(let i in input) {
+            if(i%2 == 0) {
+                iddatainput[f] = input[i];
+                f++;
+            } else {
+                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
+                iddatainput[f] = preiddatainput.id;
+                f++;
+                iddatainput[f] = preiddatainput.data;
+                f++;
+            }
+        }
+        for(let i in iddatainput) {
+          Logger.Log(iddatainput[i], "edro");
+        }
+        //let iddataoutput = ToolDictionary.invdata[output.type];
+        let iddataoutput = {id: ToolDictionary.invdata[output.type].id, count: 1, data: ToolDictionary.invdata[output.type].data};
+            function fun(api, field, result) {
+              for (let y in field) {
+				    if (field[y].id == ItemID.gtmetatool01) {
+                        ToolDictionary.damageTool(field[y]);
+				    } else {
+                      field[y].count -= 1;
+                    }
+               }
+                ToolDictionary.upgradeTool(output.material, result);
+                if(func) func(api, field, result);
+            }
+        Recipes.addShaped(iddataoutput, newmask, iddatainput, fun, prefix);
+    },
+    provideFurnaceRecipe: function(container, prefix) {
+      Logger.Log(container, "dero");
+      Logger.Log(container.getSlot("input0"), "derrekpro");
+        return Recipes.getFurnaceRecipeResult(container.getSlot("input0").id, container.getSlot("input0").data, prefix);
+    },
+    provideFurnaceRecipeA: function(item, prefix) {
+      Logger.Log(container, "dero");
+      Logger.Log(container.getSlot("input0"), "derrekpro");
+        return Recipes.getFurnaceRecipeResult(item.id, item.data, prefix);
+    },
+    provideFurnaceByRecipe: function(container, prefix) {
+      Logger.Log(container, "dero");
+      Logger.Log(container.getSlot("input0"), "derrekpro");
+        return Recipes.getFurnaceRecipeByResult(container.getSlot("output0").id, container.getSlot("output0").data, prefix);
+    },
+    provideFurnaceByRecipeA: function(item, prefix) {
+      Logger.Log(container, "dero");
+      Logger.Log(container.getSlot("input0"), "derrekpro");
+        return Recipes.getFurnaceRecipeByResult(item.id, item.data, prefix);
+    },
+    provideFurnaceFuel: function(inputs) {
+        let iddata = MaterialDictionary.invdata[inputs[0].material][inputs[0].form];
+        if(Recipes.getFuelBurnDuration(iddata.id, iddata.data) > 0) {
+            return true;
+        }
+        return false;
+    },
+    registerFormHandlingRecipes: function(input, EUt) {
+      setLoadingTip("Recipes: processing of " + input.name);
+        Logger.Log(input.name, "formsGor");
+        if(input.type == "MARKER" || input.type == "FLUID") return;
+        if(input.type == "INGOT") { RecipeDictionary.addFurnace({type: "material", material: input, form: "dust"}, {type: "material", material: input, form: "ingot"});
+        
+        Logger.Log(MaterialDictionary.invdata["dust"][input.name].data, "formsooor");
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material");
+        }
+        
+        if(input.type == "INGOT") { RecipeDictionary.addFurnace({type: "material", material: input, form: "ingot"}, {type: "material", material: input, form: "nugget"});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }//
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushed"}, {type: "material", material: input, form: "nugget"});
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedCentrifuged"}, {type: "material", material: input, form: "nugget"});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedPurified"}, {type: "material", material: input, form: "nugget"});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].material.name, "cancater1material"); //?!
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_BOLT_SCREW)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "bolt"}, {type: "material", material: input, form: "nugget"});
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].material.name, "cancater1material");
+
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_BOLT_SCREW)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "screw"}, {type: "material", material: input, form: "nugget"});
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].material.name, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "stick"}, {type: "material", material: input, form: "nugget"});
+        
+        Logger.Log("Ma", MaterialDictionary.invdata["stick"]);
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "dustImpure"}, {type: "material", material: input, form: "ingot"});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) {RecipeDictionary.addFurnace({type: "material", material: input, form: "dustPure"}, {type: "material", material: input, form: "ingot"});
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].material.name, "cancater1material");
+        }
+        
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedCentrifuged"}, {type: "material", material: input, form: "ingot"});
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedPurified"}, {type: "material", material: input, form: "ingot"});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) {RecipeDictionary.addFurnace({type: "material", material: input, form: "crushed"}, {type: "material", material: input, form: "ingot"});
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+}
+        
+        if(input.type == "INGOT") { RecipeDictionary.addToolShaped(["mortar"], ["_", "i"], ['i', {type: "material", material: input, form: "ingot"}], {type: "material", material: input, form: "dust", count: 1});
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material");
+        }
+            if(input.type == "GEM") { RecipeDictionary.addToolShaped(["mortar"], ["_", "i"], ['i', {type: "material", material: input, form: "gem"}], {type: "material", material: input, form: "dust", count: 1});
+            
+            Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+            Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].material.name, "cancater1material");
+            }
+        if(input.hasFlag(GENERATE_PLATE)) { RecipeDictionary.addToolShaped(["mortar"],  ["_", "i"], ['i', {type: "material", material: input, form: "plate"}], {type: "material", material: input, form: "dust", count: 1});
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_PLATE)) { RecipeDictionary.addToolShaped(["hammer"], ["_", "i", "i"],  ['i', {type: "material", material: input, form: "ingot"}], {type: "material", material: input, form: "plate", count: 1});
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "GEM" && input.hasFlag(GENERATE_PLATE)) { RecipeDictionary.addToolShaped(["hammer"], ["_", "i"],  ['i', {type: "material", material: input, form: "gem"}], {type: "material", material: input, form: "plate", count: 1});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD)) { RecipeDictionary.addToolShaped(["file"], ["_ ", " i"],  ['i', {type: "material", material: input, form: "ingot"}], {type: "material", material: input, form: "stick", count: 1});
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_LONG_ROD)) { RecipeDictionary.addToolShaped(["hammer"], ["i_i"],  ['i', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "stickLong", count: 1});
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stickLong"][input.name].id][MaterialDictionary.invdata["stickLong"][input.name].data].form, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stickLong"][input.name].id][MaterialDictionary.invdata["stickLong"][input.name].data].material.name, "cancater1material");
+        }
+        //if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShaped(["chainsaw"], ["_", "i"],  ['i', {type: "material", material: input, form: "stickLong"}], {type: "material", material: input, form: "stick", count: 2});
+        
+        RecipeDictionary.addShaped(["ddd", "ddd", "ddd"], ['d', {type: "material", material: input, form: "dustTiny"}], {type: "material", material: input, form: "dust", count: 1});
+        
+        RecipeDictionary.addShaped(["dd", "dd"], ['d', {type: "material", type: "material", material: input, form: "dustSmall"}], {type: "material", material: input, form: "dust", count: 1});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].material.name, "cancater1material")
+          
+        RecipeDictionary.addShaped(["d  ", "  ", "  "], ['d', {type: "material", material: input, form: "dust"}], {type: "material", material: input, form: "dustTiny", count: 9});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+          
+        RecipeDictionary.addShaped([" d ", "  ", "  "], ['d', {type: "material", type: "material", material: input, form: "dust"}], {type: "material", material: input, form: "dustSmall", count: 4});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].material.name, "cancater1material")
+        if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_FOIL)) { RecipeDictionary.addToolShaped(["hammer"], ["_p"], ['p', {type: "material", material: input, form: "plate"}], {type: "material", material: input, form: "foil", count: 1});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_FOIL) && input.hasFlag(GENERATE_FINE_WIRE)) { RecipeDictionary.addToolShaped(["wirecutter"], ["_p"], ['p', {type: "material", material: input, form: "foil"}], {type: "material", material: input, form: "wireFine", count: 1});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["wireFine"][input.name].id][MaterialDictionary.invdata["wireFine"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["wireFine"][input.name].id][MaterialDictionary.invdata["wireFine"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_BOLT_SCREW)) {RecipeDictionary.addToolShaped(["file"], ["_p", "p "], ['p', {type: "material", material: input, form: "bolt"}], {type: "material", material: input, form: "screw", count: 1});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].material.name, "cancater1material");
+        }
+        //if(input.hasFlag(GENERATE_BOLT_SCREW) && input.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShaped(["chainsaw"], ["_ ", "p "], ['p', {type: "material", material: input, form: "screw"}], {type: "material", material: input, form: "bolt", count: 1});
+        if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_GEAR) && input.hasFlag(GENERATE_ROD)) { RecipeDictionary.addToolShaped(["screwdriver"], ["rpr", "p_p", "rpr"], ['p', {type: "material", material: input, form: "plate"}, 'r', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "gearGt", count: 1});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+           Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGt"][input.name].id][MaterialDictionary.invdata["gearGt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGt"][input.name].id][MaterialDictionary.invdata["gearGt"][input.name].data].material.name, "cancater1material");
+        }
+if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_SMALL_GEAR)) { RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {type: "material", material: input, form: "plate"}], {type: "material", material: input, form: "gearGtSmall", count: 1});
+
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGtSmall"][input.name].id][MaterialDictionary.invdata["gearGtSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGtSmall"][input.name].id][MaterialDictionary.invdata["gearGtSmall"][input.name].data].material.name, "cancater1material");
+          
+       }
+        if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_FRAME)) { RecipeDictionary.addToolShaped(["wrench"], ["ppp", "p_p", "ppp"], ['p', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "frameGt", count: 1});
+
+      Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+      Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+      Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["frameGt"][input.name].id][MaterialDictionary.invdata["frameGt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["frameGt"][input.name].id][MaterialDictionary.invdata["frameGt"][input.name].data].material.name, "cancater1material");
+      }
+if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) {RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "ring", count: 1});
+
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ring"][input.name].id][MaterialDictionary.invdata["ring"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ring"][input.name].id][MaterialDictionary.invdata["ring"][input.name].data].material.name, "cancater1material");
+}
+        
+        if(input.hasFlag(GENERATE_PLATE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "plate", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_FOIL)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "foil", count: 1}], [{material: input, form: "dustSmall", count: 1}], 56, 4));
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_RING)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ring", count: 1}], [{material: input, form: "dustSmall", count: 1}], 56, 4));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ring"][input.name].id][MaterialDictionary.invdata["ring"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ring"][input.name].id][MaterialDictionary.invdata["ring"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.type == "INGOT") { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_SMALL_GEAR)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gearGtSmall", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGtSmall"][input.name].id][MaterialDictionary.invdata["gearGtSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGtSmall"][input.name].id][MaterialDictionary.invdata["gearGtSmall"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_GEAR)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gearGt", count: 1}], [{material: input, form: "dust", count: 4}], 224, 4));
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGt"][input.name].id][MaterialDictionary.invdata["gearGt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGt"][input.name].id][MaterialDictionary.invdata["gearGt"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_BOLT_SCREW)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "bolt", count: 1}], [{material: input, form: "dustTiny", count: 1}], 56, 4));
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].material.name, "cancater1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+        }
+       if(input.hasFlag(GENERATE_FINE_WIRE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "wireFine", count: 1}], [{material: input, form: "dustTiny", count: 1}], 56, 4));
+       
+       Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["wireFine"][input.name].id][MaterialDictionary.invdata["wireFine"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["wireFine"][input.name].id][MaterialDictionary.invdata["wireFine"][input.name].data].material.name, "cancater1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+       }
+        if(input.hasFlag(GENERATE_BOLT_SCREW)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "screw", count: 1}], [{material: input, form: "dustTiny", count: 1}], 56, 4));
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.type == "GEM") { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gem", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].material.name, "cancater1material")
+        }
+        //if(input.type == "GEM") MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "frameGt", count: 1}], [{material: input, form: "dust", count: 2}], 128, 4));
+        
+        if(input.type == "INGOT") { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "nugget", count: 1}], [{material: input, form: "dustTiny", count: 1}], 16, 4));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.type == "INGOT") { MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 9}], [{material: input, form: "block", count: 1}], 300, 2));
+        Logger.Log(input.name, "daredevil");
+        Logger.Log(MaterialDictionary.invdata["block"]["iron"].id, "ztрщy");
+        
+        
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material");
+
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["block"][input.name].id][MaterialDictionary.invdata["block"][input.name].data].form, "cancater1")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["block"][input.name].id][MaterialDictionary.invdata["block"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.type == "GEM") { MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gem", count: 9}], [{material: input, form: "block", count: 1}], 300, 2));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["block"][input.name].id][MaterialDictionary.invdata["block"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["block"][input.name].id][MaterialDictionary.invdata["block"][input.name].data].material.name, "cancater1material");
+        }
+        //if(input.type == "INGOT" || input.type == "GEM") MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "dust", count: 9}], [{material: input, form: "block", count: 1}], ));
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_PLATE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 3}], [{material: input, form: "plate", count: 2}], 55, 16));
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_LONG_ROD)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "stick", count: 2}], [{material: input, form: "stickLong", count: 1}], 208, 16));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stickLong"][input.name].id][MaterialDictionary.invdata["stickLong"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stickLong"][input.name].id][MaterialDictionary.invdata["stickLong"][input.name].data].material.name, "cancater1material");
+        }
+        Logger.Log("GENERATE_OREo", GENERATE_ORE);
+        Logger.Log("inputs", input.name);
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "ore", material: input, count: 1}], [{material: input, form: "crushed", count: 1}], 16, 10));
+        
+          Logger.Log(OreDictionary.invdata[OreDictionary.data[input.name].id].name, "cancaterore1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushed", count: 1}], [{material: input, form: "dustImpure", count: 1}], 10, 16));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "ore", material: input, count: 1}], [{material: input, form: "crushed", count: 2}], 400, 2));
+          
+          Logger.Log(OreDictionary.invdata[OreDictionary.data[input.name].id].name, "cancaterore1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushed", count: 1}], [{material: input, form: "dustImpure", count: 1}], 400, 2));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].form, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedPurified", count: 1}], [{material: input, form: "dustPure", count: 1}], 10, 16));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedCentrifuged", count: 1}], [{material: input, form: "dust", count: 1}], 10, 16));
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedPurified", count: 1}], [{material: input, form: "dustPure", count: 2}], 400, 2));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedCentrifuged", count: 1}], [{material: input, form: "dust", count: 1}], 400, 2));
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].material.name, "cancater1material");
+        }
+    },
+    registerAlloy: function(output, EUt) {
+      setLoadingTip("Recipes: alloying of " + output.name);
+      let inputs = output.formula;
+        //if(inputs[0].material.type != "INGOT") return;
+        if(inputs.length == 0) return;
+        //if(output.length == 0) return;
+       for(let i in inputs) {
+         //ifinputs[i].type != "ingot") {}
+       }
+        if(inputs.length == 2) MachineDictionary.steammachines["alloy_smelter"].recipes.addRecipe(new Recipe([{type: "material", material: inputs[0].material, form: "ingot", count: inputs[0].count}, {type: "material", material: inputs[1].material, form: "ingot", count: inputs[1].count}], [{material: output, form: "ingot", count: 1}]));
+        
+        let mask = [];
+        for(let i in inputs) {
+            mask.push({material: inputs[i].material, form: "dust"});
+        }
+        RecipeDictionary.addShapeless(mask,  {material: output, form: "dust", count: 1});
+        
+        let omask = [];
+        for(let i in inputs) {
+            omask.push({material: inputs[i].material, form: "dustTiny"});
+        }
+        RecipeDictionary.addShapeless(omask,  {material: output, form: "dustTiny", count: 1});
+        
+        let kmask = [];
+        for(let i in inputs) {
+            kmask.push({material: inputs[i].material, form: "dustSmall"});
+        }
+        RecipeDictionary.addShapeless(kmask,  {material: output, form: "dustSmall", count: 1});
+    },
+    addMachineShaped: function (mask, input, machine) {
+      if(machine.type = "machine_steam") {
+        let machine0 = {type: machine.type, name: machine.name, count: machine.count, tier: 0};
+        let machine1 = {type: machine.type, name: machine.name, count: machine.count, tier: 1};
+        this.addShaped(mask, input, machine0);
+        this.addShaped(mask, input, machine1);
+      } else if("machine_electric") {
+        //this.addShaped();
+      } else if("casing") {
+        this.addShaped(mask, input, machine);
+      }
+    },
+    registerToolRecipe: function(input) {
+      setLoadingTip("Recipes: tool of " + input.name);
+        Logger.Log(input.material2.name, "ger");
+        Logger.Log(input.material.name, "zombied");
+        if(ToolDictionary.invdata[input.name]) return;
+        if(!input.material2.hasFlag(GENERATE_ROD)) return;
+        if(!(input.material.type == "INGOT" || input.material.type == "GEM")) return;
+        if(!input.material.hasFlag(GENERATE_PLATE)) return;
+        Logger.Log(input.material.type, "rexium");
+        let material = ToolDictionary.materials[input.name].material;
+        let material2 = ToolDictionary.materials[input.name].material2;
+        if(input.material.type == "INGOT") RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["pii", "_s_", " s "], ['p', {material: material, form: "plate"}, 'i', {material: material, form: "ingot"}, 's', {material: material2, form: "stick"}], {material: material, type: "pickaxe"});
+      if(input.material.type == "GEM") RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["pii", "_s_", " s "], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "gem"}, 's', {material: material2, form: "stick"}], {material: material, type: "pickaxe"});
+if(input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["_p_", " s ", " s "], ['p', {material: input, form: "plate"}, 's', {material: material2, form: "stick"}], {material: material, type: "shovel"});
+if(input.material.type == "INGOT" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["pi_", "ps ", "_s "], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "ingot"}, 's', {material: material2, form: "stick"}], {material: material, type: "axe"});
+if(input.material.type == "GEM" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["pi_", "ps ", "_s "], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "gem"}, 's', {material: material2, form: "stick"}], {material: material, type: "axe"});
+if(input.material.type == "INGOT" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["pi_", "_s", " s"], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "ingot"}, 's', {material: material2, form: "stick"}], {material: material, type: "hoe"});
+if(input.material.type == "GEM" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["hammer", "file"], ["pi_", "_s", " s"], ['p', {material: input, form: "plate"}, 'i', {material: input, form: "gem"}, 's', {material: material2, form: "stick"}], {material: material, type: "hoe"});
+if(input.material.type == "INGOT" && input.material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addShapedForTool(["xx ", "xxs", "xx "], ['x', {material: material, form: "ingot"}, 's', {material: material2, form: "stick"}], {material: material, type: "hammer"});
+if(material.type == "GEM" && material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addShapedForTool(["xx ", "xxs", "xx "], ['x', {material: material, form: "gem"}, 's', {material: material2, form: "stick"}], {material: material, type: "hammer"});
+if(material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addShapedForTool(["x", "x", "s"], ['x', {material: material, form: "plate"}, 's', {material: material2, form: "stick"}], {material: material, type: "file"});
+if(material.type == "INGOT") RecipeDictionary.addToolShapedForTool(["hammer"], ["i_i", "iii", " i "], ['i', {material: material, form: "ingot"}], {material: material, type: "wrench"});
+if(material.type == "GEM") RecipeDictionary.addToolShapedForTool(["hammer"], ["i_i", "iii", " i "], ['i', {material: material, form: "gem"}], {material: material, type: "wrench"});
+
+if(material.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShapedForTool(["file", "hammer"], [" p ", "_p_", " s "], ['p', {material: material, form: "plate"}, 's', {material: material2, form: "stick"}], {material: material, type: "sword"});
+
+if(material.hasFlag(GENERATE_PLATE) && material.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShapedForTool(["file", "hammer", "screwdriver"], ["p_p", "_p_", "rsr"], ['p', {material: material, form: "plate"}, 'r', {material: material, form: "stick"}, 's', {material: material, form: "screw"}], {material: material, type: "wirecutter"});
+
+if(material.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShapedForTool(["file", "hammer"], [" _r", " r_", "s  "], ['r', {material: material, form: "stick"}, 's', {material: material2, form: "stick"}], {material: material, type: "screwdriver"});
+
+
+if(material.type == "INGOT") RecipeDictionary.addShapedForTool([" s ", "xsx", "xxх"], ['x', {material: material, form: "ingot"}, 's', {material: MaterialDictionary.dict["flint"], form: "gem"}], {material: material, type: "mortar"});
+if(material.type == "GEM") RecipeDictionary.addShapedForTool(["x x", "xxх"], ['x', {material: material, form: "gem"}], {material: material, type: "mortar"});
+    },
+    toNotConsumable: function(input) {
+        return {id: input.id, data: input.data, count: 0};
+    },
+    Builder: function() {
+        this.inputs = [];
+        this.outputs = [];
+        this.duration = 0;
+        this.EUt = 0;
+        this.recipes = null;
+        
+        this.setRecipeMap = function(recipes) {
+            this.recipes = recipes;
+            return this;
+        }
+        this.input = function(input) {
+            this.inputs.push(input);
+            return this;
+        }
+        this.notConsumable = function(input) {
+            this.input(RecipeDictionary.toNotConsumable(input));
+            return this;
+        }
+        this.inputs = function(inputs) {
+	        [].push.apply(this.inputs, inputs);
+            return this;
+        }
+        this.output = function(output) {
+            this.outputs.push(output);
+            return this;
+        }
+        this.outputs = function(outputs) {
+            [].push.apply(this.inputs, inputs);
+            return this;
+        }
+        this.duration = function(duration) {
+            this.duration = duration;
+            return this;
+        }
+        this.EUt = function(EUt) {
+            this.EUt = EUt;
+            return this;
+        }
+        this.build = function() {
+            return new Recipe(inputs, outputs, duration, EUt);
+        }
+        this.buildAndRegister = function() {
+            let builded = this.build();
+            recipeMap.addRecipe(builded);
+        
+            return builded;
+        }
+    },
+};
+
+//let field = java.lang.Class.forName("com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry");
+
+Callback.addCallback("PostLoaded", function() {
+  let t = new com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry().getClass();
+  
+  let field = t.getDeclaredField("componentQuickAccess");
+  //let field = java.lang.Class.forName("java.lang.String").getDeclaredField("recipes");
+       field.setAccessible(true);
+      RecipeDictionary.recipes = field.get(t);
+      
+      let eeed = [{id: 5, data: 0, count: 1, index: 0}];
+      
+      Logger.Log("red", eeed[0].count, "ced");
+      
+      RecipeDictionary.getBySources(eeed);
+      
+      Logger.Log("red", eeed[0].count, "ced");
 });
 
 
@@ -2123,7 +5898,7 @@ Callback.addCallback('ItemUseNoTarget', function (item, player) {
 
 // file: API/net.js
 
-var TileEntityRegistry = {
+let TileEntityRegistry = {
 
 	// adds energy type for tile entity prototype
 
@@ -2375,14 +6150,14 @@ var PipeNetBuilder = {
 			  let machinesource = [];
 			  let machinestorage = [];
 			  let others = [];
-			  Logger.Log("zub");
-			  Logger.Log("zza");
+			  
+			  //Logger.Log("zza");
 			  for(let i in TileEntityRegistry.quickCoordAccess) {
-			      Logger.Log("z");
+			      
 			    let tile = TileEntityRegistry.quickCoordAccess[i];
-			    Logger.Log(tile, "zoli");
+			    
 			    if(tile.isSource() && tile.isGenerator()) {
-			        Logger.Log(tile.isGenerator(), "zopers");
+			        
 			      machinesource.push(tile);
 			    } else if(tile.isSource()) {
 			      machinestorage.push(tile);
@@ -2395,7 +6170,7 @@ var PipeNetBuilder = {
 			  for(let i in machinesource) {
 			    Logger.Log("push");
 			    let created = PipeNetBuilder.buildForTile(machinesource[i], "liquid");
-			    Logger.Log("pusher");
+			    
 			    if(created != null) {
 			      //is tileentity is not connected
 			      machinesource[i].__Nets["liquid"] = created;
@@ -2410,14 +6185,14 @@ var PipeNetBuilder = {
 			    }
 			  }
 			  for(let i in others) {
-			      Logger.Log("zzLogger.Log(zza)la");
+			      
 			    let created = PipeNetBuilder.buildForTile(others[i], "liquid");
 			    if(created != null) {
 			      //is tileentity is not connected
 			      others[i].__Nets["liquid"] = created;
 			    }
 			  }
-			  Logger.Log("founder's ___f");
+			  
 },
 	/*rebuildForPipe: function(x, y, z, id) {
 		var blockID = World.getBlock(x, y, z);
@@ -2594,10 +6369,10 @@ function PipeNet(Type, overloadFunc) {
 		
 		add: function(pretile, amount, type, coords, sidepre) {
 		  
-		  Logger.Log(amount, "io");
+		  //Logger.Log(amount, "io");
 		  
 			var add = self.add(pretile, amount, type, coords, sidepre);
-			Logger.Log(add, "io's");
+			//Logger.Log(add, "io's");
 			return amount - add;
 		},
 	}
@@ -2664,8 +6439,8 @@ function PipeNet(Type, overloadFunc) {
 	}
 
 	this.add = function(pretile, amount, type, coords, sidepre) {
-	  Logger.Log("oop", "zoop");
-		var inAmount = amount;
+	  
+		let inAmount = amount;
 		/*var n = this.tileEntities.length;
 		for (var i in this.tileEntities) {
 			if (amount <= 0) break;
@@ -2689,14 +6464,13 @@ function PipeNet(Type, overloadFunc) {
 		Logger.Log(amount, "zub");
 		let divider = 2;
 		for(let side = 0; side < 6; side++) {
-		    Logger.Log(pretile, "zeaser");
+		    
 				if(pretile.canExtract(side, type)) {
 				let c = PipeNetBuilder.getRelativeCoords(pretile.x, pretile.y, pretile.z, side);
 				let tile = World.getTileEntity(c.x, c.y, c.z);
 				Logger.Log(sidepre, "zoop");
 				if(side !== sidepre) {
-				  if(tile) Logger.Log(tile.data.type, "zaeanoloiuhytrreueueuueueiewuueiwuwe8e8eeieieieueiiewuueeiieieie");
-				  if(tile) Logger.Log(tile.isGenerator(), "zaeanoloiuhytrreueueuueueiewuueiwuwe8e8eeieieieueiiewuueeiieieie");
+				  
 				if(tile && tile.__Types && tile.__Types[this.Type] && tile.canConnect() && !tile.isGenerator()) {
 				  Logger.Log("fuccc");
 				  if(tile != this.sourceTile) {
@@ -2705,8 +6479,9 @@ function PipeNet(Type, overloadFunc) {
 			        Logger.Log("fucc");
 			        let amont = Math.min(inAmount / divider, amount);
 				      amount -= tile.receive(type, amont, side);
-				      divider = divider * 2;
+				      
 				      Logger.Log(inAmount / divider, "zub");
+				      divider = divider * 2;
 			      }
       }
 		  }}
@@ -2755,17 +6530,19 @@ sounds.extractor_sound.setSource("res/sound/ExtractorOp.ogg");
 
 // file: block/stone.js
 
-StoneDictionary = {
+let StoneDictionary = {
 	stones: {},
 	registerStone: function(id, variants) {
 		this.stones[id] = variants;
 		let inverted = null
 		let inverted2 = null
 		if(variants.name.includes("granite")) {
-        		inverted = variants.name.substring(variants.name.indexOf("_") + 1, variants.name.length) + "_" + variants.name.substring(0, variants.name.indexOf("_"));
+        		/*inverted = variants.name.substring(variants.name.indexOf("_") + 1, variants.name.length) + "_" + variants.name.substring(0, variants.name.indexOf("_"));
         		inverted = inverted.toUpperCase();
         		inverted2 = variants.name2.substring(variants.name2.indexOf("_") + 1, variants.name2.length) + "_" + variants.name2.substring(0, variants.name2.indexOf("_"));
-        		inverted2 = inverted2.toUpperCase();
+        		inverted2 = inverted2.toUpperCase();*/
+        		inverted = variants.name.toUpperCase();
+		    inverted2 = variants.name2.toUpperCase();
 		} else {
 		    inverted = variants.name.toUpperCase();
 		    inverted2 = variants.name2.toUpperCase();
@@ -2773,6 +6550,7 @@ StoneDictionary = {
 		Logger.Log("$*", inverted);
 		Logger.Log(inverted2);
             	IDRegistry.genBlockID(id);
+            this.stones[id].id = BlockID[id];
     		Block.createBlock(id, [{name: variants.name, texture: [[inverted + "_STONE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_SMOOTH", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_STONE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_SMOOTH", 0]], inCreative: true}], "stone");
     	ToolAPI.registerBlockMaterial(id, "stone", variants.level, true);
 		Block.registerDropFunction(id, function(blockCoords, blockID, blockData, diggingLevel, region) {
@@ -2782,18 +6560,11 @@ StoneDictionary = {
 			return [[blockID, 1, blockData]];
 		});
 	},
-	generateStone: function(coords, id, variant, random) {
-    		let sizze = random.nextInt(5);
-    		let size = sizze + 2
-		for(let x = -size; x < size; x++) {
-    			for(let y = -size; y < size; y++) {
-      				for(let z = -size; z < size; z++) {
-					if(x * x + y * y + z * z < size * size) {
-						World.setBlock(coords.x + x, coords.y + y, coords.z + z, id, variant);
-					}
-				}
-    		}
-		}
+	generateStoneOld: function(coords, id, data, random) {
+		GenerationDictionary.generateSphere(coords, 2, 7, id, data, random, null, 1, OreDictionary.blocks);
+	},
+	generateStonePerlin: function(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids) {
+		GenerationDictionary.generateChunkPerlin(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids);
 	},
 	addToCreative: function() {
 		for(let i in this.stones) {
@@ -2807,10 +6578,12 @@ StoneDictionary.registerStone("granite", {
 	hardness: 7.0,
 	resistance: 12.0,
 	level: 3,
-	name: "black_granite",
+	name: "granite_black",
 	dimension: 0,
-	name2: "red_granite",
-	dimension2: 0
+	rarity: 0.2,
+	name2: "granite_red",
+	dimension2: 0,
+	rarity2: 0.2
 });
 StoneDictionary.registerStone("mineral", {
 	hardness: 3.0,
@@ -2818,8 +6591,10 @@ StoneDictionary.registerStone("mineral", {
 	level: 1,
 	name: "marble",
 	dimension: 0,
+	rarity: 0.5,
 	name2: "basalt",
-	dimension2: 0
+	dimension2: 0,
+	rarity2: 0.5,
 });
 //StoneDictionary.addToCreative();
 
@@ -2828,239 +6603,7 @@ StoneDictionary.registerStone("mineral", {
 
 // file: item/meta.js
 
-MaterialDictionary.registerForm("item", 0, "ingot");
-MaterialDictionary.registerForm("item", 0, "dust");
-MaterialDictionary.registerForm("item", GENERATE_PLATE, "plate");
-MaterialDictionary.registerForm("item", GENERATE_DENSE, "dense_plate");
-MaterialDictionary.registerForm("item", GENERATE_ROD, "rod");
-MaterialDictionary.registerForm("item", GENERATE_LONG_ROD, "long_rod");
-MaterialDictionary.registerForm("item", 0, "smallpiledust");
-MaterialDictionary.registerForm("item", 0, "tinypiledust");
-MaterialDictionary.registerForm("item", GENERATE_FOIL, "foil");
-MaterialDictionary.registerForm("item", GENERATE_FINE_WIRE, "fine_wire");
-MaterialDictionary.registerForm("item", GENERATE_SMALL_GEAR, "small_gear");
-MaterialDictionary.registerForm("item", GENERATE_GEAR, "gear");
-MaterialDictionary.registerForm("item", GENERATE_RING, "ring");
-MaterialDictionary.registerForm("item", GENERATE_BOLT_SCREW, "bolt");
-MaterialDictionary.registerForm("item", GENERATE_BOLT_SCREW, "screw");
-//MaterialDictionary.registerForm(ItemID.gtmetaitem01, GENERATE_TURBINE_BLADE, "gear");
-MaterialDictionary.registerForm("item", 0, "nugget");
-
-MaterialDictionary.registerForm("item", 0, "gem");
-MaterialDictionary.registerForm("item", GENERATE_LENSE, "lens");
-
-MaterialDictionary.registerForm("item", GENERATE_ORE, "crushedore");
-MaterialDictionary.registerForm("item", GENERATE_ORE, "purifiedore");
-MaterialDictionary.registerForm("item", GENERATE_ORE, "centrifugedore");
-MaterialDictionary.registerForm("item", GENERATE_ORE, "impuredust");
-MaterialDictionary.registerForm("item", GENERATE_ORE, "purifieddust");
-
-MaterialDictionary.registerForm("block", 0, "block");
-MaterialDictionary.registerForm("block", GENERATE_FRAME, "frame_box");
-
-MaterialDictionary.registerMaterial(new Material("_NULL", of(), "MARKER", 0, 2, 38400, 6, 6, 70, 300, 0x80C8F0, IconTransformator.UV.DULL));
-
-MaterialDictionary.registerMaterial(new Material("aluminium", Elements.Al, "INGOT", EXT2_METAL | GENERATE_SMALL_GEAR | GENERATE_ORE | GENERATE_RING | GENERATE_FRAME, 2, 38400, 6, 6, 70, 300, 0x80C8F0, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("americium", Elements.Am, "INGOT", STD_METAL | GENERATE_ROD | GENERATE_LONG_ROD, 2, 38400, 6, 6, 70, 300, 0xC8C8C8, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("antimony", Elements.Sb, "INGOT", EXT_METAL | MORTAR_GRINDABLE, 2, 38400, 6, 6, 70, 300, 0xDCDCC8, IconTransformator.UV.SHINY));
-MaterialDictionary.registerMaterial(new Material("arsenic", Elements.As, "DUST", 0, 2, 38400, 6, 6, 70, 300, 0xDDDDDD, IconTransformator.UV.SAND));
-MaterialDictionary.registerMaterial(new Material("barium", Elements.Ba, "INGOT", STD_METAL, 2, 19200, 6, 6, 70, 300, 0x64B464, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("beryllium", Elements.Be, "INGOT", STD_METAL | GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x64B464, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("bismuth", Elements.Bi, "INGOT", GENERATE_ORE, 1, 19200, 6, 6, 70, 300, 0x64A0A0, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("boron", Elements.B, "DUST", 0, 2, 38400, 6, 6, 70, 300, 0xD2F0D2, IconTransformator.UV.SAND));
-MaterialDictionary.registerMaterial(new Material("cadmium", Elements.Cd, "INGOT", 0, 1, 25600, 6, 6, 70, 300, 0x505060, IconTransformator.UV.SHINY));
-MaterialDictionary.registerMaterial(new Material("calcium", Elements.Ca, "INGOT", 0, 2, 38400, 6, 6, 70, 300, 0xDDDDAA, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("carbon", Elements.C, "INGOT", 0, 2, 38400, 6, 6, 70, 300, 0x333333, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("cerium", Elements.Ce, "INGOT", 0, 1, 25600, 6, 6, 70, 300, 0xEEEEEE, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("cobalt", Elements.Co, "INGOT", GENERATE_ORE | STD_METAL, 1, 25600, 6, 6, 70, 300, 0x2929BC, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("copper", Elements.Cu, "INGOT", EXT2_METAL | GENERATE_ORE | MORTAR_GRINDABLE | GENERATE_DENSE, 1, 25600, 6, 6, 70, 300, 0xFFAAAB, IconTransformator.UV.SHINY));
-MaterialDictionary.registerMaterial(new Material("chlorine", Elements.Cl, "FLUID",  STATE_GAS, 1, 25600, 6, 6, 70, 300, 0xFF8000, IconTransformator.UV.GAS));
-MaterialDictionary.registerMaterial(new Material("chrome", Elements.Cr, "INGOT",  EXT2_METAL | GENERATE_RING | GENERATE_ROTOR, 1, 25600, 6, 6, 70, 300, 0xFF8000, IconTransformator.UV.GAS));
-MaterialDictionary.registerMaterial(new Material("gallium", Elements.Ga, "INGOT", GENERATE_PLATE, 2, 25600, 6, 6, 70, 300, 0xFFFF00, IconTransformator.UV.SHINY));
-MaterialDictionary.registerMaterial(new Material("gold", Elements.Au, "INGOT", EXT2_METAL | GENERATE_ORE | MORTAR_GRINDABLE | EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES, 2, 25600, 6, 6, 70, 300, 0xFFFF00, IconTransformator.UV.SHINY));
-MaterialDictionary.registerMaterial(new Material("fluorine", Elements.F, "FLUID", STATE_GAS, 2, 25600, 6, 6, 70, 300, 0xFFFFAA, IconTransformator.UV.GAS));
-MaterialDictionary.registerMaterial(new Material("iridium", Elements.Ir, "INGOT", GENERATE_ORE | EXT2_METAL | GENERATE_ORE | GENERATE_RING | GENERATE_ROTOR, 3, 19200, 6, 6, 70, 300, 0xFFFFFF, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("iron", Elements.Fe, "INGOT", EXT2_METAL | GENERATE_ORE | MORTAR_GRINDABLE | GENERATE_RING | GENERATE_DENSE | GENERATE_FRAME | GENERATE_LONG_ROD | GENERATE_PLASMA | EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES, 2, 25600, 6, 6, 70, 300, 0xAAAAAA, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("lead", Elements.Pb, "INGOT", EXT2_METAL | GENERATE_ORE | MORTAR_GRINDABLE | GENERATE_DENSE, 1, 25600, 6, 6, 70, 300, 0x8C648C, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("magnesium", Elements.Mg, "INGOT", STD_METAL | GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xFFBBBB, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("manganese", Elements.Mn, "INGOT", GENERATE_FOIL, 2, 19200, 6, 6, 70, 300, 0xEEEEEE, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("lithium", Elements.Li, "INGOT", STD_METAL | GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xCBCBCB, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("mercury", Elements.Hg, "FLUID", SMELT_INTO_FLUID, 2, 19200, 6, 6, 70, 300, 0xFFDDDD, IconTransformator.UV.FLUID));
-MaterialDictionary.registerMaterial(new Material("molybdenum", Elements.Mo, "INGOT", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xAAAADD, IconTransformator.UV.SHINY));
-MaterialDictionary.registerMaterial(new Material("neodymium", Elements.Nd, "INGOT", STD_METAL | GENERATE_ROD | GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x777777, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("nickel", Elements.Ni, "INGOT", STD_METAL | GENERATE_ORE | MORTAR_GRINDABLE | GENERATE_PLASMA, 2, 19200, 6, 6, 70, 300, 0xAAAAFF, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("niobium", Elements.Nb, "INGOT", STD_METAL, 2, 19200, 6, 6, 70, 300, 0xAAAAFF, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("nitrogen", Elements.N, "FLUID", STATE_GAS | GENERATE_PLASMA, 2, 19200, 6, 6, 70, 300, 0x90AAEE, IconTransformator.UV.FLUID));
-MaterialDictionary.registerMaterial(new Material("oxygen", Elements.O, "FLUID", STATE_GAS | GENERATE_PLASMA, 2, 19200, 6, 6, 70, 300, 0x90AAEE, IconTransformator.UV.FLUID));
-MaterialDictionary.registerMaterial(new Material("hydrogen", Elements.H, "FLUID", STATE_GAS, 2, 19200, 6, 6, 70, 300, 0x00FFAA, IconTransformator.UV.GAS));
-MaterialDictionary.registerMaterial(new Material("palladium", Elements.Pd, "INGOT", EXT2_METAL | GENERATE_ORE | GENERATE_FLUID_BLOCK, 2, 19200, 6, 6, 70, 300, 0xCED0DD, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("phosphorus", Elements.P, "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("platinum", Elements.Pt, "INGOT", EXT2_METAL | GENERATE_ORE | GENERATE_FLUID_BLOCK, 2, 19200, 6, 6, 70, 300, 0xFFFF99, IconTransformator.UV.SHINY));
-MaterialDictionary.registerMaterial(new Material("potassium", Elements.K, "INGOT", EXT_METAL, 2, 19200, 6, 6, 70, 300, 0xFFFF99, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("titanium", Elements.Ti, "INGOT", EXT2_METAL | MORTAR_GRINDABLE, 2, 38400, 6, 6, 70, 300, 0xDCDCFF, IconTransformator.UV.SHINY)
-);
-MaterialDictionary.registerMaterial(new Material("silver", Elements.Ag, "INGOT", EXT2_METAL | GENERATE_ORE | MORTAR_GRINDABLE, 2, 38400, 6, 6, 70, 300, 0xDCDCFF, IconTransformator.UV.SHINY)
-);
-MaterialDictionary.registerMaterial(new Material("silicon", Elements.Si, "INGOT", EXT2_METAL | GENERATE_ORE | MORTAR_GRINDABLE, 2, 38400, 6, 6, 70, 300, 0xDCDCFF, IconTransformator.UV.SHINY)
-);
-MaterialDictionary.registerMaterial(new Material("sodium", Elements.Na, "INGOT", STD_METAL, 2, 38400, 6, 6, 70, 300, 0x000096, IconTransformator.UV.METALLIC)
-);
-MaterialDictionary.registerMaterial(new Material("sulfur", Elements.S, "DUST", NO_SMASHING | NO_SMELTING | FLAMMABLE | GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("tantalum", Elements.Ta, "INGOT", EXT2_METAL | MORTAR_GRINDABLE | GENERATE_RING, 1, 25600, 6, 6, 70, 300, 0xDCDCDC, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("tin", Elements.Sn, "INGOT", EXT2_METAL | MORTAR_GRINDABLE | GENERATE_RING | GENERATE_ROTOR | GENERATE_ORE, 1, 25600, 6, 6, 70, 300, 0xDCDCDC, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("thorium", Elements.Th, "INGOT", STD_METAL | GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x001E00, IconTransformator.UV.SHINY));
-MaterialDictionary.registerMaterial(new Material("tungsten", Elements.W, "INGOT", EXT2_METAL, 2, 19200, 6, 6, 70, 300, 0x001E00, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("uranium", Elements.U[238], "INGOT", STD_METAL | GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0x32F032, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("uranium235", Elements.U[235], "INGOT", STD_METAL | GENERATE_ORE | GENERATE_ROD, 3, 19200, 6, 6, 70, 300, 0x32F032, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("vanadium", Elements.V, "INGOT", STD_METAL, 2, 19200, 6, 6, 70, 300, 0x323232, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("zinc", Elements.Zn, "INGOT", STD_METAL | GENERATE_ORE | MORTAR_GRINDABLE | GENERATE_FOIL, 1, 19200, 6, 6, 70, 300, 0xFAF0F0, IconTransformator.UV.METALLIC));
-
-
-
-
-
-
-
-
-MaterialDictionary.registerMaterial(new Material("almandine", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["iron"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xFF0000, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("amber", of(), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 2, 25600, 6, 6, 70, 300, 0xBD4949, IconTransformator.UV.RUBY));
-MaterialDictionary.registerMaterial(new Material("banded_iron", of(new MaterialStack(MaterialDictionary.dict["iron"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x915A5A, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("barite", of(new MaterialStack(MaterialDictionary.dict["barium"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xE6EBFF, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("bastnasite",  of(new MaterialStack(MaterialDictionary.dict["cerium"], 1), new MaterialStack(MaterialDictionary.dict["carbon"], 1), new MaterialStack(MaterialDictionary.dict["fluorine"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC86E2D, IconTransformator.UV.FINE));
-MaterialDictionary.registerMaterial(new Material("battery_alloy", of(new MaterialStack(MaterialDictionary.dict["lead"], 4), new MaterialStack(MaterialDictionary.dict["antimony"], 1)), "INGOT", EXT_METAL, 2, 25600, 6, 6, 70, 300, 0x9C7CA0, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("blue_topaz", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["fluorine"], 2), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 3, 25600, 6, 6, 70, 300, 0x0000FF, IconTransformator.UV.GEM_HORIZONTAL));
-MaterialDictionary.registerMaterial(new Material("bronze", of(new MaterialStack(MaterialDictionary.dict["tin"], 1), new MaterialStack(MaterialDictionary.dict["copper"], 3)), "INGOT", EXT2_METAL | MORTAR_GRINDABLE | GENERATE_RING | GENERATE_ROTOR | GENERATE_FRAME | GENERATE_LONG_ROD, 2, 19200, 6, 6, 70, 300, 0xFF8000, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("brown_limonite", of(new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["hydrogen"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC86400, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("certus_quartz", of(), "GEM", STD_SOLID | NO_SMELTING | CRYSTALLISABLE | GENERATE_ORE, 2, 25600, 6, 6, 70, 300, 0xD2D2E6, IconTransformator.UV.QUARTZ));
-MaterialDictionary.registerMaterial(new Material("coal", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "GEM", GENERATE_ORE | FLAMMABLE | NO_SMELTING | NO_SMASHING | MORTAR_GRINDABLE | EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES, 2, 19200, 1, 6, 70, 300, 0x464646, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("calcite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 1), new MaterialStack(MaterialDictionary.dict["carbon"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xFAE6DC, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("cassiterite", of(new MaterialStack(MaterialDictionary.dict["tin"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xDCDCDC, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("chalcopyrite", of(new MaterialStack(MaterialDictionary.dict["copper"], 1), new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 2)), "DIST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xA07828, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("cinnabar", of(new MaterialStack(MaterialDictionary.dict["mercury"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x960000, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("cobaltite", of(new MaterialStack(MaterialDictionary.dict["cobalt"], 1), new MaterialStack(MaterialDictionary.dict["arsenic"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x5050FA, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("cooperite", of(new MaterialStack(MaterialDictionary.dict["platinum"], 3), new MaterialStack(MaterialDictionary.dict["nickel"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1), new MaterialStack(MaterialDictionary.dict["palladium"], 1)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xFFFFC8, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("dark_ash", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "DUST", DISABLE_DECOMPOSITION, 2, 19200, 6, 6, 70, 300, 0xFF0000, IconTransformator.UV.SAND));
-MaterialDictionary.registerMaterial(new Material("ash", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "DUST", DISABLE_DECOMPOSITION, 2, 19200, 6, 6, 70, 300, 0x969696, IconTransformator.UV.SAND));
-MaterialDictionary.registerMaterial(new Material("diamond", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "GEM", GENERATE_ROD | GENERATE_BOLT_SCREW | GENERATE_LENSE | GENERATE_GEAR | NO_SMASHING | NO_SMELTING | FLAMMABLE | HIGH_SIFTER_OUTPUT | GENERATE_ORE | DISABLE_DECOMPOSITION | EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES, 3, 128000, 7, 8, 0, 0, 0xC8FFFF, IconTransformator.UV.DIAMOND));
-MaterialDictionary.registerMaterial(new Material("emerald", of(new MaterialStack(MaterialDictionary.dict["beryllium"], 3), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 6), new MaterialStack(MaterialDictionary.dict["oxygen"], 18)), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT | EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES, 0, 25600, 6, 6, 70, 300, 0x50FF50, IconTransformator.UV.EMERALD));
-MaterialDictionary.registerMaterial(new Material("ender_pearl", of(new MaterialStack(MaterialDictionary.dict["beryllium"], 3), new MaterialStack(MaterialDictionary.dict["potassium"], 4), new MaterialStack(MaterialDictionary.dict["nitrogen"], 5)), "GEM", GENERATE_PLATE | GENERATE_LENSE | NO_SMASHING | NO_SMELTING, 0, 25600, 6, 6, 70, 300, 0x50FF50, IconTransformator.UV.GEM_VERTICAL));
-MaterialDictionary.registerMaterial(new Material("galena", of(new MaterialStack(MaterialDictionary.dict["lead"], 3), new MaterialStack(MaterialDictionary.dict["silver"], 3), new MaterialStack(MaterialDictionary.dict["sulfur"], 2)), "DUST", GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0x643C64, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("garnierite", of(new MaterialStack(MaterialDictionary.dict["nickel"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "DUST", GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0x32C846, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("glauconite", of(new MaterialStack(MaterialDictionary.dict["potassium"], 1), new MaterialStack(MaterialDictionary.dict["magnesium"], 2), new MaterialStack(MaterialDictionary.dict["aluminium"], 4), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x82B43C, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("glowstone", of(), "DUST", NO_SMASHING | SMELT_INTO_FLUID | GENERATE_PLATE | EXCLUDE_PLATE_COMPRESSOR_RECIPE, 2, 19200, 6, 6, 70, 300, 0xFFFF00, IconTransformator.UV.SHINY));
-MaterialDictionary.registerMaterial(new Material("graphite", of(), "INGOT", GENERATE_PLATE | GENERATE_ORE | NO_SMELTING | FLAMMABLE, 2, 19200, 6, 6, 70, 300, 0x808080, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("green_sapphire", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "GEM", GENERATE_ORE | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT | GENERATE_LENSE, 2, 19200, 6, 6, 70, 300, 0x64C882, IconTransformator.UV.GEM_VERTICAL));
-MaterialDictionary.registerMaterial(new Material("andradite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 3), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC86400, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("grossular", of(new MaterialStack(MaterialDictionary.dict["calcium"], 3), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC86400, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("gunpowder", of(), "DUST", FLAMMABLE | EXPLOSIVE | NO_SMELTING | NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0x808080, IconTransformator.UV.SAND));
-MaterialDictionary.registerMaterial(new Material("quartzite", of(), "GEM", NO_SMELTING | CRYSTALLISABLE | GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xD2E6D2, IconTransformator.UV.QUARTZ));
-MaterialDictionary.registerMaterial(new Material("ilmenite", of(new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["titanium"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0x463732, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("jasper", of(), "GEM", STD_GEM | NO_SMELTING | HIGH_SIFTER_OUTPUT, 2, 25600, 6, 6, 70, 300, 0xC85050, IconTransformator.UV.EMERALD));
-MaterialDictionary.registerMaterial(new Material("lazurite", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 6), new MaterialStack(MaterialDictionary.dict["silicon"], 6), new MaterialStack(MaterialDictionary.dict["calcium"], 8), new MaterialStack(MaterialDictionary.dict["sodium"], 8)), "GEM", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x6478FF, IconTransformator.UV.LAPIS));
-MaterialDictionary.registerMaterial(new Material("lepidolite", of(new MaterialStack(MaterialDictionary.dict["potassium"], 1), new MaterialStack(MaterialDictionary.dict["lithium"], 3), new MaterialStack(MaterialDictionary.dict["aluminium"], 4), new MaterialStack(MaterialDictionary.dict["fluorine"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 10)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xF0328C, IconTransformator.UV.FINE));
-MaterialDictionary.registerMaterial(new Material("magnesite", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 1), new MaterialStack(MaterialDictionary.dict["carbon"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xFAFAB4, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("magnetite", of(new MaterialStack(MaterialDictionary.dict["iron"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x1E1E1E, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("malachite", of(new MaterialStack(MaterialDictionary.dict["copper"], 2), new MaterialStack(MaterialDictionary.dict["carbon"], 1), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 5)), "DUST", GENERATE_ORE | INDUCTION_SMELTING_LOW_OUTPUT, 2, 19200, 6, 6, 70, 300, 0x055F05, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("molybdenite",  of(new MaterialStack(MaterialDictionary.dict["molybdenum"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 2)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x191919, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("nether_quartz", of(), "GEM", STD_SOLID | NO_SMELTING | CRYSTALLISABLE | GENERATE_ORE | EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES, 2, 19200, 6, 6, 70, 300, 0xE6D2D2, IconTransformator.UV.QUARTZ));
-MaterialDictionary.registerMaterial(new Material("nether_star", of(), "GEM", STD_SOLID | GENERATE_LENSE | NO_SMASHING | NO_SMELTING, 2, 19200, 6, 6, 70, 300, 0xFFFFFF, IconTransformator.UV.NETHERSTAR));
-MaterialDictionary.registerMaterial(new Material("pentlandite", of(new MaterialStack(MaterialDictionary.dict["nickel"], 9), new MaterialStack(MaterialDictionary.dict["sulfur"], 8)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xFFFF00, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("phosphate", of(new MaterialStack(MaterialDictionary.dict["phosphorus"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)),  "DUST", GENERATE_ORE | NO_SMASHING | NO_SMELTING | FLAMMABLE | EXPLOSIVE, 2, 19200, 6, 6, 70, 300, 0xA59605, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("powellite",  of(new MaterialStack(MaterialDictionary.dict["calcium"], 1), new MaterialStack(MaterialDictionary.dict["molybdenum"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xFFFF00, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("pyrite", of(new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 2)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x967828, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("pyrochlore", of(new MaterialStack(MaterialDictionary.dict["calcium"], 2), new MaterialStack(MaterialDictionary.dict["niobium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 7)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x783264, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("pyrolusite", of(new MaterialStack(MaterialDictionary.dict["manganese"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x9696AA, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("pyrope", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["magnesium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x783264, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("salt",  of(new MaterialStack(MaterialDictionary.dict["sodium"], 1), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xFFFFFF, IconTransformator.UV.FINE));
-MaterialDictionary.registerMaterial(new Material("silicon_dioxide", of(new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", NO_SMASHING | NO_SMELTING | CRYSTALLISABLE, 2, 25600, 6, 6, 70, 300, 0x9C7CA0, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("soapstone", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 4), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x5F915F, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("spessartine", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["manganese"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xFF6464, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("spodumene", of(new MaterialStack(MaterialDictionary.dict["lithium"], 1), new MaterialStack(MaterialDictionary.dict["aluminium"], 1), new MaterialStack(MaterialDictionary.dict["silicon"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xBEAAAA, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("rare_earth", of(), "DUST", 0, 2, 19200, 6, 6, 70, 300, 0x808064, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("rock_salt",  of(new MaterialStack(MaterialDictionary.dict["potassium"], 1), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xF0C8C8, IconTransformator.UV.FINE));
-MaterialDictionary.registerMaterial(new Material("ruby", of(new MaterialStack(MaterialDictionary.dict["chrome"], 1), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 2, 25600, 6, 6, 70, 300, 0xBD4949, IconTransformator.UV.RUBY));
-MaterialDictionary.registerMaterial(new Material("fools_ruby", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 1), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 2, 25600, 6, 6, 70, 300, 0xBD4949, IconTransformator.UV.RUBY));
-MaterialDictionary.registerMaterial(new Material("rutile", of(new MaterialStack(MaterialDictionary.dict["titanium"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "GEM",  STD_GEM | DISABLE_DECOMPOSITION, 2, 25600, 6, 6, 70, 300, 0xD40D5C, IconTransformator.UV.GEM_HORIZONTAL));
-MaterialDictionary.registerMaterial(new Material("sapphire", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 2, 25600, 6, 7, 0, 0, 0x6464C8, IconTransformator.UV.GEM_HORIZONTAL));
-MaterialDictionary.registerMaterial(new Material("sodalite", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["sodium"], 4), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "GEM", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x1414FF, IconTransformator.UV.LAPIS));
-MaterialDictionary.registerMaterial(new Material("tanzanite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 2), new MaterialStack(MaterialDictionary.dict["aluminium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["hydrogen"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 13)), "GEM", EXT_METAL | GENERATE_ORE | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 2, 25600, 6, 6, 70, 300, 0x4000C8, IconTransformator.UV.GEM_VERTICAL));
-MaterialDictionary.registerMaterial(new Material("topaz", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["fluorine"], 2), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 3, 19200, 6, 6, 70, 300, 0xFF8000, IconTransformator.UV.GEM_HORIZONTAL));
-MaterialDictionary.registerMaterial(new Material("steel", of(new MaterialStack(MaterialDictionary.dict["iron"], 1)), "INGOT", EXT2_METAL | MORTAR_GRINDABLE | GENERATE_RING | GENERATE_ROTOR | GENERATE_SMALL_GEAR | GENERATE_DENSE | DISABLE_DECOMPOSITION | GENERATE_FRAME | GENERATE_LONG_ROD, 2, 51200, 6, 6, 70, 300, 0x505050, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("stibnite", of(new MaterialStack(MaterialDictionary.dict["antimony"], 2), new MaterialStack(MaterialDictionary.dict["sulfur"], 3)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x464646, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("scheelite", of(new MaterialStack(MaterialDictionary.dict["tungsten"], 1), new MaterialStack(MaterialDictionary.dict["calcium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0xC88C14, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("talc", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 4), new MaterialStack(MaterialDictionary.dict["hydrogen"],2), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x5AB45A, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("tantalite", of(new MaterialStack(MaterialDictionary.dict["manganese"], 1), new MaterialStack(MaterialDictionary.dict["tantalum"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "DUST", GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0x915028, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("tungstate", of(new MaterialStack(MaterialDictionary.dict["tungsten"], 1), new MaterialStack(MaterialDictionary.dict["lithium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0x373223, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("tetrahedrite", of(new MaterialStack(MaterialDictionary.dict["copper"], 3), new MaterialStack(MaterialDictionary.dict["antimony"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 3), new MaterialStack(MaterialDictionary.dict["iron"], 1)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC82000, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("wroughtiron", of(new MaterialStack(MaterialDictionary.dict["iron"], 1)), "INGOT", EXT2_METAL | MORTAR_GRINDABLE | GENERATE_RING | GENERATE_LONG_ROD | DISABLE_DECOMPOSITION, 2, 38400, 6, 6, 70, 300, 0xC8B4B4, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("wulfenite", of(new MaterialStack(MaterialDictionary.dict["lead"], 1), new MaterialStack(MaterialDictionary.dict["molybdenum"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0xFF8000, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("water", of(new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "FLUID", NO_RECYCLING | DISABLE_DECOMPOSITION, 3, 19200, 6, 6, 70, 300, 0xFF8000, IconTransformator.UV.FLUID));
-MaterialDictionary.registerMaterial(new Material("yellow_limonite", of(new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["hydrogen"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("uraninite", of(new MaterialStack(MaterialDictionary.dict["uranium"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0x232323, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("uvarovite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 3), new MaterialStack(MaterialDictionary.dict["chrome"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", 0, 3, 19200, 6, 6, 70, 300, 0xB4FFB4, IconTransformator.UV.GEM_VERTICAL));
-
-MaterialDictionary.registerMaterial(new Material("andesite", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("basalt", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("black_granite", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("diorite", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("endstone", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("granite", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("gravel", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.METALLIC));
-MaterialDictionary.registerMaterial(new Material("marble", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.FINE));
-MaterialDictionary.registerMaterial(new Material("netherrack", of(), "DUST", NO_SMASHING, 3, 19200, 6, 6, 70, 300, 0x232323, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("sandstone", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("stone", of(), "DUST", MORTAR_GRINDABLE | GENERATE_GEAR | GENERATE_PLATE | NO_SMASHING | NO_RECYCLING, 3, 19200, 6, 6, 70, 300, 0xB4FFB4, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("red_granite", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("red_sandstone", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("red_granite", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("red_sandstone", of(), "DUST", NO_SMASHING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-
-
-MaterialDictionary.registerMaterial(new Material("lava", of(), "FLUID", 0, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.FLUID));
-MaterialDictionary.registerMaterial(new Material("clay", of(new MaterialStack(MaterialDictionary.dict["sodium"], 2), new MaterialStack(MaterialDictionary.dict["lithium"], 1), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 2), new MaterialStack(MaterialDictionary.dict["water"], 6)), "DUST", MORTAR_GRINDABLE, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("charcoal", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "GEM", FLAMMABLE | NO_SMELTING | NO_SMASHING | MORTAR_GRINDABLE, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.LIGNITE));
-MaterialDictionary.registerMaterial(new Material("glass", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", GENERATE_PLATE | GENERATE_LENSE | NO_SMASHING | NO_RECYCLING | SMELT_INTO_FLUID | EXCLUDE_BLOCK_CRAFTING_RECIPES, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.GLASS));
-MaterialDictionary.registerMaterial(new Material("wheat", of(), "DUST", 0, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.FINE));
-MaterialDictionary.registerMaterial(new Material("brick", of(new MaterialStack(MaterialDictionary.dict["clay"], 1)), "DUST", EXCLUDE_BLOCK_CRAFTING_RECIPES | DECOMPOSITION_BY_CENTRIFUGING, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.GLASS));
-MaterialDictionary.registerMaterial(new Material("steam", of(new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "FLUID", NO_RECYCLING | GENERATE_FLUID_BLOCK | DISABLE_DECOMPOSITION, 2, 19200, 6, 6, 70, 300, 0xC8C800, IconTransformator.UV.GAS));
-
-
-
-
-MaterialDictionary.registerMaterial(new Material("amethyst", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 4), new MaterialStack(MaterialDictionary.dict["iron"], 1)), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 3, 19200, 6, 6, 70, 300, 0xD232D2, IconTransformator.UV.FLINT));
-MaterialDictionary.registerMaterial(new Material("apatite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 5), new MaterialStack(MaterialDictionary.dict["phosphate"], 3), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "GEM", GENERATE_ORE | NO_SMASHING | NO_SMELTING | CRYSTALLISABLE, 2, 25600, 6, 6, 70, 300, 0xC8C8FF, IconTransformator.UV.DIAMOND));
-MaterialDictionary.registerMaterial(new Material("bauxite", of(new MaterialStack(MaterialDictionary.dict["rutile"], 2), new MaterialStack(MaterialDictionary.dict["aluminium"], 16), new MaterialStack(MaterialDictionary.dict["hydrogen"], 10), new MaterialStack(MaterialDictionary.dict["oxygen"], 11)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC86400, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("bentonite", of(new MaterialStack(MaterialDictionary.dict["sodium"], 1), new MaterialStack(MaterialDictionary.dict["magnesium"], 6), new MaterialStack(MaterialDictionary.dict["silicon"], 12), new MaterialStack(MaterialDictionary.dict["hydrogen"], 4), new MaterialStack(MaterialDictionary.dict["water"], 5), new MaterialStack(MaterialDictionary.dict["oxygen"], 36)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xF5D7D2, IconTransformator.UV.ROUGH));
-MaterialDictionary.registerMaterial(new Material("blaze", of(new MaterialStack(MaterialDictionary.dict["dark_ash"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1)), "DUST", NO_SMELTING | SMELT_INTO_FLUID | MORTAR_GRINDABLE | BURNING, 2, 19200, 6, 6, 70, 300, 0xFFC800, IconTransformator.UV.DULL));
-MaterialDictionary.registerMaterial(new Material("ender_eye", of(new MaterialStack(MaterialDictionary.dict["ender_pearl"], 1), new MaterialStack(MaterialDictionary.dict["blaze"], 1)), "GEM", GENERATE_PLATE | GENERATE_LENSE | NO_SMASHING | NO_SMELTING, 0, 25600, 6, 6, 70, 300, 0x50FF50, IconTransformator.UV.GEM_VERTICAL));
-MaterialDictionary.registerMaterial(new Material("monazite", of(new MaterialStack(MaterialDictionary.dict["rare_earth"], 1), new MaterialStack(MaterialDictionary.dict["phosphate"], 1)), "GEM", GENERATE_ORE | NO_SMASHING | NO_SMELTING | CRYSTALLISABLE, 2, 19200, 6, 6, 70, 300, 0x324632, IconTransformator.UV.DIAMOND)); // ? - lantanoids rateearh
-MaterialDictionary.registerMaterial(new Material("olivine", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 2), new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 2)), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 2, 25600, 6, 6, 70, 300, 0x66FF66, IconTransformator.UV.RUBY));
-MaterialDictionary.registerMaterial(new Material("opal", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", STD_GEM | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT, 2, 19200, 6, 6, 70, 300, 0x0000FF, IconTransformator.UV.OPAL));
-MaterialDictionary.registerMaterial(new Material("lapis",  of(new MaterialStack(MaterialDictionary.dict["lazurite"], 12), new MaterialStack(MaterialDictionary.dict["sodalite"], 2), new MaterialStack(MaterialDictionary.dict["pyrite"], 1), new MaterialStack(MaterialDictionary.dict["calcite"], 1)), "GEM", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x4646DC, IconTransformator.UV.LAPIS));
-MaterialDictionary.registerMaterial(new Material("lignite", of(new MaterialStack(MaterialDictionary.dict["carbon"], 2), new MaterialStack(MaterialDictionary.dict["water"], 4), new MaterialStack(MaterialDictionary.dict["dark_ash"], 1)), "GEM", GENERATE_ORE | FLAMMABLE | NO_SMELTING | NO_SMASHING | MORTAR_GRINDABLE, 0, 19200, 6, 6, 70, 300, 0x644646, IconTransformator.UV.LIGNITE));
-MaterialDictionary.registerMaterial(new Material("pitchblende", of(new MaterialStack(MaterialDictionary.dict["uraninite"], 3), new MaterialStack(MaterialDictionary.dict["thorium"], 1), new MaterialStack(MaterialDictionary.dict["lead"], 1)), "DUST", GENERATE_ORE, 3, 19200, 6, 6, 70, 300, 0xC8D200, IconTransformator.UV.DULL));
-
-
-MaterialDictionary.registerMaterial(new Material("red_garnet", of(new MaterialStack(MaterialDictionary.dict["pyrope"], 3), new MaterialStack(MaterialDictionary.dict["almandine"], 5), new MaterialStack(MaterialDictionary.dict["spessartine"], 8)), "GEM", STD_SOLID | GENERATE_LENSE | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT | GENERATE_ORE, 2, 25600, 6, 6, 70, 300, 0xC85050, IconTransformator.UV.RUBY));
-MaterialDictionary.registerMaterial(new Material("redstone", of(new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["pyrite"], 5), new MaterialStack(MaterialDictionary.dict["ruby"], 1), new MaterialStack(MaterialDictionary.dict["mercury"], 3)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC80000, IconTransformator.UV.ROUGH));
-
-MaterialDictionary.registerMaterial(new Material("yellow_garnet", of(new MaterialStack(MaterialDictionary.dict["andradite"], 5), new MaterialStack(MaterialDictionary.dict["grossular"], 8), new MaterialStack(MaterialDictionary.dict["uvarovite"], 3)), "GEM", STD_SOLID | GENERATE_LENSE | NO_SMASHING | NO_SMELTING | HIGH_SIFTER_OUTPUT | GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0xC8C850, IconTransformator.UV.RUBY));
-MaterialDictionary.registerMaterial(new Material("flint",  of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", NO_SMASHING | MORTAR_GRINDABLE, 1, 19200, 6, 6, 70, 300, 0x001E00, IconTransformator.UV.FLINT));
-MaterialDictionary.registerMaterial(new Material("vanadium_magnetite",  of(new MaterialStack(MaterialDictionary.dict["magnetite"], 1), new MaterialStack(MaterialDictionary.dict["vanadium"], 1)), "DUST", GENERATE_ORE, 2, 19200, 6, 6, 70, 300, 0x23233C, IconTransformator.UV.METALLIC));
-
-
-
-
-MaterialDictionary.registerMaterial(new Material("red_alloy", of(new MaterialStack(MaterialDictionary.dict["copper"], 1), new MaterialStack(MaterialDictionary.dict["redstone"], 4)), "INGOT", GENERATE_PLATE | GENERATE_FINE_WIRE, 2, 38400, 6, 6, 70, 300, IconTransformator.UV.DULL));
-
-MaterialDictionary.addMaterials();
-//MaterialDictionary.registerMaterial(new Material("amber", "Al2O3", "gem", "", 2, 19200, 6, 6, 70, 300, 0x0000FF, IconTransformator.UV.RUBY));
-//MaterialDictionary.registerMaterial(new Material("fake_ruby", "Al2O3", "gem", "ored", 2, 25600, 6, 6, 70, 300, 0xBD4949, IconTransformator.UV.SHINY));
-//MaterialDictionary.registerMaterial(new Material("pyrochlore", "Al2O3", "DUST", GENERATE_ORE, 0, 19200, 6, 6, 70, 300, 0xE6D2D2, IconTransformator.UV.METALLIC));
-
-
-invertedIDs.invertIDs();
-MaterialDictionary.addToCreative();
+setLoadingTip("register Materials");
 
 OreDictionary.registerChangeableBlock({id: 1, data: 0, texture: "stone"});
 OreDictionary.registerChangeableBlock({id: 1, data: 1, texture: "granite"});
@@ -3071,55 +6614,342 @@ OreDictionary.registerChangeableBlock({id: 7, data: 0, texture: "bedrock"});
 OreDictionary.registerChangeableBlock({id: 87, data: 0, texture: "netherrack"});
 OreDictionary.registerChangeableBlock({id: 121, data: 0, texture: "endstone"});
 OreDictionary.registerChangeableBlock({id: 24, data: 0, texture: "sandstone"});
-OreDictionary.registerChangeableBlock({id: 179, data: 0, texture: "red_sandstone"});
+OreDictionary.registerChangeableBlock({id: 179, data: 0, texture: "sandstone_red"});
 for(let stone in StoneDictionary.stones) {
-    Logger.Log(stone, "Pentium");
-    OreDictionary.registerChangeableBlock({id: stone, data: 0, texture: StoneDictionary.stones[stone].name});
-    Logger.Log(StoneDictionary.stones[stone].name, "Pentium III");
-    OreDictionary.registerChangeableBlock({id: stone, data: 8, texture: StoneDictionary.stones[stone].name2});
-    Logger.Log(StoneDictionary.stones[stone].name2, "Pentium IV");
+    OreDictionary.registerChangeableBlock({id: StoneDictionary.stones[stone].id, data: 0, texture: StoneDictionary.stones[stone].name});
+    OreDictionary.registerChangeableBlock({id: StoneDictionary.stones[stone].id, data: 8, texture: StoneDictionary.stones[stone].name2});
 }
 
+MaterialDictionary.registerForm("item", 0, "ingot");
+MaterialDictionary.registerForm("item", 0, "dust");
+MaterialDictionary.registerForm("item", GENERATE_PLATE, "plate");
+MaterialDictionary.registerForm("item", GENERATE_DENSE, "plateDense");
+MaterialDictionary.registerForm("item", GENERATE_ROD, "stick");
+MaterialDictionary.registerForm("item", GENERATE_LONG_ROD, "stickLong");
+MaterialDictionary.registerForm("item", 0, "dustSmall");
+MaterialDictionary.registerForm("item", 0, "dustTiny");
+MaterialDictionary.registerForm("item", GENERATE_FOIL, "foil");
+MaterialDictionary.registerForm("item", GENERATE_FINE_WIRE, "wireFine");
+MaterialDictionary.registerForm("item", GENERATE_SMALL_GEAR, "gearGtSmall");
+MaterialDictionary.registerForm("item", GENERATE_GEAR, "gearGt");
+MaterialDictionary.registerForm("item", GENERATE_RING, "ring");
+MaterialDictionary.registerForm("item", GENERATE_BOLT_SCREW, "bolt");
+MaterialDictionary.registerForm("item", GENERATE_BOLT_SCREW, "screw");
+//MaterialDictionary.registerForm(ItemID.gtmetaitem01, GENERATE_TURBINE_BLADE, "gear");
+MaterialDictionary.registerForm("item", 0, "nugget");
 
-OreDictionary.registerOre(MaterialDictionary.dict.copper, {level: 1, isgen: true, minimalheight: 60, maximalheight: 120, rarity: 32});
-OreDictionary.registerOre(MaterialDictionary.dict.tin, {level: 1, isgen: true, minimalheight: 60, maximalheight: 120, rarity: 32});
-OreDictionary.registerOre(MaterialDictionary.dict.iron, {level: 2, isgen: true, minimalheight: 40, maximalheight: 80, rarity: 16});
-OreDictionary.registerOre(MaterialDictionary.dict.coal, {level: 1, isgen: true, minimalheight: 60, maximalheight: 100, rarity: 24});
+MaterialDictionary.registerForm("item", 0, "gem");
+MaterialDictionary.registerForm("item", GENERATE_LENSE, "lens");
+
+MaterialDictionary.registerForm("item", GENERATE_ORE, "crushed");
+MaterialDictionary.registerForm("item", GENERATE_ORE, "crushedPurified");
+MaterialDictionary.registerForm("item", GENERATE_ORE, "crushedCentrifuged");
+MaterialDictionary.registerForm("item", GENERATE_ORE, "dustImpure");
+MaterialDictionary.registerForm("item", GENERATE_ORE, "dustPure");
+
+MaterialDictionary.registerForm("block", 0, "block");
+MaterialDictionary.registerForm("block", GENERATE_FRAME, "frameGt");
+
+MaterialDictionary.registerMaterial(new Material("_NULL", of(), "MARKER", 0));
+
+MaterialDictionary.registerMaterial(new Material("aluminium", Elements.Al, "INGOT", Flag.pack5(EXT2_METAL, GENERATE_SMALL_GEAR, GENERATE_ORE, GENERATE_RING, GENERATE_FRAME), 933.25, 2773.15)); //WA
+MaterialDictionary.registerMaterial(new Material("americium", Elements.Am, "INGOT", Flag.pack3(STD_METAL, GENERATE_ROD, GENERATE_LONG_ROD), 1473.15, 2873.15));
+MaterialDictionary.registerMaterial(new Material("antimony", Elements.Sb, "INGOT", 
+Flag.pack2(EXT_METAL, MORTAR_GRINDABLE), 903.78, 1908));
+MaterialDictionary.registerMaterial(new Material("arsenic", Elements.As, "DUST", 0, TemperaturePoints.NO, 887)); //w
+MaterialDictionary.registerMaterial(new Material("barium", Elements.Ba, "INGOT", STD_METAL, 983.15, 2118));
+MaterialDictionary.registerMaterial(new Material("beryllium", Elements.Be, "INGOT",Flag.pack2(STD_METAL, GENERATE_ORE), 1558.15, 3243.15));
+MaterialDictionary.registerMaterial(new Material("bismuth", Elements.Bi, "INGOT", GENERATE_ORE, 544.45, 1833.15));
+MaterialDictionary.registerMaterial(new Material("boron", Elements.B, "DUST", 0, 2349.15, 4073));
+MaterialDictionary.registerMaterial(new Material("cadmium", Elements.Cd, "INGOT", 0, 594.18, 1038));
+MaterialDictionary.registerMaterial(new Material("calcium", Elements.Ca, "INGOT", 0, 1112, 1757));
+MaterialDictionary.registerMaterial(new Material("carbon", Elements.C, "INGOT", 0, 3780, 4130));
+MaterialDictionary.registerMaterial(new Material("cerium", Elements.Ce, "INGOT", 0, 1072, 3699));
+MaterialDictionary.registerMaterial(new Material("cobalt", Elements.Co, "INGOT", 
+STD_METAL, 1768, 3143));
+MaterialDictionary.registerMaterial(new Material("copper", Elements.Cu, "INGOT",
+Flag.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_DENSE), 1356.55, 2840.15));
+MaterialDictionary.registerMaterial(new Material("chlorine", Elements.Cl, "FLUID",  STATE_GAS, -101, 172));
+MaterialDictionary.registerMaterial(new Material("chrome", Elements.Cr, "INGOT", Flag.pack3(EXT2_METAL, GENERATE_RING, GENERATE_ROTOR) , 2130, 2945));
+MaterialDictionary.registerMaterial(new Material("gallium", Elements.Ga, "INGOT", GENERATE_PLATE, 302.91, 2477));
+MaterialDictionary.registerMaterial(new Material("gold", Elements.Au, "INGOT", 
+Flag.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES), 1337.33, 3129));
+MaterialDictionary.registerMaterial(new Material("fluorine", Elements.F, "FLUID", STATE_GAS, -219.67, 53.48));
+MaterialDictionary.registerMaterial(new Material("iridium", Elements.Ir, "INGOT", 
+Flag.pack5(GENERATE_ORE, EXT2_METAL, GENERATE_ORE, GENERATE_RING, GENERATE_ROTOR), 2739, 4701));
+MaterialDictionary.registerMaterial(new Material("iron", Elements.Fe, "INGOT", 
+Flag.pack3(Flag.pack3(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE),
+Flag.pack3(GENERATE_RING, GENERATE_DENSE, GENERATE_FRAME), 
+Flag.pack3(GENERATE_LONG_ROD, GENERATE_PLASMA, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES)), 1811, 3134));
+MaterialDictionary.registerMaterial(new Material("lead", Elements.Pb, "INGOT", 
+Flag.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_DENSE), 600, 2022));
+MaterialDictionary.registerMaterial(new Material("magnesium", Elements.Mg, "INGOT", STD_METAL, 923.15, 1363.15));
+MaterialDictionary.registerMaterial(new Material("manganese", Elements.Mn, "INGOT", GENERATE_FOIL, 1517, 2235));
+MaterialDictionary.registerMaterial(new Material("lithium", Elements.Li, "INGOT", 
+Flag.pack2(STD_METAL, GENERATE_ORE), 453.65,	1603));
+MaterialDictionary.registerMaterial(new Material("mercury", Elements.Hg, "FLUID", SMELT_INTO_FLUID, 234.3210, 629.88));
+MaterialDictionary.registerMaterial(new Material("molybdenum", Elements.Mo, "INGOT", GENERATE_ORE, 2896, 4912));
+MaterialDictionary.registerMaterial(new Material("neodymium", Elements.Nd, "INGOT",Flag.pack3(STD_METAL, GENERATE_ROD, GENERATE_ORE), 1297, 3347));
+MaterialDictionary.registerMaterial(new Material("nickel", Elements.Ni, "INGOT", 
+Flag.pack4(STD_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_PLASMA), 1728, 3003));
+MaterialDictionary.registerMaterial(new Material("niobium", Elements.Nb, "INGOT", STD_METAL, 2741, 5015));
+MaterialDictionary.registerMaterial(new Material("nitrogen", Elements.N, "FLUID", 
+Flag.pack2(STATE_GAS | GENERATE_PLASMA), 63.29, 77.4));
+MaterialDictionary.registerMaterial(new Material("oxygen", Elements.O, "FLUID", 
+Flag.pack2(STATE_GAS, GENERATE_PLASMA) , 54.8, 90.19));
+MaterialDictionary.registerMaterial(new Material("hydrogen", Elements.H, "FLUID", STATE_GAS, 14.01, 20,28));
+MaterialDictionary.registerMaterial(new Material("palladium", Elements.Pd, "INGOT",Flag.pack3(EXT2_METAL, GENERATE_ORE, GENERATE_FLUID_BLOCK), 1828, 2940));
+MaterialDictionary.registerMaterial(new Material("phosphorus", Elements.P, "DUST", GENERATE_ORE, 317.3, 553));
+MaterialDictionary.registerMaterial(new Material("platinum", Elements.Pt, "INGOT", 
+Flag.pack3(EXT2_METAL, GENERATE_ORE, GENERATE_FLUID_BLOCK), 2041.4, 4098));
+MaterialDictionary.registerMaterial(new Material("potassium", Elements.K, "INGOT", EXT_METAL, 336.8, 1047));
+MaterialDictionary.registerMaterial(new Material("titanium", Elements.Ti, "INGOT", 
+Flag.pack2(EXT2_METAL, MORTAR_GRINDABLE), 1943, 3560));
+MaterialDictionary.registerMaterial(new Material("silver", Elements.Ag, "INGOT", 
+Flag.pack3(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE), 1235.1, 2485));
+MaterialDictionary.registerMaterial(new Material("silicon", Elements.Si, "INGOT", 
+Flag.pack2(STD_METAL, GENERATE_FOIL), 1688, 2623));
+MaterialDictionary.registerMaterial(new Material("sodium", Elements.Na, "INGOT", STD_METAL, 370.96, 1156,1));
+MaterialDictionary.registerMaterial(new Material("sulfur", Elements.S, "DUST", 
+Flag.pack4(NO_SMASHING, NO_SMELTING, FLAMMABLE, GENERATE_ORE), 386, 717.824));
+MaterialDictionary.registerMaterial(new Material("tantalum", Elements.Ta, "INGOT", 
+Flag.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), 3290, 5731));
+MaterialDictionary.registerMaterial(new Material("tin", Elements.Sn, "INGOT", 
+Flag.pack5(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING, GENERATE_ROTOR, GENERATE_ORE), 505.06, 2893));
+MaterialDictionary.registerMaterial(new Material("thorium", Elements.Th, "INGOT", 
+Flag.pack2(STD_METAL, GENERATE_ORE), 2028, 5060));
+MaterialDictionary.registerMaterial(new Material("tungsten", Elements.W, "INGOT", EXT2_METAL, 3695, 5828));
+MaterialDictionary.registerMaterial(new Material("uranium", Elements.U[238], "INGOT", Flag.pack2(STD_METAL, GENERATE_ORE), 1405.5, 4018));
+MaterialDictionary.registerMaterial(new Material("uranium235", Elements.U[235], "INGOT", Flag.pack2(STD_METAL, GENERATE_ROD), 1405.5, 4018));
+MaterialDictionary.registerMaterial(new Material("vanadium", Elements.V, "INGOT", STD_METAL, 2160, 3650));
+MaterialDictionary.registerMaterial(new Material("zinc", Elements.Zn, "INGOT",
+Flag.pack4(STD_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_FOIL), 692.75, 1179.35));
+
+
+
+
+
+
+
+
+MaterialDictionary.registerMaterial(new Material("almandine", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["iron"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("amber", of(), "GEM", 
+Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("banded_iron", of(new MaterialStack(MaterialDictionary.dict["iron"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("barite", of(new MaterialStack(MaterialDictionary.dict["barium"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("bastnasite",  of(new MaterialStack(MaterialDictionary.dict["cerium"], 1), new MaterialStack(MaterialDictionary.dict["carbon"], 1), new MaterialStack(MaterialDictionary.dict["fluorine"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("battery_alloy", of(new MaterialStack(MaterialDictionary.dict["lead"], 4), new MaterialStack(MaterialDictionary.dict["antimony"], 1)), "INGOT", EXT_METAL)); //A
+MaterialDictionary.registerMaterial(new Material("blue_topaz", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["fluorine"], 2), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "GEM", Flag.pack5(GENERATE_ORE, STD_GEM, NO_SMASHING, NO_SMELTING,  HIGH_SIFTER_OUTPUT))) ;
+MaterialDictionary.registerMaterial(new Material("bronze", of(new MaterialStack(MaterialDictionary.dict["tin"], 1), new MaterialStack(MaterialDictionary.dict["copper"], 3)), "INGOT", 
+Flag.pack2(Flag.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), Flag.pack3(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_LONG_ROD)))); //A
+MaterialDictionary.registerMaterial(new Material("brown_limonite", of(new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["hydrogen"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("certus_quartz", of(), "GEM", 
+Flag.pack4(STD_SOLID, NO_SMELTING, CRYSTALLISABLE, GENERATE_ORE)));
+MaterialDictionary.registerMaterial(new Material("coal", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "GEM", Flag.pack2(Flag.pack3(GENERATE_ORE, FLAMMABLE, NO_SMELTING),
+Flag.pack3(NO_SMASHING, MORTAR_GRINDABLE, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES))));
+MaterialDictionary.registerMaterial(new Material("calcite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 1), new MaterialStack(MaterialDictionary.dict["carbon"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("cassiterite", of(new MaterialStack(MaterialDictionary.dict["tin"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("chalcopyrite", of(new MaterialStack(MaterialDictionary.dict["copper"], 1), new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 2)), "DIST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("cinnabar", of(new MaterialStack(MaterialDictionary.dict["mercury"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("cobaltite", of(new MaterialStack(MaterialDictionary.dict["cobalt"], 1), new MaterialStack(MaterialDictionary.dict["arsenic"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("cooperite", of(new MaterialStack(MaterialDictionary.dict["platinum"], 3), new MaterialStack(MaterialDictionary.dict["nickel"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1), new MaterialStack(MaterialDictionary.dict["palladium"], 1)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("dark_ash", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "DUST", DISABLE_DECOMPOSITION));
+MaterialDictionary.registerMaterial(new Material("ash", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "DUST", DISABLE_DECOMPOSITION));
+Logger.Log(NO_SMELTING, "NO_SMELTING");
+MaterialDictionary.registerMaterial(new Material("diamond", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "GEM", Flag.pack3(Flag.pack4(GENERATE_ROD, GENERATE_BOLT_SCREW, GENERATE_LENSE, GENERATE_GEAR), 
+Flag.pack4(NO_SMASHING, NO_SMELTING, FLAMMABLE, HIGH_SIFTER_OUTPUT),
+Flag.pack3(GENERATE_ORE, DISABLE_DECOMPOSITION, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES) )));
+Logger.Log(NO_SMELTING, "NO_SMELTING");
+MaterialDictionary.registerMaterial(new Material("emerald", of(new MaterialStack(MaterialDictionary.dict["beryllium"], 3), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 6), new MaterialStack(MaterialDictionary.dict["oxygen"], 18)), "GEM", 
+Flag.pack5(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES)));
+MaterialDictionary.registerMaterial(new Material("ender_pearl", of(new MaterialStack(MaterialDictionary.dict["beryllium"], 3), new MaterialStack(MaterialDictionary.dict["potassium"], 4), new MaterialStack(MaterialDictionary.dict["nitrogen"], 5)), "GEM",
+Flag.pack4(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING, NO_SMELTING)));
+MaterialDictionary.registerMaterial(new Material("galena", of(new MaterialStack(MaterialDictionary.dict["lead"], 3), new MaterialStack(MaterialDictionary.dict["silver"], 3), new MaterialStack(MaterialDictionary.dict["sulfur"], 2)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("garnierite", of(new MaterialStack(MaterialDictionary.dict["nickel"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("glauconite", of(new MaterialStack(MaterialDictionary.dict["potassium"], 1), new MaterialStack(MaterialDictionary.dict["magnesium"], 2), new MaterialStack(MaterialDictionary.dict["aluminium"], 4), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("glowstone", of(), "DUST",
+Flag.pack4(NO_SMASHING, SMELT_INTO_FLUID, GENERATE_PLATE, EXCLUDE_PLATE_COMPRESSOR_RECIPE)));
+MaterialDictionary.registerMaterial(new Material("graphite", of(), "INGOT",
+Flag.pack4(GENERATE_PLATE, GENERATE_ORE, NO_SMELTING, FLAMMABLE)));
+MaterialDictionary.registerMaterial(new Material("green_sapphire", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "GEM", 
+Flag.pack5(GENERATE_ORE, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_LENSE)));
+MaterialDictionary.registerMaterial(new Material("andradite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 3), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", 0));
+MaterialDictionary.registerMaterial(new Material("grossular", of(new MaterialStack(MaterialDictionary.dict["calcium"], 3), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("gunpowder", of(), "DUST",
+Flag.pack4(FLAMMABLE, EXPLOSIVE, NO_SMELTING, NO_SMASHING)));
+MaterialDictionary.registerMaterial(new Material("quartzite", of(), "GEM",
+Flag.pack3(NO_SMELTING, CRYSTALLISABLE, GENERATE_ORE)));
+MaterialDictionary.registerMaterial(new Material("ilmenite", of(new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["titanium"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("jasper", of(), "GEM", 
+Flag.pack4(STD_GEM, NO_SMELTING, HIGH_SIFTER_OUTPUT | GENERATE_ORE)));
+MaterialDictionary.registerMaterial(new Material("lazurite", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 6), new MaterialStack(MaterialDictionary.dict["silicon"], 6), new MaterialStack(MaterialDictionary.dict["calcium"], 8), new MaterialStack(MaterialDictionary.dict["sodium"], 8)), "GEM", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("lepidolite", of(new MaterialStack(MaterialDictionary.dict["potassium"], 1), new MaterialStack(MaterialDictionary.dict["lithium"], 3), new MaterialStack(MaterialDictionary.dict["aluminium"], 4), new MaterialStack(MaterialDictionary.dict["fluorine"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 10)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("magnesite", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 1), new MaterialStack(MaterialDictionary.dict["carbon"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("magnetite", of(new MaterialStack(MaterialDictionary.dict["iron"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("malachite", of(new MaterialStack(MaterialDictionary.dict["copper"], 2), new MaterialStack(MaterialDictionary.dict["carbon"], 1), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 5)), "DUST", 
+Flag.pack2(GENERATE_ORE, INDUCTION_SMELTING_LOW_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("molybdenite",  of(new MaterialStack(MaterialDictionary.dict["molybdenum"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 2)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("nether_quartz", of(), "GEM",
+Flag.pack5(STD_SOLID, NO_SMELTING, CRYSTALLISABLE, GENERATE_ORE, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES)));
+MaterialDictionary.registerMaterial(new Material("nether_star", of(), "GEM",
+Flag.pack4(STD_SOLID, GENERATE_LENSE, NO_SMASHING, NO_SMELTING)));
+MaterialDictionary.registerMaterial(new Material("pentlandite", of(new MaterialStack(MaterialDictionary.dict["nickel"], 9), new MaterialStack(MaterialDictionary.dict["sulfur"], 8)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("phosphate", of(new MaterialStack(MaterialDictionary.dict["phosphorus"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)),  "DUST", Flag.pack5(GENERATE_ORE, NO_SMASHING, NO_SMELTING, FLAMMABLE, EXPLOSIVE)));
+MaterialDictionary.registerMaterial(new Material("powellite",  of(new MaterialStack(MaterialDictionary.dict["calcium"], 1), new MaterialStack(MaterialDictionary.dict["molybdenum"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("pyrite", of(new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 2)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("pyrochlore", of(new MaterialStack(MaterialDictionary.dict["calcium"], 2), new MaterialStack(MaterialDictionary.dict["niobium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 7)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("pyrolusite", of(new MaterialStack(MaterialDictionary.dict["manganese"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("pyrope", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["magnesium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("salt",  of(new MaterialStack(MaterialDictionary.dict["sodium"], 1), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("silicon_dioxide", of(new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", Flag.pack3(NO_SMASHING, NO_SMELTING, CRYSTALLISABLE)));
+MaterialDictionary.registerMaterial(new Material("soapstone", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 4), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("spessartine", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["manganese"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("spodumene", of(new MaterialStack(MaterialDictionary.dict["lithium"], 1), new MaterialStack(MaterialDictionary.dict["aluminium"], 1), new MaterialStack(MaterialDictionary.dict["silicon"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("rare_earth", of(), "DUST", 0));
+MaterialDictionary.registerMaterial(new Material("rock_salt",  of(new MaterialStack(MaterialDictionary.dict["potassium"], 1), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("ruby", of(new MaterialStack(MaterialDictionary.dict["chrome"], 1), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "GEM", Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("fools_ruby", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 1), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "GEM", Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("rutile", of(new MaterialStack(MaterialDictionary.dict["titanium"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "GEM", Flag.pack2(STD_GEM, DISABLE_DECOMPOSITION)));
+MaterialDictionary.registerMaterial(new Material("sapphire", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 3)), "GEM", Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING , HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("sodalite", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["sodium"], 4), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "GEM", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("tanzanite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 2), new MaterialStack(MaterialDictionary.dict["aluminium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["hydrogen"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 13)), "GEM", Flag.pack5(EXT_METAL, GENERATE_ORE, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("topaz", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["fluorine"], 2), new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "GEM", Flag.pack5(GENERATE_ORE, STD_GEM, NO_SMASHING,  NO_SMELTING,  HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("steel", of(new MaterialStack(MaterialDictionary.dict["iron"], 1)), "INGOT", Flag.pack3(
+  Flag.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), 
+Flag.pack3(GENERATE_ROTOR, GENERATE_SMALL_GEAR, GENERATE_DENSE),
+Flag.pack3(DISABLE_DECOMPOSITION, GENERATE_FRAME, GENERATE_LONG_ROD))));
+MaterialDictionary.registerMaterial(new Material("stibnite", of(new MaterialStack(MaterialDictionary.dict["antimony"], 2), new MaterialStack(MaterialDictionary.dict["sulfur"], 3)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("scheelite", of(new MaterialStack(MaterialDictionary.dict["tungsten"], 1), new MaterialStack(MaterialDictionary.dict["calcium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("talc", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 4), new MaterialStack(MaterialDictionary.dict["hydrogen"],2), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("tantalite", of(new MaterialStack(MaterialDictionary.dict["manganese"], 1), new MaterialStack(MaterialDictionary.dict["tantalum"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 6)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("tungstate", of(new MaterialStack(MaterialDictionary.dict["tungsten"], 1), new MaterialStack(MaterialDictionary.dict["lithium"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("tetrahedrite", of(new MaterialStack(MaterialDictionary.dict["copper"], 3), new MaterialStack(MaterialDictionary.dict["antimony"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 3), new MaterialStack(MaterialDictionary.dict["iron"], 1)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("wrought_iron", of(new MaterialStack(MaterialDictionary.dict["iron"], 1)), "INGOT", 
+Flag.pack5(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING, GENERATE_LONG_ROD, DISABLE_DECOMPOSITION))); //A
+MaterialDictionary.registerMaterial(new Material("wulfenite", of(new MaterialStack(MaterialDictionary.dict["lead"], 1), new MaterialStack(MaterialDictionary.dict["molybdenum"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 4)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("water", of(new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "FLUID", 
+Flag.pack2(NO_RECYCLING, DISABLE_DECOMPOSITION)));
+MaterialDictionary.registerMaterial(new Material("yellow_limonite", of(new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["hydrogen"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("uraninite", of(new MaterialStack(MaterialDictionary.dict["uranium"], 1), new MaterialStack(MaterialDictionary.dict["oxygen"], 2)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("uvarovite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 3), new MaterialStack(MaterialDictionary.dict["chrome"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", 0));
+
+MaterialDictionary.registerMaterial(new Material("andesite", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("basalt", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("granite_black", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("diorite", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("endstone", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("granite", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("gravel", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("marble", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("netherrack", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("sandstone", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("bedrock", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("sand", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("stone", of(), "DUST", 
+Flag.pack5(MORTAR_GRINDABLE, GENERATE_GEAR, GENERATE_PLATE, NO_SMASHING, NO_RECYCLING) ));
+MaterialDictionary.registerMaterial(new Material("granite_red", of(), "DUST", NO_SMASHING));
+MaterialDictionary.registerMaterial(new Material("sandstone_red", of(), "DUST", NO_SMASHING));
+
+
+MaterialDictionary.registerMaterial(new Material("lava", of(), "FLUID", 0));
+MaterialDictionary.registerMaterial(new Material("clay", of(new MaterialStack(MaterialDictionary.dict["sodium"], 2), new MaterialStack(MaterialDictionary.dict["lithium"], 1), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 2), new MaterialStack(MaterialDictionary.dict["water"], 6)), "DUST", MORTAR_GRINDABLE));
+MaterialDictionary.registerMaterial(new Material("charcoal", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "GEM", 
+Flag.pack4(FLAMMABLE, NO_SMELTING, NO_SMASHING, MORTAR_GRINDABLE)));
+MaterialDictionary.registerMaterial(new Material("glass", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", 
+Flag.pack2(Flag.pack3(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING), Flag.pack3(NO_RECYCLING, SMELT_INTO_FLUID, EXCLUDE_BLOCK_CRAFTING_RECIPES))));
+MaterialDictionary.registerMaterial(new Material("wheat", of(), "DUST", 0));
+MaterialDictionary.registerMaterial(new Material("brick", of(new MaterialStack(MaterialDictionary.dict["clay"], 1)), "DUST", Flag.pack2(EXCLUDE_BLOCK_CRAFTING_RECIPES, DECOMPOSITION_BY_CENTRIFUGING)));
+MaterialDictionary.registerMaterial(new Material("steam", of(new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "FLUID", 
+Flag.pack3(NO_RECYCLING, GENERATE_FLUID_BLOCK, DISABLE_DECOMPOSITION)));
+
+
+
+
+MaterialDictionary.registerMaterial(new Material("amethyst", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 4), new MaterialStack(MaterialDictionary.dict["iron"], 1)), "GEM", Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT))); //A
+MaterialDictionary.registerMaterial(new Material("apatite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 5), new MaterialStack(MaterialDictionary.dict["phosphate"], 3), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "GEM", Flag.pack4(GENERATE_ORE, NO_SMASHING, NO_SMELTING, CRYSTALLISABLE)));
+MaterialDictionary.registerMaterial(new Material("bauxite", of(new MaterialStack(MaterialDictionary.dict["rutile"], 2), new MaterialStack(MaterialDictionary.dict["aluminium"], 16), new MaterialStack(MaterialDictionary.dict["hydrogen"], 10), new MaterialStack(MaterialDictionary.dict["oxygen"], 11)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("bentonite", of(new MaterialStack(MaterialDictionary.dict["sodium"], 1), new MaterialStack(MaterialDictionary.dict["magnesium"], 6), new MaterialStack(MaterialDictionary.dict["silicon"], 12), new MaterialStack(MaterialDictionary.dict["hydrogen"], 4), new MaterialStack(MaterialDictionary.dict["water"], 5), new MaterialStack(MaterialDictionary.dict["oxygen"], 36)), "DUST", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("blaze", of(new MaterialStack(MaterialDictionary.dict["dark_ash"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1)), "DUST", 
+Flag.pack4(NO_SMELTING, SMELT_INTO_FLUID, MORTAR_GRINDABLE, BURNING)));
+MaterialDictionary.registerMaterial(new Material("ender_eye", of(new MaterialStack(MaterialDictionary.dict["ender_pearl"], 1), new MaterialStack(MaterialDictionary.dict["blaze"], 1)), "GEM", 
+Flag.pack4(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING, NO_SMELTING)));
+MaterialDictionary.registerMaterial(new Material("monazite", of(new MaterialStack(MaterialDictionary.dict["rare_earth"], 1), new MaterialStack(MaterialDictionary.dict["phosphate"], 1)), "GEM",
+Flag.pack4(GENERATE_ORE, NO_SMASHING, NO_SMELTING, CRYSTALLISABLE))); // ? - lantanoids rateearh
+MaterialDictionary.registerMaterial(new Material("olivine", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 2), new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 2)), "GEM", Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("opal", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", 
+Flag.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("lapis",  of(new MaterialStack(MaterialDictionary.dict["lazurite"], 12), new MaterialStack(MaterialDictionary.dict["sodalite"], 2), new MaterialStack(MaterialDictionary.dict["pyrite"], 1), new MaterialStack(MaterialDictionary.dict["calcite"], 1)), "GEM", GENERATE_ORE));
+MaterialDictionary.registerMaterial(new Material("lignite", of(new MaterialStack(MaterialDictionary.dict["carbon"], 2), new MaterialStack(MaterialDictionary.dict["water"], 4), new MaterialStack(MaterialDictionary.dict["dark_ash"], 1)), "GEM", Flag.pack5(GENERATE_ORE, FLAMMABLE, NO_SMELTING, NO_SMASHING, MORTAR_GRINDABLE)));
+MaterialDictionary.registerMaterial(new Material("pitchblende", of(new MaterialStack(MaterialDictionary.dict["uraninite"], 3), new MaterialStack(MaterialDictionary.dict["thorium"], 1), new MaterialStack(MaterialDictionary.dict["lead"], 1)), "DUST", GENERATE_ORE));
+
+
+MaterialDictionary.registerMaterial(new Material("garnet_red", of(new MaterialStack(MaterialDictionary.dict["pyrope"], 3), new MaterialStack(MaterialDictionary.dict["almandine"], 5), new MaterialStack(MaterialDictionary.dict["spessartine"], 8)), "GEM", 
+Flag.pack2(Flag.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flag.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE))));
+MaterialDictionary.registerMaterial(new Material("redstone", of(new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["pyrite"], 5), new MaterialStack(MaterialDictionary.dict["ruby"], 1), new MaterialStack(MaterialDictionary.dict["mercury"], 3)), "DUST", GENERATE_ORE));
+
+MaterialDictionary.registerMaterial(new Material("garnet_yellow", of(new MaterialStack(MaterialDictionary.dict["andradite"], 5), new MaterialStack(MaterialDictionary.dict["grossular"], 8), new MaterialStack(MaterialDictionary.dict["uvarovite"], 3)), "GEM", 
+Flag.pack2(Flag.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flag.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE))));
+MaterialDictionary.registerMaterial(new Material("flint",  of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", 
+Flag.pack2(NO_SMASHING, MORTAR_GRINDABLE)));
+MaterialDictionary.registerMaterial(new Material("vanadium_magnetite",  of(new MaterialStack(MaterialDictionary.dict["magnetite"], 1), new MaterialStack(MaterialDictionary.dict["vanadium"], 1)), "DUST", GENERATE_ORE));
+
+
+
+
+MaterialDictionary.registerMaterial(new Material("red_alloy", of(new MaterialStack(MaterialDictionary.dict["copper"], 1), new MaterialStack(MaterialDictionary.dict["redstone"], 4)), "INGOT", Flag.pack2(GENERATE_PLATE, GENERATE_FINE_WIRE)));
+
+MaterialDictionary.addMaterials();
+//MaterialDictionary.registerMaterial(new Material("amber", "Al2O3", "gem", "",  0x0000FF, ));
+//MaterialDictionary.registerMaterial(new Material("fake_ruby", "Al2O3", "gem", "ored", , 0xBD4949, ));
+//MaterialDictionary.registerMaterial(new Material("pyrochlore", "Al2O3", "DUST", GENERATE_ORE,  0xE6D2D2, ));
+
+
+invertedIDs.invertIDs();
+MaterialDictionary.addToCreative();
+
+setLoadingTip("register Ores");
+OreDictionary.registerOre(MaterialDictionary.dict.copper, {level: 1, isgen: true, 0: { minimalheight: 40, maximalheight: 55, rarity: 14}, 1: { minimalheight: 55, maximalheight: 130, rarity: 16}, 2: { minimalheight: 55, maximalheight: 130, rarity: 14}});
+
+OreDictionary.registerOre(MaterialDictionary.dict.tin, {level: 1, isgen: true, 0: {minimalheight: 60, maximalheight: 140, rarity: 16}, 1: {minimalheight: 60, maximalheight: 140, rarity: 16}, 2: {minimalheight: 60, maximalheight: 140, rarity: 16}});
+OreDictionary.registerOre(MaterialDictionary.dict.iron, {level: 2, isgen: true, 0: {minimalheight: 40, maximalheight: 80, rarity: 28}, 1: {minimalheight: 40, maximalheight: 80, rarity: 28}, 2: {minimalheight: 30, maximalheight: 80, rarity: 27}});
+OreDictionary.registerOre(MaterialDictionary.dict.coal, {level: 1, isgen: true, 0: {minimalheight: 25, maximalheight: 100, rarity: 24}});
 OreDictionary.registerOre(MaterialDictionary.dict.lignite, {level: 0, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.magnetite, {level: 1, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.vanadium_magnetite, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.redstone, {level: 2, isgen: true, minimalheight: 5, maximalheight: 20, rarity: 8});
-OreDictionary.registerOre(MaterialDictionary.dict.gold, {level: 2, isgen: true, minimalheight: 20, maximalheight: 40, rarity: 8});
+OreDictionary.registerOre(MaterialDictionary.dict.vanadium_magnetite, {level: 2, isgen: true, 0: {minimalheight: 4, maximalheight: 9, rarity: 8}});
+OreDictionary.registerOre(MaterialDictionary.dict.redstone, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 25, rarity: 9}, 1: {minimalheight: 5, maximalheight: 20, rarity: 8}});
+OreDictionary.registerOre(MaterialDictionary.dict.gold, {level: 2, isgen: true, 0: {minimalheight: 20, maximalheight: 40, rarity: 8}, 1: {minimalheight: 20, maximalheight: 40, rarity: 8}, 2: {minimalheight: 20, maximalheight: 40, rarity: 8}});
 OreDictionary.registerOre(MaterialDictionary.dict.graphite, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.diamond, {level: 3, isgen: true, minimalheight: 5, maximalheight: 10, rarity: 2});
-OreDictionary.registerOre(MaterialDictionary.dict.bismuth, {level: 1, isgen: true, minimalheight: 80, maximalheight: 120, rarity: 8});
-OreDictionary.registerOre(MaterialDictionary.dict.lead, {level: 1, isgen: true, minimalheight: 40, maximalheight: 80, rarity: 16});
-OreDictionary.registerOre(MaterialDictionary.dict.zinc, {level: 1, isgen: true, minimalheight: 30, maximalheight: 60, rarity: 12});
-OreDictionary.registerOre(MaterialDictionary.dict.silver, {level: 2, isgen: true, minimalheight: 20, maximalheight: 40, rarity: 8});
-OreDictionary.registerOre(MaterialDictionary.dict.nickel, {level: 2, isgen: true, minimalheight: 20, maximalheight: 40, rarity: 8});
-OreDictionary.registerOre(MaterialDictionary.dict.lapis, {level: 2, isgen: true, minimalheight: 20, maximalheight: 40, rarity: 4});
-OreDictionary.registerOre(MaterialDictionary.dict.emerald, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.ruby, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.sapphire, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.green_sapphire, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.olivine, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.topaz, {level: 3, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.tanzanite, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.amethyst, {level: 3, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.opal, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.blue_topaz, {level: 3, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.amber, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.fools_ruby, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.red_garnet, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.yellow_garnet, {level: 2, isgen: true, minimalheight: 5, maximalheight: 250, rarity: 1});
-OreDictionary.registerOre(MaterialDictionary.dict.sulfur, {level: 2, isgen: true, minimalheight: 5, maximalheight: 15, rarity: 8});
+OreDictionary.registerOre(MaterialDictionary.dict.diamond, {level: 3, isgen: true, 0: {minimalheight: 5, maximalheight: 10, rarity: 2}, 1: {minimalheight: 5, maximalheight: 10, rarity: 2}});
+OreDictionary.registerOre(MaterialDictionary.dict.bismuth, {level: 1, isgen: true, 0: {minimalheight: 30, maximalheight: 120, rarity: 10}, 1: {minimalheight: 90, maximalheight: 128, rarity: 10}});
+OreDictionary.registerOre(MaterialDictionary.dict.lead, {level: 1, isgen: true, 0: {minimalheight: 50, maximalheight: 95, rarity: 18}, 1: {minimalheight: 50, maximalheight: 95, rarity: 16}, 2: {minimalheight: 50, maximalheight: 95, rarity: 16}});
+OreDictionary.registerOre(MaterialDictionary.dict.zinc, {level: 1, isgen: true, 0: {minimalheight: 30, maximalheight: 50, rarity: 15}, 1: {minimalheight: 30, maximalheight: 60, rarity: 15}, 2: {minimalheight: 30, maximalheight: 50, rarity: 15}});
+OreDictionary.registerOre(MaterialDictionary.dict.silver, {level: 2, isgen: true, 0: {minimalheight: 20, maximalheight: 40, rarity: 8}, 1: {minimalheight: 20, maximalheight: 40, rarity: 8}, 2: {minimalheight: 20, maximalheight: 40, rarity: 8}});
+OreDictionary.registerOre(MaterialDictionary.dict.nickel, {level: 2, isgen: true, 0:  {minimalheight: 20, maximalheight: 90, rarity: 16}, 1: {minimalheight: 20, maximalheight: 90, rarity: 16}, 2: {minimalheight: 20, maximalheight: 90, rarity: 16}});
+OreDictionary.registerOre(MaterialDictionary.dict.lapis, {level: 2, isgen: true, 0: {minimalheight: 20, maximalheight: 40, rarity: 4}});
+OreDictionary.registerOre(MaterialDictionary.dict.emerald, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.ruby, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.sapphire, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.green_sapphire, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.olivine, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.topaz, {level: 3, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.tanzanite, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 15, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.amethyst, {level: 3, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.opal, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.blue_topaz, {level: 3, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.amber, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.jasper, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.fools_ruby, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.garnet_red, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.garnet_yellow, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 250, rarity: 1}, 1: {minimalheight: 5, maximalheight: 250, rarity: 1}});
+OreDictionary.registerOre(MaterialDictionary.dict.sulfur, {level: 2, isgen: true, 0: {minimalheight: 5, maximalheight: 35, rarity: 10}, 1: {minimalheight: 10, maximalheight: 60, rarity: 32}});
+OreDictionary.registerOre(MaterialDictionary.dict.nether_quartz, {level: 2, isgen: true, 1: {minimalheight: 30, maximalheight: 120, rarity: 32}});
 OreDictionary.registerOre(MaterialDictionary.dict.brown_limonite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.yellow_limonite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.banded_iron, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.malachite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.cassiterite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.tetrahedrite, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.stibnite, {level: 2, sgenn: false});
+OreDictionary.registerOre(MaterialDictionary.dict.stibnite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.chalcopyrite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.pyrite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.bauxite, {level: 2, isgen: false});
@@ -3138,11 +6968,12 @@ OreDictionary.registerOre(MaterialDictionary.dict.garnierite, {level: 3, isgen: 
 OreDictionary.registerOre(MaterialDictionary.dict.cobaltite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.cooperite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.palladium, {level: 2, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.iridium, {level: 3, isgen: false});
-OreDictionary.registerOre(MaterialDictionary.dict.platinum, {level: 2, isgen: false});
+OreDictionary.registerOre(MaterialDictionary.dict.iridium, {level: 3, isgen: true, 3: {minimalheight: 20, maximalheight: 40, rarity: 8}});
+OreDictionary.registerOre(MaterialDictionary.dict.platinum, {level: 2, isgen: true, 3: {minimalheight: 20, maximalheight: 40, rarity: 8}});
 OreDictionary.registerOre(MaterialDictionary.dict.pitchblende, {level: 3, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.uraninite, {level: 3, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.uranium, {level: 3, isgen: false});
+
 OreDictionary.registerOre(MaterialDictionary.dict.bastnasite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.monazite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.neodymium, {level: 2, isgen: false});
@@ -3173,6 +7004,8 @@ OreDictionary.registerOre(MaterialDictionary.dict.lazurite, {level: 2, isgen: fa
 OreDictionary.registerOre(MaterialDictionary.dict.calcite, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.beryllium, {level: 2, isgen: false});
 OreDictionary.registerOre(MaterialDictionary.dict.thorium, {level: 2, isgen: false});
+
+OreDictionary.registerOre(MaterialDictionary.dict.rutile, {level: 2, isgen: false});
 //OreDictionary.addToCreative();
 
 //Logger.Log(Object.keys(OreDictionary.invdata[BlockID.gtblockores0]).length, "sharovar");
@@ -3187,65 +7020,68 @@ Item.registerNameOverrideFunction(BlockID["gtblockores" + smallid], function(ite
     return "Small" + OreDictionary.ores[i].name + " ore";
   }
 });*/
+setLoadingTip("register OreMixVeins");
+OreDictionary.registerVein(new OreMixVein("lignite", [0], MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.coal, 50, 130, 160, 8, 30, 1, new CovarianceMatrix([[5, 0, 0], [0, 5, 0], [0, 0, 5]])));
 
-OreDictionary.registerVein(new OreMixVein("lignite", [0], MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.coal, 50, 130, 160, 8, 32));
-for(let i = 0; i < Object.keys(OreDictionary.veins[0]).length; i++) {
-  Logger.Log(OreDictionary.veins[0][Object.keys(OreDictionary.veins[0])[i]], Object.keys(OreDictionary.veins[0])[i]);
-}
-OreDictionary.registerVein(new OreMixVein("coal", [0], MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.lignite, 50, 80, 80, 6, 32));
+OreDictionary.registerVein(new OreMixVein("coal", [0], MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.lignite, 50, 80, 80, 6, 32, 2, new CovarianceMatrix([[5, 1, 4], [2, 5, 1], [0, 0, 5]])));
 
-OreDictionary.registerVein(new OreMixVein( "magnetite",  [0], MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.iron, MaterialDictionary.dict.vanadium_magnetite, 50, 120, 160, 3, 32));
+OreDictionary.registerVein(new OreMixVein( "magnetite", {0: 0, 1: 1}, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.iron, MaterialDictionary.dict.vanadium_magnetite, 50, 120, 160, 3, 32, 5, new CovarianceMatrix([[5, 1, 1], [1, 5, 2], [3, 2, 5]])));
 
-OreDictionary.registerVein(new OreMixVein("gold", [0], MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.vanadium_magnetite, MaterialDictionary.dict.gold, 60, 80, 160, 3, 32));
+OreDictionary.registerVein(new OreMixVein("gold", [0], MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.vanadium_magnetite, MaterialDictionary.dict.gold, 60, 80, 160, 3, 32, 3, new CovarianceMatrix([[5, 4, 1], [1, 5, 3], [2, 2, 5]])));
 
-OreDictionary.registerVein(new OreMixVein( "iron", [0], MaterialDictionary.dict.brown_limonite, MaterialDictionary.dict.yellow_limonite, MaterialDictionary.dict.banded_iron, MaterialDictionary.dict.malachite, 10, 40, 120, 4, 24));
+OreDictionary.registerVein(new OreMixVein( "iron", {0: 0, 1: 1}, MaterialDictionary.dict.brown_limonite, MaterialDictionary.dict.yellow_limonite, MaterialDictionary.dict.banded_iron, MaterialDictionary.dict.malachite, 10, 40, 120, 4, 24, 4, new CovarianceMatrix([[4, 2, 2], [1, 4, 0], [1, 2, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "cassiterite", [0], MaterialDictionary.dict.tin, MaterialDictionary.dict.tin, MaterialDictionary.dict.cassiterite, MaterialDictionary.dict.tin, 40, 120, 50, 5, 24));
+OreDictionary.registerVein(new OreMixVein( "cassiterite", {0: 0, 2: 2}, MaterialDictionary.dict.tin, MaterialDictionary.dict.tin, MaterialDictionary.dict.cassiterite, MaterialDictionary.dict.tin, 40, 120, 50, 5, 24, 0, new CovarianceMatrix([[4, 1, 1], [2, 4, 0], [0, 0, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "tetrahedrite", [0], MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.copper, MaterialDictionary.dict.stibnite, 80, 120, 70, 4, 24));
+OreDictionary.registerVein(new OreMixVein( "tetrahedrite", {0: 0, 1: 1}, MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.copper, MaterialDictionary.dict.stibnite, 80, 120, 70, 4, 24, 1, new CovarianceMatrix([[4, 1, 1], [1, 4, 1], [1, 1, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "copper", [0], MaterialDictionary.dict.chalcopyrite, MaterialDictionary.dict.iron, MaterialDictionary.dict.pyrite, MaterialDictionary.dict.copper, 10, 30, 80, 4, 24));
+OreDictionary.registerVein(new OreMixVein( "copper", {0: 0, 1: 1}, MaterialDictionary.dict.chalcopyrite, MaterialDictionary.dict.iron, MaterialDictionary.dict.pyrite, MaterialDictionary.dict.copper, 10, 30, 80, 4, 24, 1, new CovarianceMatrix([[4, 1, 2], [0, 1.5, 0], [1, 3, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "bauxite", [0], MaterialDictionary.dict.bauxite, MaterialDictionary.dict.bauxite, MaterialDictionary.dict.aluminium, MaterialDictionary.dict.ilmenite, 50, 90, 80, 4, 24));
+OreDictionary.registerVein(new OreMixVein( "bauxite", [0], MaterialDictionary.dict.bauxite, MaterialDictionary.dict.bauxite, MaterialDictionary.dict.aluminium, MaterialDictionary.dict.ilmenite, 50, 90, 80, 4, 24, 2, new CovarianceMatrix([[4, 0, 1], [1, 4, 0], [1, 0, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "salts", [0], MaterialDictionary.dict.rock_salt, MaterialDictionary.dict.salt, MaterialDictionary.dict.lepidolite, MaterialDictionary.dict.spodumene, 50, 60, 50, 3, 24));
+OreDictionary.registerVein(new OreMixVein( "salts", [0], MaterialDictionary.dict.rock_salt, MaterialDictionary.dict.salt, MaterialDictionary.dict.lepidolite, MaterialDictionary.dict.spodumene, 50, 60, 50, 3, 24, 1, new CovarianceMatrix([[4, 0, 1], [0, 4, 1], [1, 1, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "redstone", [0], MaterialDictionary.dict.redstone, MaterialDictionary.dict.redstone, MaterialDictionary.dict.ruby, MaterialDictionary.dict.cinnabar, 10, 40, 60, 3, 24));
+OreDictionary.registerVein(new OreMixVein( "redstone", {0: 0, 1: 1}, MaterialDictionary.dict.redstone, MaterialDictionary.dict.redstone, MaterialDictionary.dict.ruby, MaterialDictionary.dict.cinnabar, 10, 40, 60, 3, 24, 4, new CovarianceMatrix([[4, 1, 1], [1, 4, 1], [2, 0, 2]])));
 
-OreDictionary.registerVein(new OreMixVein( "soapstone", [0], MaterialDictionary.dict.soapstone, MaterialDictionary.dict.talc, MaterialDictionary.dict.glauconite, MaterialDictionary.dict.pentlandite, 10, 40, 40, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "sulfur", {1: 1}, MaterialDictionary.dict.sulfur, MaterialDictionary.dict.sulfur, MaterialDictionary.dict.pyrite, MaterialDictionary.dict.sapphire, 5, 20, 60, 3, 24, 3, new CovarianceMatrix([[4, 1, 1], [2, 4, 0], [1, 0, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "nickel", [0], MaterialDictionary.dict.garnierite, MaterialDictionary.dict.nickel, MaterialDictionary.dict.cobaltite, "pentlandite", 10, 40, 40, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "nether_quartz", {1: 1}, MaterialDictionary.dict.nether_quartz, MaterialDictionary.dict.nether_quartz, MaterialDictionary.dict.nether_quartz, MaterialDictionary.dict.nether_quartz, 40, 80, 60, 3, 24, 2, new CovarianceMatrix([[4, 1, 1], [1, 4, 1], [1, 1, 4]])));
 
-OreDictionary.registerVein(new OreMixVein( "platinum", [0], MaterialDictionary.dict.cooperite, MaterialDictionary.dict.palladium, MaterialDictionary.dict.platinum, MaterialDictionary.dict.iridium, 40, 50, 5, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "soapstone", [0], MaterialDictionary.dict.soapstone, MaterialDictionary.dict.talc, MaterialDictionary.dict.glauconite, MaterialDictionary.dict.pentlandite, 10, 40, 40, 3, 16, 0, new CovarianceMatrix([[3, 1, 1], [2, 3, 0], [1, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein("pitchblende", [0], MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, 10, 40, 40, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "nickel", {0: 0, 1: 1, 2: 2}, MaterialDictionary.dict.garnierite, MaterialDictionary.dict.nickel, MaterialDictionary.dict.cobaltite, MaterialDictionary.dict.pentlandite, 10, 40, 40, 3, 16, 1, new CovarianceMatrix([[3, 1, 0], [1, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "uranium", [0], MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uranium, MaterialDictionary.dict.uranium, 20, 30, 20, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "platinum", {0: 0, 2: 2}, MaterialDictionary.dict.cooperite, MaterialDictionary.dict.palladium, MaterialDictionary.dict.platinum, MaterialDictionary.dict.iridium, 40, 50, 5, 3, 16, 2, new CovarianceMatrix([[3, 2, 0.5], [0, 3, 2], [1, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "monazite", [0], MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.monazite, MaterialDictionary.dict.neodymium, 20, 40, 30, 3, 16));
+OreDictionary.registerVein(new OreMixVein("pitchblende", [0], MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, 10, 40, 40, 3, 16, 1, new CovarianceMatrix([[3, 1, 2], [0, 3, 0], [0, 1, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "molybdenum", [0], MaterialDictionary.dict.wulfenite, MaterialDictionary.dict.molybdenite, MaterialDictionary.dict.molybdenum, MaterialDictionary.dict.powellite, 20, 50, 5, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "uranium", [0], MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uranium, MaterialDictionary.dict.uranium, 20, 30, 20, 3, 16, 2, new CovarianceMatrix([[3, 1, 0], [1, 3, 1], [1, 1, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "tungstate", [0], MaterialDictionary.dict.scheelite, MaterialDictionary.dict.scheelite, MaterialDictionary.dict.tungstate, MaterialDictionary.dict.lithium, 20, 50, 10, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "monazite", [0], MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.monazite, MaterialDictionary.dict.neodymium, 20, 40, 30, 3, 16, 2, new CovarianceMatrix([[3, 1, 0], [1, 3, 2], [0, 1, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "sapphire", [0], MaterialDictionary.dict.almandine, MaterialDictionary.dict.pyrope, MaterialDictionary.dict.sapphire, MaterialDictionary.dict.green_sapphire, 10, 40, 60, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "molybdenum", {0: 0, 2: 2}, MaterialDictionary.dict.wulfenite, MaterialDictionary.dict.molybdenite, MaterialDictionary.dict.molybdenum, MaterialDictionary.dict.powellite, 20, 50, 5, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "manganese", [0], MaterialDictionary.dict.grossular, MaterialDictionary.dict.spessartine, MaterialDictionary.dict.pyrolusite, MaterialDictionary.dict.tantalite, 20, 30, 20, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "tungstate", {0: 0, 2: 2}, MaterialDictionary.dict.scheelite, MaterialDictionary.dict.scheelite, MaterialDictionary.dict.tungstate, MaterialDictionary.dict.lithium, 20, 50, 10, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "quartz", [0], MaterialDictionary.dict.quartzite, MaterialDictionary.dict.barite, MaterialDictionary.dict.certus_quartz, MaterialDictionary.dict.certus_quartz, 40, 80, 60, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "sapphire", [0], MaterialDictionary.dict.almandine, MaterialDictionary.dict.pyrope, MaterialDictionary.dict.sapphire, MaterialDictionary.dict.green_sapphire, 10, 40, 60, 3, 16, 0, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "diamond", [0], MaterialDictionary.dict.graphite, MaterialDictionary.dict.graphite, MaterialDictionary.dict.diamond, MaterialDictionary.dict.coal, 5, 20, 40, 2, 16));
+OreDictionary.registerVein(new OreMixVein( "manganese", {0: 0, 2: 2}, MaterialDictionary.dict.grossular, MaterialDictionary.dict.spessartine, MaterialDictionary.dict.pyrolusite, MaterialDictionary.dict.tantalite, 20, 30, 20, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "olivine", [0], MaterialDictionary.dict.bentonite, MaterialDictionary.dict.magnesite, MaterialDictionary.dict.olivine, MaterialDictionary.dict.glauconite, 10, 40, 60, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "quartz", [0], MaterialDictionary.dict.quartzite, MaterialDictionary.dict.barite, MaterialDictionary.dict.certus_quartz, MaterialDictionary.dict.certus_quartz, 40, 80, 60, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "apatite", [0], MaterialDictionary.dict.apatite, MaterialDictionary.dict.apatite, MaterialDictionary.dict.phosphorus, MaterialDictionary.dict.pyrochlore, 40, 60, 60, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "diamond", [0], MaterialDictionary.dict.graphite, MaterialDictionary.dict.graphite, MaterialDictionary.dict.diamond, MaterialDictionary.dict.coal, 5, 20, 40, 2, 16, 2, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "galena", [0], MaterialDictionary.dict.galena, MaterialDictionary.dict.galena, MaterialDictionary.dict.silver, MaterialDictionary.dict.lead, 30, 60, 40, 5, 16));
+OreDictionary.registerVein(new OreMixVein( "olivine", {0: 0, 2: 2}, MaterialDictionary.dict.bentonite, MaterialDictionary.dict.magnesite, MaterialDictionary.dict.olivine, MaterialDictionary.dict.glauconite, 10, 40, 60, 3, 16, 0, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "lapis", [0], MaterialDictionary.dict.lazurite, MaterialDictionary.dict.sodalite, MaterialDictionary.dict.lapis, MaterialDictionary.dict.calcite, 20, 50, 40, 5, 16));
+OreDictionary.registerVein(new OreMixVein( "apatite", [0], MaterialDictionary.dict.apatite, MaterialDictionary.dict.apatite, MaterialDictionary.dict.phosphorus, MaterialDictionary.dict.pyrochlore, 40, 60, 60, 3, 16, 3, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
-OreDictionary.registerVein(new OreMixVein( "beryllium", [0], MaterialDictionary.dict.beryllium, MaterialDictionary.dict.beryllium, MaterialDictionary.dict.emerald, MaterialDictionary.dict.thorium, 5, 30, 30, 3, 16));
+OreDictionary.registerVein(new OreMixVein( "galena", [0], MaterialDictionary.dict.galena, MaterialDictionary.dict.galena, MaterialDictionary.dict.silver, MaterialDictionary.dict.lead, 30, 60, 40, 5, 16, 2, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
 
+OreDictionary.registerVein(new OreMixVein( "lapis", {0: 0, 2: 2}, MaterialDictionary.dict.lazurite, MaterialDictionary.dict.sodalite, MaterialDictionary.dict.lapis, MaterialDictionary.dict.calcite, 20, 50, 40, 5, 16, 2, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
+
+OreDictionary.registerVein(new OreMixVein( "beryllium", {0: 0, 2: 2}, MaterialDictionary.dict.beryllium, MaterialDictionary.dict.beryllium, MaterialDictionary.dict.emerald, MaterialDictionary.dict.thorium, 5, 30, 30, 3, 16, 1, new CovarianceMatrix([[4, 0, 3], [0.2, 3, 0], [0.1, 0.1, 4]])));
+
+setLoadingTip("GTTool: register tool");
 ToolDictionary.registerType({name: "hammer", blockTypes: ["stone"], damage: 3, flag: 0});
 ToolDictionary.registerType({name: "file", blockTypes: ["stone"], damage: 2, flag: 0});
 ToolDictionary.registerType({name: "axe", blockTypes: ["wood"], damage: 3, flag: 0});
@@ -3270,6 +7106,11 @@ ToolDictionary.registerType("screwdriver");
 ToolDictionary.registerType("wirecutter", ["wire"]);
 ToolDictionary.registerType("wrench");*/
 
+ToolDictionary.registerMaterial({material: MaterialDictionary.dict["_NULL"], material2: MaterialDictionary.dict["_NULL"], durability: 100, 
+    level: 0,
+    miningspeed: 0.5,
+    attackdamage: 1,
+    enchantability: 0, flag: 0});
 ToolDictionary.registerMaterial({material: MaterialDictionary.dict["flint"], material2: MaterialDictionary.dict["copper"], durability: 6400, 
     level: 1,
     miningspeed: 2.5,
@@ -3290,7 +7131,7 @@ ToolDictionary.registerMaterial({material: MaterialDictionary.dict["flint"], mat
     miningspeed: 6,
     attackdamage: 6,
     enchantability: 0, flag: 0});
-    ToolDictionary.registerMaterial({material: MaterialDictionary.dict["wroughtiron"], material2: MaterialDictionary.dict["copper"], durability: 38400, 
+    ToolDictionary.registerMaterial({material: MaterialDictionary.dict["wrought_iron"], material2: MaterialDictionary.dict["copper"], durability: 38400, 
     level: 2,
     miningspeed: 6,
     attackdamage: 6,
@@ -3313,53 +7154,27 @@ ToolDictionary.addToCreative();
 
 invertedIDs.invertIDs();
 
-let concater = function(formulareal, material) {
-    Logger.Log("@sas", material.name);
-	if(!material.formula.protons) {
-		for(let i in material.formula) {
-			concater(formulareal, material.formula[i].material);
-			formulareal = formulareal.concat(material.formula[i].count);
-		}
-	} else if(!material.formula.neutrons) {
-		formulareal = formulareal.concat(material.formula.formula);
-	} else if(material.formula.neutrons) {
-		formula = formulareal.concat(material.formula.formula);
-	}
-	return formulareal;
-}
-
 for(let id in MaterialDictionary.data) {
         //Logger.Log(item.data, "zaer");
         if(invertedIDs.isNumericIDisItemID(id)) {
 Item.registerIconOverrideFunction(invertedIDs.itemID[id], function(item){
-  Logger.Log(item.data, "zaiier");
-  let material = MaterialDictionary.data[item.id][item.data].material;
-  Logger.Log(material.name, "er");
- let form = MaterialDictionary.data[item.id][item.data].form;
-  
-if(form == undefined) return {name: "unknown"};
-   if(material == undefined) return {name: "unknown_" + form};
-    return {name: material.name + "_" + form};
+  return MaterialDictionary.getTexture(item);
 });
 Item.registerNameOverrideFunction(invertedIDs.itemID[id], function(item){
-    Logger.Log(item.data, "zaiiper"); 
     let material = MaterialDictionary.data[item.id][item.data].material;
-  Logger.Log(material.name, "yer");
   let form = MaterialDictionary.data[item.id][item.data].form;
-  
    if(form == undefined) return "unknown";
    if(material == undefined) return "unknown " + form;
-	let formulareal = "";
-	formulareal = concater(formulareal, material);
-   return material.name[0].toUpperCase() + material.name.substring(1) + " " + form + "\n" + formulareal;
+   
+   return material.usablename + " " + form + "\n" + material.formulatext;
 });
 }}
 
-Item.registerIconOverrideFunction(ItemID.gtmetatool01, function(item){
+Item.registerIconOverrideFunction(ItemID.gtmetatool01, function(item) {
 if(ToolDictionary.getTypeByData(item.data) == null) {
   return "unknown";
 }
-var w = ToolDictionary.getTypeByData(item.data).name;
+let w = ToolDictionary.getTypeByData(item.data).name;
 
   if(item.extra != undefined) {
     if(item.extra.getString("name") != undefined) {
@@ -3395,8 +7210,8 @@ Item.registerNameOverrideFunction(ItemID.gtmetatool01, function(item) {
     if(item.extra.getString("name") != undefined) {
       return ToolDictionary.getTypeByData(item.data).name;    
     } else {
-return "Unknown " + ToolDictionary.getTypeByData(item.data).name;    
-  }
+      return "Unknown " + ToolDictionary.getTypeByData(item.data).name;
+    }
   } else {
     return "Unknown " + ToolDictionary.getTypeByData(item.data).name;  
   }
@@ -3404,8 +7219,10 @@ return "Unknown " + ToolDictionary.getTypeByData(item.data).name;
 
 IDRegistry.genItemID("gtdebug");
 Item.createItem("gtdebug", "Debug Scanner",  {name: "debug_scanner", meta: 0}, {});
+Item.setCategory(ItemID.gtdebug, Native.ItemCategory.TOOL);
+Item.setAllowedInOffhand(ItemID.gtdebug, true);
 //for debugging
-Item.registerUseFunction(ItemID.gtdebug, function (coords, item, block, isExternal) {
+/*Item.registerUseFunction(ItemID.gtdebug, function (coords, item, block, isExternal) {
   if(TileEntity.isTileEntityBlock(block.id)) {
     if(TileEntity.getTileEntity(coords.x, coords.y, coords.z).data.pipe != null) {
       let type = null;
@@ -3419,7 +7236,7 @@ Item.registerUseFunction(ItemID.gtdebug, function (coords, item, block, isExtern
       if(type == "machine") Game.message("steam: " + TileEntity.getTileEntity(coords.x, coords.y, coords.z).liquidStorage.getAmount("steam"));
     }
   }
-});
+});*/
 
 var testUiScreen = new UI.Window({
      location: {
@@ -3447,63 +7264,535 @@ var testUiScreen = new UI.Window({
 
 
 
+let uiw = new UI.StandardWindow({
+  standart: {
+          header: {
+               text: {
+                    text: "Work bench"
+               },
+               color: android.graphics.Color.rgb(225, 119, 6)
+          },
+          inventory: {
+               standart: true
+          },
+          background: {
+               color: android.graphics.Color.rgb(225, 119, 6)
+          },
+     },
+     params: {
+          textures: {
+               /*slot: "thaum_slot",
+               invSlot: "thaum_inv_slot",
+               selection: "thaum_selection",
+               closeButton: "thaum_close_button_up",
+               closeButton2: "thaum_close_button_down",
+               frame: "thaum_frame_default"*/
+          }
+     },
+     drawing: [],
+  elements: {
+    "slot0": {type: "slot", x: 467, y: 146, size: 60},
+		"slot1": {type: "slot", x: 537, y: 146, size: 60},
+		"slot2": {type: "slot", x: 607, y: 146, size: 60},
+		"slot3": {type: "slot", x: 467, y: 214, size: 60},
+		"slot4": {type: "slot", x: 537, y: 214, size: 60},
+		"slot5": {type: "slot", x: 607, y: 214, size: 60},
+		"slot6": {type: "slot", x: 467, y: 283, size: 60},
+		"slot7": {type: "slot", x: 537, y: 283, size: 60},
+		"slot8": {type: "slot", x: 607, y: 283, size: 60},
+		"resultSlot": {type: "slot", x: 698, y: 212, size: 60, clicker: {
+				//При обычном клике
+				onClick: function(position, container, tileEntity) {
+					//Пробуем провести крафт
+					let result = Recipes.provideRecipe(container, prefix);
+					//Если получилось
+					if (result) {
+					//Добавляем результат в инвентарь
+						Player.getInventory().addItem(result.id, result.count, result.data);
+					}
+				},
+				onLongClick: function(position, container, tileEntity) {
+					this.onClick(position, container, tileEntity);
+				}
+			}
+		},
+  }
+});
+
+IDRegistry.genBlockID("cheetahtable");
+Block.createBlock("cheetahtable", [{name: "table of testers", texture: [["cobblestone", 0]], inCreative: true}]);
+TileEntity.registerPrototype(BlockID.cheetahtable, {
+  useNetworkItemContainer: true,
+  init: function() {
+    
+  },
+  tick: function() {
+    Logger.Log("zakotyui", 
+    this.container
+    );
+    let rec = Recipes.provideRecipe(this.container, "workbench");
+    Logger.Log("zakotyi", rec);
+    if(rec) {
+      Logger.Log("zakokotyy", rec);
+      this.container.setSlot("recipeSlot", rec.id, rec.count, rec.data);
+    } else {
+      this.container.setSlot("recipeSlot", 0, 0, 0);
+    }
+  },
+  destroy: function() {
+    
+  },
+  client: {
+    load: function() {},
+  },
+  getGuiScreen: function () {
+    return uiw;
+  },
+  getScreenName: function(player, coords) {
+      return "workbench"
+    },
+    // это событие вызывается на стороне клиента, this в данном случае не определен, по переданному имени, которое вернул метод getScreenName, возвращает окно, которое нужно открыть
+    getScreenByName: function(screenName) {
+      Logger.Log("vg", uiw);
+      return uiw;
+    },
+});
+
+//Создадим UID blockWorkbench
+IDRegistry.genBlockID("blockWorkbench");
+
+//Создаем наш верстак
+Block.createBlock("blockWorkbench", [
+	{name: "workbench", texture: [["crafting_table", 0]], inCreative: true}
+]);
+
+//Регистрируем его как tileEntity
+TileEntity.registerPrototype(BlockID.blockWorkbench, {
+  useNetworkItemContainer: true,
+  sourcesForCleaning: null,
+  isOpened: false,
+  tickk: 0,
+	//Функция тика
+	tick: function() {
+	  Logger.Log(Network.inRemoteWorld(), "tguiu");
+		//Если интерфейс открыт
+if(this.tickk % 10 == 0) {
+Logger.Log(this.isOpened, "dedil");
+Logger.Log(this.tickk % 10 == 0, "dedsad");
+     this.container.sendEvent("isOpened", {});
+    Logger.Log(this.isOpened, "dedes");
+		/*if(this.isOpened) {
+			//Узнаем результат крафта
+			let res = RecipeDictionary.getBySources([this.container.getSlot("slot0"), this.container.getSlot("slot1"), this.container.getSlot("slot2"), this.container.getSlot("slot3"), this.container.getSlot("slot4"), this.container.getSlot("slot5"), this.container.getSlot("slot6"), this.container.getSlot("slot7"), this.container.getSlot("slot8")]);
+			//Если он есть
+//Logger.Log(res, "derrr");
+			if (res) {
+			//Отрисовываем его
+				this.container.setSlot("resultSlot", res.result.id, res.result.count, res.result.data);
+				this.sourcesForCleaning = res.cleaning;
+			}
+			else {
+				//Иначе рисуем пустой слот
+				this.container.setSlot("resultSlot", 0, 0, 0);
+			}
+		}*/
+		
+}
+    this.container.sendChanges();
+
+
+		Logger.Log(this.tickk, "dedes");
+		this.tickk++;
+	},
+	
+	getGuiScreen: function(){
+		return workbenchGui;
+	},
+	getScreenName: function(player, coords) {
+      return "workbench"
+    },
+    // это событие вызывается на стороне клиента, this в данном случае не определен, по переданному имени, которое вернул метод getScreenName, возвращает окно, которое нужно открыть
+    getScreenByName: function(screenName) {
+      Logger.Log("vg", uiw);
+      return workbenchGui;
+    },
+	click: function (id, count, data, coords, player) {
+	  this.pl = new PlayerActor(player);
+	},
+	destroy: function () {
+	  this.uid = null;
+	},
+	client: {
+	  load: function () {
+	    Logger.Log(Network.inRemoteWorld(), "tguiuiu");
+	  },
+    containerEvents: {
+    // события контейнера на стороне сервера, в данном случае this - серверный экземпляр, получивший пакет
+    isOpened: function(container, window, windowContent, eventData) {
+      // доступный только здесь метод:
+      //this.container.sendResponseEvent("eventName", someData)
+      Logger.Log(window.isOpened(), "zaer");
+      container.sendEvent("isOpened", {isOpened: window.isOpened()});
+}
+  }
+    },
+    
+    containerEvents: {
+
+      // события контейнера на стороне сервера, в данном случае this - серверный экземпляр, получивший пакет
+      isOpened: function(eventData, connectedClient) {
+        Logger.Log(this, "zubazh");
+        this.isOpened = eventData.isOpened;
+      },
+      cleanSources: function(eventData, connectedClient) {
+        
+        if(this.resultForCleaning.length == 0 || this.sourcesForCleaning.length == 0) return;
+        Logger.Log(this, "zazh");
+  
+
+        this.container.setSlot("resultSlot", this.container.getSlot("resultSlot").id, this.container.getSlot("resultSlot").count - this.resultForCleaning.count + 1, this.container.getSlot("resultSlot").data, this.container.getSlot("resultSlot").extra);
+        
+        this.pl.addItemToInventory(this.container.getSlot("resultSlot").id, this.resultForCleaning.count- 1, this.container.getSlot("resultSlot").data, this.container.getSlot("resultSlot").extra, true);
+        
+        for(let i in this.sourcesForCleaning) {
+          Logger.Log("slat the", "zubazh");
+
+					this.container.setSlot("slot" + this.sourcesForCleaning[i], this.container.getSlot("slot" + this.sourcesForCleaning[i]).id, this.container.getSlot("slot" + this.sourcesForCleaning[i]).count - 1, this.container.getSlot("slot" + this.sourcesForCleaning[i]).data, this.container.getSlot("slot" + this.sourcesForCleaning[i]).extra);
+				}
+				this.container.validateAll();
+				this.sourcesForCleaning = [];
+				this.resultForCleaning = [];
+      },
+      performCrafting: function(eventData, connectedClient) {
+        Logger.Log("saxerd");
+        
+        let arr = [{id: this.container.getSlot("slot0").id, data: this.container.getSlot("slot0").data, count: this.container.getSlot("slot0").count, extra: this.container.getSlot("slot0").extra, index: 0}, {id: this.container.getSlot("slot1").id, data: this.container.getSlot("slot1").data, count: this.container.getSlot("slot1").count, extra: this.container.getSlot("slot1").extra, index: 1}, {id: this.container.getSlot("slot2").id, data: this.container.getSlot("slot2").data, count: this.container.getSlot("slot2").count, extra: this.container.getSlot("slot2").extra, index: 2}, {id: this.container.getSlot("slot3").id, data: this.container.getSlot("slot3").data, count: this.container.getSlot("slot3").count, extra: this.container.getSlot("slot3").extra, index: 3}, {id: this.container.getSlot("slot4").id, data: this.container.getSlot("slot4").data, count: this.container.getSlot("slot4").count, extra: this.container.getSlot("slot4").extra, index: 4}, {id: this.container.getSlot("slot5").id, data: this.container.getSlot("slot5").data, count: this.container.getSlot("slot5").count, extra: this.container.getSlot("slot5").extra, index: 5}, {id: this.container.getSlot("slot6").id, data: this.container.getSlot("slot6").data, count: this.container.getSlot("slot6").count, extra: this.container.getSlot("slot6").extra, index: 6}, {id: this.container.getSlot("slot7").id, data: this.container.getSlot("slot7").data, count: this.container.getSlot("slot7").count, extra: this.container.getSlot("slot7").extra, index: 7}, {id: this.container.getSlot("slot8").id, data: this.container.getSlot("slot8").data, count: this.container.getSlot("slot8").count, extra: this.container.getSlot("slot8").extra, index: 8}];
+        let spliced = new Set();
+        if(this.container.getSlot("slot0").id == 0 && this.container.getSlot("slot1").id == 0 && this.container.getSlot("slot2").id == 0) {
+          spliced.push(0);
+          spliced.push(1);
+          spliced.push(2);
+          Logger.Log(0, "derter");
+          Logger.Log(1, "derter");
+          Logger.Log(2, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derase");
+          }
+        }
+        if(this.container.getSlot("slot3").id == 0 && this.container.getSlot("slot4").id == 0 && this.container.getSlot("slot5").id == 0) {
+          
+          spliced.push(3);
+          spliced.push(4);
+          spliced.push(5);
+          Logger.Log(3, "derter");
+          Logger.Log(4, "derter");
+          Logger.Log(5, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        if(this.container.getSlot("slot6").id == 0 && this.container.getSlot("slot7").id == 0 && this.container.getSlot("slot8").id == 0) {
+          
+          spliced.push(6);
+          spliced.push(7);
+          spliced.push(8);
+          Logger.Log(6, "derter");
+          Logger.Log(7, "derter");
+          Logger.Log(8, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        
+        if(this.container.getSlot("slot0").id == 0 && this.container.getSlot("slot3").id == 0 && this.container.getSlot("slot6").id == 0) {
+          
+          spliced.push(0);
+          spliced.push(3);
+          spliced.push(6);
+          Logger.Log(0, "derter");
+          Logger.Log(3, "derter");
+          Logger.Log(6, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        if(this.container.getSlot("slot1").id == 0 && this.container.getSlot("slot4").id == 0 && this.container.getSlot("slot7").id == 0) {
+          
+          spliced.push(1);
+          spliced.push(4);
+          spliced.push(7);
+          Logger.Log(1, "derter");
+          Logger.Log(4, "derter");
+          Logger.Log(7, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        if(this.container.getSlot("slot2").id == 0 && this.container.getSlot("slot5").id == 0 && this.container.getSlot("slot8").id == 0) {
+          
+          spliced.push(2);
+          spliced.push(5);
+          spliced.push(8);
+          Logger.Log(2, "derter");
+          Logger.Log(5, "derter");
+          Logger.Log(8, "derter");
+          for(let i = 0; i < spliced.size(); i++) {
+          Logger.Log(spliced.get(i), "derasgte");
+          }
+        }
+        let spliceda = spliced.toArray();
+        Logger.Log(arr, "splicedpre");
+        for(let i = 0; i < spliceda.length; i++) {
+          arr[spliceda[i]] = null;
+          Logger.Log(spliceda[i], "derase");
+        }
+        for(let i = 0; i < arr.length; i++) {
+          if(arr[i] == null) {
+            arr.splice(i, 1);
+              i -= 1;
+          }
+        }
+        Logger.Log(arr, "spliced");
+        
+        let res = RecipeDictionary.getBySources(arr);
+			  //Если он есть
+        //Logger.Log(res, "derrr");
+			  if (res) {
+			  //Отрисовываем его
+				this.container.setSlot("resultSlot", res.result.id, res.result.count, res.result.data);
+				this.sourcesForCleaning = res.cleaning;
+				this.resultForCleaning = res.result
+			  } else {
+				  //Иначе рисуем пустой слот
+				  this.container.setSlot("resultSlot", 0, 0, 0);
+				  
+				  this.sourcesForCleaning = [];
+				  this.resultForCleaning = [];
+			  }
+      }
+    },
+    events: {
+      
+    }
+});
+
+//И так, мы видим, что наш верстак отображает результат крафта, когда он возможен.
+
+//Создадим интерфейс:
+
+//Создаем обычное окно
+var workbenchGui = new UI.StandartWindow();
+//Задаем его свойства
+workbenchGui.setContent({
+	standart: {
+		header: {
+			text: {
+				text: "workbench"
+			},
+		},
+		inventory: {
+			standart: true
+		},
+		background: {
+			standart: true
+		},
+		minHeight: 600
+	},
+	elements: {
+		//Создаем слоты
+		"slot0": {type: "slot", x: 467, y: 146, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		},
+		"slot1": {type: "slot", x: 537, y: 146, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		},
+		"slot2": {type: "slot", x: 607, y: 146, size: 60, 
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		  
+		},
+		"slot3": {type: "slot", x: 467, y: 214, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		},
+		"slot4": {type: "slot", x: 537, y: 214, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		  
+		},
+		"slot5": {type: "slot", x: 607, y: 214, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		  
+		},
+		"slot6": {type: "slot", x: 467, y: 283, size: 60, 
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		},
+		"slot7": {type: "slot", x: 537, y: 283, size: 60,
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  Logger.Log(Network.inRemoteWorld(), "psukered");
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		},
+		"slot8": {type: "slot", x: 607, y: 283, size: 60, 
+				//При  клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  container.getParent().sendEvent("performCrafting", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		},
+		//Слот для результата
+		"resultSlot": {type: "slot", x: 698, y: 212, size: 60,
+				//При обычном клике
+				onItemChanged: function(container, oldID, oldData, oldCount) {
+				  if(oldID == 0) return;
+				  if(container.getParent().getSlot("resultSlot").id == 0) return;
+				  if(container.getParent().getSlot("resultSlot").id != oldID) return;
+				  Logger.Log(container.getParent().getSlot("resultSlot").id, "zeak");
+				  
+				  container.getParent().sendEvent("cleanSources", {});
+					//Пробуем провести краф
+					
+			  }
+					
+					//this.getSlot("resultSlot");
+		}
+	},
+});
+
+
+
 
 // file: block/tree.js
 
-var BiomeHelper = {
-  TAIGA_BIOMES: [5, 19, 32, 33]
+let BiomeHelper = {
+  TAIGA_BIOMES: {5: 5, 19: 19, 32: 32, 33: 33, 160: 160, 161: 161}
 };
 TreeDictionary = {
-  NARROWED: 1,
-  QUAD: 2,
+  NARROWED: 0,
+  QUAD: 1,
+  
   trees: {},
   data: [],
   lengt: 0,
   registerTree: function (tree) {
     this.trees[tree.name] = tree;
-    this.data[this.lengt] =  {name: tree.name, type: "wood"};
+    this.data[this.lengt] =  {name: tree.name, type: "wood", texture: [["log_" + tree.name + "_top", 0], ["log_" + tree.name + "_top", 0], ["log_" + tree.name + "_side", 0]]};
     
-    var moel = new ICRender.Model();
-      moel.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [[tree.name + "_wood", 1], [tree.name + "_wood", 1], [tree.name + "_wood", 0], [tree.name + "_wood", 0], [tree.name + "_wood", 0], [tree.name + "_wood", 0]]));
+   // var moel = new ICRender.Model();
+     // moel.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [[tree.name + "_wood", 1], [tree.name + "_wood", 1], [tree.name + "_wood", 0], [tree.name + "_wood", 0], [tree.name + "_wood", 0], [tree.name + "_wood", 0]]));
 
-      BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, moel);
+      //BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, moel);
     
     this.lengt++;
     
-    this.data[this.lengt] =  {name: tree.name, type: "leave"};
+    this.data[this.lengt] =  {name: tree.name, type: "leave", texture: [["leaves_" + tree.name, 0]]};
     
-    var model = new ICRender.Model();
-      model.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [[tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0]]));
+   // let model = new ICRender.Model();
+     // model.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [[tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0]]));
 
-      BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, model);
+      //BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, model);
     
     this.lengt++;
     
-    this.data[this.lengt] =  {name: tree.name, type: "func_wood"};
+    this.data[this.lengt] =  {name: tree.name, type: "func_wood", texture: [["log_" + tree.name + "_top", 0], ["log_" + tree.name + "_top", 0], ["log_" + tree.name + "_side", 0]]};
     
-    var odel = new ICRender.Model();
-      odel.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [[tree.name + "_funcwood", 1], [tree.name + "_funcwood", 1], [tree.name + "_funcwood", 0], [tree.name + "_funcwood", 0], [tree.name + "_funcwood", 0], [tree.name + "_funcwood", 0]]));
+    //var odel = new ICRender.Model();
+    //  odel.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [[tree.name + "_funcwood", 1], [tree.name + "_funcwood", 1], [tree.name + "_funcwood", 0], [tree.name + "_funcwood", 0], [tree.name + "_funcwood", 0], [tree.name + "_funcwood", 0]]));
 
-      BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, odel);
+     // BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, odel);
     
     this.lengt++;
     
-    this.data[this.lengt] =  {name: tree.name, type: "sapling"};
+    this.data[this.lengt] =  {name: tree.name, type: "sapling", texture: [["sapling_" + tree.name, 0]]};
     
-    var mol = new ICRender.Model();
-      mol.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0]]));
+    //var mol = new ICRender.Model();
+    //  mol.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0]]));
 
-      BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, mol);
+      //BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, mol);
     
     this.lengt++;
     
-    this.data[this.lengt] =  {name: tree.name, type: "planks"};
+    this.data[this.lengt] =  {name: tree.name, type: "planks", texture: [["planks_" + tree.name, 0]]};
     
-    var moele = new ICRender.Model();
-      moele.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [["rubbertree_leaves", 0], ["rubbertree_leaves", 0], ["rubberwooe_leaves", 0], ["rubbertree_leaves", 0], ["rubber_tree_leaves", 0], ["rubbertree_leaves", 0]]));
+    //var moele = new ICRender.Model();
+      //moele.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [["rubbertree_leaves", 0], ["rubbertree_leaves", 0], ["rubberwooe_leaves", 0], ["rubbertree_leaves", 0], ["rubber_tree_leaves", 0], ["rubbertree_leaves", 0]]));
 
-      BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, moele);
+      //BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, moele);
     this.lengt++;
+  },
+  addToCreative: function() {
+    let variable = [];
+    for(let i in this.data) {
+      variable.push({name: this.data[i].name, texture: this.data[i].texture, inCreative: true});
+    }
+    IDRegistry.genBlockID("gttree");
+Block.createBlock("gttree", variable, "gtwood");
   },
   generateTree: function (x, y, z, random, tree) {
    let data;
@@ -3522,9 +7811,10 @@ TreeDictionary = {
         World.setBlock(x, ys, z, BlockID.gttree, data + 2);
       }
     }
-    let leavesheight = height / tree.shape.minimalleaveheightdevisor;
+    let leavesheight = Math.floor(height / tree.shape.minimalleaveheightdevisor);
+    
     if(tree.shape.shape == TreeDictionary.QUAD) {
-      for(let yy = y + leavesheight; yy < y + height; yy++) {
+      for(let yy = y + leavesheight; yy <= y + height; yy++) {
         for(let xa = x - tree.width / 2; xa < x + tree.width / 2; xa++) {
           for(let za = z - tree.width / 2; za < z + tree.width / 2; za++) {
             World.setBlock(xx, ys, zz, BlockID.gttree, data + 1);
@@ -3532,24 +7822,33 @@ TreeDictionary = {
         }
       }
     } else if(tree.shape.shape == TreeDictionary.NARROWED) {
-      for(let yy = y + leavesheight; yy < y + height; yy++) {
-        Logger.Log("shifts", leavesheight);
+      for(let yy = y + leavesheight; yy <= y + height; yy++) {
+        Logger.Log("shifts", tree.shape.width / 2 - 0.5);
         for(let xa = x - Math.floor(tree.shape.width / 2); xa < x + Math.floor(tree.shape.width / 2) + 1; xa++) {
           for(let za = z - Math.floor(tree.shape.width / 2); za < z + Math.floor(tree.shape.width / 2) + 1; za++) {
-            if(yy - y - leavesheight == 1 || yy - y - leavesheight > 1 & xa - x + Math.floor(tree.shape.width / 2) != 1 & za - z + Math.floor(tree.shape.width / 2) != 1 & xa - x + Math.floor(tree.shape.width / 2) != x + Math.floor(tree.shape.width / 2) & za - z + Math.floor(tree.shape.width / 2) != x + Math.floor(tree.shape.width / 2)) {
-            World.setBlock(xa, yy, za, BlockID.gttree, data + 1);
+            if(yy - y == leavesheight && za != z && xa != x) {
+              World.setBlock(xa, yy, za, BlockID.gttree, data + 1);
+            }
             }
           }
+          Logger.Log(yy - y, "zobah");
+          Logger.Log(height, "zobakoi");
+          if(yy - y == height || yy - y == height - 1) {
+          World.setBlock(x, yy, z, BlockID.gttree, data + 1);
+        } else if(yy - y == height - 2) {
+          GenerationDictionary.generateDisk(new Vector3(x, yy, z), BlockID.gttree, data + 1, null, tree.shape.width / 2 - 1, -100500, false, {roll: 0, pitch: 0, yaw: 0});
+        } else {
+          GenerationDictionary.generateDisk(new Vector3(x, yy, z), BlockID.gttree, data + 1, null, tree.shape.width / 2, -100500, false, {roll: 0, pitch: 0, yaw: 0});
+        }
         }
       }
     }
-  }
-};
+  };
 
 TreeDictionary.registerTree({
-  name: "rubberwood",
-  minimalheight: 5,
-  maximalheight: 11,
+  name: "rubber",
+  minimalheight: 10,
+  maximalheight: 12,
   shape: {
     width: 5,
     minimalleaveheightdevisor: 2,
@@ -3562,60 +7861,67 @@ TreeDictionary.registerTree({
     count: 1  
   }
 });
-
-World.addGenerationCallback("GenerateChunk", function(chunkX, chunkZ, random){
-	var biome = World.getBiome((chunkX + 0.5) * 16, (chunkZ + 0.5) * 16);
-	for(let biom in TreeDictionary.trees["rubberwood"].generation.biomes) {
-  if(biome == biom) {
-	if(Math.random() < TreeDictionary.trees["rubberwood"].generation.rarity){
-			var coords = GenerationUtils.findSurface(chunkX*16 + random.nextInt(16), 96, chunkZ*16 + random.nextInt(16));
-			if(World.getBlockID(coords.x, coords.y, coords.z) == 2){
-			  Logger.Log();
-				TreeDictionary.generateTree(coords.x, coords.y + 1, coords.z, random, TreeDictionary.trees["rubberwood"])
-			}
-	}
-  }
+TreeDictionary.addToCreative();
+Callback.addCallback("GenerateChunkUniversal", function (chunkX, chunkZ, random, dimension) {
+  if(dimension != 0) return;
+	let biome = World.getBiome((chunkX + 0.5) * 16, (chunkZ + 0.5) * 16);
+	Logger.Log(biome, "zas");
+    if(TreeDictionary.trees["rubber"].generation.biomes[biome]) {
+	    if(Math.random() < TreeDictionary.trees["rubber"].generation.rarity) {
+  			let coords = GenerationUtils.findSurface(chunkX*16 + random.nextInt(16), 96, chunkZ*16 + random.nextInt(16));
+			  if(World.getBlockID(coords.x, coords.y, coords.z) == 2) {
+			    
+				  TreeDictionary.generateTree(coords.x, coords.y + 1, coords.z, random, TreeDictionary.trees["rubber"])
+			  }
+    }
 	}
 }, "gt_tree");
 
 
 
 
-// file: ore/ore.js
+// file: ore/ore_generation.js
 
-var isore={};
+let isore = {};
 Saver.addSavesScope("isOreGenerated",
-	function read(scope){
+	function read(scope) {
 		isore = scope;
 	},
 	
-	function save(){
+	function save() {
 		return isore;
 	}
 );
-Callback.addCallback("GenerateChunkUniversal", function (chunkX, chunkZ, random, dimension) {
-  if(!isore[chunkX + "_" + chunkZ]) {
+Saver.addSavesScope("oreGrid",
+	function read(scope) {
+		OreDictionary.grids = scope;
+	},
+	
+	function save() {
+		return OreDictionary.grids;
+	}
+);
+Callback.addCallback("GenerateChunkUniversal", function (chunkX, chunkZ, random, dimension, chunkSeed, worldSeed, dimensionSeed) {
+  if(!isore[dimension] || !isore[dimension][chunkX + "_" + chunkZ]) {
     
   Logger.Log(chunkX + "_" + chunkZ, "zoppo");
   //granites
   let highbl = OreDictionary.findChunkHighSurface(chunkX, chunkZ);
 
-     if(Math.random() < 0.5) {
-	let randomStone = random.nextInt(Object.keys(StoneDictionary.stones).length);
-	let randomSubStone = random.nextInt(2);
 	let coords = GenerationUtils.randomXZ(chunkX, chunkZ);
-    	let highest = Math.min(GenerationUtils.findHighSurface(coords.x, coords.z), 120);
-    	highest = Math.max(highest, 10);
-    	coords = {x: coords.x, y: highest, z: coords.z}
-    	StoneDictionary.generateStone(coords, BlockID[Object.keys(StoneDictionary.stones)[randomStone]],  randomSubStone * 8, random);
-   }
-   
+	    if(GenerationUtils.findHighSurface(coords.x, coords.z).y > 14) {
+	      let randomStone = random.nextInt(Object.keys(StoneDictionary.stones).length);
+	      let randomSubStone = random.nextInt(2);
+    	
+    	//StoneDictionary.generateStonePerlin({x: chunkX, z: chunkZ}, BlockID[Object.keys(StoneDictionary.stones)[randomStone]], randomSubStone * 8, dimensionSeed, 256, 2, 42, 1, {"1_0": "1_0"});
+	    }
   // ore vein
   //coords of 3x3 chunk grid
   let mixX = Math.floor(chunkX / 3);
   let mixZ = Math.floor(chunkZ / 3);
-  if(OreDictionary.grids[mixX + "_" + mixZ] == undefined) {
- OreDictionary.grids[mixX + "_" + mixZ] = {};
+  if(!OreDictionary.grids[dimension]) OreDictionary.grids[dimension] = {};
+  if(OreDictionary.grids[dimension][mixX + "_" + mixZ] == undefined) {
+ OreDictionary.grids[dimension][mixX + "_" + mixZ] = {};
 if(Math.random() < 0.5) {
     let rand = Math.random();
     let rarity = 0;
@@ -3624,68 +7930,445 @@ for(let i = 0; i < OreDictionary.veins.length; i++) {
   let prerarity = rarity;
       rarity += OreDictionary.veins[i].rarity / OreDictionary.sumOfRarites;
       if(OreDictionary.isInnerDiapozone(rand, prerarity, rarity)) {
-OreDictionary.grids[mixX + "_" + mixZ].vein = OreDictionary.veins[i];
+OreDictionary.grids[dimension][mixX + "_" + mixZ].vein = OreDictionary.veins[i];
 break;
       }
     }
-    let isgen = true;
-    for(let x = 0; x < 16; x++) {
-    for(let z = 0; z < 16; z++) {
-      if(OreDictionary.grids[mixX + "_" + mixZ].vein.minimalheight > GenerationUtils.findHighSurface(chunkX * 16 + x, chunkZ * 16 + z)) {
-        isgen = false;
+      let isgen = true;
+    if(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein) {
+      for(let x = 0; x < 16; x++) {
+        for(let z = 0; z < 16; z++) {
+          if(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.minimalheight > GenerationUtils.findHighSurface(chunkX * 16 + x, chunkZ * 16 + z)) {
+          isgen = false;
         }}}
-    OreDictionary.grids[mixX + "_" + mixZ].enabled = isgen;
-    let height = OreDictionary.grids[mixX + "_" + mixZ].vein.maximalheight;
-    for(let x = 0; x < 16; x++) {
-    for(let z = 0; z < 16; z++) {
-      if(height > GenerationUtils.findHighSurface(chunkX * 16 + x, chunkZ * 16 + z)) {
-        height = GenerationUtils.findHighSurface(chunkX * 16 + x, chunkZ * 16 + z);
-        }}}
+       
     
-    OreDictionary.grids[mixX + "_" + mixZ].ys = OreDictionary.randomInInner(random, OreDictionary.grids[mixX + "_" + mixZ].vein.minimalheight, height);
-}
+      OreDictionary.grids[dimension][mixX + "_" + mixZ].enabled = isgen;
+    
+      let height = OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.maximalheight;
+      for(let x = 0; x < 16; x++) {
+        for(let z = 0; z < 16; z++) {
+          if(height > GenerationUtils.findHighSurface(chunkX * 16 + x, chunkZ * 16 + z) - 5) {
+            height = GenerationUtils.findHighSurface(chunkX * 16 + x, chunkZ * 16 + z) - 5;
+      }}}
+    
+      OreDictionary.grids[dimension][mixX + "_" + mixZ].ys = OreDictionary.randomInInner(random, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.minimalheight, height);
+      OreDictionary.grids[dimension][mixX + "_" + mixZ].gaussianYs = OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + OreDictionary.randomInInnerGaussian(random, -2, 2);
+    OreDictionary.grids[dimension][mixX + "_" + mixZ].xs = OreDictionary.randomInInner(random, 0, 15);
+    OreDictionary.grids[dimension][mixX + "_" + mixZ].gaussianXs = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + OreDictionary.randomInInnerGaussian(random, -7, 4);
+    OreDictionary.grids[dimension][mixX + "_" + mixZ].zs = OreDictionary.randomInInner(random, 0, 15);
+    OreDictionary.grids[dimension][mixX + "_" + mixZ].gaussianZs = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + OreDictionary.randomInInnerGaussian(random, -3, 4);
+    //OreDictionary.grids[dimension][mixX + "_" + mixZ].chunkcX = OreDictionary.randomInInner(random, Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + 1, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2), 16);
+    //OreDictionary.grids[dimension][mixX + "_" + mixZ].chunkcZ = OreDictionary.randomInInner(random, Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.zs + 1), 16);
+    //OreDictionary.grids[dimension][mixX + "_" + mixZ].chunkс1X = OreDictionary.randomInInner(random, Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs), 16);
+    //OreDictionary.grids[dimension][mixX + "_" + mixZ].chunk1Z = OreDictionary.randomInInner(random, Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16-OreDictionary.grids[dimension][mixX + "_" + mixZ].zs), 16);
+    
+    let posX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].xs, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2);
+    let posZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs)
+    let pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
+    let pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
+    Logger.Log(mixX + "_" + mixZ, "qiokoikf");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name, "qikf");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size, "qikf");
+    Logger.Log(posX, "f");
+    Logger.Log(posZ, "qwa");
+    Logger.Log(pos1X, "gqwa");
+    Logger.Log(pos1Z, "f");
+    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
+    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) +  "startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;
+    Logger.Log(mixX * 3 + 1 + "started", "saq");
+    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "endedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + pos1X;
+    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "endedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + pos1Z;
+    //OreDictionary.grids[dimension][mixX + "_" + mixZ].posChunkX = mixX * 3 + 1;
+    //OreDictionary.grids[dimension][mixX + "_" + mixZ].posChunkY = mixY * 3 + 1;
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "startedX"], "ferromagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) +  "startedZ"], "ferrimagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "endedX"], "diamagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "endedZ"], "paramagnetic");
+    Logger.Log(mixX * 3 + 1 + "_" + (mixZ * 3 + 1), "paramagnetic");
+
+    let numb = 1;
+    while(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "endedX"] = 16;
+      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "startedX"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
+      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "endedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + pos1Z;
+      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;
+      posX += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
+      if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
+      if(!(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
+        OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"] = (mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1);
+      }
+      Logger.Log((mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1), "magnetic");
+      
+      Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "startedX"], "ferromagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "startedZ"], "ferrimagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "endedX"], "diamagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "endedZ"], "paramagnetic");
+    
+      numb++;
+      Logger.Log(posX, "fx");
+        }
+        numb = 1;
+        posX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].xs, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2);
+        posZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs)
+        pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
+        pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
+        while(posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "endedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + pos1X;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
+          posZ += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
+          if(!(posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
+            OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"] = (mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb);
+          }
+          Logger.Log((mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb), "magnetic");
+          
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"], "paramagnetic");
+          
+          numb++;
+          Logger.Log(posZ, "fz");
+          
+          
+        }
+        numb = 1;
+        posX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].xs, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2);
+        posZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs)
+        pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
+        pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
+        while(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "startedX"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "endedX"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "endedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + pos1Z;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;
+         pos1X += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
+         if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
+         if(!(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"] = (mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1);
+         }
+         Logger.Log((mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1), "magnetic");
+         
+         Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "startedX"], "ferromagnetic");
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "startedZ"], "ferrimagnetic");
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "endedX"], "diamagnetic");
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "endedZ"], "paramagnetic");
+        
+         numb++;
+         Logger.Log(pos1X, "f1x");
+         
+         
+        }
+        numb = 1;
+        posX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].xs, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2);
+        posZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs)
+        pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
+        pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
+        while(pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+          
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "endedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + pos1X;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
+          
+          pos1Z += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+         if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
+         if(!(pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
+            OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"] = (mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb);
+            Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"], "derry");
+         }
+          Logger.Log((mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb), "magnetic");
+          
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"], "paramagnetic");
+          
+          numb++;
+          Logger.Log(pos1Z, "f1z");
+          
+          
+        }
+        numb = 1;
+        posX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].xs, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2);
+        posZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs)
+        pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
+        pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
+        while(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "endedX"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "startedX"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
+      
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          
+          posX += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
+          posZ += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          if(!(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
+            if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
+          OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"] = (mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb);
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"], "derry");
+          }
+          Logger.Log((mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb), "magnetic");
+          
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"], "paramagnetic");
+          
+          numb++;
+          Logger.Log(posX, "fxz x");
+          Logger.Log(posZ, "fxz z");
+          
+          
+        }
+        numb = 1;
+        posX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].xs, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2);
+        posZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs)
+        pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
+        pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
+        while(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "startedX"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "endedX"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          pos1X += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
+          posZ += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
+          if(!(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"] = (mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb);
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"], "derry");
+          }
+          Logger.Log((mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb), "magnetic");
+          
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"], "paramagnetic");
+          
+          numb++;
+          Logger.Log(pos1X, "f1x 1x");
+          Logger.Log(posZ, "fz z");
+        }
+        numb = 1;
+        posX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].xs, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2);
+        posZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs)
+        pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
+        pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
+        while(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "endedX"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "startedX"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+          posX += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX - 1, 16);
+          pos1Z += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+          if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
+          if(!(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"] = (mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb);
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"], "derry");
+          }
+          
+          Logger.Log((mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb), "magnetic");
+          
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"], "paramagnetic");
+          
+          numb++;
+          Logger.Log(posX, "fx1z x");
+          Logger.Log(pos1Z, "fx1z 1z");
+        }
+        numb = 1;
+        posX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].xs, OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2);
+        posZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs)
+        pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
+        pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
+        while(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "startedX"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "endedX"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+      
+          pos1X += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
+          pos1Z += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+          if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
+          if(!(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
+          OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"] = (mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb);
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"], "derry");
+          }
+          
+          Logger.Log((mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb), "magnetic");
+          
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"], "paramagnetic");
+          
+          numb++;
+          Logger.Log(pos1X, "f1x1z 1x");
+          Logger.Log(pos1Z, "f1x1z 1z");
+        }
+        numb = 0;
+        posX = 0;
+        posZ = 0;
+        pos1X = 0;
+        pos1Z = 0;
+        
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"], "e");
+      Logger.Log(mixX + "_" + mixZ, "ehj");
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]]) {
+      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].startX; x < OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].endX; x++) {
+        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].startZ + sizeing * (Math.random() * 2 - 1);
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]][x], "xz");
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]]) {
+      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]].startX; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].endX; x++) {
+       OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]].startZ + sizeing * (Math.random() * 2 - 1);
+       Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]][x], "z");
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]]) {
+      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].startX; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].endX; x++) {
+       OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].startZ + sizeing * (Math.random() * 2 - 1);
+       Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]][x], "1xz")
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]]) {
+      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].endZ; x++) {
+        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].endZ + sizeing * (Math.random() * 2 - 1);
+      
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]][x], "x1z")
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]]) {
+      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]].startX; x < OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]].endX; x++) {
+        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]].endZ + sizeing * (Math.random() * 2 - 1);
+      
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]][x], "1z")
+      }}
+      
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]]) {
+      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].endZ; x++) {
+        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].endZ + sizeing * (Math.random() * 2 - 1);
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]][x], "1x1z")
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]]) {
+      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].startX; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].endX; x++) {
+        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].startX + sizeing * (Math.random() * 2 - 1);
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]][x], "xz")
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]]) {
+      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]].startX; x < OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]].endX; x++) {
+        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]].startX + sizeing * (Math.random() * 2 - 1);
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]][x], "x")
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]]) {
+      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].startX; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].endX; x++) {
+        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].startX + sizeing * (Math.random() * 2 - 1);
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]][x], "x1z")
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]]) {
+      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].endZ; x++) {
+       OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]][z].endX + sizeing * (Math.random() * 2 - 1);
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]]) {
+      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]].endZ; x++) {
+       OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]][z].endX + sizeing * (Math.random() * 2 - 1);
+      }}
+      
+      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]]) {
+      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].endZ; x++) {
+        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].endX + sizeing * (Math.random() * 2 - 1);
+      }}
+      } else {
+        isgen = false;
+      }
+    }
   }
   
-  if(OreDictionary.grids[mixX + "_" + mixZ].enabled) {
+  if(OreDictionary.grids[dimension][mixX + "_" + mixZ].enabled) {
+  //let cent
+let endX = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ + "endedX"];
+Logger.Log(chunkX + "_" + chunkZ + "started", "$$$");
+
+Logger.Log(mixX + "_" + mixZ, "qiokoikf");
+Logger.Log(chunkX + "_" + chunkZ, "pokoio");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name, "qikf");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size, "qikf");
+    
+let startX = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ + "startedX"];
+
+let startZ = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ + "startedZ"];
+let endZ = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX+ "_" + chunkZ + "endedZ"];
+Logger.Log(startX, "qwa");
+Logger.Log(endX, "qqwa");
+
+Logger.Log(startZ, "sqwa");
+Logger.Log(endZ, "qsqwa");
+
   let main = 3;
   let inbetween = 2;
-  for(let x = 0; x < 16; x++) {
+  //let randomX = GenerationDictionary.randomInInnerGaussian(random, -2, 2);
+  //let randomX1 = GenerationDictionary.randomInInnerGaussian(random, -2, 2);
+  for(let x = startX; x < endX; x++) {
     for(let y = 0; y < 3; y++) {
-      for(let z = 0; z < 16; z++) {
-          let tile = World.getBlock(chunkX * 16 + x, OreDictionary.grids[mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z);
-        if(OreDictionary.rollPercentage(OreDictionary.grids[mixX + "_" + mixZ].vein.density * 10, random)) {
+        //let randomX = GenerationDictionary.randomInInnerGaussian(random, -2, 2);
+        //let randomX1 = GenerationDictionary.randomInInnerGaussian(random, -2, 2);
+      for(let z = startZ; z < endZ; z++) {
+        //Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].ys, "Asher"); 
+          let tile = World.getBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z);
+        if(OreDictionary.rollPercentage(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.density * 10, random)) {
         if(tile.id + "_" + tile.data in OreDictionary.blocks) {
-		if(Math.random < 0.2) {
-  			World.setBlock(chunkX * 16 + x, OreDictionary.grids[mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[mixX + "_" + mixZ].vein.sporadic.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+          Logger.Log(tile.id, "zeak");
+		if(Math.random() < 0.2) {
+  			World.setBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sporadic.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+  			Logger.Log("sporadic", OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name);
 		} else {
-			World.setBlock(chunkX * 16 + x, OreDictionary.grids[mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[mixX + "_" + mixZ].vein.primary.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
-	}
+			World.setBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.primary.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+			Logger.Log("primary", OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name);
+	  }
 	}
 }
       }}}
-for(let x = 0; x < 16; x++) {
+for(let x = startX; x < endX; x++) {
     for(let y = 0; y < 2; y++) {
-      for(let z = 0; z < 16; z++) {
-          let tile = World.getBlock(chunkX * 16 + x, OreDictionary.grids[mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z);
-if(OreDictionary.rollPercentage(OreDictionary.grids[mixX + "_" + mixZ].vein.density * 10, random)) {
+      for(let z = startZ; z < endZ; z++) {
+          let tile = World.getBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z);
+if(OreDictionary.rollPercentage(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.density * 10, random)) {
        if(tile.id + "_" + tile.data in OreDictionary.blocks) {
-  	if(Math.random < 0.2) {
-		World.setBlock(chunkX * 16 + x, OreDictionary.grids[mixX + "_" + mixZ].ys + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[mixX + "_" + mixZ].vein.sporadic.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+         Logger.Log(tile.id, "zeak");
+  	if(Math.random() < 0.2) {
+		World.setBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sporadic.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+		Logger.Log("sporadic", OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name);
 	} else {	
-		World.setBlock(chunkX * 16 + x, OreDictionary.grids[mixX + "_" + mixZ].ys + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[mixX + "_" + mixZ].vein.inbetween.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+		World.setBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.inbetween.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+		Logger.Log("inbetween", OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name);
 	}
 }}
       }}}
-  for(let x = 0; x < 16; x++) {
+  for(let x = startX; x < endX; x++) {
     for(let y = 0; y < 3; y++) {
-      for(let z = 0; z < 16; z++) {
-          let tile = World.getBlock(chunkX * 16 + x, OreDictionary.grids[mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z);
-if(OreDictionary.rollPercentage(OreDictionary.grids[mixX + "_" + mixZ].vein.density * 10, random)) {
+      for(let z = startZ; z < endZ; z++) {
+          let tile = World.getBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z);
+if(OreDictionary.rollPercentage(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.density * 10, random)) {
        if(tile.id + "_" + tile.data in OreDictionary.blocks) {
-  	if(Math.random < 0.2) {
-		World.setBlock(chunkX * 16 + x, OreDictionary.grids[mixX + "_" + mixZ].ys - 3 + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[mixX + "_" + mixZ].vein.sporadic.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
-	} else {
-		World.setBlock(chunkX * 16 + x, OreDictionary.grids[mixX + "_" + mixZ].ys - 3 + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[mixX + "_" + mixZ].vein.secondary.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+         Logger.Log(tile.id, "zeakh");
+  	if(Math.random() < 0.2) {
+		  World.setBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys - 3 + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sporadic.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+		Logger.Log("sporadic", OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name);
+	  } else {
+		World.setBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys - 3 + y, chunkZ * 16 + z, OreDictionary.data[OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.secondary.name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
+		Logger.Log("secondary", OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name);
 	}
 }}
       }}}
@@ -3694,23 +8377,44 @@ if(OreDictionary.rollPercentage(OreDictionary.grids[mixX + "_" + mixZ].vein.dens
   
   //smallores
   for(let i = 0; i < OreDictionary.ores.length; i++) {
-    if(OreDictionary.smallgens[i].isgen & highbl > OreDictionary.smallgens[i].minimalheight) {
-      for(let d = 0; d < OreDictionary.smallgens[i].rarity; d++){
-let coords;
-        if(highbl > OreDictionary.smallgens[i].maximallheight) {
-coords = GenerationUtils.randomCoords(chunkX, chunkZ, OreDictionary.smallgens[i].minimalheight, OreDictionary.smallgens[i].maximalheight);
-} else {
-coords = GenerationUtils.randomCoords(chunkX, chunkZ, OreDictionary.smallgens[i].minimalheight, highbl);
-}
+    if(OreDictionary.smallgens[i].isgen && dimension in OreDictionary.smallgens[i] && highbl > OreDictionary.smallgens[i][dimension].minimalheight) {
+      for(let d = 0; d < OreDictionary.smallgens[i][dimension].rarity; d++) {
+        let coords;
+        if(highbl > OreDictionary.smallgens[i][dimension].maximallheight) {
+          coords = GenerationUtils.randomCoords(chunkX, chunkZ, OreDictionary.smallgens[i][dimension].minimalheight, OreDictionary.smallgens[i].maximalheight);
+         } else {
+          coords = GenerationUtils.randomCoords(chunkX, chunkZ, OreDictionary.smallgens[i][dimension].minimalheight, highbl);
+        }
         let tile = World.getBlock(coords.x, coords.y, coords.z);
        if(tile.id + "_" + tile.data in OreDictionary.blocks) {
+         Logger.Log(tile.id, "zeakggak");
           World.setBlock(coords.x, coords.y, coords.z, OreDictionary.dat[OreDictionary.ores[i].name].id, OreDictionary.blocks[tile.id + "_" + tile.data].number);
         }
         }
     }
   }
   
-  isore[chunkX + "_" + chunkZ] = true;
+  if(!isore[dimension]) isore[dimension] = {};
+  isore[dimension][chunkX + "_" + chunkZ] = true;
+  }
+});
+
+let customBiome = new CustomBiome("oilsands");
+customBiome.setCoverBlock(42, 0).setSurfaceBlock(12, 0).setFillingBlock(1, 0).setSkyColor(0, 0, 0).setTemperatureAndDownfall(1, 1);
+
+Callback.addCallback("GenerateBiomeMap", function(chunkX, chunkZ, random, dimensionId, chunkSeed, worldSeed, dimensionSeed) {
+  if(dimensionId != 0) return;
+  if(GenerationUtils.getPerlinNoise(chunkX * 16 + 8, 0, chunkZ * 16 + 8, dimensionSeed, 1 / 72, 2) < 0.7 - 12 / 72 && (World.getBiomeMap(chunkX * 16 + 7, chunkZ * 16 + 7) != 2 || World.getBiomeMap(chunkX * 16 + 7, chunkZ * 16 + 7) != 17)) { 
+    // проверка порога отбрасывания чанка
+    return;
+  }
+  Logger.Log("bicepoij", World.getBiomeMap(chunkX * 16 + 1, chunkZ * 16 + 1));
+  for(let x = 0; x < 16; x++) {
+    for(let z = 0; z < 16; z++) {
+      if(World.getBiomeMap(chunkX * 16 + x, chunkZ * 16 + z) != 2 && World.getBiomeMap(chunkX * 16 + x, chunkZ * 16 + z) != 17) continue;
+      Logger.Log("bicep", World.getBiomeMap(chunkX * 16 + x, chunkZ * 16 + z)) 
+       if(GenerationUtils.getPerlinNoise(chunkX * 16 + x, 0, chunkZ * 16 + z, dimensionSeed, 1 / 72, 2) > 0.7) World.setBiomeMap(chunkX * 16 + x, chunkZ * 16 + z, customBiome.id)
+    }
   }
 });
 
@@ -3730,15 +8434,15 @@ Particles.registerParticleType({
 
 // file: machine/pipe.js
 
+PipeDictionary.registerMaterial(MaterialDictionary.dict["copper"], 10);
+PipeDictionary.registerMaterial(MaterialDictionary.dict["bronze"], 20);
+PipeDictionary.registerMaterial(MaterialDictionary.dict["steel"], 40);
+
 PipeDictionary.registerSize({type: "tiny", multiplier: 1});
 PipeDictionary.registerSize({type: "small", multiplier: 2});
 PipeDictionary.registerSize({type: "normal", multiplier: 4});
 PipeDictionary.registerSize({type: "large", multiplier: 8});
 PipeDictionary.registerSize({type: "huge", multiplier: 16});
-
-PipeDictionary.registerMaterial(MaterialDictionary.dict["copper"], 10);
-PipeDictionary.registerMaterial(MaterialDictionary.dict["bronze"], 20);
-PipeDictionary.registerMaterial(MaterialDictionary.dict["steel"], 40);
 
 PipeDictionary.addToCreative();
 
@@ -3758,8 +8462,12 @@ TileEntity.registerPrototype(BlockID.gtblockpipe, {
          tickEncouter: 0,
     },
     init: function() {
-      this.data.typePipe = "copper";
-      this.data.sizePipe = 0;
+      this.data.typePipe = PipeDictionary.data[this.blockSource.getBlock(this.x, this.y, this.z).data].type;
+      this.data.sizePipe = PipeDictionary.data[this.blockSource.getBlock(this.x, this.y, this.z).data].size.index;
+      
+      Logger.Log(this.data.typePipe, "ruex");
+      Logger.Log(this.data.sizePipe, "iruex");
+
       this.liquidStorage.setLimit("lava", PipeDictionary.materials[this.data.typePipe].rate * PipeDictionary.sizes[this.data.sizePipe]. multiplier);
       this.liquidStorage.setLimit("milk", PipeDictionary.materials[this.data.typePipe].rate * PipeDictionary.sizes[this.data.sizePipe]. multiplier);
        this.liquidStorage.setLimit("water", PipeDictionary.materials[this.data.typePipe].rate * PipeDictionary.sizes[this.data.sizePipe]. multiplier);
@@ -3768,7 +8476,6 @@ TileEntity.registerPrototype(BlockID.gtblockpipe, {
        this.data.rate = PipeDictionary.materials[this.data.typePipe].rate * PipeDictionary.sizes[this.data.sizePipe].multiplier;
        this.data.limit = this.data.rate * 20;
     
-      Logger.Log(this, "fui");
     this.data.pipeEncounter = 0;
 			this.__Nets = {};
 			TileEntityRegistry.addMacineAccessAtCoords(this.x, this.y, this.z, this);
@@ -3794,7 +8501,28 @@ TileEntity.registerPrototype(BlockID.gtblockpipe, {
 			  this.data.pipeEncounter++;
 			}
     },
-    click: function(id, count, data, coords) {},
+    click: function(id, count, data, coords) {
+      if(id == ItemID.gtdebug) {
+         //if(TileEntity.isTileEntityBlock(this.id)) {
+           Logger.Log("zomb$");
+    if(this.data.pipe != null) {
+      let block = this.blockSource.getBlock(this.x, this.y, this.z);
+      Logger.Log("zo$");
+      let type = null;
+      if(this.data.pipe == true) {
+        type = "pipe"
+      } else {
+        type = "machine"
+      }
+      Logger.Log("zomb$", type);
+      Game.message("id:" + block.id + "\n" + "data:" + block.data + "\n" + "GT_Machine" + "\n" + type + "\n temperature: " + this.data.temperature + "\n progress: " + this.data.progress);
+      if(type == "pipe") Game.message("steam: " + this.data.amount + "\n type:" + this.data.typeLiquid);
+      if(type == "machine") Game.message("steam: " + this.liquidStorage.getAmount("steam"));
+    }
+  //}
+         return true;
+       }
+    },
    returnLiquid: function(x, y, z, type, amount) {
       if(this.data.type == type) {
        return this.liquidStorage.addLiquid(type, amount);
@@ -3809,7 +8537,7 @@ TileEntity.registerPrototype(BlockID.gtblockpipe, {
     requestLiquid: function(x, y, z, type, amount) {
       if(this.data.typeLiquid == type) {
        let tr = this.liquidStorage.getLiquid(type, amount);
-       Logger.Log(tr, "мудачки™");
+       
        return tr;
       }
       return 0;
@@ -3862,7 +8590,6 @@ TileEntity.registerPrototype(BlockID.gtblockpipe, {
    receive: function(type, amount, sidepre) {
      Logger.Log(amount, "zirconocene dichloride");
        amount = Math.min(amount, this.data.rate); // устанавлимаем максимальное количество энергии, которое может принять механизм равным 1000.
-       Logger.Log(amount, "tantalocene dichloride");
        let add = Math.min(amount, this.getCapacity() - this.data.amount); // уменьшаем количество энергии, так, чтобы хранилище не переполнялось;
        Logger.Log(this.getCapacity(), "tantalocene diiodide");
        Logger.Log(this.data.amount, "niobocene dichloride");
@@ -3904,17 +8631,22 @@ TileEntityRegistry.addEnergyTypeForId(BlockID.gtblockpipe, "liquid");
 var id = BlockID.gtblockpipe// id блока провода 
 var group = ICRender.getGroup("GTpipe"); // группа блоков 
 group.add(id, -1); // добавим сам провод в группу
-group.add(BlockID.gtblockmachine, -1);
+
 
 for(let m = 0; m < Object.keys(PipeDictionary.materials).length; m++) {
     for(let s = 0; s < PipeDictionary.sizes.length; s++) {
-      let width = 0.25 + s * 2;
-      var model = new ICRender.Model();
-      var collmodel = new ICRender.CollisionShape();
+      let width = 0;
+      if(s >= PipeDictionary.sizes.length - 2) {
+        width = 1/16 * (4 + s * 2 + 2);
+      } else {
+        width = 1/16 * (4 + s * 2);
+      }
+      let model = new ICRender.Model();
+      let collmodel = new ICRender.CollisionShape();
       
-  model.addEntry(new BlockRenderer.Model(0.5 - width / 2, 0.5 - width / 2, 0.5 - width / 2, 0.5 + width / 2, 0.5 + width / 2, 0.5 + width / 2, id, 0)); 
+  model.addEntry(new BlockRenderer.Model(0.5 - width / 2, 0.5 - width / 2, 0.5 - width / 2, 0.5 + width / 2, 0.5 + width / 2, 0.5 + width / 2, "bedrock", 0)); 
   
-  var boxes = [
+  let boxes = [
       {side: [1, 0, 0], box: [0.5 + width / 2, 0.5 - width / 2, 0.5 - width / 2, 1, 0.5 + width / 2, 0.5 + width / 2]},
       {side: [-1, 0, 0], box: [0, 0.5 - width / 2, 0.5 - width / 2, 0.5 - width / 2, 0.5 + width / 2, 0.5 + width / 2]},
       {side: [0, 1, 0], box: [0.5 - width / 2, 0.5 + width / 2, 0.5 - width / 2, 0.5 + width / 2, 1, 0.5 + width / 2]},
@@ -3923,15 +8655,15 @@ for(let m = 0; m < Object.keys(PipeDictionary.materials).length; m++) {
       {side: [0, 0, -1], box: [0.5 - width / 2, 0.5 - width / 2, 0, 0.5 + width / 2, 0.5 + width / 2, 0.5 - width / 2]}
   ];
   
-  for(var i in boxes) {
-      var box = boxes[i].box; 
-      var side = boxes[i].side;
-      model.addEntry(new BlockRenderer.Model(box[0], box[1], box[2], box[3], box[4], box[5], id, 0))
+  for(let i in boxes) {
+      let box = boxes[i].box; 
+      let side = boxes[i].side;
+      model.addEntry(new BlockRenderer.Model(box[0], box[1], box[2], box[3], box[4], box[5], "bedrock", 0))
           .setCondition(new ICRender.BLOCK(side[0], side[1], side[2], group, false));
   }
       var entry = collmodel.addEntry();
       entry.addBox(0.5 - width / 2, 0.5 - width / 2, 0.5 - width / 2, 0.5 + width / 2, 0.5 + width / 2, 0.5 + width / 2);
-      for(var i in boxes) {
+      for(let i in boxes) {
       var box = boxes[i].box; 
       var side = boxes[i].side;
       let entri = collmodel.addEntry();
@@ -3949,15 +8681,18 @@ for(let m = 0; m < Object.keys(PipeDictionary.materials).length; m++) {
 
 // file: machine/machine.js
 
+setLoadingTip("GTMachines: register Machines");
 MachineDictionary.registerCasings();
 //1234
 let bitmap = android.graphics.BitmapFactory.decodeFile(__dir__ + "gui/BronzeAlloySmelterPocket.png");
+
+
 MachineDictionary.registerSteamMachine({ name: "alloy_smelter", 
 type: MachineDictionary.PROCESSING, 
-hull: "brick_hull",
+hull: ["BRONZE", "STEEL"],
 tier: [0, 1],
 recipes: new RecipeMap(1, 2, 1, 1)
-}, {
+}, new UI.StandardWindow({
      standart: {
           header: {
                text: {
@@ -3971,7 +8706,6 @@ recipes: new RecipeMap(1, 2, 1, 1)
           background: {
                color: android.graphics.Color.rgb(225, 119, 6)
           },
-          minHeight: 600
      },
      params: {
           textures: {
@@ -3984,24 +8718,24 @@ recipes: new RecipeMap(1, 2, 1, 1)
           }
      },
      drawing: [
-         {type: "bitmap", bitmap: "BronzeAlloySmelterPocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
+         {type: "bitmap", bitmap: "BronzeAlloySmelterPocket", x: 0, y: 0, width: bitmap.getWidth() * 5, height: bitmap.getHeight() * 5}
      ],
      elements: {
-       "energySlot": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 237, y: 226, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-       "input0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 102, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-       "input1": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 156, y: 
-112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 225, y: 112, direction: 0, bitmap: "furnace_process", scale: 2, value: 0},
-        "output0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 318, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+       "energySlot": {type: "slot", x: 395, y: 310, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+       "input0": {type: "slot", x: 170, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+       "input1": {type: "slot", x: 260, y: 
+120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+    "scale": {type: "scale", x: 390, y: 125, direction: 0, bitmap: "bronze_furnace_process", scale: 5, value: 0},
+        "output0": {type: "slot", x: 530, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function() {return false;}},
      },
-});
+}));
 MachineDictionary.registerSteamMachine({
     name: "furnace",
     type: MachineDictionary.PROCESSING,
-    hull: "brick_hull",
+    hull: ["BRONZE", "STEEL"],
     tier: [0, 1],
     recipes: RecipeDictionary.RECIPE_FURNACE_MAP
-}, {
+}, new UI.StandardWindow({
      standart: {
           header: {
                text: {
@@ -4015,7 +8749,6 @@ MachineDictionary.registerSteamMachine({
           background: {
                color: android.graphics.Color.rgb(225, 119, 6)
           },
-          minHeight: 600
      },
      params: {
           textures: {
@@ -4028,22 +8761,22 @@ MachineDictionary.registerSteamMachine({
           }
      },
      drawing: [
-         {type: "bitmap", bitmap: "BronzeFurnacePocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
+         {type: "bitmap", bitmap: "BronzeFurnacePocket", x: 0, y: 0, width: bitmap.getWidth() * 5, height: bitmap.getHeight() * 5}
      ],
      elements: {
-       "energySlot": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 237, y: 226, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-       "input0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 156, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 225, y: 112, direction: 0, bitmap: "furnace_process", scale: 2, value: 0},
-        "output0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 318, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+       "energySlot": {type: "slot", x: 395, y: 310, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+       "input0": {type: "slot", x: 260, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+    "scale": {type: "scale", x: 390, y: 125, direction: 0, bitmap: "bronze_furnace_process", scale: 5, value: 0},
+        "output0": {type: "slot", x: 530, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
      },
-});
+}));
 MachineDictionary.registerSteamMachine({
     name: "macerator",
     type: MachineDictionary.PROCESSING,
-    hull: "bronze_hull",
+    hull: ["BRONZE", "STEEL"],
     tier: [0, 1],
     recipes: new RecipeMap(1, 1, 1, 1)
-}, {
+}, new UI.StandardWindow({
      standart: {
           header: {
                text: {
@@ -4057,7 +8790,6 @@ MachineDictionary.registerSteamMachine({
           background: {
                color: android.graphics.Color.rgb(225, 119, 6)
           },
-          minHeight: 600
      },
      params: {
           textures: {
@@ -4070,22 +8802,22 @@ MachineDictionary.registerSteamMachine({
           }
      },
      drawing: [
-         {type: "bitmap", bitmap: "BronzeMaceratorPocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
+         {type: "bitmap", bitmap: "BronzeMaceratorPocket", x: 0, y: 0, width: bitmap.getWidth() * 5, height: bitmap.getHeight() * 5}
      ],
      elements: {
-       "energySlot": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 237, y: 226, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-       "input0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 156, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 225, y: 112, direction: 0, bitmap: "furnace_process", scale: 2, value: 0},
-        "output0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 318, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+       "energySlot": {type: "slot", x: 395, y: 310, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+       "input0": {type: "slot", x: 260, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+    "scale": {type: "scale", x: 390, y: 125, direction: 0, bitmap: "bronze_macerator_process", scale: 5, value: 0},
+        "output0": {type: "slot", x: 530, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
      },
-});
+}));
 MachineDictionary.registerSteamMachine({
     name: "extractor",
     type: MachineDictionary.PROCESSING,
-    hull: "hull",
+    hull: ["BRONZE", "STEEL"],
     tier: [0, 1],
     recipes: new RecipeMap(1, 1, 1, 1),
-}, {
+}, new UI.StandardWindow({
      standart: {
           header: {
                text: {
@@ -4099,7 +8831,6 @@ MachineDictionary.registerSteamMachine({
           background: {
                color: android.graphics.Color.rgb(225, 119, 6)
           },
-          minHeight: 600
      },
      params: {
           textures: {
@@ -4112,22 +8843,22 @@ MachineDictionary.registerSteamMachine({
           }
      },
      drawing: [
-         {type: "bitmap", bitmap: "BronzeExtractorPocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
+         {type: "bitmap", bitmap: "BronzeExtractorPocket", x: 0, y: 0, width: bitmap.getWidth() * 5, height: bitmap.getHeight() * 5}
      ],
      elements: {
-       "energySlot": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 237, y: 226, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-       "input0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 156, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 225, y: 112, direction: 0, bitmap: "furnace_process", scale: 2, value: 0},
-        "output0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 318, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+       "energySlot": {type: "slot", x: 395, y: 310, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+       "input0": {type: "slot", x: 260, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+    "scale": {type: "scale", x: 390, y: 125, direction: 0, bitmap: "bronze_extractor_process", scale: 5, value: 0},
+        "output0": {type: "slot", x: 530, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
      },
-});
+}));
 MachineDictionary.registerSteamMachine({
     name: "compressor",
     type: MachineDictionary.PROCESSING,
-    hull: "hull",
+    hull: ["BRONZE", "STEEL"],
     tier: [0, 1],
     recipes: new RecipeMap(1, 1, 1, 1)
-}, { 
+}, new UI.StandardWindow({ 
      standart: {
           header: {
                text: {
@@ -4141,7 +8872,6 @@ MachineDictionary.registerSteamMachine({
           background: {
                color: android.graphics.Color.rgb(225, 119, 6)
           },
-          minHeight: 600
      },
      params: {
           textures: {
@@ -4154,22 +8884,22 @@ MachineDictionary.registerSteamMachine({
           }
      },
      drawing: [
-         {type: "bitmap", bitmap: "BronzeCompressorPocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
+         {type: "bitmap", bitmap: "BronzeCompressorPocket", x: 0, y: 0, width: bitmap.getWidth() * 5, height: bitmap.getHeight() * 5}
      ],
      elements: {
-       "energySlot": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 237, y: 226, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-       "input0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 156, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 225, y: 112, direction: 0, bitmap: "furnace_process", scale: 2, value: 0},
-        "output0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 318, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+       "energySlot": {type: "slot", x: 395, y: 310, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+       "input0": {type: "slot", x: 260, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+    "scale": {type: "scale", x: 390, y: 125, direction: 0, bitmap: "bronze_compressor_process", scale: 5, value: 0},
+        "output0": {type: "slot", x: 530, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
      },
-});
+}));
 MachineDictionary.registerSteamMachine({
     name: "hammer",
     type: MachineDictionary.PROCESSING,
-    hull: "hull",
+    hull: ["BRONZE", "STEEL"],
     tier: [0, 1],
     recipes: new RecipeMap(1, 1, 1, 1),
-}, {
+}, new UI.StandardWindow({
      standart: {
           header: {
                text: {
@@ -4183,7 +8913,6 @@ MachineDictionary.registerSteamMachine({
           background: {
                color: android.graphics.Color.rgb(225, 119, 6)
           },
-          minHeight: 600
      },
      params: {
           textures: {
@@ -4196,23 +8925,23 @@ MachineDictionary.registerSteamMachine({
           }
      },
      drawing: [
-         {type: "bitmap", bitmap: "BronzeHammerPocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
+         {type: "bitmap", bitmap: "BronzeHammerPocket", x: 0, y: 0, width: bitmap.getWidth() * 5, height: bitmap.getHeight() * 5}
      ],
      elements: {
-       "energySlot": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 237, y: 226, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-       "input0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 156, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 219, y: 112, direction: 0, bitmap: "furnace_process", scale: 2, value: 0},
-        "output0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 318, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+       "energySlot": {type: "slot", x: 395, y: 310, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+       "input0": {type: "slot", x: 260, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+    "scale": {type: "scale", x: 390, y: 125, direction: 3, bitmap: "bronze_hammer_process", scale: 5, value: 0},
+        "output0": {type: "slot", x: 530, y: 120, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
      },
-});
+}));
 
 MachineDictionary.registerSteamMachine({
     name: "boiler",
     type: MachineDictionary.GENERATOR,
-    hull: "brick_hull",
+    hull: ["BRONZEBRICKS", "STEELBRICKS"],
     tier: [0, 1],
     recipes: new FuelMap(1, 1),
-}, {
+}, new UI.StandardWindow({
      standart: {
           header: {
                text: {
@@ -4226,7 +8955,7 @@ MachineDictionary.registerSteamMachine({
           background: {
                color: android.graphics.Color.rgb(225, 119, 6)
           },
-          minHeight: 600
+          //minHeight: 600
      },
      params: {
           textures: {
@@ -4239,27 +8968,28 @@ MachineDictionary.registerSteamMachine({
           }
      },
      drawing: [
-         {type: "bitmap", bitmap: "BronzeBoilerPocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
+         {type: "bitmap", bitmap: "BronzeBoilerPocket", x: 0, y: 0, width: bitmap.getWidth() * 5, height: bitmap.getHeight() * 5}
      ],
      elements: {
-        "inputCan0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 129, y: 115, size: 54, bitmap: "slot", needClean: true,isTransparentBackground: true},
-       "coal0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 345, y: 223, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 345, y: 169, direction: 1, bitmap: "bronze_boiler_process", scale: 3, value: 0},
-        "ash0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 345, y: 115, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
-        "outputCan0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 129, y: 223, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
-        "waterScale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 210, y: 115, direction: 1, bitmap: "water_scale", scale: 3, value: 0},
-        "steamScale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 249, y: 115, direction: 1, bitmap: "steam_scale", scale: 3, value: 0},
-        "heatScale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 288, y: 115, direction: 1, bitmap: "heat_scale", scale: 3, value: 0},
+        "inputCan0": {type: "slot", x: 215, y: 125, size: 90, bitmap: "slot", needClean: true,isTransparentBackground: true},
+       "coal0": {type: "slot", x: 575, y: 305, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+        "ash0": {type: "slot", x: 575, y: 125, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+        "outputCan0": {type: "slot", x: 215, y: 305, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+        "waterScale": {type: "scale", x: 415, y: 125, direction: 1, bitmap: "water_scale", scale: 5, value: 0},
+        "steamScale": {type: "scale", x: 350, y: 125, direction: 1, bitmap: "steam_scale", scale: 5, value: 0},
+        "hScale": {type: "scale", x: 480, y: 125, direction: 1, bitmap: "heat_scale", scale: 5, value: 0},
+     
+        "sccale": {type: "scale", x: 580, y: 215, direction: 1, bitmap: "bronze_boiler_process", scale: 5, value: 0},
      },
-});
+}));
 
 MachineDictionary.registerSteamMachine({
-    name: "solar_boiler",
+    name: "boiler_solar",
     type: MachineDictionary.GENERATOR,
-    hull: "brick_hull",
+    hull: ["BRONZEBRICKS"],
     tier: [0],
     recipes: new FuelMap(0, 0),
-}, {
+}, new UI.StandardWindow({
      standart: {
           header: {
                text: {
@@ -4273,7 +9003,6 @@ MachineDictionary.registerSteamMachine({
           background: {
                color: android.graphics.Color.rgb(225, 119, 6)
           },
-          minHeight: 600
      },
      params: {
           textures: {
@@ -4286,73 +9015,29 @@ MachineDictionary.registerSteamMachine({
           }
      },
      drawing: [
-         {type: "bitmap", bitmap: "SolarBoilerPocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
+         {type: "bitmap", bitmap: "SolarBoilerPocket", x: 0, y: 0, width: bitmap.getWidth() * 5, height: bitmap.getHeight() * 5}
      ],
      elements: {
-       "inputCan0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 129, y: 115, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 345, y: 169, direction: 0, bitmap: "furnace_process", scale: 2, value: 0},
-        "outputCan0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 129, y: 223, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
-             "waterScale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 210, y: 115, direction: 1, bitmap: "water_scale", scale: 3, value: 0},
-        "steamScale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 249, y: 115, direction: 1, bitmap: "steam_scale", scale: 3, value: 0},
-        "heatScale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 288, y: 115, direction: 1, bitmap: "heat_scale", scale: 3, value: 0},
+        "inputCan0": {type: "slot", x: 215, y: 125, size: 90, bitmap: "slot", needClean: true,isTransparentBackground: true},
+    "sccale": {type: "scale", x: 580, y: 215, direction: 1, bitmap: "bronze_boiler_process", scale: 5, value: 0},
+        "outputCan0": {type: "slot", x: 215, y: 305, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+        "waterScale": {type: "scale", x: 415, y: 125, direction: 1, bitmap: "water_scale", scale: 5, value: 0},
+        "steamScale": {type: "scale", x: 350, y: 125, direction: 1, bitmap: "steam_scale", scale: 5, value: 0},
+        "hScale": {type: "scale", x: 480, y: 125, direction: 1, bitmap: "heat_scale", scale: 5, value: 0},
      },
-});
+}));
 
-
-/*MachineDictionary.registerSteamMachine("alloy_smelter", 1, 2, 1, MachineDictionary.PROCESSING, {
-    name: "alloy_smelter",
-    type: MachineDictionary.PROCESSING,
-    inputSlots: 2, 
-    outputSlots: 1,
-}, {
-     standart: {
-          header: {
-               text: {
-                    text: "Alloy Smelter"
-               },
-               color: android.graphics.Color.rgb(225, 119, 6)
-          },
-          inventory: {
-               standart: true
-          },
-          background: {
-               color: android.graphics.Color.rgb(225, 119, 6)
-          },
-          minHeight: 600
-     },
-     params: {
-          textures: {
-               /*slot: "thaum_slot",
-               invSlot: "thaum_inv_slot",
-               selection: "thaum_selection",
-               closeButton: "thaum_close_button_up",
-               closeButton2: "thaum_close_button_down",
-               frame: "thaum_frame_default"
-          }
-     },
-     drawing: [
-         {type: "bitmap", bitmap: "SteelAlloySmelterPocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
-     ],
-     elements: {
-       "energySlot": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 237, y: 226, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-       "input0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 102, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-       "input1": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 156, y: 
-112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 225, y: 112, direction: 0, bitmap: "furnace_process", scale: 2, value: 0},
-        "output0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 318, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-     },
-});*/
 MachineDictionary.registerSteamMachine({
-    name: "lava_boiler",
+    name: "boiler_lava",
     type: MachineDictionary.GENERATOR,
-    hull: "brick_hull",
+    hull: ["STEELBRICKS"],
     tier: [1],
     recipes: new FuelMap(1, 1),
-}, {
+}, new UI.StandardWindow({
      standart: {
           header: {
                text: {
-                    text: "Lava boiler"
+                    text: "HP Lava boiler"
                },
                color: android.graphics.Color.rgb(225, 119, 6)
           },
@@ -4362,7 +9047,6 @@ MachineDictionary.registerSteamMachine({
           background: {
                color: android.graphics.Color.rgb(225, 119, 6)
           },
-          minHeight: 600
      },
      params: {
           textures: {
@@ -4375,17 +9059,19 @@ MachineDictionary.registerSteamMachine({
           }
      },
      drawing: [
-         {type: "bitmap", bitmap: "LavaBoilerPocket", x: 1000 / 2 - bitmap.getWidth(), y: 40, width: bitmap.getWidth() * 3, height: bitmap.getHeight() * 3}
+         {type: "bitmap", bitmap: "LavaBoilerPocket", x: 0, y: 0, width: bitmap.getWidth() * 5, height: bitmap.getHeight() * 5}
      ],
      elements: {
-       "energySlot": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 237, y: 226, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-           "inputCan0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 102, y: 112, size: 54, bitmap: "slot", needClean: true,isTransparentBackground: true},
-       "coal0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 102, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-    "scale": {type: "scale", x: 1000 / 2 - bitmap.getWidth() + 225, y: 112, direction: 0, bitmap: "furnace_process", scale: 2, value: 0},
-        "ash0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 318, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true},
-        "output0": {type: "slot", x: 1000 / 2 - bitmap.getWidth() + 318, y: 112, size: 54, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+        "inputCan0": {type: "slot", x: 215, y: 125, size: 90, bitmap: "slot", needClean: true,isTransparentBackground: true},
+       "coal0": {type: "slot", x: 575, y: 305, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true},
+    "sccale": {type: "scale", x: 580, y: 215, direction: 1, bitmap: "bronze_boiler_process", scale: 5, value: 0},
+        "ash0": {type: "slot", x: 575, y: 125, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+        "outputCan0": {type: "slot", x: 215, y: 305, size: 90, bitmap: "slot", needClean: true, isTransparentBackground: true, isValid: function(){return false;}},
+        "waterScale": {type: "scale", x: 415, y: 125, direction: 1, bitmap: "water_scale", scale: 5, value: 0},
+        "steamScale": {type: "scale", x: 350, y: 125, direction: 1, bitmap: "steam_scale", scale: 5, value: 0},
+        "hScale": {type: "scale", x: 480, y: 125, direction: 1, bitmap: "heat_scale", scale: 5, value: 0},
      },
-});
+}));
 //MachineDictionary.addToCreative();
 
 let ui = {
@@ -4431,12 +9117,12 @@ TileEntity.registerPrototype(BlockID.gtblockmachine, {
           //is uses steam instead energy
         isSteam: true,
         rotation: 2,
-        put0: null,
-        put1: null,
-        put2: null,
-        put3: null,
-        put4: null,
-        put5: null,
+        put0: true,
+        put1: true,
+        put2: true,
+        put3: true,
+        put4: true,
+        put5: true,
         pipe: false,
         type: null,
         
@@ -4444,7 +9130,7 @@ TileEntity.registerPrototype(BlockID.gtblockmachine, {
           
         amount: 0,
         steamcomsumption: 0,
-          
+        
         isProcess: false,
         original_work_time: 0,
         work_time: 0,
@@ -4466,7 +9152,8 @@ init: function() {
   //if(!this.data.inited) this.data.put = [];
   Logger.Log(this.data.rotation, "hyper");
     let dat = 0;
-    for(let m in MachineDictionary.steammachines) {
+    //for() {
+    /*for(let m in MachineDictionary.steammachines) {
       let uuu = false;
       let steamobj = MachineDictionary.steammachines[m];
       for(let i = 0; i < steamobj.tier.length; i++) {
@@ -4483,11 +9170,15 @@ Logger.Log(steamobj.type, "so8i");
     dat++;
       }
       if(uuu) break;
-  }
+  }*/
+  Logger.Log(this.liquidStorage.getAmount("water"), "unifis");
+  Logger.Log(this.liquidStorage.getRelativeAmount("water"), "despair");
+  
+  this.data.name = MachineDictionary.invsteammachines[this.blockSource.getBlock(this.x, this.y, this.z).data].name;
+  this.data.tier = MachineDictionary.invsteammachines[this.blockSource.getBlock(this.x, this.y, this.z).data].tier;
+  this.data.type = MachineDictionary.steammachines[this.data.name];
   if(this.data.type != null) {
   Logger.Log(this.data.tier, "syyyk");
-  Logger.Log(this.data.type, "sjk");
-    Logger.Log(this.data.rotation, "sjk");
     if(this.data.type.type == MachineDictionary.GENERATOR) {
       this.liquidStorage.setLimit("water", 16000);
       this.liquidStorage.setLimit("steam", 16000);
@@ -4506,16 +9197,12 @@ Logger.Log(steamobj.type, "so8i");
     Logger.Log(this.data.put3, "lev");
     Logger.Log(this.data.put4, "lev");
     Logger.Log(this.data.put5, "levj");
-    Logger.Log(this.data.type.textures, "levoiki");
     
-this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, rotation: this.data.rotation, put0: this.data.put0, put1: this.data.put1, put2: this.data.put2, put3: this.data.put3, put4: this.data.put4, put5: this.data.put5, textures: this.data.type.textures, rotationOfBlock: this.data.rotation});
+this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, rotation: this.data.rotation, textures: this.data.type["variable" + this.data.tier]});
     //this.sendPacket("gtmachine_ui", {ui: this.data.type.ui});
     this.data.inited = true;
     }
     
-    
-    
-    Logger.Log(this, "fui");
     this.data.pipeEncounter = 0;
 			this.__Nets = {};
 			TileEntityRegistry.addMacineAccessAtCoords(this.x, this.y, this.z, this);
@@ -4526,16 +9213,18 @@ this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, r
 			
 			let screenName = this.data.type.name + "_" + this.data.type.tier;
       Logger.Log(screenName.substring(0, screenName.indexOf("_"), "fear"));
-Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
+    //Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
+    this.data.tick = -1;
     Logger.Log("inited", "hyper");
 },
-     tick: function(){
-         Logger.Log("Ferrumhi");
+     tick: function() {
+       this.data.tick++;
+         Logger.Log("Ferrumhi", this.data.tick);
        if(this.data.type != null) {
-           Logger.Log(this.data.type.type , "Fumhi");
-           Logger.Log(MachineDictionary.PROCESSING, "Fumhi");
+           //Logger.Log(this.data.type.type , "Fumhi");
+           //Logger.Log(MachineDictionary.PROCESSING, "Fumhi");
          if(this.data.type.type == MachineDictionary.PROCESSING) {
-             Logger.Log("Frumhi");
+             //Logger.Log("Frumhi");
            /*for(let xx = -1; xx < 2; xx += 2) {
             for(let yy = -1; yy < 2; yy += 2) {
             ipe].rate * PipeDictionary.sizes[this.data.sizePipe]. multiplier) / 4));
@@ -4548,26 +9237,48 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
                }
           }*/
           if(!this.data.isProcess) {
-              Logger.Log(this.data.type.recipes, "ss");
+            Logger.Log(this.data.tick, "sheko");
+            Logger.Log(this.data.tick % 10, "shei");
+            if(this.data.tick % 10 != 0) {
+              
+              return;
+            }
+              //Logger.Log(this.data.type.recipes, "ss");
               if(this.data.type.recipes) {
-         for(let i in this.data.type.recipes) {
-             Logger.Log(i, "seas");
-         }
-         for(let i in this.data.type.recipes) {
-             Logger.Log(i, "sease");
-           if(isNaN(i)) continue;
-           if(!this.data.i.isSteam()) continue;
-           this.data.i = this.data.type.recipes[i];
-             if(this.checkInput(this.data.i)) {
-               Logger.Log("is", "is");
+         
+         //for(let i in this.data.type.recipes) {
+             Logger.Log(this.data.tick, "sheoe");
+           //this.data.i = this.data.type.recipes[i];
+           
+           
+           //Logger.Log(this.data.type.recipes[i], "heanolol");
+           
+           //Logger.Log(this.data.i.inputs[0], "xcpu_zukoper");
+           //if(!this.data.i.isSteam()) continue;
+           
+             if(this.checkInput()) {
+               
+               if(!this.check(this.data.i.EUt * 2, false, true)) {
+                this.data.i = null;
+                 return;
+                } else {
+                 this.data.errored = false;
+                 /*if(this.container.getGuiContent() != null) {
+                    this.container.getGuiContent().elements["error"] = null;
+                 }*/
+                }
+               
                if(this.checkOutput(this.data.i)) {
                  
                  if(this.data.tier == 0) {
-              this.data.original_work_time = this.data.i.duration * 2;
+              this.data.original_work_time = this.data.i.time * 2;
+              
               this.data.work_time = this.data.original_work_time;
+              //Logger.Log(this.data.work_time, "derjbl");
               this.data.steamcomsumption = this.data.i.EUt * 2;
+              //Logger.Log(this.data.steamcomsumption, "deolbl");
             } else if(this.data.tier == 1) {
-              this.data.original_work_time = this.data.i.duration * 2 / 2;
+              this.data.original_work_time = this.data.i.time * 2 / 2;
               this.data.work_time = this.data.original_work_time;
               this.data.steamcomsumption = this.data.i.EUt * 2 * 3;
             }
@@ -4576,33 +9287,27 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
             //this.outputSet(this.data.i);
             
             this.liquidStorage.getLiquid("steam", this.data.steamcomsumption);
-            if(!this.check(true)) {
-                this.data.i = null;
-                 continue;
-                 
-            } else {
-                 this.data.errored = false;
-                 /*if(this.container.getGuiContent() != null) {
-                    this.container.getGuiContent().elements["error"] = null;
-                 }*/
-            }
+            
+            //Logger.Log(this.liquidStorage.getAmount("steam"), "yusa");
+            
             this.data.isProcess = true;
             this.data.progress += 1/this.data.original_work_time;
             this.container.setScale("scale", this.data.progress);
+            //Logger.Log("yuki");
 	    //SoundApi
 	    /*sounds[this.data.type.name + "_sound"].setInBlock(this.x, this.y, this.z, 10);
 	        this.sendPacket("gtmachine_soundStart", {sound: sounds[this.data.type.name + "_sound"]});*/
             //sounds[this.data.type.name + "_sound"].play();
-            break;
+            //break;
                }
              }
-         }
+         //}
          
               } else {
                   //if(this.checkInput(this.data.i)) {
-                  Logger.Log(this.container, "seas");
+                  //Logger.Log(this.container, "seas");
                       if(RecipeDictionary.provideFurnaceRecipe(this.container, "GTFurnace")) {
-                          Logger.Log("seal"); 
+                         // Logger.Log("seal"); 
                           if(this.checkOutputF(RecipeDictionary.provideFurnaceRecipe(this.container, "GTFurnace"))) {
                     //this.data.isProcess = true;
                  if(this.data.tier == 0) {
@@ -4614,7 +9319,7 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
               this.data.work_time = this.data.original_work_time;
               this.data.steamcomsumption = 24;
             }
-            if(!this.check(true)) {
+            if(!this.check(this.data.i.EUt * 2, false,this.data.i.EUt * 2, false, true)) {
                  this.data.i = null;
                  return;
             } else {
@@ -4623,9 +9328,11 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
                     this.container.getGuiContent().elements["error"] = null;
                  }*/
             }
-            this.inputF(RecipeDictionary.provideFurnaceRecipe(this.container, "GTFurnace"));
-            //this.outputSet(this.data.i);
             this.data.i = RecipeDictionary.provideFurnaceRecipe(this.container, "GTFurnace");//()
+
+            this.inputF(/*RecipeDictionary.provideFurnaceByRecipe(this.container, "GTFurnace")*/);
+            //this.outputSet(this.data.i);
+            
             this.liquidStorage.getLiquid("steam", this.data.steamcomsumption);
             this.data.isProcess = true;
             this.data.progress += 1/this.data.original_work_time;
@@ -4640,10 +9347,11 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
                   //}
               }
          } else {
+           
            if(this.data.type.recipes) {
            if(this.data.work_time > 0) {
              this.liquidStorage.getLiquid("steam", this.data.steamcomsumption);
-             if(!this.check()) return;
+             if(!this.check(this.data.steamcomsumption, true, false)) return;
              this.data.progress += 1/this.data.original_work_time;
               this.data.work_time -= 1;
               this.container.setScale("scale", this.data.progress);
@@ -4662,14 +9370,14 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
                     if(this.data["put" + i] === null || this.data["put" + i] === undefined) continue;
                    yuki_onna = i;   
              }
-             let relative = PipeNetBuilder.getRelativeCoords(this.x, this.y, this.z, this.data["put" + yuki_onna]);
-                Particles.addParticle("steam", this.x + relative.x, this.y + relative.y, this.z + relative.z, 0, 0.5, 0);
+             /*let relative = PipeNetBuilder.getRelativeCoords(this.x, this.y, this.z, this.data["put" + yuki_onna]);
+                Particles.addParticle("steam", this.x + relative.x, this.y + relative.y, this.z + relative.z, 0, 0.5, 0);*/
                 /*this.sendPacket("gtmachine_sound", {sound: sounds["interrupt"]});*/
            }
          } else {
              if(this.data.work_time > 0) {
              this.liquidStorage.getLiquid("steam", this.data.steamcomsumption);
-             if(!this.check()) return;
+             if(!this.check(this.data.steamcomsumption, true, false)) return;
              this.data.progress += 1/this.data.original_work_time;
               this.data.work_time -= 1;
               this.container.setScale("scale", this.data.progress);
@@ -4691,8 +9399,8 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
              }
              if(yuki_onna > -1) {
                  //юки онна!
-                 let relative = PipeNetBuilder.getRelativeCoords(this.x, this.y, this.z, this.data["put" + yuki_onna]);
-                Particles.addParticle("steam", this.x + relative.x, this.y + relative.y, this.z + relative.z, 0, 0.5, 0);
+                 /*let relative = PipeNetBuilder.getRelativeCoords(this.x, this.y, this.z, this.data["put" + yuki_onna]);
+                Particles.addParticle("steam", this.x + relative.x, this.y + relative.y, this.z + relative.z, 0, 0.5, 0);*/
              } else {
                 /*this.sendPacket("gtmachine_sound", {sound: sounds["interrupt"]});*/
              }
@@ -4716,11 +9424,15 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
                   }
                 }}
                 this.container.validateSlot("inputCan0");
-                if(this.data.type.name == "solar_boiler") {
+                this.container.validateSlot("outputCan0");
+                if(this.data.type.name == "boiler_solar") {
                 if(this.data.solarTickEncounter < 255) {
                   this.data.solarTickEncounter++;
                 } else {
                   this.data.solarTickEncounter = 0;
+                  Logger.Log(this.blockSource.canSeeSky(this.x, this.y + 1, this.z), "xed");
+                  Logger.Log(World.getWorldTime(), "xedors");
+                  Logger.Log(this.blockSource.canSeeSky(this.x, this.y + 1, this.z), "xolor");
                   if(this.dimension == Native.Dimension.NORMAL && this.blockSource.canSeeSky(this.x, this.y + 1, this.z) && OreDictionary.isInnerDiapozone(World.getWorldTime(), 0, 12000)) {
                   this.data.fuel += 8;
                   }
@@ -4733,24 +9445,36 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
                       this.data.fuel--;
                       if(this.data.temperature < 500) {
                         this.data.temperature += 1;
+                        
+                        this.container.setScale("hScale", (this.data.temperature - 20) / 480);
+                    if(this.data.i) { this.container.setScale("sccale", this.data.fuel / this.data.i.time);
+                    } else {
+                      this.container.setScale("sccale", this.data.fuel / 32);
+                    }
                       }
-                    } else if(this.data.type.name != "solar_boiler") {
+                    } else if(this.data.type.name != "boiler_solar") {
                       
                       for(let i in this.data.type.recipes) {
-                        Logger.Log(this.data.type.recipes[i], "heanol");
+                        
+                       //if(this.data.type.recipes[i] && this.data.type.recipes[i].type) Logger.Log(this.data.type.recipes[i].type, "heanoikl");
                       }
                       
+                      
                         for(let i in this.data.type.recipes) {
-                        if(this.data.type.recipes[i].type == "fuel") {
+                        if(this.data.type.recipes[i] && this.data.type.recipes[i].type && this.data.type.recipes[i].type == "fuel") {
+                        this.data.i = this.data.type.recipes[i];
                         let irdata = MaterialDictionary.invdata[this.data.type.recipes[i].inputs[0].form][this.data.type.recipes[i].inputs[0].material.name];
                         let irdata1 = MaterialDictionary.invdata[this.data.type.recipes[i].outputs[0].form][this.data.type.recipes[i].outputs[0].material.name];
                       if(this.container.getSlot("coal0").id == irdata.id && this.container.getSlot("coal0").data == irdata.data && this.container.getSlot("coal0").count > 0) {
                       this.container.setSlot("coal0", irdata.id, this.container.getSlot("coal0").count - 1, irdata.data);
-    
-                      this.data.fuel = 500;
+                      
+                      //Logger.Log(this.container.getSlot("coal0").id, "ol");
+                      
+                    
+                      this.data.fuel = this.data.type.recipes[i].time;
                       if(Math.random() < 0.33) {
                         if(this.container.getSlot("ash0").id == 0 || this.container.getSlot("ash0").id == irdata1.id && this.container.getSlot("ash0").data == irdata1.data) {
-                          this.container.setSlot("ash0", irdata.id, this.container.getSlot("ash0").count + 1, irdata.data);
+                          this.container.setSlot("ash0", irdata1.id, this.container.getSlot("ash0").count + 1, irdata1.data);
                         }
                       }
                       this.data.temperature += 1;
@@ -4758,11 +9482,16 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
                         }}
                       this.container.validateSlot("coal0");
                       this.container.validateSlot("ash0");
-                  }
                   
-                    this.container.setScale("heatScale", (this.data.temperature - 20) / 480);
-                    this.container.setScale("scale", this.data.fuel / 500);
+                    }
+                  
+                    this.container.setScale("hScale", (this.data.temperature - 20) / 480);
+                  if(this.data.i) { this.container.setScale("sccale", this.data.fuel / this.data.i.time);
+                    } else {
+                      this.container.setScale("sccale", this.data.fuel / 32);
+                    }
                 this.data.fuelTickEncounter = 0;
+                
                 }
                 
                 if(this.data.temperatureTickEncounter < 44) {
@@ -4770,7 +9499,7 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
                 } else {
                   if(this.data.temperature > 20) {
                   this.data.temperature -= 1;
-                  this.container.setScale("heatScale", (this.data.temperature - 20) / 480);
+                  this.container.setScale("hScale", (this.data.temperature - 20) / 480);
                   }
                     this.data.temperatureTickEncounter = 0;
                   }
@@ -4779,18 +9508,27 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
                   this.data.steamTickEncounter++;
                 } else {
                   if(this.data.temperature > 100) {
-                  if(this.liquidStorage.getAmount("steam") + 150 <= this.liquidStorage.getLimit("steam") & this.liquidStorage.getAmount("water") - 1 >= 0) {
+                  if(this.liquidStorage.getAmount("steam") <= this.liquidStorage.getLimit("steam") & this.liquidStorage.getAmount("water") - 1 >= 0) {
                   this.liquidStorage.getLiquid("water", 1);
                   this.container.setScale("waterScale", this.liquidStorage.getRelativeAmount("water"));
                   
-                  this.liquidStorage.addLiquid("steam", 150);
+                  Logger.Log("peopokl", this.liquidStorage.getAmount("steam"));
+                  Logger.Log("peopiil", this.liquidStorage.addLiquid("steam", 150));
+                  Logger.Log("piiil", this.liquidStorage.getAmount("steam"));
+
+                  if(this.liquidStorage.getAmount("steam") >= this.getCapacity("steam")) {
+                    this.liquidStorage.getLiquid("steam", this.liquidStorage.getAmount("steam") / 4);
+                  }
                   this.container.setScale("steamScale", this.liquidStorage.getRelativeAmount("steam"));
 
                   }}
                   this.data.steamTickEncounter = 0;
               }
-          }}
-        this.container.sendChanges();
+              Logger.Log("peopopl", this.container.getValue("sccale", 0));
+          } Logger.Log("peopl", 8);}
+        
+        
+        
         
         if(this.data.pipeEncounter == 4) {
 			  this.data.pipeEncounter = 0;
@@ -4808,22 +9546,53 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
 			} else {
 			  this.data.pipeEncounter++;
 			}
+			//this.data.tick++;
+			
+			this.container.sendChanges();
      },
      
-     click: function(id, count, data, coords, player){
+     click: function(id, count, data, coords, player) {
         let playerobject = new PlayerActor(player);
-       if(this.data.type != null) {
+        
+       if(id == ItemID.gtdebug) {
+         //if(TileEntity.isTileEntityBlock(this.id)) {
+           Logger.Log("zomb$");
+    if(this.data.pipe != null) {
+      let block = this.blockSource.getBlock(this.x, this.y, this.z);
+      Logger.Log("zo$");
+      let type = null;
+      if(this.data.pipe == true) {
+        type = "pipe"
+      } else {
+        type = "machine"
+      }
+      Logger.Log("zomb$", type);
+      Game.message("id:" + block.id + "\n" + "data:" + block.data + "\n" + "hardness" + Block.getDestroyTime(block.id) + "\n" + "resistance" + Block.getExplosionResistance(block.id) + "\n" + "isConnectable" + true + "\n" + type + "\n" + "required" + 16 + "maximum" + 16 + "\n" + "temperature:" + this.data.temperature + "\n progress: " + this.data.progress);
+      if(type == "pipe") Game.message("steam: " + this.data.amount + "\n type:" + this.data.typeLiquid);
+      if(type == "machine") Game.message("steam: " + this.liquidStorage.getAmount("steam"));
+    }
+  //}
+         return true;
+       }
+        
+       if(this.data.type != null && (this.data.name == "boiler" || this.data.name == "boiler_solar" || this.data.name == "boiler_lava")) {
        if(id == 325 & data == 8) {
-         playerobject.setCarriedItem(325, 1, 0);
+         playerobject.setInventorySlot(playerobject.getSelectedSlot(), 325, 1, 0, null);
          if(this.data.temperature > 100) {
            this.blockSource.explode(this.x, this.y, this.z, 5, false);
            return true;
          }
-         this.liquidStorage.addLiquid("water", 1);
+         Logger.Log(this.liquidStorage.getAmount("water"), "derrous");
+         Logger.Log(this.liquidStorage.getRelativeAmount("water"), "derrousas");
+         this.liquidStorage.addLiquid("water", 1000);
+         Logger.Log(this.liquidStorage.getAmount("water"), "derrau");
+         Logger.Log(this.liquidStorage.getRelativeAmount("water"), "des");
+         
          this.container.setScale("waterScale", this.liquidStorage.getRelativeAmount("water"));
-         this.container.invalidateUI();
+         //this.container.invalidateUI();
+         this.container.sendChanges();
          return true;
-       } else if(id == ItemID.gtmetatool01 && ToolDictionary.types[data].name == "wrench") {
+       }}/*else if(id == ItemID.gtmetatool01 && ToolDictionary.types[data].name == "wrench") {
          let item = playerobject.getInventorySlot(playerobject.getSelectedSlot());
          ToolDictionary.damageTool(item);
     Logger.Log(coords.side, "zopp");
@@ -4834,7 +9603,7 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
       let rotation = MetaRenderer.getBlockRotation(player, false);
       this.data.rotation = rotation;
       
-      this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, rotation: this.data.rotation, put0: this.data.put0, put1: this.data.put1, put2: this.data.put2, put3: this.data.put3, put4: this.data.put4, put5: this.data.put5, textures: this.data.type.textures, rotationOfBlock: this.data.rotation});
+      this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, rotation: this.data.rotation, put0: this.data.put0, put1: this.data.put1, put2: this.data.put2, put3: this.data.put3, put4: this.data.put4, put5: this.data.put5, textures: this.data.type.variable0, rotationOfBlock: this.data.rotation});
       
       } else {
         //Logger.Log(this.data.put.length);
@@ -4845,12 +9614,12 @@ Logger.Log(screenName.substring(0, screenName.indexOf("_") + 1, "fealui"));
         }
         //Logger.Log(this.data.put.length);
         
-        this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, rotation: this.data.rotation, put0: this.data.put0, put1: this.data.put1, put2: this.data.put2, put3: this.data.put3, put4: this.data.put4, put5: this.data.put5, textures: this.data.type.textures, rotationOfBlock: this.data.rotation});
+        this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, rotation: this.data.rotation, put0: this.data.put0, put1: this.data.put1, put2: this.data.put2, put3: this.data.put3, put4: this.data.put4, put5: this.data.put5, textures: this.data.type.variable0, rotationOfBlock: this.data.rotation});
       }
     }
          return true;
-       }
-       }
+       }*/
+       //this.container.sendChanges();
     },
     
     events: {
@@ -4866,7 +9635,7 @@ this.container.sendResponseEvent("eventName", someData)
 },
 
     getScreenName: function(player, coords) {
-      let screenName = this.data.type.name + "-" + this.data.type.tier;
+      let screenName = this.data.type.name + "-" + this.data.tier;
       Logger.Log(screenName.substring(0, screenName.indexOf("-"), "fear"));
 Logger.Log(screenName.substring(0, screenName.indexOf("-") + 1, "fealui"));
         return screenName;
@@ -4875,12 +9644,14 @@ Logger.Log(screenName.substring(0, screenName.indexOf("-") + 1, "fealui"));
     getScreenByName: function(screenName){
 Logger.Log(screenName.substring(0, screenName.indexOf("-")), "fear");
 Logger.Log(screenName.substring(screenName.indexOf("-") + 1), "fealui");
-        if(!screenName.substring(screenName.indexOf("-") + 1)) return MachineDictionary.steammachines[screenName.substring(0, screenName.indexOf("-"))].ui0;
-        if(screenName.substring(screenName.indexOf("-") + 1)) return MachineDictionary.steammachines[screenName.substring(0, screenName.indexOf("-"))].ui1;
+Logger.Log(MachineDictionary.steammachines[screenName.substring(0, screenName.indexOf("-"))].ui0, "fpu");
+Logger.Log(MachineDictionary.steammachines[screenName.substring(0, screenName.indexOf("-"))].ui1, "fpi");
+        if(!screenName.substring(screenName.indexOf("-") + 1) || screenName.substring(screenName.indexOf("-") + 1) == 0) return MachineDictionary.steammachines[screenName.substring(0, screenName.indexOf("-"))].ui0;
+        if(screenName.substring(screenName.indexOf("-") + 1) == 1) return MachineDictionary.steammachines[screenName.substring(0, screenName.indexOf("-"))].ui1;
     },
 
 
-     check: function(error) {
+     check: function(consumption, processing, error) {
        let checked = true;
        if(this.liquidStorage.getAmount("steam") < this.data.steamcomsumption) {
             checked = false;
@@ -4897,6 +9668,7 @@ Logger.Log(screenName.substring(screenName.indexOf("-") + 1), "fealui");
               /*sounds["interrupt"].setInBlock(this.x, this.y, this.z, 10);
               this.sendPacket("gtmachine_sound", {sound: sounds["interrupt"]});*/
               //sounds.interrupt.play();
+              if(processing) {
               this.data.progress = 0;
               this.container.setScale("scale", 0);
              
@@ -4905,50 +9677,112 @@ Logger.Log(screenName.substring(screenName.indexOf("-") + 1), "fealui");
               this.data.work_time = 0;
               //this.clearPut();
               this.data.steamcomsumption = 0;
+              }
             }
           return checked;
      },
-     checkInput: function(j) {
-       let checked = true;
-         for(let i = 0; i < this.data.type.recipes.maxInputs; i++) {
-           let iddata = MaterialDictionary.invdata[j.outputs[i].form][j.outputs[i].material];
-              if(this.container.getSlot("input" + i).id == iddata.id & this.container.getSlot("input"+ i).data == iddata.data & this.container.getSlot("input"+ i).extra == iddata.extra & this.container.getSlot("input" + i).count >= iddata.count) {
-              
+     checkInput: function() {
+       Logger.Log("pentazonium", ".");
+       //let checked = true;
+       let f = null;
+       let t = "";
+       for(let i = 0; i < this.data.type.recipes.maxInputs; i++) {
+
+           t += this.container.getSlot("input" + i).id + "_";
+          t += this.container.getSlot("input" + i).data + "_";
+           
+         t = t.substring(0, t.length - 2);
+       }
+         
+         Logger.Log(this.data.type.recipes.get[t] != null, "sad");
+         
+         //let o = null;
+         if(this.data.type.recipes.get[t] != null) {
+           for(let i = 0; i < this.data.type.recipes.get[t].length; i++) {
+             let checked = true;
+              for(let j = 0; j < this.data.type.recipes.maxInputs; j++) {
+                Logger.Log(j, "???");
+                Logger.Log(this.data.type.recipes.get[t][i].inputs[j].count, "zooi");
+                Logger.Log(this.container.getSlot("input" + j).count, "zouu");
+                if(!(this.data.type.recipes.get[t][i].inputs[j].count <= this.container.getSlot("input" + j).count)) {
+                  checked = false;
+                  break;
+                }
                 
-              } else {
-                checked = false;
               }
-                   }
-            return checked;
+              Logger.Log(checked, "ziilou");
+              if(checked && this.data.type.recipes.get[t][i].isSteam()) {
+              
+                 f = this.data.type.recipes.get[t][i];
+                  this.data.i = f;
+                 return f != null;
+              }
+           }
+         }
+        
+        return false;
+     },
+     checkInputF: function(j) {
+       let checked = true;
+            if(this.container.getSlot("input0").id == 0 || (this.container.getSlot("input0").id == j.id & this.container.getSlot("input0").data == j.data & this.container.getSlot("input0").count + j.count < Item.getMaxStack(this.container.getSlot("input0").id))) {
+            } else {
+              checked = false;
+            }
+       return checked;
      },
      input: function(j) {
        for(let i = 0; i < this.data.type.recipes.maxInputs; i++) {
               //this.data["input" + i] = j[i];
-              let iddata = MaterialDictionary.invdata[j.inputs[i].form][j.inputs[i].material];
-              this.container.setSlot("input" + i, this.container.getSlot("input" + i).id, this.container.getSlot("input" + i).count - iddata.count, this.container.getSlot("input" + i).data /*this.container.getSlot("input" + i).extra*/);
-              
+              if(j.inputs[i].type == "material") {
+              iddata = MaterialDictionary.invdata[j.inputs[i].form][j.inputs[i].material.name];
+            } else if(j.inputs[i].type == "ore") {
+              iddata = {id: OreDictionary.data[j.inputs[i].material.name].id};
+            }
+          if(j.inputs[i].type == "material") {
+              this.container.setSlot("input" + i, this.container.getSlot("input" + i).id, this.container.getSlot("input" + i).count - j.inputs[i].count, this.container.getSlot("input" + i).data /*this.container.getSlot("input" + i).extra*/);
+          } else if(j.inputs[i].type == "ore") {
+            this.container.setSlot("input" + i, this.container.getSlot("input" + i).id, this.container.getSlot("input" + i).count - j.inputs[i].count, this.container.getSlot("input" + i).data /*this.container.getSlot("input" + i).extra*/);
+          }
               this.container.validateSlot("input" + i);
-              
+              Logger.Log("this", "decoun");
+              Logger.Log(this.container.getSlot("input" + i).id, "de");
+              Logger.Log(this.container.getSlot("input" + i).data, "de");
+              Logger.Log(this.container.getSlot("input" + i).count, "de");
              //this.data["input" + i] = j[i]; 
        }
      },
      inputF: function(j) {
-              this.data["input0"] = j;
-              this.container.setSlot("input0", this.container.getSlot("input0").id, this.container.getSlot("input0").count - j.count, this.container.getSlot("input0").data /*this.container.getSlot("input0").extra*/);
+       /*let jj = j.toArray();
+       for(let i in jj) {
+         jj[i].
+       }*/
+              //this.data["input0"] = j;
+              this.container.setSlot("input0", this.container.getSlot("input0").id, this.container.getSlot("input0").count - 1, this.container.getSlot("input0").data /*this.container.getSlot("input0").extra*/);
               
               this.container.validateSlot("input0");
               
-             this.data["input0"] = j; 
+             //this.data["input0"] = j; 
      },
      checkOutput: function(j) {
+       Logger.Log("xcom ui");
        let checked = true;
        for(let i = 0; i < this.data.type.recipes.maxOutputs; i++) {
-           let iddata = MaterialDictionary.invdata[j.outputs[i].form][j.outputs[i].material];
-            if(this.container.getSlot("output" + i).id == 0 || (this.container.getSlot("output" + i).id == iddata.id & this.container.getSlot("output" + i).data == iddata.data & this.container.getSlot("output" + i).count + iddata.count < Item.getMaxStack(this.container.getSlot("output" + i).id))) {
+           let iddata = MaterialDictionary.invdata[j.outputs[i].form][j.outputs[i].material.name];
+           
+           Logger.Log(this.container.getSlot("output" + i).id, "details");
+           Logger.Log(this.container.getSlot("output" + i).data, "details");
+           Logger.Log(this.container.getSlot("output" + i).count, "details");
+           
+           Logger.Log(iddata.id, "details");
+           Logger.Log(iddata.data, "details");
+           Logger.Log(j.outputs[i].count, "detailee");
+           
+            if(this.container.getSlot("output" + i).id == 0 || (this.container.getSlot("output" + i).id == iddata.id && this.container.getSlot("output" + i).data == iddata.data && this.container.getSlot("output" + i).count + j.outputs[i].count < Item.getMaxStack(this.container.getSlot("output" + i).id))) {
             } else {
               checked = false;
             }
        }
+       Logger.Log("qshablop", checked);
        return checked;
      },
     checkOutputF: function(j) {
@@ -4960,14 +9794,18 @@ Logger.Log(screenName.substring(screenName.indexOf("-") + 1), "fealui");
        return checked;
      },
      output: function(j) {
-         
+       Logger.Log("peakks", "zoom");
        for(let i = 0; i < this.data.type.recipes.maxOutputs; i++) {
-           let iddata = MaterialDictionary.invdata[j.outputs[i].form][j.outputs[i].material];
-               this.container.setSlot("output" + i, iddata.id, this.container.getSlot("output" + i).count + iddata.count, iddata.data/*iddata.extra*/);
+           let iddata = MaterialDictionary.invdata[j.outputs[i].form][j.outputs[i].material.name];
+                Logger.Log("peakoiks", iddata.id);
+                Logger.Log("peakoiks", iddata.data);
+                Logger.Log("peakoiks", j.outputs[i].count);
+               this.container.setSlot("output" + i, iddata.id, this.container.getSlot("output" + i).count + j.outputs[i].count, iddata.data/*iddata.extra*/);
                this.container.validateSlot("output" + i);
               }
      },
      outputF: function(result) {
+       Logger.Log("peakks", "zomb");
                this.container.setSlot("output0", result.id, this.container.getSlot("output0").count + result.count, result.data /*result.extra*/);
                this.container.validateSlot("output0");
      },
@@ -4981,42 +9819,43 @@ Logger.Log(screenName.substring(screenName.indexOf("-") + 1), "fealui");
         return this.data.type.type; // блок может отдавать энергию и не может принимать
     },
     canReceive: function(side, type) {
-      Logger.Log(MachineDictionary.uses[this.data.type], "azas");
-        if(MachineDictionary.uses[this.data.type] === MachineDictionary.GENERATOR) return false;
-        Logger.Log(MachineDictionary.uses[this.data.type]);
-        let rt = this.worldRotationToBlockRotation(side ^ 1);
-        if(rt === this.data["put" + rt]) {
+      Logger.Log(this.data.type.name, "azas");
+        if(this.data.type.type === MachineDictionary.GENERATOR) return false;
+        //let rt = this.worldRotationToBlockRotation(side ^ 1);
+        /*if(rt === this.data["put" + rt]) {
           return true; 
-        }
-        Logger.Log(this.data["put" + rt], "€!!");
-      return false;
+        }*/
+        //Logger.Log(this.data["put" + rt], "€!!");
+      return true;
       // side != 0 выведет true, если сторона любая, кроме нижней.
     },
     canExtract: function(side, type) {
+      Logger.Log("peaks++", "iptables");
       if(this.data.type.type === MachineDictionary.PROCESSING) return false;
-      let rt = this.worldRotationToBlockRotation(side);
-      if(rt === this.data["put" + rt]) {
-        return true; 
-      }
-      return false;
+      //let rt = this.worldRotationToBlockRotation(side);
+      return true;
         // выведет true при подключении блока для выхода энергии с нижней стороны.
     },
-    getCapacity: function(){
-        return this.liquidStorage.getLimit("steam"); // установим лимит хранилища энергии в 2 миллиона (2e6 - это способ записи числа 2000000)
+    getCapacity: function(fluid) {
+        if(!fluid) return this.liquidStorage.getLimit("steam"); // установим лимит хранилища энергии в 2 миллиона (2e6 - это способ записи числа 2000000)
+        return this.liquidStorage.getLimit(fluid);
     },
     receive: function(type, amount, sidepre) {
+      
         amount = Math.min(amount, this.getCapacity()); // устанавлимаем максимальное количество энергии, которое может принять механизм равным 1000.
         Logger.Log(amount, "zaebok");
         let add = Math.min(amount, this.getCapacity() - this.liquidStorage.getAmount("steam")); // уменьшаем количество энергии, так, чтобы хранилище не переполнялось;
+        Logger.Log(this.liquidStorage.getAmount("steam"), "as");
         this.liquidStorage.addLiquid("steam", add); // добавляем энергию в хранилище
+        Logger.Log(this.liquidStorage.getAmount("steam"), "as");
         this.data.sidepre = PipeNetBuilder.sideToNeighboring(sidepre);
         return add; // и возвращаем сколько забрали энергии
     },
     Еtick: function(type, src){
         let output = Math.min(this.getCapacity(), this.liquidStorage.getAmount("steam")); // определяем, сколько энергии блок может отдать
-        Logger.Log(output, "osmocene");
+        //Logger.Log(output, "osmocene");
         this.liquidStorage.addLiquid("steam", src.add(this, output, "steam", {x: this.x, y: this.y, z: this.z}) - output, this.data.sidepre); // прибавляем к хранилищу количество энергии, которое осталось после отправки пакета, и вычитаем сколько отправляли.
-        Logger.Log(this.liquidStorage.getAmount("steam"), "ruthenocene");
+        //Logger.Log(this.liquidStorage.getAmount("steam"), "ruthenocene");
         //this.data.sidepre = null;
     },
     
@@ -5081,10 +9920,10 @@ Logger.Log(screenName.substring(screenName.indexOf("-") + 1), "fealui");
             gtmachine_rotate: function(packetData, packetExtra, connectedClient) {
                 // доступный только здесь метод, отправляет пакет конкретному клиенту:
                 let rotationmap = [MetaRenderer.rotationMap[packetData.rotation][0], MetaRenderer.rotationMap[packetData.rotation][1], MetaRenderer.rotationMap[packetData.rotation][2], MetaRenderer.rotationMap[packetData.rotation][3], MetaRenderer.rotationMap[packetData.rotation][4], MetaRenderer.rotationMap[packetData.rotation][5]];
-                let puts = [this.blockRotationToWorldRotation(packetData.put0, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put1, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put2, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put3, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put4, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put5, packetData.rotationOfBlock)];
-                MetaRenderer.invalidateModel({x: this.x, y: this.y, z: this.z}, packetData.block, packetData.textures, rotationmap, puts);
-                sounds.wrench.setInBlock(this.x, this.y, this.z, 5);
-                sounds.wrench.play();
+                //let puts = [this.blockRotationToWorldRotation(packetData.put0, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put1, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put2, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put3, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put4, packetData.rotationOfBlock), this.blockRotationToWorldRotation(packetData.put5, packetData.rotationOfBlock)];
+                MetaRenderer.invalidateModel(packetData.block, packetData.textures, rotationmap);
+                //sounds.wrench.setInBlock(this.x, this.y, this.z, 5);
+                //sounds.wrench.play();
             },
             gtmachine_put: function(packetData, packetExtra, connectedClient) {
                 // доступный только здесь метод, отправляет пакет конкретному клиенту:
@@ -5211,35 +10050,38 @@ UI.getScreenHeight() / 2 - bitmap.getHeight() + 48, size: 36, bitmap: "slot", ne
      },
 }));*/
 
+group.add(BlockID.gtblockmachine, -1);
+
 
 
 
 // file: recipe.js
 
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["aluminium"]);
+setLoadingTip("Recipes:");
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["aluminium"]); //А
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["americium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["antimony"]);
-//RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["arsenic"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["arsenic"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["barium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["beryllium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["bismuth"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["cadmium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["calcium"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["carbon"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["cerium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["cobalt"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["copper"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["chrome"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["gallium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["gold"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["graphite"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["iridium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["iron"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lead"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["magnesium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["manganese"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["chrome"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["gallium"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["gold"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["iridium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lithium"]);
+//RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["mercury"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["molybdenum"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["neodymium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["nickel"]);
@@ -5247,9 +10089,11 @@ RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["niobium"])
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["palladium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["platinum"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["potassium"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["titanium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["silver"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["silicon"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["sodium"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["tantalum"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["tin"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["thorium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["tungsten"]);
@@ -5257,1856 +10101,331 @@ RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["uranium"])
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["uranium235"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["vanadium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["zinc"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["battery_alloy"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["bronze"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["wroughtiron"]);
-RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["red_alloy"]);
 
-RecipeDictionary.registerAlloy(MaterialDictionary.dict["battery_alloy"]);
-RecipeDictionary.registerAlloy(MaterialDictionary.dict["bronze"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["amber"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["battery_alloy"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["blue_topaz"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["bronze"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["certus_quartz"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["coal"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["diamond"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["emerald"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["ender_pearl"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["green_sapphire"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["quartzite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["jasper"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lazurite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["nether_quartz"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["nether_star"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["ruby"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["fools_ruby"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["rutile"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["sapphire"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["sodalite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["steel"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["tanzanite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["topaz"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["charcoal"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["glass"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["wrought_iron"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["wulfenite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["water"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["yellow_limonite"]); 
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["uraninite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["uvarovite"]); 
+//A
+
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["amethyst"]);//A
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["apatite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["bauxite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["bentonite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["blaze"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["ender_eye"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["monazite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["olivine"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["opal"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lapis"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lignite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["pitchblende"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["garnet_red"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["redstone"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["garnet_yellow"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["flint"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["vanadium_magnetite"]);
+
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["andesite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["basalt"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["granite_black"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["diorite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["endstone"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["granite"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["gravel"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["marble"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["netherrack"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["sandstone"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["bedrock"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["sand"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["stone"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["granite_red"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["flint"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["sandstone_red"]);
+
+
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lava"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["clay"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["charcoal"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["glass"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["wheat"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["brick"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["steam"]);
+
+RecipeDictionary.registerAlloy(MaterialDictionary.dict["battery_alloy"]); //A
+RecipeDictionary.registerAlloy(MaterialDictionary.dict["bronze"]); //A
 RecipeDictionary.registerAlloy(MaterialDictionary.dict["red_alloy"]);
+
+
 
 for(let i in ToolDictionary.materials) {
   RecipeDictionary.registerToolRecipe(ToolDictionary.materials[i]);
 }
 
-RecipeDictionary.registerBoilerFuel(MaterialDictionary.dict["coal"], MaterialDictionary.dict["dark_ash"]);
-RecipeDictionary.registerBoilerFuel(MaterialDictionary.dict["lignite"], MaterialDictionary.dict["dark_ash"]);
-/*varar copperdust, copperingot, tindust, tiningot, bronzedust, bronzeingot, irondust, ironingot, leaddust, leadingot, antimonydust, antimonyingot, batteryalloydust, batteryalloyingot, redalloyingot, redalloydust, copperplate, tinplate, bronzeplate, ironplate, leadplate, antimonyplate, batteryalloyplate, redalloyplate;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-    if(Object.keys(MaterialDictionary.dict)[i] == "copper") {
-      copperingot = MaterialDictionary.firsts["ingot"] + i;
-      copperdust = MaterialDictionary.firsts["dust"] + i;
-      copperplate = MaterialDictionary.firsts["plate"] + i;
-    }
-    if(Object.keys(MaterialDictionary.dict)[i] == "iron") {
-      ironingot = MaterialDictionary.firsts["ingot"] + i;
-      irondust = MaterialDictionary.firsts["dust"] + i;
-      ironplate = MaterialDictionary.firsts["plate"] + i;
-    }
-    if(Object.keys(MaterialDictionary.dict)[i] == "tin") {
-       tiningot = MaterialDictionary.firsts["ingot"] + i;
-       tindust = MaterialDictionary.firsts["dust"] + i;
-       tinplate = MaterialDictionary.firsts["plate"] + i;
-    }
-    if(Object.keys(MaterialDictionary.dict)[i] == "bronze") {
-       bronzeingot = MaterialDictionary.firsts["ingot"] + i;
-       bronzedust = MaterialDictionary.firsts["dust"] + i;
-       bronzeplate = MaterialDictionary.firsts["plate"] + i;
-    }
-    if(Object.keys(MaterialDictionary.dict)[i] == "lead") {
-      leadingot = MaterialDictionary.firsts["ingot"] + i;
-      leaddust = MaterialDictionary.firsts["dust"] + i;
-      leadplate = MaterialDictionary.firsts["plate"] + i;
-    }
-    if(Object.keys(MaterialDictionary.dict)[i] == "antimony") {
-       antimonyingot = MaterialDictionary.firsts["ingot"] + i;
-       antimonydust = MaterialDictionary.firsts["dust"] + i;
-       antimonyplate = MaterialDictionary.firsts["plate"] + i;
-    }
-    if(Object.keys(MaterialDictionary.dict)[i] == "redalloy") {
-       redalloyingot = MaterialDictionary.firsts["ingot"] + i;
-       redalloydust = MaterialDictionary.firsts["dust"] + i;
-       redalloyplate = MaterialDictionary.firsts["plate"] + i;
-    }
-    if(Object.keys(MaterialDictionary.dict)[i] == "batteryalloy") {
-       batteryalloyingot = MaterialDictionary.firsts["ingot"] + i;
-       batteryalloydust = MaterialDictionary.firsts["dust"] + i;
-       batteryalloyplate = MaterialDictionary.firsts["plate"] + i;
-    }
-}
+RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["coal"], form: "gem"}, 1600, {material: MaterialDictionary.dict["dark_ash"], form: "dustTiny"}, true);
+RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["coal"], form: "dust"}, 1600, {material: MaterialDictionary.dict["dark_ash"], form: "dustTiny"}, true);
+RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["charcoal"], form: "gem"}, 1600, {material: MaterialDictionary.dict["dark_ash"], form: "dustTiny"}, true);
+RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["charcoal"], form: "dust"}, 1600, {material: MaterialDictionary.dict["dark_ash"], form: "dustTiny"}, true);
+RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["lignite"], form: "gem"}, 400, {material: MaterialDictionary.dict["dark_ash"], form: "dustTiny"}, true);
+RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["lignite"], form: "dust"}, 400, {material: MaterialDictionary.dict["dark_ash"], form: "dustTiny"}, true);
+//
+/*
+Recipes.addShaped({id: BlockID.gtcasing, count: 1, data: MachineDictionary.casings["bronze_hull"]}, ["ppp", "p p", "ppp"], ['p', ItemID.gtmetaitem1, MaterialDictionary.invdata["plate"]["bronze"].data]);
+Recipes.addShaped({id: BlockID.gtcasing, count: 1, data: MachineDictionary.casings["bronze_bricks_hull"]}, ["ppp", "p p", "fff"], ['f', 45, 0, 'p', ItemID.gtmetaitem1, MaterialDictionary.invdata["plate"]["bronze"].data]);
+*/
+
+RecipeDictionary.addMachineShaped(["pop", "pip", "pap"], ['o', {type: "common", id: 33, data: 0}, 'p', {type: "machinep", typed: "bronze", name: "small"}, 'a', {type: "common", id: 145, data: 0}, 'i', {type: "casing", typed: "bronze_hull"}], {type: "machine_steam", count: 1, name: "hammer"});
+RecipeDictionary.addMachineShaped(["ppp", "fif", "ppp"], ['f', {type: "common", id: 61, data: 0}, 'p', {type: "machinep", typed: "bronze", name: "small"}, 'i', {type: "casing", typed: "bronze_bricks_hull"}], {type: "machine_steam", count: 1, name: "alloy_smelter"});
+RecipeDictionary.addMachineShaped(["ppp", "oio", "ppp"], ['o', {type: "common", id: 33, data: 0}, 'p', {type: "machinep", typed: "bronze", name: "small"}, 'i', {type: "casing", typed: "bronze_hull"}], {type: "machine_steam", count: 1, name: "compressor"});
+RecipeDictionary.addMachineShaped(["ppp", "pip", "pfp"], ['f', {type: "common", id: 61, data: 0}, 'p', {type: "machinep", typed: "bronze", name: "small"}, 'i', {type: "casing", typed: "bronze_bricks_hull"}],
+{type: "machine_steam", count: 1, name: "furnace"});
+RecipeDictionary.addMachineShaped(["ppp", "fig", "ppp"], ['f', {type: "common", id: 33, data: 0}, 'g', {type: "common", id: 20, data: 0}, 'p', {type: "machinep", typed: "bronze", name: "small"}, 'i', {type: "casing", typed: "bronze_hull"}],
+
+{type: "machine_steam", count: 1, name: "extractor"});
+
+RecipeDictionary.addMachineShaped(["ppp", "p p", "gig"], ['f', {type: "common", id: 33, data: 0}, 'g', {type: "common", id: 20, data: 0}, 'p', {type: "machinep", typed: "bronze", name: "small"}, 'i', {type: "casing", typed: "bronze_bricks_hull"}],
+{type: "machine_steam", name: "boiler", count: 1});
+
+RecipeDictionary.addMachineShaped(["ggg", "fff", "pip"], ['f', {type: "material", material: MaterialDictionary.dict["silver"], form: "plate"}, 'g', {type: "common", id: 20, data: 0}, 'p', {type: "machinep", typed: "bronze", name: "small"}, 'i', {type: "casing", typed: "bronze_bricks_hull"}], {type: "machine_steam", name: "boiler_solar", count: 1});
+
+RecipeDictionary.addShaped(["ppp", "p p", "ppp"], ['p', {type: "material", form: ["plate"], material: MaterialDictionary.dict["bronze"]}],  {type: "casing", typed: "bronze_bricks", count: 1});
+RecipeDictionary.addShaped(["ppp", "p p", "fff"], ['f', {type: "common", id: 45, data: 0}, 'p', {type: "material", form: "plate", material: MaterialDictionary.dict["bronze"]}],  {type: "casing", typed: "bronze_bricks_hull", count: 1});
+
+
+
+
+
+RecipeDictionary.addToolShaped(["wrench", "hammer"], ["p_p", "p p", "p_p"], ['p', {type: "material", form: ["plate"], material: MaterialDictionary.dict["bronze"]}],  {type: "machinep", typed: "bronze", name: "small", count: 6});
+
+RecipeDictionary.addToolShaped(["wrench", "hammer"], ["ppp", "_ _", "ppp"], ['p', {type: "material", form: ["plate"], material: MaterialDictionary.dict["bronze"]}],  {type: "machinep", typed: "bronze", name: "normal", count: 2});
+
+RecipeDictionary.addToolShaped(["hammer", "wrench"], ["p_p", "p p", "p_p"], ['p', {type: "material", form: "plate", material: MaterialDictionary.dict["bronze"]}],  {type: "machinep", typed: "bronze", name: "large", count: 1});
+
+
+RecipeDictionary.addToolShaped(["wrench", "hammer"], ["p_p", "p p", "p_p"], ['p', {type: "material", form: ["plate"], material: MaterialDictionary.dict["copper"]}],  {type: "machinep", typed: "copper", name: "small", count: 6});
+
+RecipeDictionary.addToolShaped(["wrench", "hammer"], ["ppp", "_ _", "ppp"], ['p', {type: "material", form: ["plate"], material: MaterialDictionary.dict["copper"]}],  {type: "machinep", typed: "copper", name: "normal", count: 2});
+
+RecipeDictionary.addToolShaped(["hammer", "wrench"], ["p_p", "p p", "p_p"], ['p', {type: "material", form: "plate", material: MaterialDictionary.dict["copper"]}],  {type: "machinep", typed: "copper", name: "large", count: 1});
+
+
+RecipeDictionary.addToolShaped(["wrench", "hammer"], ["p_p", "p p", "p_p"], ['p', {type: "material", form: ["plate"], material: MaterialDictionary.dict["steel"]}],  {type: "machinep", typed: "steel", name: "small", count: 6});
+
+RecipeDictionary.addToolShaped(["wrench", "hammer"], ["ppp", "_ _", "ppp"], ['p', {type: "material", form: ["plate"], material: MaterialDictionary.dict["steel"]}],  {type: "machinep", typed: "steel", name: "normal", count: 2});
+
+RecipeDictionary.addToolShaped(["hammer", "wrench"], ["p_p", "p p", "p_p"], ['p', {type: "material", form: "plate", material: MaterialDictionary.dict["steel"]}],  {type: "machinep", typed: "steel", name: "large", count: 1});
+
+
+
+
+
+
+Callback.addCallback("ServerPlayerTick", function(playerUid, isPlayerDead) {
+
+    // playerUid - сущность игрока
+
+    // isPlayerDead - дополнительный параметр - мертв ли данный игрок
+    /*var client = Network.getClientForPlayer(playerUid);
+    if (client != null) {
+      let player = Entity.getPosition(playerUid);
+       let source = BlockSource.getDefaultForActor(playerUid);
+       let ents = source.fetchEntitiesInAABB(player.x - 24, 0, player.z - 24, player.x + 24, 256, player.z + 24, 64);
+       for(let i in ents) {
+         let t = Entity.getCompoundTag(ents[i]);
+         if(!t) return;
+         
+         let p = t.getCompoundTag("Item");
+         
+         if(p) {
+          Logger.Log(p.getString("Name").length() > 15 && p.getString("Name").substring(15) == "gtmetaitem1", "penjit");
+          if(p.getString("Name").length() > 15 && p.getString("Name").substring(15) == "gtmetaitem1") {
+            Logger.Log(p.getShort("Damage"), "derriusp pl");
+          if(MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].form == "dustPure" || MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].form == "dustImpure") {
+            
+           Logger.Log(p.getShort("Damage"), "pentest");
+            let tile = source.getBlock(Math.floor(t.getListTag("Pos").getFloat(0)), Math.floor(t.getListTag("Pos").getFloat(1)), Math.floor(t.getListTag("Pos").getFloat(2)));
+            let tileentity = source.getBlockEntity(Math.floor(t.getListTag("Pos").getFloat(0)), Math.floor(t.getListTag("Pos").getFloat(1)), Math.floor(t.getListTag("Pos").getFloat(2)));
+           if(tile.id == 118 && tileentity.getCompoundTag() != null) {
+             Logger.Log(tile.data, "rexatore");
+             source.setBlock(Math.floor(t.getListTag("Pos").getFloat(0)), Math.floor(t.getListTag("Pos").getFloat(1)), Math.floor(t.getListTag("Pos").getFloat(2)), 118, tile.data - 2);
+            p.putShort("Damage", MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].data);
+            
+            for(let v in t.toScriptable()) {
+              Logger.Log(v, "peaks");
+              Logger.Log(t.getValueType(v), "peakede");
+              
+            }
+            for(let v in p.toScriptable()) {
+              Logger.Log(v, "peak");
+              Logger.Log(p.getValueType(v), "peloiu");
+            }
+            
+            t.putCompoundTag("Item", p);
+             Logger.Log(MaterialDictionary.getTexture({id: ItemID[p.getString("Name").substring(15)], data: p.getShort("Damage"), count: 1, extra: null}, false).name, "zorq");
+             
+             
+             
+             Entity.setCompoundTag(ents[i], t);
+           }
+           Logger.Log(p.getShort("Damage"), "pepost");
+         }
+          }
+         }
+       }
+    // что то сделать
+    }*/
     
-RecipeDictionary.registerRecipe("alloy_smelter", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-   input0: {id: ItemID.gtmetaitem01, count: 1, data: antimonyingot},
-   input1: {id: ItemID.gtmetaitem01, count: 4, data: leadingot},
-output0: {id: ItemID.gtmetaitem01, count: 5, data: batteryalloyingot},
-  },
-  //in tick
-  energy: 16,
-  work_time: 256
-});
-RecipeDictionary.registerRecipe("alloy_smelter", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-   input0: {id: ItemID.gtmetaitem01, count: 3, data: copperingot},
-   input1: {id: ItemID.gtmetaitem01, count: 1, data: tiningot},
-output0: {id: ItemID.gtmetaitem01, count: 4, data: bronzeingot},
-  },
-  //in tick
-  energy: 16,
-  work_time: 256
-});
-RecipeDictionary.registerRecipe("alloy_smelter", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-   input0: {id: ItemID.gtmetaitem01, count: 1, data: copperingot},
-   input1: {id: 331, count: 4, data: 0},
-output0: {id: ItemID.gtmetaitem01, count: 4, data: redalloyingot},
-  },
-  //in tick
-  energy: 16,
-  work_time: 256
-});
-
-RecipeDictionary.registerRecipe("furnace", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: copperdust},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: copperingot},
-  },
-  //in tick
-  energy: 4,
-  work_time: 256
-});
-RecipeDictionary.registerRecipe("furnace", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: bronzedust},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: bronzeingot},
-  },
-  //in tick
-  energy: 4,
-  work_time: 256
-});
-RecipeDictionary.registerRecipe("furnace", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: tindust},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: tiningot},
-  },
-  //in tick
-  energy: 4,
-  work_time: 256
-});
-RecipeDictionary.registerRecipe("furnace", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: irondust},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: ironingot},
-  },
-   //in tick
-  energy: 4,
-  work_time: 256
-});
-RecipeDictionary.registerRecipe("furnace", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: antimonydust},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: antimonyingot},
-  },
-  //in tick
-  energy: 4,
-  work_time: 256
-});
-RecipeDictionary.registerRecipe("furnace", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: leaddust},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: leadingot},
-  },
-   //in tick
-  energy: 4,
-  work_time: 256
-});
-RecipeDictionary.registerRecipe("furnace", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: redalloydust},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: redalloyingot},
-  },
-  //in tick
-  energy: 4,
-  work_time: 256
-});
-RecipeDictionary.registerRecipe("furnace", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: batteryalloydust},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: batteryalloyingot},
-  },
-  //in tick
-  energy: 4,
-  work_time: 256
-});
-
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: copperingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: copperdust},
-  },
-  //in tick
-  energy: 2,
-  work_time: 800
-});
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: bronzeingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: bronzedust},
-  },
-  //in tick
-  energy: 2,
-  work_time: 800
-});
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: copperingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: copperdust},
-  },
-  //in tick
-  energy: 2,
-  work_time: 800
-});
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: bronzeingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: bronzedust},
-  },
- //in tick
-  energy: 2,
-  work_time: 800
-});
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: tiningot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: tindust},
-  },
-  //in tick
-  energy: 2,
-  work_time: 800
-});
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: ironingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: irondust},
-  },
-  //in tick
-  energy: 2,
-  work_time: 800
-});
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: antimonyingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: antimonydust},
-  },
-  //in tick
-  energy: 2,
-  work_time: 800
-});
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: leadingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: leaddust},
-  },
-  //in tick
-  energy: 2,
-  work_time: 800
-});
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: redalloyingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: redalloydust},
-  },
-  //in tick
-  energy: 2,
-  work_time: 800
-});
-RecipeDictionary.registerRecipe("macerator", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: batteryalloyingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: batteryalloydust},
-  },
-  //in tick
-  energy: 2,
-  work_time: 800
-});
-
-RecipeDictionary.registerRecipe("hammer", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: copperingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: copperplate},
-  },
-  steam: 1, //in tick
-  energy: 1,
-  work_time: 40
-});
-RecipeDictionary.registerRecipe("hammer", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: bronzeingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: bronzeplate},
-  },
-  steam: 1, //in tick
-  energy: 1,
-  work_time: 40
-});
-RecipeDictionary.registerRecipe("hammer", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: tiningot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: tinplate},
-  },
-  steam: 1, //in tick
-  energy: 1,
-  work_time: 40
-});
-RecipeDictionary.registerRecipe("hammer", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: ironingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: ironplate},
-  },
-  steam: 1, //in tick
-  energy: 1,
-  work_time: 40
-});
-RecipeDictionary.registerRecipe("hammer", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: antimonyingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: antimonyplate},
-  },
-  steam: 1, //in tick
-  energy: 1,
-  work_time: 40
-});
-RecipeDictionary.registerRecipe("hammer", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: leadingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: leadplate},
-  },
-  steam: 1, //in tick
-  energy: 1,
-  work_time: 40
-});
-RecipeDictionary.registerRecipe("hammer", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: redalloyingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: redalloyplate},
-  },
-  steam: 1, //in tick
-  energy: 1,
-  work_time: 40
-});
-RecipeDictionary.registerRecipe("hammer", {
-  isSteam: true, //may is provided by steam machine
-  tier: 1,
-  recipe: {
-    input0: {id: ItemID.gtmetaitem01, count: 1, data: batteryalloyingot},
-    output0: {id: ItemID.gtmetaitem01, count: 1, data: batteryalloyplate},
-  },
-  steam: 1, //in tick
-  energy: 1,
-  work_time: 40
-});
-
-var hammerindex;
-var fileindex;
-var axeindex;
-var hoeindex;
-var pickaxeindex;
-var shovelindex;
-var swordindex;
-var mortarindex;
-var screwdriverindex;
-var wirecutterindex;
-var wrenchindex;
-for(let i = 0; i < ToolDictionary.types.length; i++) {
-if(ToolDictionary.types[i].name == "axe") {
-     axeindex = i;
-  }
-if(ToolDictionary.types[i].name == "hoe") {
-   hoeindex = i;
-}
-if(ToolDictionary.types[i].name == "pickaxe") {
-     pickaxeindex = i;
-  }
-if(ToolDictionary.types[i].name == "shovel") {
-     shovelindex = i;
-  }
-if(ToolDictionary.types[i].name == "sword") {
-    swordindex = i;
-  }
-if(ToolDictionary.types[i].name == "hammer") {
-     hammerindex = i;
-  }
-if(ToolDictionary.types[i].name == "file") {
-    fileindex = i;
-  }
-if(ToolDictionary.types[i].name == "mortar") {
-    mortarindex = i;
-  }
-if(ToolDictionary.types[i].name == "screwdriver") {
-     screwdriverindex = i;
-  }
-if(ToolDictionary.types[i].name == "wirecutter") {
-    wirecutterindex = i;
-  }
-  if(ToolDictionary.types[i].name == "wrench") {
-    wrenchindex = i;
-  }
-}
-
-for(let i = 0; i < 38; i++) {
-  if(i % 2 == 0) {
-    let e = i;
-  Item.registerNameOverrideFunction(BlockID["gtblockores" + e], function(item){
-  for(let j = 0; j < Object.keys(OreDictionary.invdata[BlockID["gtblockores" + e]]).length; j++) {
-    for(let l = 0; l < OreDictionary.stones.length; l++) {
-    if(item.data == j * OreDictionary.stones.length + l) {
-    return OreDictionary.invdata[BlockID["gtblockores" + e]][j].name + " ore";
-  }
+    let client = Network.getClientForPlayer(playerUid);
+    if (client != null) {
+       let player = Entity.getPosition(playerUid);
+       let source = BlockSource.getDefaultForActor(playerUid);
+       let ents = source.fetchEntitiesInAABB(player.x - 24, player.y - 64, player.z - 24, player.x + 24, player.y + 64, player.z + 24, 64);
+       
+       for(let i in ents) {
+         let t = Entity.getCompoundTag(ents[i]);
+         
+         let p = t.getCompoundTag("Item");
+         
+         if(p && p.getString("Name").length() > 15 && p.getString("Name").substring(15) == "gtmetaitem1") {
+           if(MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].form == "dustPure" || MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].form == "dustImpure") {
+           let tile = source.getBlock(Math.floor(t.getListTag("Pos").getFloat(0)), Math.floor(t.getListTag("Pos").getFloat(1)), Math.floor(t.getListTag("Pos").getFloat(2)));
+            let tileentity = source.getBlockEntity(Math.floor(t.getListTag("Pos").getFloat(0)), Math.floor(t.getListTag("Pos").getFloat(1)), Math.floor(t.getListTag("Pos").getFloat(2)));
+             if(tile.id == 118 && tileentity.getCompoundTag() != null) {
+           Logger.Log(MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].id, "asq");
+           Logger.Log(p.getShort("Count"), "zasqw");
+           for(let r in p.getAllKeys()) {
+             Logger.Log(p.getAllKeys()[r], "zeakopi");
+             Logger.Log(p.getValueType(p.getAllKeys()[r]), "zeakopi");
+           }
+           Logger.Log(p.getByte("Count"), "zasqw");
+           Logger.Log(MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].id, "zasqwi");
+Logger.Log(MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].data, "zasqyw");
+          Entity.setDroppedItem(ents[i],
+          MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].id,
+          p.getByte("Count"),
+          MaterialDictionary.invdata["dust"][MaterialDictionary.data[ItemID[p.getString("Name").substring(15)]][p.getShort("Damage")].material.name].data, null);
+          
+          source.setBlock(Math.floor(t.getListTag("Pos").getFloat(0)), Math.floor(t.getListTag("Pos").getFloat(1)), Math.floor(t.getListTag("Pos").getFloat(2)), 118, tile.data - 2);
+             }}
+         }
+       }
     }
-  }
-  });
-  Block.registerDropFunction(BlockID["gtblockores" + e], function(coords, blockID, blockData, level){
-  for(let j = 0; j < Object.keys(OreDictionary.invdata[BlockID["gtblockores" + e]]).length; j++) {
-    if(level >= OreDictionary.invdata[BlockID["gtblockores" + e]][j].level) {
-      for(let l = 0; l < OreDictionary.stones.length; l++) {
-  if(blockData == j * OreDictionary.stones.length + l) {
-    if(Player.getCarriedItem().id == ItemID.gtmetatool01 & Player.getCarriedItem().data == hammerindex) {
- 
-    for(let i = MaterialDictionary.firsts["crushedore"]; i < MaterialDictionary.data[ItemID.gtmetaitem01].length; i++) {
-      if(MaterialDictionary.data[ItemID.gtmetaitem01][i].material.name == OreDictionary.invdata[BlockID["gtblockores" + e]][j].name) {
-        return [[ItemID.gtmetaitem01, 1, i]];
-      }
-    }         
+});
+Logger.Log(MaterialDictionary.firsts["frameGt"].id, "id");
+    Logger.Log(MaterialDictionary.firsts["frameGt"].data, "data");
+let playerposes = {};
+/*Callback.addCallback("ServerPlayerTick", function(playerUid, isPlayerDead) {
+  
+  let client = Network.getClientForPlayer(playerUid);
+  if (client != null) {
+    let playerpos = Entity.getPosition(playerUid);
+    playerpos.y -= 0.6;
+    let player = new PlayerActor(playerUid);
+    let source = BlockSource.getDefaultForActor(playerUid);
+    if(playerposes[playerUid] != null) {
       
-    } else {
-          return [[blockID, 1, blockData]];
+      Logger.Log(playerposes[playerUid].x, "xx");
+  Logger.Log(playerposes[playerUid].y, "yy");
+  Logger.Log(playerposes[playerUid].z, "zz");
+  
+      Logger.Log(playerpos.x, "x");
+  Logger.Log(playerpos.y, "y");
+  Logger.Log(playerpos.z, "z");
+  
+    Logger.Log(Math.floor(playerpos.x), "ax");
+  Logger.Log(Math.floor(playerpos.y), "ay");
+  Logger.Log(Math.floor(playerpos.z), "az");
+  
+    let xChange = playerpos.x - playerposes[playerUid].x;
+    let yChange = playerpos.y - playerposes[playerUid].y;
+    let zChange = playerpos.z - playerposes[playerUid].z;
+    
+    /*Logger.Log(source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)), "cad7");
+    Logger.Log(MaterialDictionary.firsts["frameGt"], "cad7");*
+    Logger.Log(MaterialDictionary.firsts["frameGt"].id, "id");
+    Logger.Log(MaterialDictionary.firsts["frameGt"].data, "data");
+    if(Math.abs(xChange) >= Math.abs(yChange) && Math.abs(xChange) >= Math.abs(zChange)) {
+      let chet = 0;
+      if(xChange < 0) chet = - 0.5;
+      if(xChange > 0) chet = 0.5;
+      Logger.Log(source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).id, "cad7");
+      Logger.Log(source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).data, "cad73");
+      if((source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).id == MaterialDictionary.firsts["frameGt"].id && source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).data >= MaterialDictionary.firsts["frameGt"].data) || MaterialDictionary.ids["frameGt"].includes(source.getBlock(Math.floor(playerpos.x + chet), Math.floor(playerpos.y), Math.floor(playerpos.z)).id)) {
+      
+          //Entity.setPosition(playerUid, playerposes[playerUid].x, playerpos.y + 0.8, playerposes[playerUid].z);
+          
+          Entity.setVelocity(Entity.getVelocity(playerUid).x, 0.4, Entity.getVelocity(playerUid).z);
+          
+          Entity.setVelocity(Entity.getVelocity(playerUid).x, Math.max(Entity.getVelocity(playerUid).y, -0.15), Entity.getVelocity(playerUid).z);
         }
-  }
-}
-} else {
-  
-}
-}
-});
-  } else {
-    let e = i;
-  Item.registerNameOverrideFunction(BlockID["gtblockores" + e], function(item){
-    for(let j = 0; j < Object.keys(OreDictionary.invdat[BlockID["gtblockores" + e]]).length; j++) {
-      for(let l = 0; l < OreDictionary.stones.length; l++) {
-  if(item.data == j * OreDictionary.stones.length + l) {
-    return "Small " + OreDictionary.invdat[BlockID["gtblockores" + e]][j].name + " ore";
     }
-      }
+    if(Math.abs(yChange) >= Math.abs(xChange) && Math.abs(yChange) >= Math.abs(zChange)) {
+      let chet = 0;
+      if(yChange < 0) chet = - 0.5;
+      if(yChange > 0) chet = 0.5;
+      Logger.Log(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y+ chet), Math.floor(playerpos.z)).id, "cad7er");
+      Logger.Log(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y+ chet), Math.floor(playerpos.z)).data, "cad73");
+      if((source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y+ chet), Math.floor(playerpos.z)).id == MaterialDictionary.firsts["frameGt"].id && source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y + chet), Math.floor(playerpos.z)).data >= MaterialDictionary.firsts["frameGt"].data) || MaterialDictionary.ids["frameGt"].includes(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y + chet), Math.floor(playerpos.z)).id)) {
+      
+          //Entity.setPosition(playerUid, playerposes[playerUid].x, playerpos.y + 0.8, playerposes[playerUid].z);
+          
+          Entity.setVelocity(Entity.getVelocity(playerUid).x, 0.4, Entity.getVelocity(playerUid).z);
+        }
     }
-});
-Block.registerDropFunction(BlockID["gtblockores" + e], function(coords, blockID, blockData, level){
-  for(let j = 0; j < Object.keys(OreDictionary.invdat[BlockID["gtblockores" + e]]).length; j++) {
-    if(level >= OreDictionary.invdat[BlockID["gtblockores" + e]][j].level) {
-      for(let l = 0; l < OreDictionary.stones.length; l++) {
-  if(blockData == j * OreDictionary.stones.length + l) {
-    for(let i = MaterialDictionary.firsts["crushedore"]; i < MaterialDictionary.data[ItemID.gtmetaitem01].length; i++) {
-      if(MaterialDictionary.data[ItemID.gtmetaitem01][i].material.name == OreDictionary.invdat[BlockID["gtblockores" + e]][j].name) {
-        return [[ItemID.gtmetaitem01, 1, i]];
-      }
-    }
-}
-}
-} else {
-  
-}
-}
-});
-}
-}
-
-for(let i = 0; i < MaterialDictionary.data[ItemID.gtmetaitem01].length; i++) {
-Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][i].material.name, "fucked");
-Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][i].form, "gt");
-}
-
-let ioffset1 = 0;
-let ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let isoffset = false;
-let isplateoffset = false;
-  let plate = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++) {
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isplateoffset = true;
-  } else {
-  }
-  }
-
-let isingotoffset = false;
-  let ingot = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isingotoffset = true;
-  } else {
-  }
-  }
-  if(!isplateoffset) {
-    ioffset1 += 1;
-  }
-  if(!isingotoffset) {
-    ioffset2 += 1;
-  }
-  
-  if(isplateoffset & isingotoffset) {
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  }else {
-    Logger.Log("true", "gregtech");
-  }
-let e = i;
-Logger.Log(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type, "gtx");
-Logger.Log(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].name, "rtx");
-Recipes.addShaped({id: ItemID.gtmetaitem01, count: 1, data: plate}, ["h", "x", "x"], ['h', ItemID.gtmetatool01, hammerindex, 'x', ItemID.gtmetaitem01, ingot], function(api, field, result) {
-  Logger.Log(e, "zips");
-   for (let y in field) {
-				if (field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);} else {
-  field[y].count -= 1;
-}}
-  });
-}
-
-Logger.Log(MaterialDictionary.firsts["plate"], "хуй у качков маленькие");
-Logger.Log(MaterialDictionary.firsts["rod"], "хуй у качков маленькие");
-Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][MaterialDictionary.firsts["rod"]].material.name, "quake");
-Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][MaterialDictionary.firsts["rod"]].form, "gregtech");
-Logger.Log(MaterialDictionary.firsts["longrod"], "хуй у качков маленькие");
-iоffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let isoffset = false;
-let isrodoffset = false;
-  let rod = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["rod"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["rod"][j]) {
-    rod = MaterialDictionary.firsts["rod"] + i - ioffset1;
-    Logger.Log(rod);
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][rod].material.name, "q");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][rod].form, "gregtech");
-isrodoffset = true;
-  } else {
-  }
-  }
-  
-let isingotoffset = false;
-let ingot = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isingotoffset = true;
-  } else {
-  }
-  }
-  if(!isrodoffset) {
-    ioffset1 += 1;
-  }
-  if(!isingotoffset) {
-    ioffset2 += 1;
-  }
-  if(isrodoffset & isingotoffset) {
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  }else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetaitem01, count: 1, data: rod}, ["f", "x"], ['f', ItemID.gtmetatool01, fileindex,'x', ItemID.gtmetaitem01, ingot], function(api, field, result) {
-   for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let isoffset = false;
-let isfoiloffset = false;
-  let foil = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["foil"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["foil"][j]) {
-    foil = MaterialDictionary.firsts["foil"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][foil].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][foil].form, "gregtech");
-isfoiloffset = true;
-  } else {
-  }
-  }
-  
-let isplateoffset = false;
-let plate = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isplateoffset = true;
-  } else {
-  }
-  }
-  if(!isfoiloffset) {
-    ioffset1 += 1;
-  }
-  if(!isplateoffset) {
-    ioffset2 += 1;
-  }
-  if(isplateoffset & isfoiloffset) {
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  }else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetaitem01, count: 2, data: foil}, ["hp"], ['h', ItemID.gtmetatool01, hammerindex, 'p', ItemID.gtmetaitem01, plate], function(api, field, result) {
-   for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let isoffset = false;
-let isframeoffset = false;
-  let framebox = 0;
-  for(let j = 0; j < MaterialDictionary.types[BlockID.gtmetamaterial01]["framebox"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[BlockID.gtmetamaterial01]["framebox"][j]) {
-    framebox = MaterialDictionary.firsts["framebox"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.data[BlockID.gtmetamaterial01][framebox].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[BlockID.gtmetamaterial01][framebox].form, "gregtech");
-isframeoffset = true;
-  } else {
-  }
-  }
-
-let isrodoffset = false;
-  let rod = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["rod"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["rod"][j]) {
-    rod = MaterialDictionary.firsts["rod"] + i - ioffset2;
-    Logger.Log(ioffset2, "tetramethyltin");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][rod].material.name, "pentacarbonyliron");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][rod].form, "gregtech");
-    isrodoffset = true;
-  } else {
-  }
-  }
-  if(!isframeoffset) {
-    ioffset1 += 1;
-  }
-  if(!isrodoffset) {
-    ioffset2 += 1;
-  }
-  if(isframeoffset & isrodoffset) {
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  }else {
-    Logger.Log("true", "gregtech");
-  }
-let e = i;
-Recipes.addShaped({id: BlockID.gtmetamaterial01, count: 2, data: framebox}, ["rrr","rwr", "rrr"], ['w', ItemID.gtmetatool01, wrenchindex, 'r', ItemID.gtmetaitem01, rod], function(api, field, result) {
-  Logger.Log(e, "zips");
-   for (let y in field) {
-				if (field[y].id == ItemID.gtmetatool01 & field[y].data == wrenchindex) {
-ToolDictionary.damageTool(field[y]);} else {
-  field[y].count -= 1;
-}}
-  });
-}
-
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let isoffset = false;
-let isfoiloffset = false;
-  let foil = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["foil"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["foil"][j]) {
-    foil = MaterialDictionary.firsts["foil"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][foil].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][foil].form, "gregtech");
-isfoiloffset = true;
-  } else {
-  }
-  }
-  
-let isfinewireoffset = false;
-let finewire = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["finewire"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["finewire"][j]) {
-    finewire = MaterialDictionary.firsts["finewire"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][finewire].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][finewire].form, "gregtech");
-isfinewireoffset = true;
-  } else {
-  }
-  }
-  if(!isfoiloffset) {
-    ioffset1 += 1;
-  }
-  if(!isfinewireoffset) {
-    ioffset2 += 1;
-  }
-  if(isfoiloffset & isfinewireoffset) {
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  }else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetaitem01, count: 1, data: finewire}, ["wp"], ['w', ItemID.gtmetatool01, wirecutterindex, 'p', ItemID.gtmetaitem01, foil], function(api, field, result) {
-   for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == wirecutterindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-let isoffset = false;
-let isdustoffset = false;
-let dust = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["dust"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["dust"][j]) {
-    dust = MaterialDictionary.firsts["dust"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][dust].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][dust].form, "gregtech");
-isdustoffset = true;
-  } else {
-  }
-  }
-  
-  let issmallpiledustoffset = false;
-  let smallpiledust = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["smallpiledust"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["smallpiledust"][j]) {
-    smallpiledust = MaterialDictionary.firsts["smallpiledust"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][smallpiledust].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][smallpiledust].form, "gregtech");
-issmallpiledustoffset = true;
-  } else {
-  }
-  }
-  if(!isdustoffset) {
-    ioffset1 += 1;
-  }
-  if(!issmallpiledustoffset) {
-    ioffset2 += 1;
-  }
-  if(isdustoffset & issmallpiledustoffset) {
-   isoffset = true; 
-  }
-  if(!isoffset) {
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  
-let e = i;
-Recipes.addShaped({id: ItemID.gtmetaitem01, count: 1, data: dust}, ["xx", "xx"], ['x', ItemID.gtmetaitem01, smallpiledust], function(api, field, result) {
-for (let y in field){
-field[y].count -= 1;
-  }
-  }
-);
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let isoffset = false;
-let isdustoffset = false;
-  let dust = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["dust"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["dust"][j]) {
-    dust = MaterialDictionary.firsts["dust"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][dust].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][dust].form, "gregtech");
-isdustoffset = true;
-  } else {
-  }
-  }
-
-let istinypiledustoffset = false;
-let tinypiledust = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["tinypiledust"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["tinypiledust"][j]) {
-    tinypiledust = MaterialDictionary.firsts["tinypiledust"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][tinypiledust].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][tinypiledust].form, "gregtech");
-istinypiledustoffset = true;
-  } else {
-  }
-  }
-  if(!isdustoffset) {
-    ioffset1 += 1;
-  }
-  if(!istinypiledustoffset) {
-    ioffset2 += 1;
-  }
-  if(isdustoffset & istinypiledustoffset) {
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  }else {
-    Logger.Log("true", "gregtech");
-  }
-let e = i;
-Recipes.addShaped({id: ItemID.gtmetaitem01, count: 1, data: dust}, ["xxx", "xxx", "xxx"], ['x', ItemID.gtmetaitem01, tinypiledust], function(api, field, result) {
-   for (let y in field){
-field[y].count -= 1;
-  }
-  });
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-let isoffset = false;
-let isdustoffset = false;
-let dust = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["dust"].length; j++){
-  if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["dust"][j]) {
-    dust = MaterialDictionary.firsts["dust"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][dust].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][dust].form, "gregtech");
-isdustoffset = true;
-  } else {
-  }
-  }
-  
-  let isingotoffset = false;
-  let ingot = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset2;
-   Logger.Log(MaterialDictionary.firsts["ingot"], "cathy");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isingotoffset = true;
-  } else {
-  }
-  }
-  if(!isdustoffset) {
-    ioffset1 += 1;
-  }
-  if(!isingotoffset) {
-    ioffset2 += 1;
-  }
-  if(isingotoffset & isdustoffset) {
-    isoffset = true;
-  }
-  
-  if(!isoffset) {
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  
-let e = i;
-Recipes.addShapeless({id: ItemID.gtmetaitem01, count: 1, data: dust}, [{id: ItemID.gtmetatool01, data: mortarindex}, {id: ItemID.gtmetaitem01, data: ingot}], function(api, field, result){ 
-for (let y in field){
-if(field[y].id == ItemID.gtmetatool01 & field[y].data == mortarindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-
-/*for(let i = 0; i < Object.keys(ToolDictionary.material).length; i++) {
-  let isoffset = false;
-  let ingot = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-  if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isoffset = true;
-  } else {
-  }
-  }
-  if(!isoffset) {
-    ioffset += 1;
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  
-let e = i;
-
-  Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: hammerindex}, ["xx ", "xxs", "xx "], ['x', ItemID.gtmetaitem01, ingot, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-field[y].count -= 1;
-  }
-  });
-}
-
-ioffset1 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
+    if(Math.abs(zChange) >= Math.abs(xChange) && Math.abs(zChange) >= Math.abs(yChange)) {
+      let chet = 0;
+      if(zChange < 0) chet = -0.5;
+      if(zChange > 0) chet = 0.5;
+      Logger.Log(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).id, "cad73");
+      Logger.Log(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).data, "cad73");
+      if((source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).id == MaterialDictionary.firsts["frameGt"].id && source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).data >= MaterialDictionary.firsts["frameGt"].data) || MaterialDictionary.ids["frameGt"].includes(source.getBlock(Math.floor(playerpos.x), Math.floor(playerpos.y), Math.floor(playerpos.z + chet)).id)) {
+      
+          //Entity.setPosition(playerUid, playerposes[playerUid].x, playerpos.y + 0.8, playerposes[playerUid].z);
+          
+          Entity.setVelocity(Entity.getVelocity(playerUid).x, 0.4, Entity.getVelocity(playerUid).z);
+          
+        }
     }
   }
-  if(!is) {
-    continue;
+    playerposes[playerUid] = Entity.getPosition(playerUid);
+    playerposes[playerUid].y -= 0.6;
   }
-  
-  let isoffset = false;
-  let ingot = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["ingot"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isoffset = true;
-  } else {
-  }
-  }
-  
-  if(!isoffset) {
-    ioffset1 += 1;
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  
-let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: hammerindex}, ["xx ", "xxs", "xx "], ['x', ItemID.gtmetaitem01, ingot, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-field[y].count -= 1;
-  }
-  });
-}
-
-ioffset1 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-  
-  let isoffset = false;
-  let plate = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isoffset = true;
-  } else {
-  }
-  }
-  if(!isoffset) {
-    ioffset1 += 1;
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  
-let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: fileindex}, ["x", "x", "s"], ['x', ItemID.gtmetaitem01, plate, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-field[y].count -= 1;
-  }
-});
-}
-
-ioffset1 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-  
-  let isoffset = false;
-  let ingot = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["ingot"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isoffset = true;
-  } else {
-  }
-  }
-  if(!isoffset) {
-    ioffset1 += 1;
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  
-let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: mortarindex}, [" i ", "sis", "sss"], ['i', ItemID.gtmetaitem01, ingot, 's', 1, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-field[y].count -= 1;
-  }
-});
-}
-
-ioffset1 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-  
-  let isoffset = false;
-  let rod = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["rod"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["rod"][j]) {
-    rod = MaterialDictionary.firsts["rod"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["rod"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][rod].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][rod].form, "gregtech");
-isoffset = true;
-  } else {
-  }
-  }
-  if(!isoffset) {
-    ioffset1 += 1;
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: screwdriverindex}, [" fr", " rh", "s  "], ['f', ItemID.gtmetatool01, fileindex, 'h', ItemID.gtmetatool01, hammerindex, 'r', ItemID.gtmetaitem01, rod, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-  
-  let isoffset = false;
-  let ingot = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["ingot"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isoffset = true;
-  } else {
-  }
-  }
-  if(!isoffset) {
-    ioffset1 += 1;
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: wrenchindex}, ["ihi", "iii", " i "], ['h', ItemID.gtmetatool01, hammerindex, 'i', ItemID.gtmetaitem01, ingot], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-
-let isoffset = false;
-let isplateoffset = false;
-let plate = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["plate"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isplateoffset = true;
-  } else {
-  }
-}
-
-let isrodoffset = false;
-let rod = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["rod"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["rod"][j]) {
-    rod = MaterialDictionary.firsts["rod"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.firsts["rod"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][rod].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][rod].form, "gregtech");
-isrodoffset = true;
-  } else {
-  }
-  }
-  
-  if(!isplateoffset) {
-    ioffset1 += 1;
-  }
-  if(!isrodoffset) {
-    ioffset2 += 1;
-  }
-  if(isplateoffset & isrodoffset){
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: wirecutterindex}, ["pfp", "hpd", "rsr"], ['f', ItemID.gtmetatool01, fileindex, 'h', ItemID.gtmetatool01, hammerindex, 'd', ItemID.gtmetatool01, screwdriverindex, 'p', ItemID.gtmetaitem01, plate, 'r', ItemID.gtmetaitem01, rod, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-
-let isoffset = false;
-let isplateoffset = false;
-let plate = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["plate"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isplateoffset = true;
-  } else {
-  }
-  }
-
-let isingotoffset = false;
-let ingot = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.firsts["ingot"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isingotoffset = true;
-  } else {
-  }
-  }
-    if(!isplateoffset) {
-    ioffset1 += 1;
-  }
-  if(!isingotoffset) {
-    ioffset2 += 1;
-  }
-  if(isplateoffset & isingotoffset){
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: pickaxeindex}, ["pii", "fsh", " s "], ['f', ItemID.gtmetatool01, fileindex, 'h', ItemID.gtmetatool01, hammerindex, 'p', ItemID.gtmetaitem01, plate, 'i', ItemID.gtmetaitem01, ingot, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-
-let isoffset = false;
-let isplateoffset = false;
-let plate = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["plate"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isplateoffset = true;
-  } else {
-  }
-  }
-
-let isingotoffset = false;
-let ingot = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["gem"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["gem"][j]) {
-    ingot = MaterialDictionary.firsts["gem"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.firsts["gem"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isingotoffset = true;
-  } else {
-  }
-  }
-    if(!isplateoffset) {
-    ioffset1 += 1;
-  }
-  if(!isingotoffset) {
-    ioffset2 += 1;
-  }
-  if(isplateoffset & isingotoffset){
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: pickaxeindex}, ["pii", "fs ", " s "], ['f', ItemID.gtmetatool01, fileindex, 'p', ItemID.gtmetaitem01, plate, 'i', ItemID.gtmetaitem01, ingot, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-
-let isoffset = false;
-let isplateoffset = false;
-let plate = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["plate"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isplateoffset = true;
-  } else {
-  }
-  }
-
-let isingotoffset = false;
-let ingot = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.firsts["ingot"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isingotoffset = true;
-  } else {
-  }
-  }
-  if(!isplateoffset) {
-    ioffset1 += 1;
-  }
-  if(!isingotoffset) {
-    ioffset2 += 1;
-  }
-  if(isplateoffset & isingotoffset){
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: hoeindex}, ["pih", "fs ", " s "], ['f', ItemID.gtmetatool01, fileindex, 'h', ItemID.gtmetatool01, hammerindex, 'p', ItemID.gtmetaitem01, plate, 'i', ItemID.gtmetaitem01, ingot, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-
-let isoffset = false;
-let isplateoffset = false;
-let plate = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["plate"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isplateoffset = true;
-  } else {
-  }
-  }
-
-let isingotoffset = false;
-let ingot = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["gem"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["gem"][j]) {
-    ingot = MaterialDictionary.firsts["gem"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.firsts["gem"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isingotoffset = true;
-  } else {
-  }
-  }
-  if(!isplateoffset) {
-    ioffset1 += 1;
-  }
-  if(!isingotoffset) {
-    ioffset2 += 1;
-  }
-  if(isplateoffset & isingotoffset){
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: hoeindex}, ["pi", "fs", " s"], ['f', ItemID.gtmetatool01, fileindex, 'h', ItemID.gtmetatool01, hammerindex, 'p', ItemID.gtmetaitem01, plate, 'i', ItemID.gtmetaitem01, ingot, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-  
-  let isoffset = false;
-  let plate = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["plate"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isoffset = true;
-  } else {
-  }
-  }
-  if(!isoffset) {
-    ioffset1 += 1;
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: shovelindex}, ["fph", " s ", " s "], ['f', ItemID.gtmetatool01, fileindex, 'h', ItemID.gtmetatool01, hammerindex, 'p', ItemID.gtmetaitem01, plate, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-  let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-  
-  let isoffset = false;
-  let plate = 0;
-  for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["plate"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isoffset = true;
-  } else {
-  }
-  }
-  if(!isoffset) {
-    ioffset1 += 1;
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: swordindex}, [" p ", "fph", " s "], ['f', ItemID.gtmetatool01, fileindex, 'h', ItemID.gtmetatool01, hammerindex, 'p', ItemID.gtmetaitem01, plate, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-
-let isoffset = false;
-let isplateoffset = false;
-let plate = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["plate"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isplateoffset = true;
-  } else {
-  }
-  }
-
-let isingotoffset = false;
-let ingot = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["ingot"][j]) {
-    ingot = MaterialDictionary.firsts["ingot"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.firsts["ingot"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isingotoffset = true;
-  } else {
-  }
-  }
-    if(!isplateoffset) {
-    ioffset1 += 1;
-  }
-  if(!isingotoffset) {
-    ioffset2 += 1;
-  }
-  if(isplateoffset & isingotoffset){
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: axeindex}, ["pi", "ps", "fs"], ['f', ItemID.gtmetatool01, fileindex, 'h', ItemID.gtmetatool01, hammerindex, 'p', ItemID.gtmetaitem01, plate, 'i', ItemID.gtmetaitem01, ingot, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-ioffset1 = 0;
-ioffset2 = 0;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-let is = false;
-  for(let j = 0; j < Object.keys(ToolDictionary.materials).length; j++) {
-    if(ToolDictionary.materials[Object.keys(ToolDictionary.materials)[j]] == MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]]) {
-      is = true;
-    }
-  }
-  if(!is) {
-    continue;
-  }
-
-let isoffset = false;
-let isplateoffset = false;
-let plate = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["plate"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["plate"][j]) {
-    plate = MaterialDictionary.firsts["plate"] + i - ioffset1;
-    Logger.Log(MaterialDictionary.firsts["plate"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][plate].form, "gregtech");
-isplateoffset = true;
-  } else {
-  }
-  }
-
-let isingotoffset = false;
-let ingot = 0;
-for(let j = 0; j < MaterialDictionary.types[ItemID.gtmetaitem01]["gem"].length; j++){
-      if(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[i]].type == MaterialDictionary.types[ItemID.gtmetaitem01]["gem"][j]) {
-    ingot = MaterialDictionary.firsts["gem"] + i - ioffset2;
-    Logger.Log(MaterialDictionary.firsts["gem"], "cathy"); 
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].material.name, "quake");
-    Logger.Log(MaterialDictionary.data[ItemID.gtmetaitem01][ingot].form, "gregtech");
-isingotoffset = true;
-  } else {
-  }
-  }
-    if(!isplateoffset) {
-    ioffset1 += 1;
-  }
-  if(!isingotoffset) {
-    ioffset2 += 1;
-  }
-  if(isplateoffset & isingotoffset){
-    isoffset = true;
-  }
-  if(!isoffset) {
-    continue;
-  } else {
-    Logger.Log("true", "gregtech");
-  }
-  let e = i;
-Recipes.addShaped({id: ItemID.gtmetatool01, count: 1, data: axeindex}, ["pi", "ps", "fs"], ['f', ItemID.gtmetatool01, fileindex, 'p', ItemID.gtmetaitem01, plate, 'i', ItemID.gtmetaitem01, ingot, 's', 280, -1], function(api, field, result) {
-   ToolDictionary.upgradeTool(MaterialDictionary.dict[Object.keys(MaterialDictionary.dict)[e]], result);
-for (let y in field){
-  if(field[y].id == ItemID.gtmetatool01 & field[y].data == fileindex) {
-ToolDictionary.damageTool(field[y]);
-  } else if(field[y].id == ItemID.gtmetatool01 & field[y].data == hammerindex) {
-ToolDictionary.damageTool(field[y]);
-  } else {
-field[y].count -= 1;
-}
-  }
-});
-}
-
-var copper, tin, bronze;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-    if(Object.keys(MaterialDictionary.dict)[i] == "copper") {
-      copper = MaterialDictionary.firsts["dust"] + i;
-    }
-    if(Object.keys(MaterialDictionary.dict)[i] == "tin") {
-       tin = MaterialDictionary.firsts["dust"] + i;
-    }
-    if(Object.keys(MaterialDictionary.dict)[i] == "bronze") {
-       bronze = MaterialDictionary.firsts["dust"] + i;
-    }
-}
-Recipes.addShapeless({id: ItemID.gtmetaitem01, count: 3, data: bronze}, [{id: ItemID.gtmetaitem01, data: copper}, {id: ItemID.gtmetaitem01, data: copper},
-{id: ItemID.gtmetaitem01, data: copper},
-{id: ItemID.gtmetaitem01, data: tin}], function(api, field, result){ 
-for (let y in field){
-field[y].count -= 1;
-  }
-});
-
-let copperpipe;
-for(let m = 0; m < Object.keys(PipeDictionary.materials).length; m++) {
-  if(Object.keys(PipeDictionary.materials)[m] == "bronze") {
-      copperpipe = m;
-  }
-}
-copperpipe = copperpipe * PipeDictionary.sizes.length + 1;
-
-let furnace;
-for(let m = 0; m < Object.keys(RecipeDictionary.steammachines).length; m++) {
-  if(Object.keys(RecipeDictionary.steammachines)[m] == "furnace") {
-      furnace = m * 2 + 2;
-  }
-}
-
-Recipes.addShaped({id: BlockID.gtblockmechanism, count: 1, data: furnace}, ["ppp", "pip", "pfp"], ['f', 61, 0, 'p', BlockID.gtblockpipe, copperpipe, 'i', BlockID.gtblockmechanism, 1]);
-
-let macerator;
-for(let m = 0; m < Object.keys(RecipeDictionary.steammachines).length; m++) {
-  if(Object.keys(RecipeDictionary.steammachines)[m] == "macerator") {
-      macerator = m * 2 + 2;
-  }
-}
-
-Recipes.addShaped({id: BlockID.gtblockmechanism, count: 1, data: macerator}, ["dpd", "pip", "opo"], ['o', 33, 0, 'p', BlockID.gtblockpipe, copperpipe, 'i', BlockID.gtblockmechanism, 0, 'd', 264, 0]);
-
-let forge_hammer;
-for(let m = 0; m < Object.keys(RecipeDictionary.steammachines).length; m++) {
-  if(Object.keys(RecipeDictionary.steammachines)[m] == "hammer") {
-      forge_hammer = m * 2 + 2;
-  }
-}
-
-Recipes.addShaped({id: BlockID.gtblockmechanism, count: 1, data: forge_hammer}, ["pop", "pip", "pap"], ['o', 33, 0, 'p', BlockID.gtblockpipe, copperpipe, 'a', 145, 0, 'i', BlockID.gtblockmechanism, 0]);
-
-let compressor;
-for(let m = 0; m < Object.keys(RecipeDictionary.steammachines).length; m++) {
-  if(Object.keys(RecipeDictionary.steammachines)[m] == "compressor") {
-      compressor = m * 2 + 2;
-  }
-}
-
-Recipes.addShaped({id: BlockID.gtblockmechanism, count: 1, data: compressor}, ["ppp", "oio", "ppp"], ['o', 33, 0, 'p', BlockID.gtblockpipe, copperpipe, 'i', BlockID.gtblockmechanism, 0]);
-
-let alloy_smelter;
-for(let m = 0; m < Object.keys(RecipeDictionary.steammachines).length; m++) {
-  if(Object.keys(RecipeDictionary.steammachines)[m] == "alloy_smelter") {
-      alloy_smelter = m * 2 + 2;
-  }
-}
-
-Recipes.addShaped({id: BlockID.gtblockmechanism, count: 1, data: alloy_smelter}, ["ppp", "fif", "ppp"], ['f', 61, 0, 'p', BlockID.gtblockpipe, copperpipe, 'i', BlockID.gtblockmechanism, 1]);
-
-var bronzeplate;
-for(let i = 0; i < Object.keys(MaterialDictionary.dict).length; i++) {
-    if(Object.keys(MaterialDictionary.dict)[i] == "bronze") {
-      bronzeplate = MaterialDictionary.firsts["plate"] + i;
-    }
-}
-Recipes.addShaped({id: BlockID.gtblockmechanism, count: 1, data: 0}, ["ppp", "php", "ppp"], ['h', ItemID.gtmetatool01, hammerindex, 'p', ItemID.gtmetaitem01, bronzeplate]);
-
-Recipes.addShaped({id: BlockID.gtblockmechanism, count: 1, data: 1}, ["ppp", "php", "bbb"], ['p', ItemID.gtmetaitem01, bronzeplate, 'b', 336, 0, 'h', ItemID.gtmetatool01, hammerindex]);
+});*/
 
 Recipes.removeWorkbenchRecipe(5, 4, 0);
 Recipes.removeWorkbenchRecipe(5, 4, 1);
 Recipes.removeWorkbenchRecipe(5, 4, 2);
 Recipes.removeWorkbenchRecipe(5, 4, 3);
 
-Recipes.addShaped({id: 5, count: 2, data: 0}, ["l"], ['l', 17, 0]);
-Recipes.addShaped({id: 5, count: 2, data: 1}, ["l"], ['l', 17, 1]);
-Recipes.addShaped({id: 5, count: 2, data: 2}, ["l"], ['l', 17, 2]);
-Recipes.addShaped({id: 5, count: 2, data: 3}, ["l"], ['l', 17, 3]);
-
 Recipes.removeWorkbenchRecipe(5, 4, 4);
 Recipes.removeWorkbenchRecipe(5, 4, 5);
-
-Recipes.addShaped({id: 5, count: 2, data: 4}, ["l"], ['l', 162, 0]);
-Recipes.addShaped({id: 5, count: 2, data: 5}, ["l"], ['l', 162, 1]);
-
-Recipes.removeWorkbenchRecipe(280, 4, 0);
-
-Recipes.addShaped({id: 280, count: 2, data: 0}, ["l", "l"], ['l', 5, 0]);
-Recipes.addShaped({id: 280, count: 2, data: 1}, ["l", "l"], ['l', 5, 1]);
-Recipes.addShaped({id: 280, count: 2, data: 2}, ["l", "l"], ['l', 5, 2]);
-Recipes.addShaped({id: 280, count: 2, data: 3}, ["l", "l"], ['l', 5, 3]);
-
-Recipes.addShaped({id: 280, count: 2, data: 4}, ["l", "l"], ['l', 5, 4]);
-Recipes.addShaped({id: 280, count: 2, data: 5}, ["l","l"], ['l', 5, 5]);
-*/
 Recipes.removeWorkbenchRecipe(256, 1, -1);
 Recipes.removeWorkbenchRecipe(257, 1, -1);
 Recipes.removeWorkbenchRecipe(258, 1, -1);
@@ -7122,6 +10441,93 @@ Recipes.removeWorkbenchRecipe(286, 1, -1);
 Recipes.removeWorkbenchRecipe(292, 1, -1);
 Recipes.removeWorkbenchRecipe(293, 1, -1);
 Recipes.removeWorkbenchRecipe(294, 1, -1);
+Recipes.removeWorkbenchRecipe(359, 1, -1);
+
+Recipes.removeWorkbenchRecipe(380, 1, -1);
+Recipes.removeWorkbenchRecipe(410, 1, -1);
+Recipes.removeWorkbenchRecipe(297, 1, -1);
+Recipes.removeWorkbenchRecipe(101, 16, -1);
+Recipes.removeWorkbenchRecipe(330, 3, -1);
+
+Recipes.removeWorkbenchRecipe(325, 1, -1);
+
+Recipes.removeWorkbenchRecipe(280, 4, 0);
+
+Recipes.removeWorkbenchRecipe(167, 1, -1);
+Recipes.removeWorkbenchRecipe(147, 1, -1);
+Recipes.removeWorkbenchRecipe(148, 1, -1);
+Recipes.removeWorkbenchRecipe(84, 1, -1);
+Recipes.removeWorkbenchRecipe(328, 1, -1);
+
+Recipes.removeWorkbenchRecipe(306, 1, -1);
+Recipes.removeWorkbenchRecipe(307, 1, -1);
+Recipes.removeWorkbenchRecipe(308, 1, -1);
+Recipes.removeWorkbenchRecipe(309, 1, -1);
+
+Recipes.removeWorkbenchRecipe(314, 1, -1);
+Recipes.removeWorkbenchRecipe(315, 1, -1);
+Recipes.removeWorkbenchRecipe(316, 1, -1);
+Recipes.removeWorkbenchRecipe(317, 1, -1);
+
+Recipes.addShaped({id: 5, count: 2, data: 0}, ["l"], ['l', 17, 0]);
+Recipes.addShaped({id: 5, count: 2, data: 1}, ["l"], ['l', 17, 1]);
+Recipes.addShaped({id: 5, count: 2, data: 2}, ["l"], ['l', 17, 2]);
+Recipes.addShaped({id: 5, count: 2, data: 3}, ["l"], ['l', 17, 3]);
+
+Recipes.addShaped({id: 5, count: 2, data: 4}, ["l"], ['l', 162, 0]);
+Recipes.addShaped({id: 5, count: 2, data: 5}, ["l"], ['l', 162, 1]);
+
+
+Recipes.addShaped({id: 280, count: 2, data: 0}, ["l", "l"], ['l', 5, 0]);
+Recipes.addShaped({id: 280, count: 2, data: 1}, ["l", "l"], ['l', 5, 1]);
+Recipes.addShaped({id: 280, count: 2, data: 2}, ["l", "l"], ['l', 5, 2]);
+Recipes.addShaped({id: 280, count: 2, data: 3}, ["l", "l"], ['l', 5, 3]);
+
+Recipes.addShaped({id: 280, count: 2, data: 4}, ["l", "l"], ['l', 5, 4]);
+Recipes.addShaped({id: 280, count: 2, data: 5}, ["l","l"], ['l', 5, 5]);
+
+RecipeDictionary.addToolShaped(["hammer"], ["i i", "i_i", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 380, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["wrench"], ["i_i", "ici", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}, 'c', {type: "common", id: 54, data: 0}], {type: "common", id: 410, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["wrench"], [" _ ", "iii", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "stick"}], {type: "common", id: 101, data: 0, count: 8});
+
+RecipeDictionary.addToolShaped(["hammer"], ["ii ", "ii_", "ii "],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 330, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["ii ", "ii_"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 167, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["ii_"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 147, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", " i "],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 325, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", "iii", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 307, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["iii", "i_i", "i i"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 308, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", "i i"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 309, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["iii", "i_i"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 306, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", "iii", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 315, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["iii", "i_i", "i i"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 316, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["i_i", "i i"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 317, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["iii", "i_i"],  ['i', {type: "material", material: MaterialDictionary.dict["gold"], form: "plate"}], {type: "common", id: 314, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer"], ["ii_"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 148, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer", "wrench"], [" _ ", "i_i", "iii"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 328, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["hammer", "file"], ["_i", "i_"],  ['i', {type: "material", material: MaterialDictionary.dict["iron"], form: "plate"}], {type: "common", id: 359, data: 0, count: 1});
+
+RecipeDictionary.addToolShaped(["mortar"], ["_i"],  ['i', {type: "common", id: 54, data: 0}], {type: "material", material: MaterialDictionary.dict["wheat"], form: "dust"});
+
+RecipeDictionary.addFurnace({type: "material", material: MaterialDictionary.dict["wheat"], form: "dust"}, {type: "common", id: 297, data: 0});
+
+//!!end
+setLoadingTip("");
 
 
 

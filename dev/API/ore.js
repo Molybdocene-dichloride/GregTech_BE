@@ -21,12 +21,15 @@ Size int
 //API for GregTech ore generation
 let OreDictionary = {
     blocks: [],
+    number: [],
+    invblocks: [],
+    evblocks: [],
     ores: [],
     data: [],
     dat: [],
     invdata: [],
     invdat: [],
-    smallgens : [],
+    smallgens: [],
     veins: [],
     grids: {},
     sumOfRarites: 0,
@@ -36,11 +39,14 @@ let OreDictionary = {
     //stone block for changing to ore
     registerChangeableBlock: function(block) {
         block.number = Object.keys(this.blocks).length;
+        this.invblocks[block.number] = block;
+        this.evblocks[block.texture] = block;
         this.blocks[block.id + "_" + block.data] = block;
         //this.countByID = Math.floor(16 / this.blocks.length);
     //this.IDBycount = Math.floor(this.stones.length / 16);
     },
     registerOre: function (material, smallgen) {
+        setLoadingTip("Ores: " + material.name);
         let variation = [];
         let variationbig = [];
         if(!material.hasFlag(GENERATE_ORE)) {
@@ -58,10 +64,26 @@ let OreDictionary = {
        
   //!!!!!
   this.data[material.name] = {id: BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)]};
+  Block.registerDropFunction(BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)], function(coords, id, data, diggingLevel, region) {
+    let drop = [];
+	  if(Math.random() > 0.5) {
+	    drop.push([MaterialDictionary.invdata["crushed"][material.name].id, 1, MaterialDictionary.invdata["crushed"][material.name].data]);
+	  } else {
+	    drop.push([MaterialDictionary.invdata["dustImpure"][material.name].id, 1, MaterialDictionary.invdata["dustImpure"][material.name].data]);
+	  }
+	  if(Math.random() < 0.22) {
+	    drop.push([MaterialDictionary.invdata["dustImpure"][OreDictionary.invblocks[data].texture].id, 1, MaterialDictionary.invdata["dustImpure"][OreDictionary.invblocks[data].texture].data]);
+	  } else if(Math.random() > 0.22 && Math.random() < 0.33) {
+	    drop.push([MaterialDictionary.invdata["dust"][OreDictionary.invblocks[data].texture].id, 1, MaterialDictionary.invdata["dust"][OreDictionary.invblocks[data].texture].data]);
+	  }
+	  return drop;
+  });
   this.dat[material.name] = {id: BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)]};
   
   this.invdata[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)]] = material;
   this.invdat[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)]] = material;
+  this.invsmallgens[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)]] = smallgens;
+  this.invsmallgen[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)]] = smallgens;
   
   for(let i = 0; i < Object.keys(this.blocks).length; i++) {
     
@@ -74,6 +96,9 @@ variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" 
     Block.createBlock("gtblockores" + id, this.createvariables(material, variationbig), "gtore");
     IDRegistry.genBlockID("gtblockores" + smallid);
     Block.createBlock("gtblockores" + smallid, this.createvariables(material, variation), "gtore");
+    
+    this.number[BlockID["gtblockores" + id]] = id;
+    this.number[BlockID["gtblockores" + smallid]] = smallid;
     },
     createvariables: function(material, variation) {
         let variables = [];
@@ -117,6 +142,9 @@ variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" 
   randomInInner: function(random, start, end) {
     return start + random.nextInt(end - start);
   },
+  randomInInnerGaussian: function(random, start, end) {
+    return start + Math.floor(random.nextGaussian() * (end - start));
+  },
   findChunkHighSurface: function (chunkX, chunkZ) {
     let highs = 0;
     for(let x = 0; x < 16; x++) {
@@ -137,19 +165,23 @@ variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" 
     }
   }
   };
-  
-  
+
   //code vein
-  function OreMixVein(name, dimensions, primary, secondary, inbetween, sporadic, minimalheight, maximalheight, rarity, density, size) {
+  function OreMixVein(name, dimensions, primary, secondary, inbetween, sporadic, minimalheight, maximalheight, rarity, density, size, sizeing, covariance) {
     this.name = name;
-    this.dimensions= dimensions;
+    this.dimensions = dimensions;
     this.primary = primary;
-  this.secondary = secondary;
+    this.secondary = secondary;
     this.inbetween = inbetween;
-  this.sporadic = sporadic;
+    this.sporadic = sporadic;
     this.minimalheight = minimalheight;
-  this.maximalheight = maximalheight;
+    this.maximalheight = maximalheight;
     this.rarity = rarity;
-  this.density = density;
+    this.density = density;
     this.size = size;
+    this.covariance = covariance;
+    this.sizeing = sizeing;
+    /*checkGen() {
+      GenerationDictionary.get() * density * 
+    }*/
   }

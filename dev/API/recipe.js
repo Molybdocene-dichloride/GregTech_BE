@@ -119,7 +119,346 @@ function FuelMap(minInputs, maxInputs, defaultEUt) {
 
 let RecipeDictionary = {
     RECIPE_FURNACE_MAP: false,
-    recipemaps: {},
+    recipes: null,
+    create: function() {
+      let trv = recipes.keySet().iterator();
+      let itt = trv.iterator();
+      while(itt.hasNext()) {
+        let f = itt.next();
+        
+        recipes.get(f).getSortedEntries();
+      }
+    },
+    getBySources: function(slots) {
+      /*let lo = RecipeDictionary.recipes.keySet().iterator();
+      let pllp = 0;
+      while(lo.hasNext()) {
+        let u = lo.next();
+        Logger.Log(u, "ghhh");
+        
+       let sr = RecipeDictionary.recipes.get(u);
+       
+       let itt = sr.iterator();
+      while(itt.hasNext()) {
+        let uu = itt.next();
+        Logger.Log(uu.getSortedEntries()[0], "ghhhggtko");
+        Logger.Log(uu.getSortedEntries()[0].id, "gooo");
+        Logger.Log(uu.getSortedEntries()[0].data, "gsss");
+        Logger.Log(uu.getSortedEntries()[0].count, "gsss");
+       
+        pllp++;
+      }
+      }*/
+      if(slots.length == 0) return null;
+      if(slots.length == 1) {
+        slots[0].index = 1;
+      }
+      if(slots.length == 2) {
+        if(row(slots[0].index) == row(slots[1].index) && row2(slots[0].index) == row2(slots[1].index) + 1) {
+          slots[0].index = 1;
+          slots[1].index = 0;
+        }
+        if(row(slots[0].index) == row(slots[1].index) && row2(slots[0].index) == row2(slots[1].index) + 2) {
+          slots[0].index = 2;
+          slots[1].index = 0;
+        }
+        if(row(slots[0].index) == row(slots[1].index) && row2(slots[0].index) == row2(slots[1].index) - 1) {
+          slots[0].index = 0;
+          slots[1].index = 1;
+        }
+        if(row(slots[0].index) == row(slots[1].index) && row2(slots[0].index) == row2(slots[1].index) + 2) {
+          slots[0].index = 0;
+          slots[1].index = 2;
+        }
+      }
+      
+      let r;
+      let it = RecipeDictionary.recipes.keySet().iterator();
+      while(it.hasNext()) {
+        let u = it.next();
+        Logger.Log(u, "warehouse");
+        
+        let trv = RecipeDictionary.recipes.get(u);
+      if(java.lang.Long.toString(u) == "17") r = u;
+        Logger.Log(trv == null, "xenoss");
+      }
+      
+      let sslot;
+      for(let slot in slots) {
+        if(!sslot || slots[slot].data > sslot.data) {
+          sslot = slots[slot];
+        }
+      }
+      
+      Logger.Log(sslot.id, "xendo");
+      Logger.Log(sslot.data, "xenlo");
+      
+      Logger.Log(Flag.pack2(Flag.recepiee(sslot.data), sslot.id), "xeno");
+      
+      Logger.Log(r, "xeno");
+      
+      Logger.Log(Flag.pack2(Flag.recepiee(sslot.data), sslot.id) == r, "xeno");
+      
+      let trv = RecipeDictionary.recipes.get(new java.lang.Long(Flag.pack2(Flag.recepiee(sslot.data), sslot.id)));
+      let trvminus = RecipeDictionary.recipes.get(new java.lang.Long(Flag.pack2(Flag.recepiee(-1), sslot.id)));
+      
+      Logger.Log(trv == null, "xenoss");
+      
+      let trsv = RecipeDictionary.recipes.get(r);
+      
+        Logger.Log(trsv == null, "xenoss");
+      
+      if(trv == null) return null;
+      
+      let sourcesForCleaning = [];
+        let result;
+      
+      let ittas = trv.iterator();
+      while(ittas.hasNext()) {
+        let trvi = ittas.next();
+        Logger.Log(trvi.getResult().id, "xenos_12");
+      }
+      if(trvminus != null) {
+      let ittaols = trvminus.iterator();
+      while(ittaols.hasNext()) {
+        let trvi = ittaols.next();
+        Logger.Log(trvi.getResult().id, "xenkiopuy_102");
+      }}
+      
+      let itt = trv.iterator();
+      while(itt.hasNext()) {
+        let trvi = itt.next();
+        let eeeeeee = true;
+        Logger.Log(",,,,,,.m", "yyseddly");
+
+        for(let i in slots) {
+          Logger.Log(slots, "deriu");
+          Logger.Log(trvi.getResult().id, "zanaras");
+          Logger.Log(trvi.getResult().data, "zanjiaras");
+          Logger.Log(trvi.getResult().count, "hunki");
+          Logger.Log(i, "leass");
+          let trvim;
+          
+          if(slots[i] != null && trvi.getSortedEntries()[slots[i].index]) {
+          Logger.Log(trvi.getSortedEntries()[slots[i].index].id, "yyseddly");
+          Logger.Log(trvi.getSortedEntries()[slots[i].index].data, "seddl7y");
+          trvim = trvi.getSortedEntries()[slots[i].index];
+          } else {
+            trvim = {id: 0, data: 0, count: 0}
+          }
+          
+          if(slots[i] == null) {
+            Logger.Log("cunnot", slots[i] != null);
+            eeeeeee = false;
+            break;
+          } else if(slots[i] != null && (slots[i].id != trvim.id || (trvim.data != -1 && slots[i].data != trvim.data))) {
+            //return 
+            Logger.Log("cumnnot", slots[i] != null);
+            Logger.Log(slots[i].id, "y777y");
+          Logger.Log(slots[i].data, "s66y");
+          
+            eeeeeee = false;
+            break;
+          } else if(slots[i] != null && slots[i].count >= 1) {
+            
+            Logger.Log("cannot", slots[i] != null);
+            
+            Logger.Log(slots[i].id, "y777y");
+          Logger.Log(slots[i].data, "s66y");
+          
+          
+            sourcesForCleaning.push(i);
+            result = trvi.getResult();
+          }
+        }
+        
+        //Logger.Log(trvi.getSortedEntries()[i].data, "seddl7y");
+        
+        if(eeeeeee) {
+          //result
+          Logger.Log("zases", "daqwasder");
+            break;
+          } else {
+            Logger.Log(sourcesForCleaning.length, "xedasofi");
+            sourcesForCleaning = sourcesForCleaning.slice(sourcesForCleaning.length);
+            Logger.Log(sourcesForCleaning.length, "rered");
+            result = null;
+          }
+        /*if(rtv[i]) {
+          sslot = slots[slot];
+        }*/
+      }
+      
+      if(trvminus != null && result == null) {
+      let itto = trvminus.iterator();
+      while(itto.hasNext()) {
+        let trviminus = itto.next();
+        let eeeeeee = true;
+        Logger.Log(",,,,,,.m", "yyseddly");
+        
+        if(trviminus != null) {
+          for(let i in slots) {
+          //if(trviminus.getSortedEntries()[i].id == 0) continue;
+          
+          let trvim;
+          if(slots[i] != null && trviminus.getSortedEntries()[slots[i].index]) {
+          Logger.Log(trviminus.getSortedEntries()[slots[i].index].id, "yyseddly");
+          Logger.Log(trviminus.getSortedEntries()[slots[i].index].data, "seddl7y");
+          trvim = trviminus.getSortedEntries()[slots[i].index];
+          } else {
+            trvim = {id: 0, data: 0, count: 0}
+          }
+          
+          Logger.Log(i, "leass");
+          Logger.Log(trvim.id, "yyseddly");
+          Logger.Log(trvim.data, "seddl7y");
+            
+          
+          if(slots[i] == null) {
+            Logger.Log("cunnot", slots[i] != null);
+            eeeeeee = false;
+            break;
+          } else if(slots[i] != null && (slots[i].id != trvim.id || (trvim.data != -1 && slots[i].data != trvim.data))) {
+            //return 
+            Logger.Log("cumnnot", slots[i] != null);
+            Logger.Log(slots[i].id, "y777y");
+          Logger.Log(slots[i].data, "s66y");
+          
+            eeeeeee = false;
+            break;
+          } else if(slots[i] != null && slots[i].count >= 1) {
+            
+            Logger.Log("cannopnot", slots[i] != null);
+            
+            Logger.Log(slots[i].id, "y777y");
+          Logger.Log(slots[i].data, "s66y");
+          
+          
+            sourcesForCleaning.push(i);
+            result = trviminus.getResult();
+          }
+        }
+        
+        //Logger.Log(trvi.getSortedEntries()[i].data, "seddl7y");
+        
+        if(eeeeeee) {
+          //result
+          Logger.Log("zases", "daqwasder");
+            break;
+          } else {
+            Logger.Log(sourcesForCleaning.length, "xedasofi");
+            sourcesForCleaning = sourcesForCleaning.slice(sourcesForCleaning.length);
+            Logger.Log(sourcesForCleaning.length, "rered");
+            result = null;
+          }
+          }
+      }
+      }
+      
+      for(let i in sourcesForCleaning) {
+        Logger.Log(sourcesForCleaning[i], "xedasoi");
+      }
+      
+      if(result != null) {
+        Logger.Log(result.id, "xedoi");
+        Logger.Log(result.data, "xsoi");
+        Logger.Log(result.count, "xeoi");
+      }
+      
+      if(result == null) {
+        return null;
+      }
+      return {cleaning: sourcesForCleaning, result: result};
+      /*let it = RecipeDictionary.recipes.values().iterator();
+      while(it.hasNext()) {
+        let u = it.next();
+        Logger.Log(u, "ghhh");
+        let itt = u.iterator();
+      while(itt.hasNext()) {
+        let uu = itt.next();
+        Logger.Log(uu.getSortedEntries()[0], "ghhhggtko");
+        Logger.Log(uu.getSortedEntries()[0].id, "gooo");
+        Logger.Log(uu.getSortedEntries()[0].data, "gsss");
+        Logger.Log(uu.getSortedEntries()[0].count, "gsss");
+      }
+      }*/
+    },
+    
+    
+    SimulatedField: function(slots, prefix, pattern) {
+      this.pattern = pattern;
+      this.slots = slots;
+      this.prefix = prefix;
+      
+      Logger.Log(this.slots[0], "$$lolol");
+      
+      this.getFieldSlot = function(index) {
+        return this.slots[index];
+      }
+      
+      isMatchingSimulatedField = function (field) {
+      for (let y = 0; y < this.pattern.length; y++) {
+            for (let x = 0; x < this.pattern[y].length; x++) {
+                if (!this.pattern[y][x].isMatching(field.getFieldSlot((y * 3) + x))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    isMatchingSimulatedPrefix = function (prefix2) {
+      if (prefix2 == null || prefix2.isEmpty() || prefix2.equals("undefined")) {
+            return this.prefix == null || this.prefix.isEmpty();
+        }
+        return prefix2.contains(this.prefix);
+    }
+    },
+    
+    getSimulatedFieldMasks: function(field) {
+      let chars = new java.util.ArrayList();
+        let shaped = "";
+        for (let i = 0; i < 9; i++) {
+            let slot = field.getFieldSlot(i);
+            Logger.Log(slot.getClass(), "$$lolol");
+            Logger.Log(slot.getCount(), "$$");
+            Logger.Log(slot.getId(), "$$$$");
+            let c = (slot.getCount() > 0 ? slot.getId() : 0);
+            shaped = shaped + c;
+            if (c != 0) {
+                chars.add(java.lang.Character.valueOf(c));
+            }
+        }
+        let shapeless = "$$";
+java.util.Collections.sort(chars);
+        let it = chars.iterator();
+        while (it.hasNext()) {
+            shapeless = shapeless + it.next();
+        }
+        return [shaped, shapeless];
+    },
+    getRecipeByItems: function(field, prefix) {
+      let masks = this.getSimulatedFieldMasks(field);
+        if(recipes.containsKey(masks[0])) {
+            let it = recipes.get(masks[0]).iterator();
+            while (it.hasNext()) {
+                let recipe = it.next();
+                if (recipe.isMatchingSimulatedField(field) && recipe.isMatchingSimulatedPrefix(prefix)) {
+                    return recipe;
+                }
+            }
+        }
+        if (!recipes.containsKey(masks[1])) {
+            return null;
+        }
+        let it2 = recipes.get(masks[1]).iterator();
+        while (it2.hasNext()) {
+            let recipe2 = it2.next();
+            if (recipe2.isMatchingSimulatedField(field)) {
+                return recipe2;
+            }
+        }
+        return null;
+    },
     addFurnace: function(input, output, prefix) {
       let iddatainput = null;
       let iddataoutput = null;
@@ -136,6 +475,7 @@ let RecipeDictionary = {
         Recipes.addFurnace(iddatainput.id, iddatainput.data, iddataoutput.id, iddataoutput.data, prefix);
     },
     addFurnaceFuel: function(input, time, output, isCoalBoiler) {
+      setLoadingTip("Recipes: fuel of " + input.name);
        let iddatainput = MaterialDictionary.invdata[input.form][input.material.name];
       if(isCoalBoiler) {
         MachineDictionary.steammachines["boiler"].recipes.addRecipe(new FuelRecipe([{type: "material", material: input.material, form: input.form, count: 1}], [{type: "material", material: output.material, form: output.form, count: 1}], time, 1));
@@ -198,6 +538,7 @@ let RecipeDictionary = {
         Recipes.addShaped(iddataoutput, mask, iddatainput, func, prefix);
     },
     addShapedForTool: function(mask, input, output, prefix, func) {
+      //setLoadingTip("Recipes: tool of " + input.name);
         let iddatainput = [];
         let f = 0;
         for(let i in input) {
@@ -312,6 +653,7 @@ let RecipeDictionary = {
         Recipes.addShaped(iddataoutput, newmask, iddatainput, fun, prefix);
     },
     addToolShapedForTool: function(tools, mask, input, output, prefix, func) {
+      //setLoadingTip("Recipes: tool of " + input.name);
       Logger.Log(output.type, "хуйня");
         let newmask = [];
         let pos = [];
@@ -405,99 +747,401 @@ let RecipeDictionary = {
         return false;
     },
     registerFormHandlingRecipes: function(input, EUt) {
+      setLoadingTip("Recipes: processing of " + input.name);
+        Logger.Log(input.name, "formsGor");
         if(input.type == "MARKER" || input.type == "FLUID") return;
-        if(input.type == "INGOT") RecipeDictionary.addFurnace({type: "material", material: input, form: "dust"}, {type: "material", material: input, form: "ingot"});
+        if(input.type == "INGOT") { RecipeDictionary.addFurnace({type: "material", material: input, form: "dust"}, {type: "material", material: input, form: "ingot"});
         
-        if(input.type == "INGOT") RecipeDictionary.addFurnace({type: "material", material: input, form: "ingot"}, {type: "material", material: input, form: "nugget"});
+        Logger.Log(MaterialDictionary.invdata["dust"][input.name].data, "formsooor");
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({type: "material", material: input, form: "crushed"}, {type: "material", material: input, form: "nugget"});
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material");
+        }
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedCentrifuged"}, {type: "material", material: input, form: "nugget"});
+        if(input.type == "INGOT") { RecipeDictionary.addFurnace({type: "material", material: input, form: "ingot"}, {type: "material", material: input, form: "nugget"});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }//
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushed"}, {type: "material", material: input, form: "nugget"});
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedPurified"}, {type: "material", material: input, form: "nugget"});
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedCentrifuged"}, {type: "material", material: input, form: "nugget"});
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_BOLT_SCREW)) RecipeDictionary.addFurnace({type: "material", material: input, form: "bolt"}, {type: "material", material: input, form: "nugget"});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedPurified"}, {type: "material", material: input, form: "nugget"});
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_BOLT_SCREW)) RecipeDictionary.addFurnace({type: "material", material: input, form: "screw"}, {type: "material", material: input, form: "nugget"});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].material.name, "cancater1material"); //?!
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_BOLT_SCREW)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "bolt"}, {type: "material", material: input, form: "nugget"});
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD)) RecipeDictionary.addFurnace({type: "material", material: input, form: "stick"}, {type: "material", material: input, form: "nugget"});
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].material.name, "cancater1material");
+
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_BOLT_SCREW)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "screw"}, {type: "material", material: input, form: "nugget"});
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({type: "material", material: input, form: "dustImpure"}, {type: "material", material: input, form: "ingot"});
-if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({type: "material", material: input, form: "dustPure"}, {type: "material", material: input, form: "ingot"});
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].material.name, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "stick"}, {type: "material", material: input, form: "nugget"});
         
+        Logger.Log("Ma", MaterialDictionary.invdata["stick"]);
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "dustImpure"}, {type: "material", material: input, form: "ingot"});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) {RecipeDictionary.addFurnace({type: "material", material: input, form: "dustPure"}, {type: "material", material: input, form: "ingot"});
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].material.name, "cancater1material");
+        }
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedCentrifuged"}, {type: "material", material: input, form: "ingot"});
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedPurified"}, {type: "material", material: input, form: "ingot"});
-if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) RecipeDictionary.addFurnace({type: "material", material: input, form: "crushed"}, {type: "material", material: input, form: "ingot"});
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedCentrifuged"}, {type: "material", material: input, form: "ingot"});
         
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) { RecipeDictionary.addFurnace({type: "material", material: input, form: "crushedPurified"}, {type: "material", material: input, form: "ingot"});
         
-        if(input.type == "INGOT") RecipeDictionary.addToolShaped(["mortar"], ["_", "i"], ['i', {type: "material", material: input, form: "ingot"}], {type: "material", material: input, form: "dust", count: 1});
-            if(input.type == "GEM") RecipeDictionary.addToolShaped(["mortar"], ["_", "i"], ['i', {type: "material", material: input, form: "gem"}], {type: "material", material: input, form: "dust", count: 1});
-        if(input.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShaped(["mortar"],  ["_", "i"], ['i', {type: "material", material: input, form: "plate"}], {type: "material", material: input, form: "dust", count: 1});
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShaped(["hammer"], ["_", "i", "i"],  ['i', {type: "material", material: input, form: "ingot"}], {type: "material", material: input, form: "plate", count: 1});
-        if(input.type == "GEM" && input.hasFlag(GENERATE_PLATE)) RecipeDictionary.addToolShaped(["hammer"], ["_", "i"],  ['i', {type: "material", material: input, form: "gem"}], {type: "material", material: input, form: "plate", count: 1});
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShaped(["file"], ["_ ", " i"],  ['i', {type: "material", material: input, form: "ingot"}], {type: "material", material: input, form: "stick", count: 1});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ORE)) {RecipeDictionary.addFurnace({type: "material", material: input, form: "crushed"}, {type: "material", material: input, form: "ingot"});
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+}
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_LONG_ROD)) RecipeDictionary.addToolShaped(["hammer"], ["i_i"],  ['i', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "stickLong", count: 1});
+        if(input.type == "INGOT") { RecipeDictionary.addToolShaped(["mortar"], ["_", "i"], ['i', {type: "material", material: input, form: "ingot"}], {type: "material", material: input, form: "dust", count: 1});
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material");
+        }
+            if(input.type == "GEM") { RecipeDictionary.addToolShaped(["mortar"], ["_", "i"], ['i', {type: "material", material: input, form: "gem"}], {type: "material", material: input, form: "dust", count: 1});
+            
+            Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+            Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].material.name, "cancater1material");
+            }
+        if(input.hasFlag(GENERATE_PLATE)) { RecipeDictionary.addToolShaped(["mortar"],  ["_", "i"], ['i', {type: "material", material: input, form: "plate"}], {type: "material", material: input, form: "dust", count: 1});
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_PLATE)) { RecipeDictionary.addToolShaped(["hammer"], ["_", "i", "i"],  ['i', {type: "material", material: input, form: "ingot"}], {type: "material", material: input, form: "plate", count: 1});
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "GEM" && input.hasFlag(GENERATE_PLATE)) { RecipeDictionary.addToolShaped(["hammer"], ["_", "i"],  ['i', {type: "material", material: input, form: "gem"}], {type: "material", material: input, form: "plate", count: 1});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD)) { RecipeDictionary.addToolShaped(["file"], ["_ ", " i"],  ['i', {type: "material", material: input, form: "ingot"}], {type: "material", material: input, form: "stick", count: 1});
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_LONG_ROD)) { RecipeDictionary.addToolShaped(["hammer"], ["i_i"],  ['i', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "stickLong", count: 1});
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stickLong"][input.name].id][MaterialDictionary.invdata["stickLong"][input.name].data].form, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stickLong"][input.name].id][MaterialDictionary.invdata["stickLong"][input.name].data].material.name, "cancater1material");
+        }
         //if(input.type == "INGOT" && input.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShaped(["chainsaw"], ["_", "i"],  ['i', {type: "material", material: input, form: "stickLong"}], {type: "material", material: input, form: "stick", count: 2});
         
         RecipeDictionary.addShaped(["ddd", "ddd", "ddd"], ['d', {type: "material", material: input, form: "dustTiny"}], {type: "material", material: input, form: "dust", count: 1});
+        
         RecipeDictionary.addShaped(["dd", "dd"], ['d', {type: "material", type: "material", material: input, form: "dustSmall"}], {type: "material", material: input, form: "dust", count: 1});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].material.name, "cancater1material")
+          
         RecipeDictionary.addShaped(["d  ", "  ", "  "], ['d', {type: "material", material: input, form: "dust"}], {type: "material", material: input, form: "dustTiny", count: 9});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+          
         RecipeDictionary.addShaped([" d ", "  ", "  "], ['d', {type: "material", type: "material", material: input, form: "dust"}], {type: "material", material: input, form: "dustSmall", count: 4});
-        if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_FOIL)) RecipeDictionary.addToolShaped(["hammer"], ["_p"], ['p', {type: "material", material: input, form: "plate"}], {type: "material", material: input, form: "foil", count: 1});
-        if(input.hasFlag(GENERATE_FOIL) && input.hasFlag(GENERATE_FINE_WIRE)) RecipeDictionary.addToolShaped(["wirecutter"], ["_p"], ['p', {type: "material", material: input, form: "foil"}], {type: "material", material: input, form: "wireFine", count: 1});
-        if(input.hasFlag(GENERATE_BOLT_SCREW)) RecipeDictionary.addToolShaped(["file"], ["_p", "p "], ['p', {type: "material", material: input, form: "bolt"}], {type: "material", material: input, form: "screw", count: 1});
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].material.name, "cancater1material")
+        if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_FOIL)) { RecipeDictionary.addToolShaped(["hammer"], ["_p"], ['p', {type: "material", material: input, form: "plate"}], {type: "material", material: input, form: "foil", count: 1});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_FOIL) && input.hasFlag(GENERATE_FINE_WIRE)) { RecipeDictionary.addToolShaped(["wirecutter"], ["_p"], ['p', {type: "material", material: input, form: "foil"}], {type: "material", material: input, form: "wireFine", count: 1});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["wireFine"][input.name].id][MaterialDictionary.invdata["wireFine"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["wireFine"][input.name].id][MaterialDictionary.invdata["wireFine"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_BOLT_SCREW)) {RecipeDictionary.addToolShaped(["file"], ["_p", "p "], ['p', {type: "material", material: input, form: "bolt"}], {type: "material", material: input, form: "screw", count: 1});
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].material.name, "cancater1material");
+        }
         //if(input.hasFlag(GENERATE_BOLT_SCREW) && input.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShaped(["chainsaw"], ["_ ", "p "], ['p', {type: "material", material: input, form: "screw"}], {type: "material", material: input, form: "bolt", count: 1});
-        if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_GEAR) && input.hasFlag(GENERATE_ROD)) RecipeDictionary.addToolShaped(["screwdriver"], ["rpr", "p_p", "rpr"], ['p', {type: "material", material: input, form: "plate"}, 'r', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "gearGt", count: 1});
-if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_SMALL_GEAR)) RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {type: "material", material: input, form: "plate"}], {type: "material", material: input, form: "gearGtSmall", count: 1});
-if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_FRAME)) RecipeDictionary.addToolShaped(["wrench"], ["ppp", "p_p", "ppp"], ['p', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "frameGt", count: 1});
-if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "ring", count: 1});
+        if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_GEAR) && input.hasFlag(GENERATE_ROD)) { RecipeDictionary.addToolShaped(["screwdriver"], ["rpr", "p_p", "rpr"], ['p', {type: "material", material: input, form: "plate"}, 'r', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "gearGt", count: 1});
         
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+           Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGt"][input.name].id][MaterialDictionary.invdata["gearGt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGt"][input.name].id][MaterialDictionary.invdata["gearGt"][input.name].data].material.name, "cancater1material");
+        }
+if(input.hasFlag(GENERATE_PLATE) && input.hasFlag(GENERATE_SMALL_GEAR)) { RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {type: "material", material: input, form: "plate"}], {type: "material", material: input, form: "gearGtSmall", count: 1});
+
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGtSmall"][input.name].id][MaterialDictionary.invdata["gearGtSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGtSmall"][input.name].id][MaterialDictionary.invdata["gearGtSmall"][input.name].data].material.name, "cancater1material");
+          
+       }
+        if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_FRAME)) { RecipeDictionary.addToolShaped(["wrench"], ["ppp", "p_p", "ppp"], ['p', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "frameGt", count: 1});
+
+      Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+      Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+      Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["frameGt"][input.name].id][MaterialDictionary.invdata["frameGt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["frameGt"][input.name].id][MaterialDictionary.invdata["frameGt"][input.name].data].material.name, "cancater1material");
+      }
+if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) {RecipeDictionary.addToolShaped(["hammer"], ["_ ", " p"], ['p', {type: "material", material: input, form: "stick"}], {type: "material", material: input, form: "ring", count: 1});
+
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ring"][input.name].id][MaterialDictionary.invdata["ring"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ring"][input.name].id][MaterialDictionary.invdata["ring"][input.name].data].material.name, "cancater1material");
+}
         
-        if(input.hasFlag(GENERATE_PLATE)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "plate", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+        if(input.hasFlag(GENERATE_PLATE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "plate", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_FOIL)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "foil", count: 1}], [{material: input, form: "dustSmall", count: 1}], 56, 4));
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_FOIL)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "foil", count: 1}], [{material: input, form: "dustSmall", count: 1}], 56, 4));
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["foil"][input.name].id][MaterialDictionary.invdata["foil"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_RING)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ring", count: 1}], [{material: input, form: "dustSmall", count: 1}], 56, 4));
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_RING)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ring", count: 1}], [{material: input, form: "dustSmall", count: 1}], 56, 4));
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustSmall"][input.name].id][MaterialDictionary.invdata["dustSmall"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ring"][input.name].id][MaterialDictionary.invdata["ring"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ring"][input.name].id][MaterialDictionary.invdata["ring"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.type == "INGOT") { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
         
-        if(input.type == "INGOT") MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_SMALL_GEAR)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gearGtSmall", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_SMALL_GEAR)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gearGtSmall", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGtSmall"][input.name].id][MaterialDictionary.invdata["gearGtSmall"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGtSmall"][input.name].id][MaterialDictionary.invdata["gearGtSmall"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_GEAR)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gearGt", count: 1}], [{material: input, form: "dust", count: 4}], 224, 4));
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_GEAR)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gearGt", count: 1}], [{material: input, form: "dust", count: 4}], 224, 4));
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGt"][input.name].id][MaterialDictionary.invdata["gearGt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gearGt"][input.name].id][MaterialDictionary.invdata["gearGt"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_BOLT_SCREW)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "bolt", count: 1}], [{material: input, form: "dustTiny", count: 1}], 56, 4));
         
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_BOLT_SCREW)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "bolt", count: 1}], [{material: input, form: "dustTiny", count: 1}], 56, 4));
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["bolt"][input.name].id][MaterialDictionary.invdata["bolt"][input.name].data].material.name, "cancater1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+        }
+       if(input.hasFlag(GENERATE_FINE_WIRE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "wireFine", count: 1}], [{material: input, form: "dustTiny", count: 1}], 56, 4));
        
-       if(input.type == "INGOT" && input.hasFlag(GENERATE_FINE_WIRE)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "wireFine", count: 1}], [{material: input, form: "dustTiny", count: 1}], 56, 4));
-       
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_BOLT_SCREW)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "screw", count: 1}], [{material: input, form: "dustTiny", count: 1}], 56, 4));
-       
-        if(input.type == "GEM") MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gem", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+       Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["wireFine"][input.name].id][MaterialDictionary.invdata["wireFine"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["wireFine"][input.name].id][MaterialDictionary.invdata["wireFine"][input.name].data].material.name, "cancater1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+       }
+        if(input.hasFlag(GENERATE_BOLT_SCREW)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "screw", count: 1}], [{material: input, form: "dustTiny", count: 1}], 56, 4));
         
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["screw"][input.name].id][MaterialDictionary.invdata["screw"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.type == "GEM") { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gem", count: 1}], [{material: input, form: "dust", count: 1}], 56, 4));
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].material.name, "cancater1material")
+        }
         //if(input.type == "GEM") MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "frameGt", count: 1}], [{material: input, form: "dust", count: 2}], 128, 4));
         
-        if(input.type == "INGOT") MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "nugget", count: 1}], [{material: input, form: "dustTiny", count: 1}], 16, 4));
-        if(input.type == "INGOT") MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 9}], [{material: input, form: "block", count: 1}], 300, 2));
-        if(input.type == "GEM") MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gem", count: 9}], [{material: input, form: "block", count: 1}], 300, 2));
+        if(input.type == "INGOT") { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "nugget", count: 1}], [{material: input, form: "dustTiny", count: 1}], 16, 4));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustTiny"][input.name].id][MaterialDictionary.invdata["dustTiny"][input.name].data].material.name, "cancater1material")
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["nugget"][input.name].id][MaterialDictionary.invdata["nugget"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.type == "INGOT") { MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 9}], [{material: input, form: "block", count: 1}], 300, 2));
+        Logger.Log(input.name, "daredevil");
+        Logger.Log(MaterialDictionary.invdata["block"]["iron"].id, "ztрщy");
+        
+        
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material");
+
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["block"][input.name].id][MaterialDictionary.invdata["block"][input.name].data].form, "cancater1")
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["block"][input.name].id][MaterialDictionary.invdata["block"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.type == "GEM") { MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "gem", count: 9}], [{material: input, form: "block", count: 1}], 300, 2));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["gem"][input.name].id][MaterialDictionary.invdata["gem"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["block"][input.name].id][MaterialDictionary.invdata["block"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["block"][input.name].id][MaterialDictionary.invdata["block"][input.name].data].material.name, "cancater1material");
+        }
         //if(input.type == "INGOT" || input.type == "GEM") MachineDictionary.steammachines["compressor"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "dust", count: 9}], [{material: input, form: "block", count: 1}], ));
-        if(input.type == "INGOT" && input.hasFlag(GENERATE_PLATE)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 3}], [{material: input, form: "plate", count: 2}], 55, 16));
-        if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_LONG_ROD)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "stick", count: 2}], [{material: input, form: "stickLong", count: 1}], 208, 16));
+        if(input.type == "INGOT" && input.hasFlag(GENERATE_PLATE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "ingot", count: 3}], [{material: input, form: "plate", count: 2}], 55, 16));
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["ingot"][input.name].id][MaterialDictionary.invdata["ingot"][input.name].data].material.name, "cancater1material")
+          
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["plate"][input.name].id][MaterialDictionary.invdata["plate"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_LONG_ROD)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "stick", count: 2}], [{material: input, form: "stickLong", count: 1}], 208, 16));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stick"][input.name].id][MaterialDictionary.invdata["stick"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stickLong"][input.name].id][MaterialDictionary.invdata["stickLong"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["stickLong"][input.name].id][MaterialDictionary.invdata["stickLong"][input.name].data].material.name, "cancater1material");
+        }
         Logger.Log("GENERATE_OREo", GENERATE_ORE);
         Logger.Log("inputs", input.name);
-        if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "ore", material: input, count: 1}], [{material: input, form: "crushed", count: 1}], 16, 10));
-        if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushed", count: 1}], [{material: input, form: "dustImpure", count: 1}], 10, 16));
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "ore", material: input, count: 1}], [{material: input, form: "crushed", count: 1}], 16, 10));
         
-        if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "ore", material: input, count: 1}], [{material: input, form: "crushed", count: 2}], 400, 2));
-        if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushed", count: 1}], [{material: input, form: "dustImpure", count: 1}], 400, 2));
+          Logger.Log(OreDictionary.invdata[OreDictionary.data[input.name].id].name, "cancaterore1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material")
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushed", count: 1}], [{material: input, form: "dustImpure", count: 1}], 10, 16));
         
-        if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedPurified", count: 1}], [{material: input, form: "dustPure", count: 1}], 10, 16));
-        if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedCentrifuged", count: 1}], [{material: input, form: "dust", count: 1}], 10, 16));
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "ore", material: input, count: 1}], [{material: input, form: "crushed", count: 2}], 400, 2));
+          
+          Logger.Log(OreDictionary.invdata[OreDictionary.data[input.name].id].name, "cancaterore1material");
+          
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushed", count: 1}], [{material: input, form: "dustImpure", count: 1}], 400, 2));
         
-        if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedPurified", count: 1}], [{material: input, form: "dustPure", count: 2}], 400, 2));
-        if(input.hasFlag(GENERATE_ORE)) MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedCentrifuged", count: 1}], [{material: input, form: "dust", count: 1}], 400, 2));
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushed"][input.name].id][MaterialDictionary.invdata["crushed"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].form, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustImpure"][input.name].id][MaterialDictionary.invdata["dustImpure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedPurified", count: 1}], [{material: input, form: "dustPure", count: 1}], 10, 16));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["hammer"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedCentrifuged", count: 1}], [{material: input, form: "dust", count: 1}], 10, 16));
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedPurified", count: 1}], [{material: input, form: "dustPure", count: 2}], 400, 2));
+        
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedPurified"][input.name].id][MaterialDictionary.invdata["crushedPurified"][input.name].data].material.name, "cancater1material");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dustPure"][input.name].id][MaterialDictionary.invdata["dustPure"][input.name].data].material.name, "cancater1material");
+        }
+        if(input.hasFlag(GENERATE_ORE)) { MachineDictionary.steammachines["macerator"].recipes.addRecipe(new Recipe([{type: "material", material: input, form: "crushedCentrifuged", count: 1}], [{material: input, form: "dust", count: 1}], 400, 2));
+        
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["dust"][input.name].id][MaterialDictionary.invdata["dust"][input.name].data].material.name, "cancater1material");
+        Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].form, "cancater1");
+          Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].material.name, "cancater1material");
+        }
     },
     registerAlloy: function(output, EUt) {
+      setLoadingTip("Recipes: alloying of " + output.name);
       let inputs = output.formula;
         //if(inputs[0].material.type != "INGOT") return;
         if(inputs.length == 0) return;
@@ -538,6 +1182,7 @@ if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) RecipeDictionary
       }
     },
     registerToolRecipe: function(input) {
+      setLoadingTip("Recipes: tool of " + input.name);
         Logger.Log(input.material2.name, "ger");
         Logger.Log(input.material.name, "zombied");
         if(ToolDictionary.invdata[input.name]) return;
@@ -623,3 +1268,22 @@ if(material.type == "GEM") RecipeDictionary.addShapedForTool(["x x", "xxх"], ['
         }
     },
 };
+
+//let field = java.lang.Class.forName("com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry");
+
+Callback.addCallback("PostLoaded", function() {
+  let t = new com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry().getClass();
+  
+  let field = t.getDeclaredField("componentQuickAccess");
+  //let field = java.lang.Class.forName("java.lang.String").getDeclaredField("recipes");
+       field.setAccessible(true);
+      RecipeDictionary.recipes = field.get(t);
+      
+      let eeed = [{id: 5, data: 0, count: 1, index: 0}];
+      
+      Logger.Log("red", eeed[0].count, "ced");
+      
+      RecipeDictionary.getBySources(eeed);
+      
+      Logger.Log("red", eeed[0].count, "ced");
+});
