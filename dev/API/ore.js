@@ -30,6 +30,8 @@ let OreDictionary = {
     invdata: [],
     invdat: [],
     smallgens: [],
+    invsmallgens: [],
+    invsmallgen: [],
     veins: [],
     grids: {},
     sumOfRarites: 0,
@@ -64,7 +66,21 @@ let OreDictionary = {
        
   //!!!!!
   this.data[material.name] = {id: BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)]};
+  Block.registerDropFunction(BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)], function(coords, id, data, diggingLevel, region) {
+    if(diggingLevel < OreDictionary.invsmallgens[id].level) return [];
+    return [[id, 1, data]];
+  });
+  Block.registerPopResourcesFunction(BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)], function(coords, block, region) {
+    let dropFunc = Block.getDropFunction(block.id);
+				let enchant = ToolAPI.getEnchantExtraData();
+				let item = {id: 0, count: 0, data: 0};
+				let drop = dropFunc(coords, block.id, block.data, 127, enchant, item, region);
+				for (let i in drop) {
+					region.spawnDroppedItem(coords.x + .5, coords.y + .5, coords.z + .5, drop[i][0], drop[i][1], drop[i][2], drop[i][3] || null);
+				}
+  });
   Block.registerDropFunction(BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)], function(coords, id, data, diggingLevel, region) {
+    if(diggingLevel < OreDictionary.invsmallgen[id].level) return [];
     let drop = [];
 	  if(Math.random() > 0.5) {
 	    drop.push([MaterialDictionary.invdata["crushed"][material.name].id, 1, MaterialDictionary.invdata["crushed"][material.name].data]);
@@ -78,12 +94,23 @@ let OreDictionary = {
 	  }
 	  return drop;
   });
+  Block.registerPopResourcesFunction(BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)], function(coords, block, region) {
+    let dropFunc = Block.getDropFunction(block.id);
+				let enchant = ToolAPI.getEnchantExtraData();
+				let item = {id: 0, count: 0, data: 0};
+				let drop = dropFunc(coords, block.id, block.data, 127, enchant, item, region);
+				for (let i in drop) {
+					region.spawnDroppedItem(coords.x + .5, coords.y + .5, coords.z + .5, drop[i][0], drop[i][1], drop[i][2], drop[i][3] || null);
+				}
+  });
+
+
   this.dat[material.name] = {id: BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)]};
   
   this.invdata[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)]] = material;
   this.invdat[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)]] = material;
-  this.invsmallgens[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)]] = smallgens;
-  this.invsmallgen[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)]] = smallgens;
+  this.invsmallgens[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2)]] = smallgen;
+  this.invsmallgen[BlockID["gtblockores" + (Math.floor(this.ores.length - 1) * 2 + 1)]] = smallgen;
   
   for(let i = 0; i < Object.keys(this.blocks).length; i++) {
     

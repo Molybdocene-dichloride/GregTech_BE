@@ -22,6 +22,7 @@ Callback.addCallback('DestroyBlockStart', function (coords, block, playerUid) {
     if(i >= 0 && i % 2 == 0) {
       let type = "stone";
       //if(OreDictionary.invblock[block.id].mindestroytime == -1) type = "unbreakable"
+      Logger.Log(OreDictionary.invsmallgens[block.id].level, "sertyui");
       ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invsmallgens[block.id].level + 1, false);
       let destroytime = 3;
       let explosionres = 15;
@@ -36,7 +37,7 @@ Callback.addCallback('DestroyBlockStart', function (coords, block, playerUid) {
       }, "gtore");
     } else if(i >= 0) {
       Logger.Log(OreDictionary.invsmallgen[block.id].level, "sertyui");
-      ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invdat[block.id].level, false);
+      ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invsmallgen[block.id].level, false);
       Block.createSpecialType({
 	      base: 1,
 	      solid: true,
@@ -72,7 +73,7 @@ Callback.addCallback('DestroyBlockStart', function (coords, block, playerUid) {
 	            translucency: 0,
 	            sound: "grass",
 	            renderallfaces: true,
-              }, "gtplant");
+              }, "gtwood");
               
           }
         }
@@ -82,7 +83,7 @@ Block.registerDropFunction(BlockID.gttree, function(coords, id, data, dig, encha
       if(item.id == 359) return [[id, 1, data]];
       if(Math.random() < 0.04) return [[id, 1, 3]];
       if(Math.random() > 0.06 && Math.random() < 0.08) return [[280, 1, 0]];
-      return [[0, 0, 0]];
+      return [];
     }
     return [[id, 1, data]];
 })

@@ -11,8 +11,10 @@ OreDictionary.registerChangeableBlock({id: 121, data: 0, texture: "endstone", mi
 OreDictionary.registerChangeableBlock({id: 24, data: 0, texture: "sandstone", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
 OreDictionary.registerChangeableBlock({id: 179, data: 0, texture: "sandstone_red", minlevel: 0, mindestroytime: 3, minexplosionres: 15});
     
-OreDictionary.registerChangeableBlock({id: StoneDictionary.stones[stone].id, data: 0, texture: StoneDictionary.stones[stone].name, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
-OreDictionary.registerChangeableBlock({id: StoneDictionary.stones[stone].id, data: 8, texture: StoneDictionary.stones[stone].name2, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: StoneDictionary.stones["granite"].id, data: 0, texture: StoneDictionary.stones["granite"].name, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: StoneDictionary.stones["granite"].id, data: 8, texture: StoneDictionary.stones["granite"].name2, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: StoneDictionary.stones["mineral"].id, data: 0, texture: StoneDictionary.stones["mineral"].name, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
+OreDictionary.registerChangeableBlock({id: StoneDictionary.stones["mineral"].id, data: 8, texture: StoneDictionary.stones["mineral"].name2, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
 
 MaterialDictionary.registerForm("item", 0, "ingot");
 MaterialDictionary.registerForm("item", 0, "dust");
