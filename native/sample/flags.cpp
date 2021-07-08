@@ -13,6 +13,11 @@ namespace patch
     }
 }
 
+long long recepiee(long long id) {
+	//std::cout << id << std::endl;
+	__android_log_write(ANDROID_LOG_INFO, "tag here", patch::to_string(id).c_str());
+	return id << 16LL;
+}
 
 long long createFlag(long long id) {
 	//std::cout << id << std::endl;
@@ -25,18 +30,20 @@ long long pack(int num, ...) {
 	/* инициализация argptr */
 	va_start (argptr, num);
 	for(; num; num--) {
-		long t = va_arg(argptr, long long);
+		long long t = va_arg(argptr, long long);
 		if(vac == 0) {
 			vac = t;
 		} else {
 			vac = vac | t;
 		}
+__android_log_write(ANDROID_LOG_INFO, "Hexacarbonylvanadium", patch::to_string(t).c_str());
+		__android_log_write(ANDROID_LOG_INFO, "асока", patch::to_string(vac).c_str());
 	}
 
 	/* завершение */
 	va_end(argptr);
 	return vac;
 }
-long long hasFlag(long long flags, long long generationFlag) {
+short hasFlag(long long flags, long long generationFlag) {
    return (flags & generationFlag) >= generationFlag;
 }
