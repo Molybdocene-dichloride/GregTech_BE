@@ -7,7 +7,7 @@
 
 #include <symbol.h>
 #include <nativejs.h>
-#include </home/ferrocene/.android/dd/innercore-mod-toolchain-master/toolchain-mod/src/native/sample/shared_headers/flags.h>
+#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\shared_headers\flags.h>
 //Log
 //std::cout << "HOOK" << std::endl;
 
@@ -60,10 +60,17 @@ MAIN {
 // module version defines version of next functions, that belong to this module
 // if several modules with one name is loaded and several same functions registered, only function with highest version is registered
 // this is required in case of libraries 
+JS_MODULE_VERSION(MCVersion, 1)
 JS_MODULE_VERSION(Flags, 1)
-
+int ver = 0;
 // exports module and function to javascript, now you can call WRAP_NATIVE("SampleNativeModule") and a module with single function "hello", receiving two numbers, will be returned
 // signature I(LL) defines a method, receiving two ints, and returning long
+JS_EXPORT(MCVersion, send, "V(I)", (JNIEnv* env, int value1) {
+	// for different return types you must call appropriate NativeJS::wrap... functions
+	// if you function is void, use return 0;
+	ver = value1;
+	return 0;
+});
 JS_EXPORT(Flags, hasFlag, "I(LL)", (JNIEnv* env, long long value1, long long value2) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;

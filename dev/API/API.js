@@ -1,7 +1,9 @@
-
+const MCVersion = WRAP_NATIVE("MCVersion");
 const Flags = WRAP_NATIVE("Flags");
 const Flag = WRAP_NATIVE("Flags");
 const setLoadingTip = ModAPI.requireGlobal("MCSystem.setLoadingTip");
+
+MCVersion.send(Game.getMinecraftVersion().substring(2, Game.getMinecraftVersion().length));
 
 setLoadingTip("Register textures");
 var copyed = null;
