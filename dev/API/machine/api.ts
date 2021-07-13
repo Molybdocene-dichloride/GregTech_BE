@@ -64,9 +64,23 @@ namespace Machine {
   export abstract class RecipeMap implements IRecipeMap {
     minInputs: number = 0;
     maxInputs: number = 0;
-    constructor(minInputs, maxInputs) {
+    minOutputs: number = 0;
+    maxOutputs: number = 0;
+    minFluidInputs: number = 0;
+    maxFluidInputs: number = 0;
+    minFluidOutputs: number = 0;
+    maxFluidOutputs: number = 0;
+    this.defaultEUt: number = 0;
+    constructor(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs, defaultEUt) {
       this.minInputs = minInputs;
       this.maxInputs = maxInputs;
+      this.minOutputs = minInputs;
+      this.maxOutputs = maxInputs;
+      this.minFluidInputs = minFluidInputs;
+      this.maxFluidInputs = maxFluidInputs;
+      this.minFluidOutputs = minFluidOutputs;
+      this.maxFluidOutputs = maxFluidOutputs;
+      this.defaultEUt = defaultEUt;
     }
     addRecipe(recipe) : void {
         this[this.length] = recipe;
@@ -118,14 +132,28 @@ namespace Machine {
      [key: string]: ItemInstance
   }
   
-  export abstract class FuelMap(minInputs, maxInputs) implements IRecipeMap {
-    this.minInputs : number = 0;
-    this.maxInputs : number = 0;
-    constructor(minInputs, maxInputs) {
+export abstract class FuelMap implements IRecipeMap {
+  minInputs: number = 0;
+  maxInputs: number = 0;
+    minOutputs: number = 0;
+    maxOutputs: number = 0;
+    minFluidInputs: number = 0;
+    maxFluidInputs: number = 0;
+    minFluidOutputs: number = 0;
+    maxFluidOutputs: number = 0;
+    this.defaultEUt: number = 0;
+  constructor(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs, defaultEUt) {
       this.minInputs = minInputs;
       this.maxInputs = maxInputs;
-    }
-    addRecipe(recipe) : void {
+      this.minOutputs = minInputs;
+      this.maxOutputs = maxInputs;
+      this.minFluidInputs = minFluidInputs;
+      this.maxFluidInputs = maxFluidInputs;
+      this.minFluidOutputs = minFluidOutputs;
+      this.maxFluidOutputs = maxFluidOutputs;
+      this.defaultEUt = defaultEUt;
+  }
+  addRecipe(recipe) : void {
         this[this.length] = recipe;
         let t = "";
         for(let input in recipe.inputs) {
@@ -152,15 +180,15 @@ namespace Machine {
         this.get[t] = recipe;
         
         this.length++;
+  }
+  deleteRecipe(recipe) : void {
+    for(let i in this) {
+      if(this[i] == recipe) { 
+        delete this[i];
+        break;
+      }
     }
-    deleteRecipe(recipe) : void {
-        for(let i in this) {
-            if(this[i] == recipe) { 
-                delete this[i];
-                break;
-            }
-        }
-    }
+  }
 }
   
   export enum Type {
@@ -208,13 +236,13 @@ namespace Machine {
     constructor(id: string, limit: number) {
       this(id, null, limit, true);
     }
-    setId(id) {
+    setId(id: string) {
       if(!constId) this.id = id;
     }
-    setAmount(amount) {
+    setAmount(amount: number) {
       if(!constId) this.data = data;
     }
-    setLimit(limit) {
+    setLimit(limit: number) {
       if(!constId) this.limit = limit;
     }
   }
@@ -331,77 +359,77 @@ prepareStack(index: number, stack : ElectricStack, isZero: boolean) : void {
   getLimit(index: number) : number {
     return limits[index];
   }
-setAmount(index: number, amount: number): number {
+  setAmount(index: number, amount: number): number {
   let oamount = Math.limit(slots[index].limit, amount);
   slots[index].amount = oamount;
   return amount - oamount;
-}
-getAmount(index: number): number {
+  }
+  getAmount(index: number): number {
   return slots[index].amount;
-}
-getRelativeAmount(index: number): number {
+  }
+  getRelativeAmount(index: number): number {
   return 1 / slots[index].amount;
-}
-isFull(index: number): boolean {
+  }
+  isFull(index: number): boolean {
   return slots[index].amount == slots[index].limit;
-}
-isEmpty(index: number): boolean {
+  }
+  isEmpty(index: number): boolean {
   return slots[index].amount == 0;
-}
-addLiquid(index: number, amount: number): number {
+  }
+  addLiquid(index: number, amount: number): number {
   let oamount = Math.min(slots[index].limit - slots[index].amount, amount);
   slots[index].amount += oamount;
   return amount - oamount;
-}
-addLiquid(index: number, stack: Machine.FluidStack): Machine.FluidStack {
+  }
+  addLiquid(index: number, stack: Machine.FluidStack): Machine.FluidStack {
   let oamount = Math.min(slots[index].limit - slots[index].amount, stack.amount);
   slots[index].amount += oamount;
   stack.amount -= oamount;
   return stack;
-}
-getliquid(index: number, amount: number): Machine.FluidStack {
+  }
+  getliquid(index: number, amount: number): Machine.FluidStack {
   let oamount = Math.min(slots[index].amount, amount);
   slots[index].amount -= oamount;
   return oamount;
-}
-getliquid(index: number, stack: Machine.FluidStack) : Machine.FluidStack {
+  }
+  getliquid(index: number, stack: Machine.FluidStack) : Machine.FluidStack {
   let oamount = Math.min(slots[index].amount, stack.amount);
   slots[index].amount -= oamount;
   stack.amount = oamount;
   return stack;
-}
-prepareStack(index: number, limit: number) : void {
+  }
+  prepareStack(index: number, limit: number) : void {
   limit[index] = limit;
   slots[index] = new Machine.FluidStack(0, limit);
-}
-prepareStack(index: number, id: number, limit: number) : void {
+  }
+  prepareStack(index: number, id: number, limit: number) : void {
   limit[index] = limit;
   slots[index] = new Machine.FluidStack(id, 0, limit);
-}
-prepareStack(index: number, id: number, limit: number, constId: boolean) : void {
+  }
+  prepareStack(index: number, id: number, limit: number, constId: boolean) : void {
   limit[index] = limit;
   slots[index] = new Machine.FluidStack(id, 0, limit, constId);
-}
+  }
 
-prepareStack(index: number, stack: Machine.FluidStack) : void {
+  prepareStack(index: number, stack: Machine.FluidStack) : void {
   this.prepareStack(index, stack, false);
-}
-prepareStack(index: number, stack: Machine.FluidStack, constId: boolean) : void {
+  }
+  prepareStack(index: number, stack: Machine.FluidStack, constId: boolean) : void {
   limit[index] = stack.limit;
   slots[index] = stack;
   stack.constId = constId;
-}
-prepareStack(index: number, stack: Machine.FluidStack, isZero: boolean) : void {
+  }
+  prepareStack(index: number, stack: Machine.FluidStack, isZero: boolean) : void {
   if(isZero) stack.amount = 0;
   limit[index] = stack.limit;
   slots[index] = stack;
-}
+    }
 
-addValidator() : void {
+    addValidator() : void {
   
-}
-addValidator(index: number) : void {
+    }
+    addValidator(index: number) : void {
   
-}
+    }
   }
 }

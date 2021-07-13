@@ -2,8 +2,10 @@ const MCVersion = WRAP_NATIVE("MCVersion");
 const Flags = WRAP_NATIVE("Flags");
 const Flag = WRAP_NATIVE("Flags");
 const setLoadingTip = ModAPI.requireGlobal("MCSystem.setLoadingTip");
-
-MCVersion.send(Game.getMinecraftVersion().substring(2, Game.getMinecraftVersion().length));
+Logger.Log(Game.getMinecraftVersion().substring(2, Game.getMinecraftVersion().indexOf(".", 3)), "deggty");
+Logger.Log(Game.getMinecraftVersion().substring(Game.getMinecraftVersion().indexOf(".", 3) + 1, Game.getMinecraftVersion().length), "deggty");
+MCVersion.sendPart1(parseInt(Game.getMinecraftVersion().substring(2, Game.getMinecraftVersion().indexOf(".", 3)), 10));
+MCVersion.sendPart2(parseInt(Game.getMinecraftVersion().substring(Game.getMinecraftVersion().indexOf(".", 3) + 1, Game.getMinecraftVersion().length), 10));
 
 setLoadingTip("Register textures");
 var copyed = null;

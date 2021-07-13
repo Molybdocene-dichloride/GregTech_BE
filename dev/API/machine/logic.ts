@@ -1,4 +1,5 @@
 export interface IProcessingLogic {
+  recipes: RecipeMap
   getRecipes(): RecipeMap
   getRecipe(index : number): Recipe
   
@@ -13,7 +14,7 @@ export interface IGenerationLogic {
   provideGeneration(): void
 }
 export interface IElectricLogic {
-  provideGeneration(): void
+  provideEnergy(): void
 }
 export interface ISteamLogic {
   provideSteam(): void
@@ -53,12 +54,14 @@ namespace MultiblockMachine {
   export abstract class Shape {
     blockSource: BlockSource,
     position: Vec3,
+    positionRel: Vec3,
     casing: Tile,
-    constructor(position: Vec3, casing: Tile, blockSource: BlockSource) {
+    constructor(position: Vec3, positionRel: Vec3, casing: Tile, blockSource: BlockSource) {
       this.casing = casing;
       this.blockSource = blockSource;
       //this.size = size;
       this.position = position;
+      this.positionRel = positionRel;
     }
     //"x_y_z": tile {id, data}
     getBlockSource() : BlockSource {
@@ -72,8 +75,8 @@ namespace MultiblockMachine {
   }
   export abstract class BoxShape extends Shape {
     this.size = size;
-    constructor(position: Vec3, size: Vec3, casing: casing, blockSource: source) {
-      super(position, casing, blockSource);
+    constructor(position: Vec3, positionRel: Vec3, size: Vec3, casing: casing, blockSource: source) {
+      super(position, positionRel, casing, blockSource);
       this.size = size;
     }
     

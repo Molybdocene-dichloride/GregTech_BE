@@ -12,7 +12,7 @@ abstract class Machine implements TileEntity.TileEntityPrototype {
   connectEncounter: 0,
   rotation: 2,
   progress: 0,
-  temperature: 20,
+  temperature: 293.15,
   fluidStorage: new Machine.FluidStorage(),
   
   init() : void {

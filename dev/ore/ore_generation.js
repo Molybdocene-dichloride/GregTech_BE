@@ -46,8 +46,8 @@ for(let i = 0; i < OreDictionary.veins.length; i++) {
   let prerarity = rarity;
       rarity += OreDictionary.veins[i].rarity / OreDictionary.sumOfRarites;
       if(OreDictionary.isInnerDiapozone(rand, prerarity, rarity)) {
-OreDictionary.grids[dimension][mixX + "_" + mixZ].vein = OreDictionary.veins[i];
-break;
+        OreDictionary.grids[dimension][mixX + "_" + mixZ].vein = OreDictionary.veins[i];
+        break;
       }
     }
       let isgen = true;
@@ -90,25 +90,66 @@ break;
     Logger.Log(posZ, "qwa");
     Logger.Log(pos1X, "gqwa");
     Logger.Log(pos1Z, "f");
-    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
-    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) +  "startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;
+    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)] = {};
+    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
+    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;
     Logger.Log(mixX * 3 + 1 + "started", "saq");
-    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "endedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + pos1X;
-    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "endedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + pos1Z;
+    //OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)] = {};
+    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["endedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + pos1X;
+    OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["endedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + pos1Z;
+    
+    let upwX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX);
+    let upw1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - pos1X);
+    let upwZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ);
+    let upw1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - pos1Z);
+    
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedZ_" + i] = posZ +  upwZ * (Math.random() * 2 - 1);
+    }
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endZ_" + i] = pos1Z +  upw1Z * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedX_" + i] = posX +  upwX * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endX_" + i] = pos1X +  upw1X * (Math.random() * 2 - 1);
+    }
+    
     //OreDictionary.grids[dimension][mixX + "_" + mixZ].posChunkX = mixX * 3 + 1;
     //OreDictionary.grids[dimension][mixX + "_" + mixZ].posChunkY = mixY * 3 + 1;
-    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "startedX"], "ferromagnetic");
-    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) +  "startedZ"], "ferrimagnetic");
-    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "endedX"], "diamagnetic");
-    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1) + "endedZ"], "paramagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["startedX"], "ferromagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["startedZ"], "ferrimagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["endedX"], "diamagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["endedZ"], "paramagnetic");
     Logger.Log(mixX * 3 + 1 + "_" + (mixZ * 3 + 1), "paramagnetic");
 
     let numb = 1;
     while(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
-      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "endedX"] = 16;
-      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "startedX"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
-      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "endedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + pos1Z;
-      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;
+      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1)] = {};
+      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1)]["endedX"] = 16;
+      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1)]["startedX"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
+      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1)]["endedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + pos1Z;
+      OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1)]["startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;
+      
+      let upwX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX);
+    let upw1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - pos1X);
+    let upwZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ);
+    let upw1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - pos1Z);
+    
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedZ_" + i] = posZ +  upwZ * (Math.random() * 2 - 1);
+    }
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endZ_" + i] = pos1Z +  upw1Z * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedX_" + i] = posX +  upwX * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endX_" + i] = pos1X +  upw1X * (Math.random() * 2 - 1);
+    }
+      
       posX += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
       if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
       if(!(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
@@ -116,10 +157,10 @@ break;
       }
       Logger.Log((mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1), "magnetic");
       
-      Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "startedX"], "ferromagnetic");
-    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "startedZ"], "ferrimagnetic");
-    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "endedX"], "diamagnetic");
-    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1) + "endedZ"], "paramagnetic");
+      Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1)]["startedX"], "ferromagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1)]["startedZ"], "ferrimagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1)]["endedX"], "diamagnetic");
+    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1)]["endedZ"], "paramagnetic");
     
       numb++;
       Logger.Log(posX, "fx");
@@ -130,21 +171,44 @@ break;
         pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
         pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
         while(posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"] = 16;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "endedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + pos1X;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1 - numb)] = {};
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb)]["endedZ"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb)]["startedZ"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb)]["endedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + pos1X;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb)]["startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
+          
+          let upwX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX);
+
+    let upw1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - pos1X);
+
+    let upwZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ);
+    let upw1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - pos1Z);
+    
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedZ_" + i] = posZ +  upwZ * (Math.random() * 2 - 1);
+    }
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endZ_" + i] = pos1Z +  upw1Z * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedX_" + i] = posX +  upwX * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endX_" + i] = pos1X +  upw1X * (Math.random() * 2 - 1);
+    }
+    
           posZ += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
           if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
           if(!(posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
             OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"] = (mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb);
           }
+          
           Logger.Log((mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb), "magnetic");
           
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "startedX"], "ferromagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"], "ferrimagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "endedX"], "diamagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"], "paramagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb)]["startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb)]["startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb)]["endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 - numb)]["endedZ"], "paramagnetic");
           
           numb++;
           Logger.Log(posZ, "fz");
@@ -157,10 +221,32 @@ break;
         pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
         pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
         while(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "startedX"] = 0;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "endedX"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "endedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + pos1Z;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1)] = {};
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1)]["startedX"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1)]["endedX"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1)]["endedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs + pos1Z;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1)]["startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;
+          
+          let upwX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX);
+
+    let upw1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - pos1X);
+
+    let upwZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ);
+    let upw1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - pos1Z);
+    
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedZ_" + i] = posZ +  upwZ * (Math.random() * 2 - 1);
+    }
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endZ_" + i] = pos1Z +  upw1Z * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedX_" + i] = posX +  upwX * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endX_" + i] = pos1X +  upw1X * (Math.random() * 2 - 1);
+    }
+    
          pos1X += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
          if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
          if(!(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
@@ -168,10 +254,10 @@ break;
          }
          Logger.Log((mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1), "magnetic");
          
-         Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "startedX"], "ferromagnetic");
-        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "startedZ"], "ferrimagnetic");
-        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "endedX"], "diamagnetic");
-        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1) + "endedZ"], "paramagnetic");
+         Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1)]["startedX"], "ferromagnetic");
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1)]["startedZ"], "ferrimagnetic");
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1)]["endedX"], "diamagnetic");
+        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1)]["endedZ"], "paramagnetic");
         
          numb++;
          Logger.Log(pos1X, "f1x");
@@ -184,11 +270,32 @@ break;
         pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
         pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
         while(pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"] = 0;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1 + numb)] = {};
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb)]["startedZ"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb)]["endedZ"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
           
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "endedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + pos1X;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb)]["endedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs + pos1X;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb)]["startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
+          
+          let upwX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX);
+
+    let upw1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - pos1X);
+
+    let upwZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ);
+    let upw1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - pos1Z);
+    
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedZ_" + i] = posZ +  upwZ * (Math.random() * 2 - 1);
+    }
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endZ_" + i] = pos1Z +  upw1Z * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedX_" + i] = posX +  upwX * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endX_" + i] = pos1X +  upw1X * (Math.random() * 2 - 1);
+    }
           
           pos1Z += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
          if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
@@ -198,10 +305,10 @@ break;
          }
           Logger.Log((mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb), "magnetic");
           
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "startedX"], "ferromagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"], "ferrimagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "endedX"], "diamagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"], "paramagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb)]["startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb)]["startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb)]["endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1) + "_" + (mixZ * 3 + 1 + numb)]["endedZ"], "paramagnetic");
           
           numb++;
           Logger.Log(pos1Z, "f1z");
@@ -214,11 +321,32 @@ break;
         pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
         pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
         while(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "endedX"] = 16;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "startedX"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb)] = {};
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb)]["endedX"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb)]["startedX"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
       
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"] = 16;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb)]["endedZ"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb)]["startedZ"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+      
+          let upwX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX);
+
+    let upw1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - pos1X);
+
+    let upwZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ);
+    let upw1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - pos1Z);
+    
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedZ_" + i] = posZ +  upwZ * (Math.random() * 2 - 1);
+    }
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endZ_" + i] = pos1Z +  upw1Z * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedX_" + i] = posX +  upwX * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endX_" + i] = pos1X +  upw1X * (Math.random() * 2 - 1);
+    }
           
           posX += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
           posZ += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
@@ -229,10 +357,10 @@ break;
           }
           Logger.Log((mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb), "magnetic");
           
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "startedX"], "ferromagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"], "ferrimagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "endedX"], "diamagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"], "paramagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb)]["startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb)]["startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb)]["endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 - numb)]["endedZ"], "paramagnetic");
           
           numb++;
           Logger.Log(posX, "fxz x");
@@ -246,10 +374,32 @@ break;
         pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
         pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
         while(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && posZ < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "startedX"] = 0;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "endedX"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"] = 16;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb)] = {};
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb)]["startedX"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb)]["endedX"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb)]["endedZ"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb)]["startedZ"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
+          
+          let upwX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX);
+
+    let upw1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - pos1X);
+
+    let upwZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ);
+    let upw1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - pos1Z);
+    
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedZ_" + i] = posZ +  upwZ * (Math.random() * 2 - 1);
+    }
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endZ_" + i] = pos1Z +  upw1Z * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedX_" + i] = posX +  upwX * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endX_" + i] = pos1X +  upw1X * (Math.random() * 2 - 1);
+    }
+    
           pos1X += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
           posZ += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posZ, 16);
           if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
@@ -259,10 +409,10 @@ break;
           }
           Logger.Log((mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb), "magnetic");
           
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "startedX"], "ferromagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "startedZ"], "ferrimagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "endedX"], "diamagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb) + "endedZ"], "paramagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb)]["startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb)]["startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb)]["endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 - numb)]["endedZ"], "paramagnetic");
           
           numb++;
           Logger.Log(pos1X, "f1x 1x");
@@ -274,10 +424,33 @@ break;
         pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
         pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
         while(posX < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "endedX"] = 16;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "startedX"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"] = 0;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb)] = {};
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb)]["endedX"] = 16;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb)]["startedX"] = 16 - Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb)]["startedZ"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb)]["endedZ"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+          
+          let upwX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX);
+
+    let upw1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - pos1X);
+
+    let upwZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ);
+    let upw1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - pos1Z);
+    
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedZ_" + i] = posZ +  upwZ * (Math.random() * 2 - 1);
+    }
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endZ_" + i] = pos1Z +  upw1Z * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedX_" + i] = posX +  upwX * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endX_" + i] = pos1X +  upw1X * (Math.random() * 2 - 1);
+   
+    }
+    
           posX += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - posX - 1, 16);
           pos1Z += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
           if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
@@ -288,10 +461,10 @@ break;
           
           Logger.Log((mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb), "magnetic");
           
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb)]["startedX"], "ferromagnetic");
           Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"], "ferrimagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "endedX"], "diamagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"], "paramagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb)]["endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 - numb) + "_" + (mixZ * 3 + 1 + numb)]["endedZ"], "paramagnetic");
           
           numb++;
           Logger.Log(posX, "fx1z x");
@@ -303,25 +476,41 @@ break;
         pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
         pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
         while(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2) {
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "startedX"] = 0;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "endedX"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"] = 0;
-          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
-      
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb)] = {};
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb)]["startedX"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb)]["endedX"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb)]["startedZ"] = 0;
+          OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb)]["endedZ"] = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
+          
+          let upwX = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX);
+
+    let upw1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - pos1X);
+
+    let upwZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ);
+    let upw1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.sizeing, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - pos1Z);
+    
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedZ_" + i] = posZ +  upwZ * (Math.random() * 2 - 1);
+    }
+    for(let i = posX; i < pos1X; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endZ_" + i] = pos1Z +  upw1Z * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["startedX_" + i] = posX +  upwX * (Math.random() * 2 - 1);
+    }
+    for(let i = posZ; i < pos1Z; i++) {
+      OreDictionary.grids[dimension][mixX + "_" + mixZ]["endX_" + i] = pos1X +  upw1X * (Math.random() * 2 - 1);
+    }
+          
           pos1X += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1X, 16);
           pos1Z += Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 - pos1Z, 16);
-          if(!OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk) OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk = {};
-          if(!(pos1X < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2 && pos1Z < OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2)) {
-          OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"] = (mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb);
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"], "derry");
-          }
           
           Logger.Log((mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb), "magnetic");
           
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "startedX"], "ferromagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "startedZ"], "ferrimagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "endedX"], "diamagnetic");
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb) + "endedZ"], "paramagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb)]["startedX"], "ferromagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb)]["startedZ"], "ferrimagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb)]["endedX"], "diamagnetic");
+          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][(mixX * 3 + 1 + numb) + "_" + (mixZ * 3 + 1 + numb)]["endedZ"], "paramagnetic");
           
           numb++;
           Logger.Log(pos1X, "f1x1z 1x");
@@ -332,89 +521,15 @@ break;
         posZ = 0;
         pos1X = 0;
         pos1Z = 0;
-        
-        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"], "e");
-      Logger.Log(mixX + "_" + mixZ, "ehj");
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]]) {
-      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].startX; x < OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].endX; x++) {
-        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].startZ + sizeing * (Math.random() * 2 - 1);
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]][x], "xz");
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]]) {
-      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]].startX; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].endX; x++) {
-       OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]].startZ + sizeing * (Math.random() * 2 - 1);
-       Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["z"]][x], "z");
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]]) {
-      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].startX; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].endX; x++) {
-       OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].startZ + sizeing * (Math.random() * 2 - 1);
-       Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]][x], "1xz")
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]]) {
-      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].endZ; x++) {
-        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].endZ + sizeing * (Math.random() * 2 - 1);
-      
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]][x], "x1z")
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]]) {
-      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]].startX; x < OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]].endX; x++) {
-        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]].endZ + sizeing * (Math.random() * 2 - 1);
-      
-          Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1z"]][x], "1z")
-      }}
-      
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]]) {
-      for(let x = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].endZ; x++) {
-        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]][x] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].endZ + sizeing * (Math.random() * 2 - 1);
-        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]][x], "1x1z")
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]]) {
-      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].startX; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].endX; x++) {
-        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]].startX + sizeing * (Math.random() * 2 - 1);
-        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["xz"]][x], "xz")
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]]) {
-      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]].startX; x < OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]].endX; x++) {
-        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]].startX + sizeing * (Math.random() * 2 - 1);
-        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x"]][x], "x")
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]]) {
-      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].startX; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].endX; x++) {
-        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]].startX + sizeing * (Math.random() * 2 - 1);
-        Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["x1z"]][x], "x1z")
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]]) {
-      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]].endZ; x++) {
-       OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1xz"]][z].endX + sizeing * (Math.random() * 2 - 1);
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]]) {
-      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]].endZ; x++) {
-       OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x"]][z].endX + sizeing * (Math.random() * 2 - 1);
-      }}
-      
-      if(OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]]) {
-      for(let z = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].startZ; x <= OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].endZ; x++) {
-        OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]][z] = OreDictionary.grids[dimension][mixX + "_" + mixZ][OreDictionary.grids[dimension][mixX + "_" + mixZ].endChunk["1x1z"]].endX + sizeing * (Math.random() * 2 - 1);
-      }}
       } else {
         isgen = false;
       }
     }
   }
   
-  if(OreDictionary.grids[dimension][mixX + "_" + mixZ].enabled) {
+  if(OreDictionary.grids[dimension][mixX + "_" + mixZ].enabled && OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]) {
   //let cent
-let endX = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ + "endedX"];
+let endX = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["endedX"];
 Logger.Log(chunkX + "_" + chunkZ + "started", "$$$");
 
 Logger.Log(mixX + "_" + mixZ, "qiokoikf");
@@ -422,10 +537,10 @@ Logger.Log(chunkX + "_" + chunkZ, "pokoio");
     Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name, "qikf");
     Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size, "qikf");
     
-let startX = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ + "startedX"];
+let startX = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["startedX"];
 
-let startZ = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ + "startedZ"];
-let endZ = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX+ "_" + chunkZ + "endedZ"];
+let startZ = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["startedZ"];
+let endZ = OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX+ "_" + chunkZ]["endedZ"];
 Logger.Log(startX, "qwa");
 Logger.Log(endX, "qqwa");
 
@@ -441,7 +556,10 @@ Logger.Log(endZ, "qsqwa");
         //let randomX = GenerationDictionary.randomInInnerGaussian(random, -2, 2);
         //let randomX1 = GenerationDictionary.randomInInnerGaussian(random, -2, 2);
       for(let z = startZ; z < endZ; z++) {
-        //Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].ys, "Asher"); 
+        //Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].ys, "Asher");
+        if(x > OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["startedX_" + z] && x < OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["endX_" + z]) continue;
+        if(z > OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["startedZ_" + x] && z < OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["endZ_" + x]) continue;
+        
           let tile = World.getBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z);
         if(OreDictionary.rollPercentage(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.density * 10, random)) {
         if(tile.id + "_" + tile.data in OreDictionary.blocks) {
@@ -459,6 +577,9 @@ Logger.Log(endZ, "qsqwa");
 for(let x = startX; x < endX; x++) {
     for(let y = 0; y < 2; y++) {
       for(let z = startZ; z < endZ; z++) {
+        if(x > OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["startedX_" + z] && x < OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["endX_" + z]) continue;
+        if(z > OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["startedZ_" + x] && z < OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["endZ_" + x]) continue;
+        
           let tile = World.getBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z);
 if(OreDictionary.rollPercentage(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.density * 10, random)) {
        if(tile.id + "_" + tile.data in OreDictionary.blocks) {
@@ -475,6 +596,9 @@ if(OreDictionary.rollPercentage(OreDictionary.grids[dimension][mixX + "_" + mixZ
   for(let x = startX; x < endX; x++) {
     for(let y = 0; y < 3; y++) {
       for(let z = startZ; z < endZ; z++) {
+        if(x > OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["startedX_" + z] && x < OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["endX_" + z]) continue;
+        if(z > OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["startedZ_" + x] && z < OreDictionary.grids[dimension][mixX + "_" + mixZ][chunkX + "_" + chunkZ]["endZ_" + x]) continue;
+        
           let tile = World.getBlock(chunkX * 16 + x, OreDictionary.grids[dimension][mixX + "_" + mixZ].ys + 2 + y, chunkZ * 16 + z);
 if(OreDictionary.rollPercentage(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.density * 10, random)) {
        if(tile.id + "_" + tile.data in OreDictionary.blocks) {

@@ -14,10 +14,24 @@ abstract class SteamMachine extends Machine implements ISteamLogic {
   provideSteam() : void {}
 }
 
-abstract class SteamGenerator extends Machine implements IGenerationLogic {
+abstract class BronzeSteamGenerator extends SteamMachine implements IGenerationLogic {
+  recipes: FuelMap;
+  maxTemperature: number = 0;
+  getRecipes(): FuelMap {
+    return recipes:
+  }
+  getRecipe(index : number): FuelRecipe {
+    return recipes[index];
+  }
+  addRecipe(recipe: FuelRecipe): void {
+    recipes[recipes.length] = recipe;
+  }
+  init() : void {
+    super.init();
+  }
   tick() : void {
     super.tick();
-    
+    provideGeneration();
   }
   provideGeneration() : void {
     if(this.data.fuelTickEncounter < 11) {
@@ -25,7 +39,7 @@ abstract class SteamGenerator extends Machine implements IGenerationLogic {
                 } else {
                     if(this.data.fuel > 0) {
                       this.data.fuel--;
-                      if(this.data.temperature < 500) {
+                      if(this.data.temperature < maxTemperature) {
                         this.data.temperature += 1;
                         
                         this.container.setScale("hScale", (this.data.temperature - 20) / 480);
@@ -77,10 +91,35 @@ abstract class SteamGenerator extends Machine implements IGenerationLogic {
                 }
   }
 }
-abstract class SteamProcessor extends Machine implements IProcessingLogic {
+abstract class BronzeSteamGenerator extends SteamGenerator {
+  init() : void {
+    super.init();
+    tier = 0;
+  }
+}
+abstract class SteelSteamGenerator extends SteamGenerator {
+  init() : void {
+    super.init();
+    tier = 1;
+  }
+
+  
+}
+abstract class SteamProcessor extends SteamMachine implements IProcessingLogic {
+  tier: number;
+  recipes: RecipeMap;
+  getRecipes(): RecipeMap {
+    return recipes:
+  }
+  getRecipe(index : number): Recipe {
+    return recipes[index];
+  }
+  addRecipe(recipe: Recipe): void {
+    recipes[recipes.length] = recipe;
+  }
   tick() : void {
     super.tick();
-    
+    provideProcessing();
   }
   provideProcessing() : void {
     if(!this.data.isProcess) {
@@ -413,4 +452,18 @@ abstract class SteamProcessor extends Machine implements IProcessingLogic {
                this.container.setSlot("output0", result.id, this.container.getSlot("output0").count + result.count, result.data /*result.extra*/);
                this.container.validateSlot("output0");
      },
+}
+
+abstract class BronzeSteamProcessor extends SteamProcessor {
+  init() : void {
+    super.init();
+    tier = 0;
+  }
+}
+
+abstract class SteelSteamProcessor extends SteamProcessor {
+  init() : void {
+    super.init();
+    tier = 1;
+  }
 }
