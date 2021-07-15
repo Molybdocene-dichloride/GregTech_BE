@@ -7,10 +7,12 @@
 
 #include <symbol.h>
 #include <nativejs.h>
+
+
+#include <typeinfo>
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\shared_headers\flags.h>
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\common.h>
-//Log
-//std::cout << "HOOK" << std::endl;
+#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\OreFeature.h>
 
 namespace patch
 {
@@ -30,21 +32,18 @@ public:
         // any HookManager::addCallback calls must be in initialize method of a module
             // any other initialization also highly recommended to happen here
         DLHandleManager::initializeHandle("libminecraftpe.so", "mcpe");
-		Logger::message("edropew", patch::to_string(Common::getGameVersionString()).c_str());
-		Logger::message("edropew", patch::to_string(Common::getGameDevVersionString()).c_str());
-		Logger::message("edropew", patch::to_string(Common::getGameVersionStringNet()).c_str());
-		if(ver == "114") {
-        	HookManager::addCallback(SYMBOL("mcpe", "_ZN18OverworldDecorator12decorateOresEP11BlockSourceR6RandomRK8BlockPos"), LAMBDA((HookManager::CallbackController* controller), {
+	
+		//if(ver == "114") {
+        	/*HookManager::addCallback(SYMBOL("mcpe", "_ZN18OverworldDecorator12decorateOresEP11BlockSourceR6RandomRK8BlockPos"), LAMBDA((HookManager::CallbackController* controller), {
 				controller->prevent();
 				return 0;
-			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
+			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);*/
 			
-		} else if(ver == "16201") {
-			HookManager::addCallback(SYMBOL("mcpe", "_ZN18OverworldDecorator12decorateOresEP11BlockSourceR6RandomRK8BlockPos"), LAMBDA((HookManager::CallbackController* controller), {
-				controller->prevent();
+			HookManager::addCallback((void*)&OreFeature::place, LAMBDA((HookManager::CallbackController* controller, IBlockWorldGenAPI& gen, BlockPos const& pos, Random& rand, RenderParams& rend), {
+				Logger::debug("hookt", patch::to_string(pos.x).c_str());
+				//controller->prevent();
 				return 0;
 			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
-		}
 	}
 };
 

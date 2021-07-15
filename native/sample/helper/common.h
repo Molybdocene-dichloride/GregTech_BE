@@ -5,7 +5,7 @@
 
 class Common {
 	public:
-	static std::string getGameVersionStringNet(void);
-	static std::string getGameVersionString(void);
-	static std::string getGameDevVersionString(void);
+	static void getGameVersionStringNet(void);
+	static void getGameVersionString(void);
+	static void getGameDevVersionString(void);
 };
