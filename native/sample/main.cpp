@@ -1,18 +1,20 @@
-#include <hook.h>
-#include <mod.h>
-
 #include <string>
 #include <sstream>
+#include <cmath>
 #include <android/log.h>
 
+#include <mod.h>
 #include <symbol.h>
+#include <hook.h>
 #include <nativejs.h>
 
 
-#include <typeinfo>
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\shared_headers\flags.h>
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\common.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\OreFeature.h>
+#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\BlockPos.h>
+#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\IBlockWorldGenAPI.h>
+#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\RenderParams.h>
+//#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\OreFeature.h>
 
 namespace patch
 {
@@ -23,7 +25,10 @@ namespace patch
         return stm.str() ;
     }
 }
-std::string ver = "";
+
+std::map<int, int> blockids;
+int size = 0;
+std::map<int, int> iblockids;
 
 class GTOreGenerationDestroyerModule : public Module { //destroy vanilla ore generation
 public:
@@ -39,8 +44,34 @@ public:
 				return 0;
 			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);*/
 			
-			HookManager::addCallback((void*)&OreFeature::place, LAMBDA((HookManager::CallbackController* controller, IBlockWorldGenAPI& gen, BlockPos const& pos, Random& rand, RenderParams& rend), {
-				Logger::debug("hookt", patch::to_string(pos.x).c_str());
+			HookManager::addCallback(SYMBOL("mcpe", "_ZNK10OreFeature5placeER17IBlockWorldGenAPIRK8BlockPosR6RandomR12RenderParams"), LAMBDA((HookManager::CallbackController* controller, IBlockWorldGenAPI& gen, BlockPos const& pos, Random& rand, RenderParams& rend), {
+				
+				controller->prevent();
+				return 0;
+			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
+
+			HookManager::addCallback(SYMBOL("mcpe", "_ZNK19NoSurfaceOreFeature5placeER17IBlockWorldGenAPIRK8BlockPosR6RandomR12RenderParams"), LAMBDA((HookManager::CallbackController* controller, IBlockWorldGenAPI& gen, BlockPos const& pos, Random& rand, RenderParams& rend), {
+				
+				controller->prevent();
+				return 0;
+			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
+
+			HookManager::addCallback(SYMBOL("mcpe", "_ZNK23LegacyEmeraldOreFeature5placeER11BlockSourceRK8BlockPosR6Random"), LAMBDA((HookManager::CallbackController* controller, IBlockWorldGenAPI& gen, BlockPos const& pos, Random& rand, RenderParams& rend), {
+				
+				controller->prevent();
+				return 0;
+			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
+
+			HookManager::addCallback(SYMBOL("mcpe", "_ZN21BiomeDecorationSystem8decorateER10LevelChunkR11BlockSourceR6RandomN3gsl4spanI22BiomeDecorationFeatureLin1EEE"), LAMBDA((HookManager::CallbackController* controller, ChunkSource& chunkSource, LevelChunk& chunk), {
+				for(unsigned int x = 0; x < 16; x++) {
+					for(unsigned int y = 0; y < 170; y++) {
+						for(unsigned int z = 0; z < 16; z++) {
+							if(chunk.getBlock(new ChunkBlockPos(x, y, z)).id != Block::mStone.id) continue;
+							PerlinSimplexNoise psn = new PerlinSimplexNoise(chunkSource.getLevel().getSeed(), 2);
+							if(iblockids[getNearest(psn.getValue(new Vec3(x, y, z)))] != null) chunk.getDimension().getTickingArea().getBlockSource().setBlock(new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), Block::mGravel, 0, null);
+						}
+					}
+				}
 				//controller->prevent();
 				return 0;
 			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
@@ -73,23 +104,30 @@ MAIN {
 // module version defines version of next functions, that belong to this module
 // if several modules with one name is loaded and several same functions registered, only function with highest version is registered
 // this is required in case of libraries 
-JS_MODULE_VERSION(MCVersion, 1)
+JS_MODULE_VERSION(Stones, 1)
 JS_MODULE_VERSION(Flags, 1)
 
 // exports module and function to javascript, now you can call WRAP_NATIVE("SampleNativeModule") and a module with single function "hello", receiving two numbers, will be returned
 // signature I(LL) defines a method, receiving two ints, and returning long
-JS_EXPORT(MCVersion, sendPart1, "V(I)", (JNIEnv* env, int value1) {
+JS_EXPORT(Stones, registerID, "V(I)", (JNIEnv* env, int id) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;
-	ver = patch::to_string(value1).c_str();
+	blockids[blockids.size()] = id;
 	return 0;
 });
-JS_EXPORT(MCVersion, sendPart2, "V(I)", (JNIEnv* env, int value1) {
+JS_EXPORT(Stones, end, "V()", (JNIEnv* env) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;
-	ver += patch::to_string(value1).c_str();
+	std::map<string,int>::iterator cur;
+	size = 1 / blockids.size();
+	for(cur = blockids.begin(); cur!=blockids.end(); cur++) {
+		iblockids[(1 / blockids.size()) * (cur->first())] = cur->second();
+	}
 	return 0;
 });
+int getNearest(int pos) {
+	return floor(pos / size) * size;
+}
 JS_EXPORT(Flags, hasFlag, "I(LL)", (JNIEnv* env, long long value1, long long value2) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;

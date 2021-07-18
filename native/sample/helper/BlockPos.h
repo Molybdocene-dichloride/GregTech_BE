@@ -22,7 +22,7 @@ public:
 	void randomFloat() const;
 	void randomSeed() const;
 	void neighbor(unsigned char) const;
-	void toString() const;
+	std::string toString() const;
 	void center() const;
 	void transform(Rotation, Mirror, Vec3 const&) const;
 public:
