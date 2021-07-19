@@ -50,10 +50,10 @@ let StoneDictionary = {
 			return [[blockID, 1, blockData]];
 		});
 	},
-	generateStoneOld: function(coords, id, data, random) {
+	generateStoneDEPRECATED: function(coords, id, data, random) {
 		GenerationDictionary.generateSphere(coords, 2, 7, id, data, random, null, 1, OreDictionary.blocks);
 	},
-	generateStonePerlin: function(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids) {
+	generateStonePerlinDEPRECATED: function(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids) {
 		GenerationDictionary.generateChunkPerlin(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids);
 	},
 	addToCreative: function() {

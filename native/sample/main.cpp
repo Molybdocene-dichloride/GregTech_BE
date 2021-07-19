@@ -27,8 +27,12 @@ namespace patch
 }
 
 std::map<int, int> blockids;
-int size = 0;
+int sizeid = 0;
 std::map<int, int> iblockids;
+
+std::map<int, int> blockdatas;
+int sizedata = 0;
+std::map<int, int> iblockdatas;
 
 class GTOreGenerationDestroyerModule : public Module { //destroy vanilla ore generation
 public:
@@ -68,7 +72,7 @@ public:
 						for(unsigned int z = 0; z < 16; z++) {
 							if(chunk.getBlock(new ChunkBlockPos(x, y, z)).id != Block::mStone.id) continue;
 							PerlinSimplexNoise psn = new PerlinSimplexNoise(chunkSource.getLevel().getSeed(), 2);
-							if(iblockids[getNearest(psn.getValue(new Vec3(x, y, z)))] != null) chunk.getDimension().getTickingArea().getBlockSource().setBlock(new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), Block::mGravel, 0, null);
+							if(iblockids[getNearest(psn.getValue(new Vec3(x, y, z)), 0)] != null && iblockdatas[getNearest(psn.getValue(new Vec3(x, y, z)), 1)] != null) chunk.getDimension().getTickingArea().getBlockSource().setBlock(new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), Block::mBlocks[iblockids[getNearest(psn.getValue(new Vec3(x, y, z)), 0)]], iblockdatas[getNearest(psn.getValue(new Vec3(x, y, z)), 1)], null);
 						}
 					}
 				}
@@ -109,24 +113,35 @@ JS_MODULE_VERSION(Flags, 1)
 
 // exports module and function to javascript, now you can call WRAP_NATIVE("SampleNativeModule") and a module with single function "hello", receiving two numbers, will be returned
 // signature I(LL) defines a method, receiving two ints, and returning long
-JS_EXPORT(Stones, registerID, "V(I)", (JNIEnv* env, int id) {
+JS_EXPORT(Stones, registerID, "V(II)", (JNIEnv* env, int id, int data) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;
 	blockids[blockids.size()] = id;
+	blockdatas[blockdatas.size()] = data;
 	return 0;
 });
 JS_EXPORT(Stones, end, "V()", (JNIEnv* env) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;
 	std::map<string,int>::iterator cur;
-	size = 1 / blockids.size();
-	for(cur = blockids.begin(); cur!=blockids.end(); cur++) {
-		iblockids[(1 / blockids.size()) * (cur->first())] = cur->second();
+	sizeid = 1 / blockids.size();
+	for(cur = blockids.begin(); cur != blockids.end(); cur++) {
+		iblockids[sizeid * (cur->first())] = cur->second();
+	}
+	sizedata = 1 / blockdatas.size();
+	for(cur = blockdatas.begin(); cur != blockdatas.end(); cur++) {
+		iblockdatas[sizedata * (cur->first())] = cur->second();
 	}
 	return 0;
 });
-int getNearest(int pos) {
-	return floor(pos / size) * size;
+int getNearest(int pos, short mode) {
+	switch(mode) {
+		case 0:
+		return floor(pos / sizeid) * sizeid;
+		case 1:
+		return floor(pos / sizedata) * sizedata;
+	}
+	return 0;
 }
 JS_EXPORT(Flags, hasFlag, "I(LL)", (JNIEnv* env, long long value1, long long value2) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
