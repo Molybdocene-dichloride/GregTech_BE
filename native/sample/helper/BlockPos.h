@@ -5,15 +5,18 @@ class Rotation;
 class Mirror;
 class ChunkPos;
 
+struct BlockPos;
 class Vec3 {
+	public:
     float x, y, z;
+	public:
+	Vec3(BlockPos const&);
 };
-class BlockPos
-{
-public:
+class BlockPos {
+	public:
 	//char filler_BlockPos[UNKNOW_SIZE];
 	int x, y, z;
-public:
+	public:
 	BlockPos(Vec3 const&);
 	BlockPos(ChunkPos const&, int);
 	BlockPos(float, float, float);
@@ -25,7 +28,7 @@ public:
 	std::string toString() const;
 	void center() const;
 	void transform(Rotation, Mirror, Vec3 const&) const;
-public:
+	public:
 	static BlockPos * ZERO;
 	static BlockPos * MIN;
 	static BlockPos * MAX;

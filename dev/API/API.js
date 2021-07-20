@@ -1,6 +1,7 @@
 const MCVersion = WRAP_NATIVE("MCVersion");
 const Flags = WRAP_NATIVE("Flags");
 const Flag = WRAP_NATIVE("Flags");
+const Stones = WRAP_NATIVE("Stones");
 const setLoadingTip = ModAPI.requireGlobal("MCSystem.setLoadingTip");
 
 setLoadingTip("Register textures");
@@ -391,9 +392,6 @@ HAMMER_FRONT:  [{u: 2, v: 4}, {u: 3, v: 4}, {u: 4, v: 4}, {u: 5, v: 4}, {u: 6, v
 
 
 let createFlag = function(id) {
-  Logger.Log(id, "desk");
-  Logger.Log(1 << id, "deqw");
-  Logger.Log(Flags.createFlag(id), "deqw");
 	return Flags.createFlag(id);
 };
 
@@ -2406,12 +2404,6 @@ let MetaRenderer = {
   getEntityYaw: ModAPI.requireGlobal("Entity.getYaw"),
   getEntityPitch: ModAPI.requireGlobal("Entity.getPitch"),
    invalidateModel: function (coords, texture, rotatedtexture, puts) {
-     Logger.Log(texture.textures[rotatedtexture[0]], "ast");
-     Logger.Log(texture.textures[rotatedtexture[1]], "Astartes");
-     Logger.Log(texture.textures[rotatedtexture[2]], "ast");
-     Logger.Log(texture.textures[rotatedtexture[3]], "Astartes");
-     Logger.Log(texture.textures[rotatedtexture[4]], "ast");
-     Logger.Log(texture.textures[rotatedtexture[5]], "Astartes");
      
      let array = [texture.textures[rotatedtexture[0]], texture.textures[rotatedtexture[1]], texture.textures[rotatedtexture[2]], texture.textures[rotatedtexture[3]], texture.textures[rotatedtexture[4]], texture.textures[rotatedtexture[5]]];
      //Logger.Log(World.getTileEntity(coords.x, coords.y, coords.z).data.put.length, "xenaft");
@@ -2420,7 +2412,6 @@ let MetaRenderer = {
       if(puts[put] === null || puts[put] === undefined) continue;
 	    puts[put] = [array[puts[put]][0] + "_put", array[puts[put]][1]];
       }*/
-     Logger.Log(array[coords.side], "ds");
     let model = BlockRenderer.createTexturedBlock(array);
     let ic = new ICRender.Model();
     ic.addEntry(model);
@@ -2439,29 +2430,11 @@ let MetaRenderer = {
     this.rotateBlock1WithRotation(coords, block, texture, rotation, isFull);
   },
   rotateBlock1WithRotation: function (coords, block, texture, rotation, isFull) {
-    //sharik
-    /*for(let xx = -1; xx < 2; xx += 2) {
-            for(let yy = -1; yy < 2; yy += 2) {
-            for(let zz = -1; zz < 2; zz += 2) {
-            if((xx != 0 & yy != 0) | (xx != 0 & zz != 0) | (yy != 0 & zz != 0) | (xx != 0 & yy != 0 & zz != 0)) {
-           continue;
-            }
-            if(World.getBlock(coords.x + xx, coords.y + yy, coords.z + zz).id == BlockID.gtblockpipe) {
-              BlockRenderer.mapAtCoords(coords.x + xx, coords.y + yy, coords.z + zz, model);
-            }
-          }
-       }
-    }*/
-    //sharik
-    Logger.Log(rotation, "xex");
     let array = [texture[this.rotationMap[rotation][0]], texture[this.rotationMap[rotation][1]], texture[this.rotationMap[rotation][2]], texture[this.rotationMap[rotation][3]], texture[this.rotationMap[rotation][4]], texture[this.rotationMap[rotation][5]]];
-    Logger.Log(texture[this.rotationMap[rotation][3]], "hexyllithium");
-    Logger.Log(World.getTileEntity(coords.x, coords.y, coords.z).data.put.length, "xenoift");
     if(World.getTileEntity(coords.x, coords.y, coords.z).data.inited) {
       for(let i = 0; i < 6; i++) {
         if(World.getTileEntity(coords.x, coords.y, coords.z).data["put" + i] === null || World.getTileEntity(coords.x, coords.y, coords.z).data["put" + i] === undefined) continue;
       let side = World.getTileEntity(coords.x, coords.y, coords.z).blockRotationToWorldRotation(World.getTileEntity(coords.x, coords.y, coords.z).data["put" + i]);
-      Logger.Log(side, "xen");
 	    array[side] = [array[side][0] + "_put", array[side][1]];
       }
     } else {
@@ -2471,7 +2444,6 @@ let MetaRenderer = {
     let model = BlockRenderer.createTexturedBlock(array);
     let ic = new ICRender.Model();
     ic.addEntry(model);
-    Logger.Log("xeb");
     BlockRenderer.mapAtCoords(coords.x, coords.y, coords.z, ic);
   },
   getBlockRotation: function(player, isFull) {
@@ -2487,19 +2459,6 @@ let MetaRenderer = {
 		return rotation + 2;
 	},
 }
-
-/*Block.registerPlaceFunction("gtblockmechanism", function(coords, item, block){
-    Logger.Log("шизики-хуизики∆");
-    World.setBlock(coords.relative.x, coords.relative.y, coords.relative.z, item.id, item.data);
-      MetaRenderer.rotateBlock(coords.relative, World.getBlock(coords.relative.x, coords.relative.y, coords.relative.z), false);
-      
-      let rotation = this.getBlockRotation(isFull);
-      if(World.getTileEntity(coords.x, coords.y, coords.z) != null) {
-	    this.data.rotation = rotation;
-    } else {
-      tileToUpdate = {coords: coords, rotation: rotation};
-    }
-});*/
 
 Callback.addCallback("DestroyBlock", function(coords, block, player) {
     if(block.id == BlockID.gtblockmechanism) {

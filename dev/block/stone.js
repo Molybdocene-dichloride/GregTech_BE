@@ -21,3 +21,4 @@ StoneDictionary.registerStone("mineral", {
 	rarity2: 0.5,
 });
 //StoneDictionary.addToCreative();
+Stones.ends();

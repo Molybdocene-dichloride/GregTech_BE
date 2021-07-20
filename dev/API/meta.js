@@ -58,8 +58,6 @@ function damageEntityInR(entity, x, y, z) {
 		  if(tile.data.temperature > 60) {
 		    let damage = Math.ceil((tile.data.temperature - 60) / 20);
 		    
-		    Logger.Log("temperature", tile.data.temperature);
-		    Logger.Log("damag", damage);
 		    Entity.damageEntity(entity, damage);
 		    return damage;
 		  }
@@ -145,26 +143,17 @@ let MaterialDictionary = {
 					}	
 				}
 				
-Logger.Log(material.name, "zuuia");
-        Logger.Log(form, "zoosia");
-        Logger.Log(type, "za");
 				if(material.hasFlag(this.types[type][form]) || (OreDictionary.evblocks[material.name] && form == "dustImpure")) {
 				  
 				    /*if(i == Object.keys(this.types[type]).length - 1 && e == Object.keys(this.dict).length - 1) {
 				        Logger.Log(e, "zoosia");
 					    limited = true;
 					    }*/
-					    Logger.Log(material.name, "ploiai");
-					    Logger.Log(form, "iiiizoa");
 		                let arr = this.limit(data, id, count, limit, bigdata, limited, material, form, type);
 		                count = arr[0];
 		                data = arr[1];
 		                limited = false;
-                		} else {
-                		  Logger.Log(material.name, "zia");
-                      Logger.Log(form, "zoa");
-                      Logger.Log(type, "ziia");
-                		}
+                }
 			}
 		}
 		if(id == "gtmetaitem") {
@@ -219,11 +208,8 @@ Logger.Log(material.name, "zuuia");
     },
     blockvariables: [],
     limit: function(data, id, count, limit, bigdata, limited, material, form, type) {
-        
-        Logger.Log(type)
         if(data == limit) {
 			    if(type == "block") {
-			      Logger.Log(form, "zoщioa");
 				    //Block.createBlock(id + (count), this.createvariables(this.blockvariables));
 				//this.blockvariables = [];
 			    } else if(type == "item") {
@@ -246,9 +232,6 @@ Logger.Log(material.name, "zuuia");
         }
 		//i{
 		    if(type == "block") {
-		      
-		          Logger.Log(form, "seres");
-		          Logger.Log(material.name, "sereees");
 		            this.data[BlockID[id + count]][data] = {material: material, form: form};
 		            this.invdata[form][material.name] = {id: BlockID[id + count], data: data};
 		            
@@ -286,7 +269,6 @@ Logger.Log(material.name, "zuuia");
     });*/
     let material = MaterialDictionary.data[item.id][item.data].material;
  let form = MaterialDictionary.data[item.id][item.data].form;
-  Logger.Log(form, "fered");
 if(form == undefined) return {name: "unknown"};
    if(material == undefined) return {name: "unknown_" + form};
     return {name: material.name + "_" + form};
@@ -492,70 +474,6 @@ function of() {
 	return stacks;
 }
 
-Logger.Log(java.lang.Long.toBinaryString(DECOMPOSITION_BY_ELECTROLYZING) , "qwest");
-Logger.Log( java.lang.Long.toBinaryString(DECOMPOSITION_BY_CENTRIFUGING) , "qwest");
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  BURNING), "$") ;
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  FLAMMABLE) , "sa") ;
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  EXPLOSIVE) , "ass") ;
-Logger.Log( java.lang.Long.toBinaryString(NO_UNIFICATION) ) ;
-Logger.Log( 
-java.lang.Long.toBinaryString( NO_RECYCLING ));
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  DISABLE_DECOMPOSITION ));
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  DECOMPOSITION_REQUIRES_HYDROGEN ));
-Logger.Log(
-java.lang.Long.toBinaryString(
-  GENERATE_FLUID_BLOCK) );
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  GENERATE_PLASMA));
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  STATE_GAS ));
-//dust
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  GENERATE_ORE));
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  GENERATE_PLATE ));
-Logger.Log(java.lang.Long.toBinaryString(NO_WORKING ));
-Logger.Log(java.lang.Long.toBinaryString(NO_SMASHING ));
-Logger.Log(java.lang.Long.toBinaryString(NO_SMELTING ));
-Logger.Log(java.lang.Long.toBinaryString(INDUCTION_SMELTING_LOW_OUTPUT) ) ;
-Logger.Log(java.lang.Long.toBinaryString(SMELT_INTO_FLUID) );
-Logger.Log(java.lang.Long.toBinaryString(EXCLUDE_BLOCK_CRAFTING_RECIPES) );
-Logger.Log( 
-java.lang.Long.toBinaryString(
-  EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES));
-Logger.Log(java.lang.Long.toBinaryString(EXCLUDE_PLATE_COMPRESSOR_RECIPE) );
-
-//solid
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_ROD ));
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_GEAR));
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_LONG_ROD) );
-Logger.Log(java.lang.Long.toBinaryString(MORTAR_GRINDABLE) );
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_FRAME) );
-//ingot
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_FOIL));
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_BOLT_SCREW) );
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_RING));
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_SPRING) );
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_FINE_WIRE));
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_ROTOR));
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_SMALL_GEAR));
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_DENSE));
-Logger.Log(java.lang.Long.toBinaryString(GENERATE_SPRING_SMALL), "hukok");
-
 function Material(name, formula, type, materialGenerationFlags, pointMelting, pointBoiling) {
   this.name = name;
   this.formula = formula;
@@ -566,9 +484,6 @@ function Material(name, formula, type, materialGenerationFlags, pointMelting, po
 		return materialBits;
 	};
 	this.materialGenerationFlags = this.verifyMaterialBits(materialGenerationFlags);
-Logger.Log(name, "т");
-Logger.Log(materialGenerationFlags, "т");
-	Logger.Log(java.lang.Long.toBinaryString(materialGenerationFlags), "тогруты");
 	this.addFlag = function(materialGenerationFlags) {
 		let combined = 0;
 		for (let materialGenerationFlag in materialGenerationFlags) {
@@ -580,11 +495,7 @@ Logger.Log(materialGenerationFlags, "т");
 		this.materialGenerationFlags |= verifyMaterialBits(combined);
 	};
 	this.hasFlag = function(generationFlag) {
-	  
-Logger.Log(materialGenerationFlags, "тогрута");
-         Logger.Log(Flag.hasFlag(materialGenerationFlags, generationFlag), "deqoi");
-         Logger.Log((materialGenerationFlags & generationFlag) >= generationFlag, "deqator");
-        	return Flag.hasFlag(materialGenerationFlags, generationFlag);
+        return Flag.hasFlag(materialGenerationFlags, generationFlag);
 	};
 	this.genItem = function(form, count) {
 		MaterialDictionary.genItem(this, form, count);

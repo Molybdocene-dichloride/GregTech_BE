@@ -6,7 +6,6 @@ let TileEntityRegistry = {
 		/*if (!Prototype.__energyLibInit) {
 			this.setupInitialParams(Prototype);
 		}*/
-        Logger.Log(Prototype.__Types, "xeror");
 		Prototype.__Types[energyType] = energyType;
 	},
 
@@ -112,7 +111,6 @@ let TileEntityRegistry = {
 
 	quickCoordAccess: {},
 	addMacineAccessAtCoords: function(x, y, z, machine) {
-	    Logger.Log(machine, "fuOS _");
 		this.quickCoordAccess[x + ":" + y + ":" + z] = machine;
 	},
 
@@ -208,10 +206,8 @@ var PipeNetBuilder = {
 	  let isnet = true;
 	  let net = null;
 		for(let i in this.pipeNets) {
-		  Logger.Log("net", i);
 		  let pipes = this.pipeNets[i].getUnits();
 		  for(let e in pipes) {
-		    Logger.Log("pipe", e);
 		    if(pipes[e].x == tile.x & pipes[e].y == tile.y & pipes[e].z == tile.z) {
 		      isnet = false;
 		      //net = nett;
@@ -264,18 +260,14 @@ var PipeNetBuilder = {
 			    } else {
 			      others.push(tile);
 			    }
-			    Logger.Log("neaters");
 			  }
-			  Logger.Log("ppm");
 			  for(let i in machinesource) {
-			    Logger.Log("push");
 			    let created = PipeNetBuilder.buildForTile(machinesource[i], "liquid");
 			    
 			    if(created != null) {
 			      //is tileentity is not connected
 			      machinesource[i].__Nets["liquid"] = created;
 			    }
-			    Logger.Log("pushnio");
 			  }
 			  for(let i in machinestorage) {
 			    let created = PipeNetBuilder.buildForTile(machinestorage[i], "liquid");
@@ -495,12 +487,10 @@ function PipeNet(Type, overloadFunc) {
     if(this.sourceTile && this.sourceTile.__Types && this.sourceTile.__Types[this.Type]) {
     units[units.length] = this.sourceTile;
     if(this.sourceTile.canConnect() && this.sourceTile.isSource()) {
-      Logger.Log("sup", "*")
     for (let side = 0; side < 6; side++) {
       if(this.enabledSide[side]) {
 				let c = PipeNetBuilder.getRelativeCoords(sourceCoords.x, sourceCoords.y, sourceCoords.z, side);
 				let tile = World.getTileEntity(c.x, c.y, c.z);
-				Logger.Log("supernio", "*")
 				if(tile && tile.__Types && tile.__Types[this.Type] && tile.canConnect() && !tile.isGenerator()) {
 				  units[units.length] = tile;
 				  if(tile.isSource()) {
@@ -510,10 +500,8 @@ function PipeNet(Type, overloadFunc) {
       }
 		  }
     }
-    Logger.Log("superfuck", "*")
 		  return units;
     }
-    Logger.Log("error!");
     return null;
   }
   this.getUnits1 = function(units, coords, coordspre) {
@@ -561,26 +549,19 @@ function PipeNet(Type, overloadFunc) {
 				amount -= net.add(amount, source, explored);
 			}
 		}*/
-		Logger.Log(amount, "zub");
 		let divider = 2;
 		for(let side = 0; side < 6; side++) {
 		    
 				if(pretile.canExtract(side, type)) {
 				let c = PipeNetBuilder.getRelativeCoords(pretile.x, pretile.y, pretile.z, side);
 				let tile = World.getTileEntity(c.x, c.y, c.z);
-				Logger.Log(sidepre, "zoop");
 				if(side !== sidepre) {
-				  
 				if(tile && tile.__Types && tile.__Types[this.Type] && tile.canConnect() && !tile.isGenerator()) {
-				  Logger.Log("fuccc");
 				  if(tile != this.sourceTile) {
-			      Logger.Log("fuccewytc");
 			      if(tile.canReceive(side, type)) {
-			        Logger.Log("fucc");
 			        let amont = Math.min(inAmount / divider, amount);
 				      amount -= tile.receive(type, amont, side);
-				      
-				      Logger.Log(inAmount / divider, "zub");
+
 				      divider = divider * 2;
 			      }
       }

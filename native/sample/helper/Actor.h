@@ -4,6 +4,7 @@
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\Random.h>
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\RenderParams.h>
 
+class ActorBlockSyncMessage;
 class ActorLocation;
 class ActorDamageSource;
 class RideTickComponent;
@@ -54,8 +55,7 @@ class Dimension;
 class Mob;
 class HashedString;
 
-class Actor
-{
+class Actor {
 public:
 	//char filler_Actor[UNKNOW_SIZE];
 public:

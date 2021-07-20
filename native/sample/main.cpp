@@ -11,7 +11,9 @@
 
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\shared_headers\flags.h>
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\common.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\BlockPos.h>
+#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\PerlinSimplexNoise.h>
+#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\LevelChunk.h>
+#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\ChunkSource.h>
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\IBlockWorldGenAPI.h>
 #include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\RenderParams.h>
 //#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\OreFeature.h>
@@ -25,6 +27,7 @@ namespace patch
         return stm.str() ;
     }
 }
+std::map<int, int>::iterator cur;
 
 std::map<int, int> blockids;
 int sizeid = 0;
@@ -34,9 +37,19 @@ std::map<int, int> blockdatas;
 int sizedata = 0;
 std::map<int, int> iblockdatas;
 
+int getNearest(int pos, short mode) {
+	switch(mode) {
+		case 0:
+		return floor(pos / sizeid) * sizeid;
+		case 1:
+		return floor(pos / sizedata) * sizedata;
+	}
+	return 0;
+}
+
 class GTOreGenerationDestroyerModule : public Module { //destroy vanilla ore generation
 public:
-	GTOreGenerationDestroyerModule(const char* id): Module(id) {Logger::message("edrop", id);};
+	GTOreGenerationDestroyerModule(const char* id): Module(id) {};
 	virtual void initialize() {	
         // any HookManager::addCallback calls must be in initialize method of a module
             // any other initialization also highly recommended to happen here
@@ -70,9 +83,9 @@ public:
 				for(unsigned int x = 0; x < 16; x++) {
 					for(unsigned int y = 0; y < 170; y++) {
 						for(unsigned int z = 0; z < 16; z++) {
-							if(chunk.getBlock(new ChunkBlockPos(x, y, z)).id != Block::mStone.id) continue;
-							PerlinSimplexNoise psn = new PerlinSimplexNoise(chunkSource.getLevel().getSeed(), 2);
-							if(iblockids[getNearest(psn.getValue(new Vec3(x, y, z)), 0)] != null && iblockdatas[getNearest(psn.getValue(new Vec3(x, y, z)), 1)] != null) chunk.getDimension().getTickingArea().getBlockSource().setBlock(new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), Block::mBlocks[iblockids[getNearest(psn.getValue(new Vec3(x, y, z)), 0)]], iblockdatas[getNearest(psn.getValue(new Vec3(x, y, z)), 1)], null);
+							if(chunk.getBlock(*new ChunkBlockPos((float)x, (float)y, (float)z)).blockId.value != Block::mStone->blockId.value) continue;
+							PerlinSimplexNoise* psn = new PerlinSimplexNoise(chunkSource.getLevel().getSeed(), 2);
+							if(iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 0)] != 0 && iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 1)] != 0) chunk.getDimension().getTickingArea().getBlockSource().setBlock(*new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), *Block::mBlocks[iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 0)]], iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 1)], nullptr);
 						}
 					}
 				}
@@ -89,12 +102,10 @@ public:
         // any HookManager::addCallback calls must be in initialize method of a module
             // any other initialization also highly recommended to happen here
         DLHandleManager::initializeHandle("libminecraftpe.so", "mcpe");
-		if(ver == "114") {
         	HookManager::addCallback(SYMBOL("mcpe", "_ZN18OverworldDecorator12decorateOresEP11BlockSourceR6RandomRK8BlockPos"), LAMBDA((HookManager::CallbackController* controller), {
 				controller->prevent();
 				return 0;
 			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
-		}
 	}
 };
 
@@ -108,8 +119,8 @@ MAIN {
 // module version defines version of next functions, that belong to this module
 // if several modules with one name is loaded and several same functions registered, only function with highest version is registered
 // this is required in case of libraries 
-JS_MODULE_VERSION(Stones, 1)
-JS_MODULE_VERSION(Flags, 1)
+JS_MODULE_VERSION(Stones, 1);
+JS_MODULE_VERSION(Flags, 1);
 
 // exports module and function to javascript, now you can call WRAP_NATIVE("SampleNativeModule") and a module with single function "hello", receiving two numbers, will be returned
 // signature I(LL) defines a method, receiving two ints, and returning long
@@ -120,29 +131,19 @@ JS_EXPORT(Stones, registerID, "V(II)", (JNIEnv* env, int id, int data) {
 	blockdatas[blockdatas.size()] = data;
 	return 0;
 });
-JS_EXPORT(Stones, end, "V()", (JNIEnv* env) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
+JS_EXPORT(Stones, ends, "V()", (JNIEnv* env) {
+// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;
-	std::map<string,int>::iterator cur;
 	sizeid = 1 / blockids.size();
 	for(cur = blockids.begin(); cur != blockids.end(); cur++) {
-		iblockids[sizeid * (cur->first())] = cur->second();
+		iblockids[sizeid * (cur->first)] = cur->second;
 	}
 	sizedata = 1 / blockdatas.size();
 	for(cur = blockdatas.begin(); cur != blockdatas.end(); cur++) {
-		iblockdatas[sizedata * (cur->first())] = cur->second();
+		iblockdatas[sizedata * (cur->first)] = cur->second;
 	}
 	return 0;
 });
-int getNearest(int pos, short mode) {
-	switch(mode) {
-		case 0:
-		return floor(pos / sizeid) * sizeid;
-		case 1:
-		return floor(pos / sizedata) * sizedata;
-	}
-	return 0;
-}
 JS_EXPORT(Flags, hasFlag, "I(LL)", (JNIEnv* env, long long value1, long long value2) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;

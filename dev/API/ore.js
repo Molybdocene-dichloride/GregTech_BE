@@ -19,7 +19,7 @@ Size int
 }
 */
 //API for GregTech ore generation
-
+Stones.registerID(0, 0);
 let StoneDictionary = {
 	stones: {},
 	registerStone: function(id, variants) {
@@ -37,13 +37,15 @@ let StoneDictionary = {
 		    inverted = variants.name.toUpperCase();
 		    inverted2 = variants.name2.toUpperCase();
 		}
-		Logger.Log("$*", inverted);
-		Logger.Log(inverted2);
-            	IDRegistry.genBlockID(id);
-            this.stones[id].id = BlockID[id];
-    		Block.createBlock(id, [{name: variants.name, texture: [[inverted + "_STONE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_SMOOTH", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_STONE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_SMOOTH", 0]], inCreative: true}], "stone");
-    	ToolAPI.registerBlockMaterial(id, "stone", variants.level, true);
-		Block.registerDropFunction(id, function(blockCoords, blockID, blockData, diggingLevel, region) {
+
+    IDRegistry.genBlockID(id);
+    this.stones[id].id = BlockID[id];
+    Stones.registerID(id, 0);
+    Stones.registerID(id, 8);
+
+    Block.createBlock(id, [{name: variants.name, texture: [[inverted + "_STONE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_SMOOTH", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_STONE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_SMOOTH", 0]], inCreative: true}], "stone");
+    ToolAPI.registerBlockMaterial(id, "stone", variants.level, true);
+    Block.registerDropFunction(id, function(blockCoords, blockID, blockData, diggingLevel, region) {
 			if(blockData == 0 || blockData == 8) {
 				return [[blockID, 1, blockData + 1]];
 			}
@@ -162,7 +164,7 @@ let OreDictionary = {
     
   
   variationbig[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" + material.name + "_ore"};
-  Logger.Log(this.blocks[Object.keys(this.blocks)[i]].texture, "видиканес");
+
 variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" + material.name + "_oreSmall"};
   }
     IDRegistry.genBlockID("gtblockores" + id);

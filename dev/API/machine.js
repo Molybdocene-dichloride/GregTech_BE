@@ -117,26 +117,8 @@ let MachineDictionary = {
           }
           }
           this.steammachines[type.name] = type;
-          Logger.Log("варп", "₽шлд");
-          for(let mach in this.steammachines) {
-              for(let i in this.steammachines[mach].tier) {
-                 if(this.steammachines[mach].tier[i] == 0) {
-                   Logger.Log(this.steammachines[mach].name, "₽₽₽₽₽₽₽₽₽k₽!!");
-                Logger.Log(this.steammachines[mach].data0, "₽₽₽₽₽₽₽₽₽k₽!!");
-              }
-              if(this.steammachines[mach].tier[i] == 1) {
-                Logger.Log(this.steammachines[mach].name, "₽₽₽₽₽₽₽₽₽!!");
-                Logger.Log(this.steammachines[mach].data1, "₽₽₽₽₽₽₽₽₽₽!!");
-              }
-              }
-            }
-           Logger.Log("варпед", "₽шлд");
-           for(let mach in this.invsteammachines) {
-             Logger.Log(this.invsteammachines[mach].name, "₽₽rrfg₽₽₽!!");
-                Logger.Log(this.invsteammachines[mach].tier, "₽₽₽kju₽!!");
-           }
+
         for(let tier in type.tier) {
-          Logger.Log(ui, "xer gia");
             type["ui" + type.tier[tier]] = ui;
             let casing = null;
             if(type.tier[tier] == 0) casing = "MACHINE";
@@ -195,7 +177,7 @@ let MachineDictionary = {
         }
         if(type.tier[tier] == 0) type.variable0 = {name: type.name, textures: [[tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_BOTTOM", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_TOP", 0],  [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_FRONT", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0]], inCreative: true};
         if(type.tier[tier] == 1) type.variable1 = {name: type.name, textures: [[tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_BOTTOM", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_TOP", 0],  [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_FRONT", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0], [tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name + "_SIDE", 0]], inCreative: true};
-        Logger.Log(tr.substring(tr.charAt("_")).toLowerCase() + "_" + type.name, "derrechi");
+
         }
       },
       addToCreative: function() {
