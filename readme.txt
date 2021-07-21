@@ -1,0 +1,1 @@
+![Alt-текст](mod_icon.png?raw=true "Орк")
