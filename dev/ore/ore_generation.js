@@ -83,13 +83,7 @@ for(let i = 0; i < OreDictionary.veins.length; i++) {
     let posZ = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, OreDictionary.grids[dimension][mixX + "_" + mixZ].zs)
     let pos1X = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].xs);
     let pos1Z = Math.min(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size / 2, 16 - OreDictionary.grids[dimension][mixX + "_" + mixZ].zs);
-    Logger.Log(mixX + "_" + mixZ, "qiokoikf");
-    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.name, "qikf");
-    Logger.Log(OreDictionary.grids[dimension][mixX + "_" + mixZ].vein.size, "qikf");
-    Logger.Log(posX, "f");
-    Logger.Log(posZ, "qwa");
-    Logger.Log(pos1X, "gqwa");
-    Logger.Log(pos1Z, "f");
+
     OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)] = {};
     OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["startedX"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].xs - posX;
     OreDictionary.grids[dimension][mixX + "_" + mixZ][mixX * 3 + 1 + "_" + (mixZ * 3 + 1)]["startedZ"] = OreDictionary.grids[dimension][mixX + "_" + mixZ].zs - posZ;

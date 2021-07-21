@@ -1,6 +1,6 @@
 #pragma once
 
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\BlockPos.h>
+#include <helper\BlockPos.h>
 
 class ChunkBlockPos {
 public:

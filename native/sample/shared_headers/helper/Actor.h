@@ -1,8 +1,8 @@
 #pragma once
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\Util.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\BlockPos.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\Random.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\RenderParams.h>
+#include <helper\Util.h>
+#include <helper\BlockPos.h>
+#include <helper\Random.h>
+#include <helper\RenderParams.h>
 
 class ActorBlockSyncMessage;
 class ActorLocation;

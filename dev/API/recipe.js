@@ -176,11 +176,9 @@ let RecipeDictionary = {
       let it = RecipeDictionary.recipes.keySet().iterator();
       while(it.hasNext()) {
         let u = it.next();
-        Logger.Log(u, "warehouse");
         
         let trv = RecipeDictionary.recipes.get(u);
       if(java.lang.Long.toString(u) == "17") r = u;
-        Logger.Log(trv == null, "xenoss");
       }
       
       let sslot;
@@ -189,15 +187,6 @@ let RecipeDictionary = {
           sslot = slots[slot];
         }
       }
-      
-      Logger.Log(sslot.id, "xendo");
-      Logger.Log(sslot.data, "xenlo");
-      
-      Logger.Log(Flag.pack2(Flag.recepiee(sslot.data), sslot.id), "xeno");
-      
-      Logger.Log(r, "xeno");
-      
-      Logger.Log(Flag.pack2(Flag.recepiee(sslot.data), sslot.id) == r, "xeno");
       
       let trv = RecipeDictionary.recipes.get(new java.lang.Long(Flag.pack2(Flag.recepiee(sslot.data), sslot.id)));
       let trvminus = RecipeDictionary.recipes.get(new java.lang.Long(Flag.pack2(Flag.recepiee(-1), sslot.id)));

@@ -466,6 +466,3 @@ RecipeDictionary.addToolShaped(["hammer", "file"], ["_i", "i_"],  ['i', {type: "
 RecipeDictionary.addToolShaped(["mortar"], ["_i"],  ['i', {type: "common", id: 54, data: 0}], {type: "material", material: MaterialDictionary.dict["wheat"], form: "dust"});
 
 RecipeDictionary.addFurnace({type: "material", material: MaterialDictionary.dict["wheat"], form: "dust"}, {type: "common", id: 297, data: 0});
-
-//!!end
-setLoadingTip("");

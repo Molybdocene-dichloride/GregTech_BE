@@ -7,11 +7,9 @@ Callback.addCallback('DestroyBlockStart', function (coords, block, playerUid) {
     let t = false;
 
     for(let e in ToolType) {
-      Logger.Log(ToolType[e], "dy");
       if(ToolDictionary.getTypeByData(item.data) == ToolType[e]) t = true;
         
       }
-      Logger.Log(String(name).valueOf(), "rexofone");
       ToolLib.setTool(ItemID.gtmetatool01, String(name).valueOf(), ToolDictionary.getTypeByData(item.data));
     }
     let i = -1;
@@ -21,8 +19,6 @@ Callback.addCallback('DestroyBlockStart', function (coords, block, playerUid) {
     if(OreDictionary.number[block.id]) i = OreDictionary.number[block.id];
     if(i >= 0 && i % 2 == 0) {
       let type = "stone";
-      //if(OreDictionary.invblock[block.id].mindestroytime == -1) type = "unbreakable"
-      Logger.Log(OreDictionary.invsmallgens[block.id].level, "sertyui");
       ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invsmallgens[block.id].level + 1, false);
       let destroytime = 3;
       let explosionres = 15;
@@ -36,7 +32,6 @@ Callback.addCallback('DestroyBlockStart', function (coords, block, playerUid) {
 	          translucency: 0
       }, "gtore");
     } else if(i >= 0) {
-      Logger.Log(OreDictionary.invsmallgen[block.id].level, "sertyui");
       ToolAPI.registerBlockMaterial(block.id, "stone", OreDictionary.invsmallgen[block.id].level, false);
       Block.createSpecialType({
 	      base: 1,

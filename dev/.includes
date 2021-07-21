@@ -24,3 +24,5 @@ machine/pipe.js
 machine/machine.js
 
 recipe.js
+
+end.js

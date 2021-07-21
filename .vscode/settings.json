@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "pointers": "cpp",
+        "gsl": "cpp",
+        "gsl_assert": "cpp",
+        "gsl_algorithm": "cpp",
+        "gsl_byte": "cpp",
+        "gsl_util": "cpp",
+        "multi_span": "cpp",
+        "span": "cpp",
+        "string_span": "cpp"
+    }
+}

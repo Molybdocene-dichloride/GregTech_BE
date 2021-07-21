@@ -1,3 +1,6 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-fpermissive"
+
 #include <string>
 #include <sstream>
 #include <cmath>
@@ -9,13 +12,15 @@
 #include <nativejs.h>
 
 
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\shared_headers\flags.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\common.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\PerlinSimplexNoise.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\LevelChunk.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\ChunkSource.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\IBlockWorldGenAPI.h>
-#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\RenderParams.h>
+#include <flags.h>
+#include <helper\common.h>
+#include <helper\PerlinSimplexNoise.h>
+#include <helper\LevelChunk.h>
+#include <helper\BlockTypeRegistry.h>
+#include <helper\VanillaBlocks.h>
+#include <helper\ChunkSource.h>
+#include <helper\IBlockWorldGenAPI.h>
+#include <helper\RenderParams.h>
 //#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\OreFeature.h>
 
 namespace patch
@@ -36,6 +41,8 @@ std::map<int, int> iblockids;
 std::map<int, int> blockdatas;
 int sizedata = 0;
 std::map<int, int> iblockdatas;
+
+std::map<int, Block*> blk;
 
 int getNearest(int pos, short mode) {
 	switch(mode) {
@@ -83,9 +90,9 @@ public:
 				for(unsigned int x = 0; x < 16; x++) {
 					for(unsigned int y = 0; y < 170; y++) {
 						for(unsigned int z = 0; z < 16; z++) {
-							if(chunk.getBlock(*new ChunkBlockPos((float)x, (float)y, (float)z)).blockId.value != Block::mStone->blockId.value) continue;
+							if(chunk.getBlock(*new ChunkBlockPos((float)x, (float)y, (float)z)).getRuntimeId() != VanillaBlocks::mStone->getRuntimeId()) continue;
 							PerlinSimplexNoise* psn = new PerlinSimplexNoise(chunkSource.getLevel().getSeed(), 2);
-							if(iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 0)] != 0 && iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 1)] != 0) chunk.getDimension().getTickingArea().getBlockSource().setBlock(*new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), *Block::mBlocks[iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 0)]], iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 1)], nullptr);
+							if(iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 0)] != 0 && iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 1)] != 0) chunk.getDimension().getTickingArea().getBlockSource().setBlock(*new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), *blk[iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 0)]], iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 1)], nullptr);
 						}
 					}
 				}
@@ -137,6 +144,8 @@ JS_EXPORT(Stones, ends, "V()", (JNIEnv* env) {
 	sizeid = 1 / blockids.size();
 	for(cur = blockids.begin(); cur != blockids.end(); cur++) {
 		iblockids[sizeid * (cur->first)] = cur->second;
+		gsl::not_null<BlockLegacy*> b = &*(BlockTypeRegistry::mBlockLookupMap[cur->second]);
+		blk[sizedata * (cur->first)] = new Block(cur->second, b);
 	}
 	sizedata = 1 / blockdatas.size();
 	for(cur = blockdatas.begin(); cur != blockdatas.end(); cur++) {
@@ -238,3 +247,4 @@ JS_EXPORT(Flags, pack11, "I(LLLLLLLLLLL)", (JNIEnv* env, long long value1, long 
 	in case of complex functions parameters are ignored
 	JNIEnv* is always passed as first parameter
 */
+#pragma GCC diagnostic pop
