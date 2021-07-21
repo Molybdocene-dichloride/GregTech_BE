@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gsl/pointers>
-class BlockLegacy;
+class BlockLegacy {};
 class Block {
     public:
     int getRuntimeId() const;

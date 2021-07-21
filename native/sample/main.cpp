@@ -9,6 +9,7 @@
 #include <mod.h>
 #include <symbol.h>
 #include <hook.h>
+#include <logger.h>
 #include <nativejs.h>
 
 
@@ -16,7 +17,7 @@
 #include <helper\common.h>
 #include <helper\PerlinSimplexNoise.h>
 #include <helper\LevelChunk.h>
-#include <helper\BlockTypeRegistry.h>
+#include <horizon\block.h>
 #include <helper\VanillaBlocks.h>
 #include <helper\ChunkSource.h>
 #include <helper\IBlockWorldGenAPI.h>
@@ -144,8 +145,12 @@ JS_EXPORT(Stones, ends, "V()", (JNIEnv* env) {
 	sizeid = 1 / blockids.size();
 	for(cur = blockids.begin(); cur != blockids.end(); cur++) {
 		iblockids[sizeid * (cur->first)] = cur->second;
-		gsl::not_null<BlockLegacy*> b = &*(BlockTypeRegistry::mBlockLookupMap[cur->second]);
-		blk[sizedata * (cur->first)] = new Block(cur->second, b);
+		Logger::debug("b", cur->second);
+		Block* b = BlockRegistry::getBlockById(cur->second);
+		Logger::debug("a", static_cast<char>(b == nullptr));
+		Block* ba = BlockRegistry::getBlockById(2);
+		Logger::debug("asweq", static_cast<char>(ba == nullptr));
+		//blk[sizedata * (cur->first)] = b;
 	}
 	sizedata = 1 / blockdatas.size();
 	for(cur = blockdatas.begin(); cur != blockdatas.end(); cur++) {

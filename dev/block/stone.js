@@ -1,3 +1,39 @@
+StoneDictionary.registerType({
+	name: "stone",
+	isgen: true,
+	gen: {
+		dimension: 0,
+		rarity: 10
+	}
+});
+StoneDictionary.registerType({
+	name: "cobble",
+	isgen: false
+});
+StoneDictionary.registerType({
+	name: "cobble_mossy",
+	isgen: false
+});
+StoneDictionary.registerType({
+	name: "BRICKS",
+	isgen: false
+});
+StoneDictionary.registerType({
+	name: "bricks_cracked",
+	isgen: false
+});
+StoneDictionary.registerType({
+	name: "bricks_mossy",
+	isgen: false
+});
+StoneDictionary.registerType({
+	name: "bricks_chiseled",
+	isgen: false
+});
+StoneDictionary.registerType({
+	name: "smooth",
+	isgen: false
+});
 StoneDictionary.registerStone("granite", {
 	hardness: 7.0,
 	resistance: 12.0,

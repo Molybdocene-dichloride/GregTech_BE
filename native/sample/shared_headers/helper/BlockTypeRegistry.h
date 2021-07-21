@@ -20,10 +20,10 @@ public:
 
 template <typename T> class SharedPtr {
 public:
-  SharedCounter<T> *counter{};
+  //SharedCounter<T> *counter;
 
   SharedPtr(T *inp);
-  template <typename... ps> static SharedPtr make(ps &&... p);
+  //template <typename... ps> static SharedPtr make(ps &&... p);
    operator bool() const;
    T &operator*();
    T *operator->();
@@ -32,5 +32,5 @@ public:
   ~SharedPtr();
 };
 namespace BlockTypeRegistry {
-    static std::map<unsigned int, SharedPtr<BlockLegacy>> mBlockLookupMap;
+    static std::map<unsigned int, SharedPtr<BlockLegacy>, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, SharedPtr<BlockLegacy>>>> mBlockLookupMap;
 };

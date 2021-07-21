@@ -8,7 +8,10 @@ class ActorBlockSyncMessage;
 class ActorLocation;
 class ActorDamageSource;
 class RideTickComponent;
-class MaterialType;
+//class MaterialType;
+enum MaterialType {
+    MATERIAL_DEFAULT = 0
+};
 class ActorEvent;
 class CompoundTag;
 class ActorLink;

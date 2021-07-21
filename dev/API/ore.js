@@ -1,27 +1,11 @@
-/*
-smallgen
-name
-isgen
-minimalheight int	
-maximalheight int
-rarity int
-vein {
-name
-primary
-secondary
-inbetween
-sporadic
-minimalheight int	
-maximalheight int	
-rarity int
-density 	int
-Size int
-}
-*/
 //API for GregTech ore generation
 Stones.registerID(0, 0);
 let StoneDictionary = {
+  types: {},
 	stones: {},
+  registerType: function(type) {
+    this.types[this.types.length] = type;
+  },
 	registerStone: function(id, variants) {
 		this.stones[id] = variants;
 		let inverted = null
@@ -40,10 +24,17 @@ let StoneDictionary = {
 
     IDRegistry.genBlockID(id);
     this.stones[id].id = BlockID[id];
-    Stones.registerID(id, 0);
-    Stones.registerID(id, 8);
+    let so = [];
+    for(let i in this.types) {
+      if(this.types[i].isgen) Stones.registerID(id, i);
+      so.push({name: variants.name, texture: [[inverted + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
+    }
+    for(let i in this.types) {
+      if(this.types[8 + i].isgen) Stones.registerID(id, 8 + i);
+      so.push({name: variants.name, texture: [[inverted + "_" + this.types[8 + i].name.toUpperCase(), 0]], inCreative: true});
+    }
 
-    Block.createBlock(id, [{name: variants.name, texture: [[inverted + "_STONE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name, texture: [[inverted + "_SMOOTH", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_STONE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_COBBLE_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CRACKED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_MOSSY", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_BRICKS_CHISELED", 0]], inCreative: true}, {name: variants.name2, texture: [[inverted2 + "_SMOOTH", 0]], inCreative: true}], "stone");
+    Block.createBlock(id, so, "stone");
     ToolAPI.registerBlockMaterial(id, "stone", variants.level, true);
     Block.registerDropFunction(id, function(blockCoords, blockID, blockData, diggingLevel, region) {
 			if(blockData == 0 || blockData == 8) {
@@ -52,7 +43,7 @@ let StoneDictionary = {
 			return [[blockID, 1, blockData]];
 		});
 	},
-	generateStoneDEPRECATED: function(coords, id, data, random) {
+	generateStoneUNREALDEPRECATED: function(coords, id, data, random) {
 		GenerationDictionary.generateSphere(coords, 2, 7, id, data, random, null, 1, OreDictionary.blocks);
 	},
 	generateStonePerlinDEPRECATED: function(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids) {
