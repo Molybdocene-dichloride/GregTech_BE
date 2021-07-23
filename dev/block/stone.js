@@ -35,6 +35,11 @@ StoneDictionary.registerType({
 	name: "smooth",
 	isgen: false
 });
+Stones.registerID(0, 0);
+Stones.registerID(1, 1);
+Stones.registerID(1, 3);
+Stones.registerID(1, 5);
+Stones.registerID(13, 0);
 StoneDictionary.registerStone("granite", {
 	hardness: 7.0,
 	resistance: 12.0,
@@ -65,4 +70,4 @@ StoneDictionary.registerStone("mineral", {
 	minheight2: 1,
 	maxheight2: 170,
 });
-//StoneDictionary.addToCreative();
+Stones.ends();

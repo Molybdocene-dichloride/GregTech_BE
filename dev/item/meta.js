@@ -14,7 +14,6 @@ OreDictionary.registerChangeableBlock({id: StoneDictionary.stones["granite"].id,
 OreDictionary.registerChangeableBlock({id: StoneDictionary.stones["granite"].id, data: 8, texture: StoneDictionary.stones["granite"].name2, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
 OreDictionary.registerChangeableBlock({id: StoneDictionary.stones["mineral"].id, data: 0, texture: StoneDictionary.stones["mineral"].name, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
 OreDictionary.registerChangeableBlock({id: StoneDictionary.stones["mineral"].id, data: 8, texture: StoneDictionary.stones["mineral"].name2, minlevel: 0, mindestroytime: 3, minexplosionres: 15});
-Stones.ends();
 
 MaterialDictionary.registerForm("item", 0, "ingot");
 MaterialDictionary.registerForm("item", 0, "dust");
@@ -376,79 +375,37 @@ OreDictionary.registerOre(MaterialDictionary.dict.beryllium, {level: 2, isgen: f
 OreDictionary.registerOre(MaterialDictionary.dict.thorium, {level: 2, isgen: false});
 
 OreDictionary.registerOre(MaterialDictionary.dict.rutile, {level: 2, isgen: false});
-//OreDictionary.addToCreative();
 
-//Logger.Log(Object.keys(OreDictionary.invdata[BlockID.gtblockores0]).length, "sharovar");
-
-/*Item.registerNameOverrideFunction(BlockID["gtblockores" + id], function(item){
-  if(item.data == OreDictionary.counter * OreDictionary.stones.length + i) {
-    return OreDictionary.ores[i].name + " ore";
-  }
-});
-Item.registerNameOverrideFunction(BlockID["gtblockores" + smallid], function(item){
-  if(item.data == OreDictionary.counter * OreDictionary.stones.length + i) {
-    return "Small" + OreDictionary.ores[i].name + " ore";
-  }
-});*/
 setLoadingTip("register OreMixVeins");
 OreDictionary.registerVein(new OreMixVein("lignite", [0], MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.lignite, MaterialDictionary.dict.coal, 50, 130, 160, 8, 30, 1, new CovarianceMatrix([[5, 0, 0], [0, 5, 0], [0, 0, 5]])));
-
 OreDictionary.registerVein(new OreMixVein("coal", [0], MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.coal, MaterialDictionary.dict.lignite, 50, 80, 80, 6, 32, 2, new CovarianceMatrix([[5, 1, 4], [2, 5, 1], [0, 0, 5]])));
-
 OreDictionary.registerVein(new OreMixVein( "magnetite", {0: 0, 1: 1}, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.iron, MaterialDictionary.dict.vanadium_magnetite, 50, 120, 160, 3, 32, 5, new CovarianceMatrix([[5, 1, 1], [1, 5, 2], [3, 2, 5]])));
-
 OreDictionary.registerVein(new OreMixVein("gold", [0], MaterialDictionary.dict.magnetite, MaterialDictionary.dict.magnetite, MaterialDictionary.dict.vanadium_magnetite, MaterialDictionary.dict.gold, 60, 80, 160, 3, 32, 3, new CovarianceMatrix([[5, 4, 1], [1, 5, 3], [2, 2, 5]])));
-
 OreDictionary.registerVein(new OreMixVein( "iron", {0: 0, 1: 1}, MaterialDictionary.dict.brown_limonite, MaterialDictionary.dict.yellow_limonite, MaterialDictionary.dict.banded_iron, MaterialDictionary.dict.malachite, 10, 40, 120, 4, 24, 4, new CovarianceMatrix([[4, 2, 2], [1, 4, 0], [1, 2, 4]])));
-
 OreDictionary.registerVein(new OreMixVein( "cassiterite", {0: 0, 2: 2}, MaterialDictionary.dict.tin, MaterialDictionary.dict.tin, MaterialDictionary.dict.cassiterite, MaterialDictionary.dict.tin, 40, 120, 50, 5, 24, 0, new CovarianceMatrix([[4, 1, 1], [2, 4, 0], [0, 0, 4]])));
-
 OreDictionary.registerVein(new OreMixVein( "tetrahedrite", {0: 0, 1: 1}, MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.tetrahedrite, MaterialDictionary.dict.copper, MaterialDictionary.dict.stibnite, 80, 120, 70, 4, 24, 1, new CovarianceMatrix([[4, 1, 1], [1, 4, 1], [1, 1, 4]])));
-
 OreDictionary.registerVein(new OreMixVein( "copper", {0: 0, 1: 1}, MaterialDictionary.dict.chalcopyrite, MaterialDictionary.dict.iron, MaterialDictionary.dict.pyrite, MaterialDictionary.dict.copper, 10, 30, 80, 4, 24, 1, new CovarianceMatrix([[4, 1, 2], [0, 1.5, 0], [1, 3, 4]])));
-
 OreDictionary.registerVein(new OreMixVein( "bauxite", [0], MaterialDictionary.dict.bauxite, MaterialDictionary.dict.bauxite, MaterialDictionary.dict.aluminium, MaterialDictionary.dict.ilmenite, 50, 90, 80, 4, 24, 2, new CovarianceMatrix([[4, 0, 1], [1, 4, 0], [1, 0, 4]])));
-
 OreDictionary.registerVein(new OreMixVein( "salts", [0], MaterialDictionary.dict.rock_salt, MaterialDictionary.dict.salt, MaterialDictionary.dict.lepidolite, MaterialDictionary.dict.spodumene, 50, 60, 50, 3, 24, 1, new CovarianceMatrix([[4, 0, 1], [0, 4, 1], [1, 1, 4]])));
-
 OreDictionary.registerVein(new OreMixVein( "redstone", {0: 0, 1: 1}, MaterialDictionary.dict.redstone, MaterialDictionary.dict.redstone, MaterialDictionary.dict.ruby, MaterialDictionary.dict.cinnabar, 10, 40, 60, 3, 24, 4, new CovarianceMatrix([[4, 1, 1], [1, 4, 1], [2, 0, 2]])));
-
 OreDictionary.registerVein(new OreMixVein( "sulfur", {1: 1}, MaterialDictionary.dict.sulfur, MaterialDictionary.dict.sulfur, MaterialDictionary.dict.pyrite, MaterialDictionary.dict.sapphire, 5, 20, 60, 3, 24, 3, new CovarianceMatrix([[4, 1, 1], [2, 4, 0], [1, 0, 4]])));
-
 OreDictionary.registerVein(new OreMixVein( "nether_quartz", {1: 1}, MaterialDictionary.dict.nether_quartz, MaterialDictionary.dict.nether_quartz, MaterialDictionary.dict.nether_quartz, MaterialDictionary.dict.nether_quartz, 40, 80, 60, 3, 24, 2, new CovarianceMatrix([[4, 1, 1], [1, 4, 1], [1, 1, 4]])));
-
 OreDictionary.registerVein(new OreMixVein( "soapstone", [0], MaterialDictionary.dict.soapstone, MaterialDictionary.dict.talc, MaterialDictionary.dict.glauconite, MaterialDictionary.dict.pentlandite, 10, 40, 40, 3, 16, 0, new CovarianceMatrix([[3, 1, 1], [2, 3, 0], [1, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "nickel", {0: 0, 1: 1, 2: 2}, MaterialDictionary.dict.garnierite, MaterialDictionary.dict.nickel, MaterialDictionary.dict.cobaltite, MaterialDictionary.dict.pentlandite, 10, 40, 40, 3, 16, 1, new CovarianceMatrix([[3, 1, 0], [1, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "platinum", {0: 0, 2: 2}, MaterialDictionary.dict.cooperite, MaterialDictionary.dict.palladium, MaterialDictionary.dict.platinum, MaterialDictionary.dict.iridium, 40, 50, 5, 3, 16, 2, new CovarianceMatrix([[3, 2, 0.5], [0, 3, 2], [1, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein("pitchblende", [0], MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.pitchblende, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, 10, 40, 40, 3, 16, 1, new CovarianceMatrix([[3, 1, 2], [0, 3, 0], [0, 1, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "uranium", [0], MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uraninite, MaterialDictionary.dict.uranium, MaterialDictionary.dict.uranium, 20, 30, 20, 3, 16, 2, new CovarianceMatrix([[3, 1, 0], [1, 3, 1], [1, 1, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "monazite", [0], MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.bastnasite, MaterialDictionary.dict.monazite, MaterialDictionary.dict.neodymium, 20, 40, 30, 3, 16, 2, new CovarianceMatrix([[3, 1, 0], [1, 3, 2], [0, 1, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "molybdenum", {0: 0, 2: 2}, MaterialDictionary.dict.wulfenite, MaterialDictionary.dict.molybdenite, MaterialDictionary.dict.molybdenum, MaterialDictionary.dict.powellite, 20, 50, 5, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "tungstate", {0: 0, 2: 2}, MaterialDictionary.dict.scheelite, MaterialDictionary.dict.scheelite, MaterialDictionary.dict.tungstate, MaterialDictionary.dict.lithium, 20, 50, 10, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "sapphire", [0], MaterialDictionary.dict.almandine, MaterialDictionary.dict.pyrope, MaterialDictionary.dict.sapphire, MaterialDictionary.dict.green_sapphire, 10, 40, 60, 3, 16, 0, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "manganese", {0: 0, 2: 2}, MaterialDictionary.dict.grossular, MaterialDictionary.dict.spessartine, MaterialDictionary.dict.pyrolusite, MaterialDictionary.dict.tantalite, 20, 30, 20, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "quartz", [0], MaterialDictionary.dict.quartzite, MaterialDictionary.dict.barite, MaterialDictionary.dict.certus_quartz, MaterialDictionary.dict.certus_quartz, 40, 80, 60, 3, 16, 1, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "diamond", [0], MaterialDictionary.dict.graphite, MaterialDictionary.dict.graphite, MaterialDictionary.dict.diamond, MaterialDictionary.dict.coal, 5, 20, 40, 2, 16, 2, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "olivine", {0: 0, 2: 2}, MaterialDictionary.dict.bentonite, MaterialDictionary.dict.magnesite, MaterialDictionary.dict.olivine, MaterialDictionary.dict.glauconite, 10, 40, 60, 3, 16, 0, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "apatite", [0], MaterialDictionary.dict.apatite, MaterialDictionary.dict.apatite, MaterialDictionary.dict.phosphorus, MaterialDictionary.dict.pyrochlore, 40, 60, 60, 3, 16, 3, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "galena", [0], MaterialDictionary.dict.galena, MaterialDictionary.dict.galena, MaterialDictionary.dict.silver, MaterialDictionary.dict.lead, 30, 60, 40, 5, 16, 2, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "lapis", {0: 0, 2: 2}, MaterialDictionary.dict.lazurite, MaterialDictionary.dict.sodalite, MaterialDictionary.dict.lapis, MaterialDictionary.dict.calcite, 20, 50, 40, 5, 16, 2, new CovarianceMatrix([[3, 0, 0], [0, 3, 0], [0, 0, 3]])));
-
 OreDictionary.registerVein(new OreMixVein( "beryllium", {0: 0, 2: 2}, MaterialDictionary.dict.beryllium, MaterialDictionary.dict.beryllium, MaterialDictionary.dict.emerald, MaterialDictionary.dict.thorium, 5, 30, 30, 3, 16, 1, new CovarianceMatrix([[4, 0, 3], [0.2, 3, 0], [0.1, 0.1, 4]])));
 
 setLoadingTip("GTTool: register tool");
