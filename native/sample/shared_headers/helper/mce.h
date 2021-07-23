@@ -1,0 +1,3 @@
+namespace mce {
+    class UUID;
+}

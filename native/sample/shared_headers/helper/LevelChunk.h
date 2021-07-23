@@ -5,7 +5,9 @@
 #include <helper\Dimension.h>
 class LevelChunk {
     public:
-    Vec3 getPosition();
-    Dimension getDimension();
+    Level getLevel() const;
+    Dimension getDimension() const;
     Block getBlock(ChunkBlockPos const&) const;
+    ChunkLocalHeight getHeightRange() const;
+    ChunkPos getPosition() const;
 };

@@ -4,5 +4,5 @@
 
 class Dimension {
     public:
-	TickingArea getTickingArea();
+	TickingArea getTickingAreas();
 };

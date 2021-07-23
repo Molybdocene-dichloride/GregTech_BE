@@ -188,8 +188,8 @@ let RecipeDictionary = {
         }
       }
       
-      let trv = RecipeDictionary.recipes.get(new java.lang.Long(Flag.pack2(Flag.recepiee(sslot.data), sslot.id)));
-      let trvminus = RecipeDictionary.recipes.get(new java.lang.Long(Flag.pack2(Flag.recepiee(-1), sslot.id)));
+      let trv = RecipeDictionary.recipes.get(new java.lang.Long(Flags.pack2(Flags.recepiee(sslot.data), sslot.id)));
+      let trvminus = RecipeDictionary.recipes.get(new java.lang.Long(Flags.pack2(Flags.recepiee(-1), sslot.id)));
       
       Logger.Log(trv == null, "xenoss");
       

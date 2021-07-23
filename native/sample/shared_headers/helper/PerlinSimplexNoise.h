@@ -5,5 +5,6 @@
 class PerlinSimplexNoise {
     public:
 	PerlinSimplexNoise(unsigned int, int);
-    float getValue(Vec3 const&);
+    float getValue(float, float) const;
+    float getValue(Vec3 const&) const;
 };

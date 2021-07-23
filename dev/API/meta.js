@@ -489,13 +489,11 @@ function Material(name, formula, type, materialGenerationFlags, pointMelting, po
 		for (let materialGenerationFlag in materialGenerationFlags) {
             		combined |= materialGenerationFlag;
         	}
-        	
-    //Logger.Log(Flag.pack(materialGenerationFlags, generationFlag), "deqoi");
-        	
+        	  	
 		this.materialGenerationFlags |= verifyMaterialBits(combined);
 	};
 	this.hasFlag = function(generationFlag) {
-        return Flag.hasFlag(materialGenerationFlags, generationFlag);
+        return Flags.hasFlag(materialGenerationFlags, generationFlag);
 	};
 	this.genItem = function(form, count) {
 		MaterialDictionary.genItem(this, form, count);

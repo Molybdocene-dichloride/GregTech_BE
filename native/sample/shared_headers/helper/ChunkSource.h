@@ -4,5 +4,5 @@
 
 class ChunkSource {
     public:
-    Level getLevel();
+    Level getLevel() const;
 };

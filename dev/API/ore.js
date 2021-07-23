@@ -8,8 +8,8 @@ let StoneDictionary = {
   },
 	registerStone: function(id, variants) {
 		this.stones[id] = variants;
-		let inverted = null
-		let inverted2 = null
+		let inverted = null;
+		let inverted2 = null;
 		if(variants.name.includes("granite")) {
         		/*inverted = variants.name.substring(variants.name.indexOf("_") + 1, variants.name.length) + "_" + variants.name.substring(0, variants.name.indexOf("_"));
         		inverted = inverted.toUpperCase();
@@ -26,12 +26,11 @@ let StoneDictionary = {
     this.stones[id].id = BlockID[id];
     let so = [];
     for(let i in this.types) {
-      if(this.types[i].isgen) Stones.registerID(id, i);
       so.push({name: variants.name, texture: [[inverted + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
     }
     for(let i in this.types) {
-      if(this.types[8 + i].isgen) Stones.registerID(id, 8 + i);
-      so.push({name: variants.name, texture: [[inverted + "_" + this.types[8 + i].name.toUpperCase(), 0]], inCreative: true});
+      if(this.types[7 + i].isgen) Stones.registerID(id, 7 + i);
+      so.push({name: variants.name, texture: [[inverted + "_" + this.types[7 + i].name.toUpperCase(), 0]], inCreative: true});
     }
 
     Block.createBlock(id, so, "stone");
@@ -83,8 +82,7 @@ let OreDictionary = {
         this.invblocks[block.number] = block;
         this.evblocks[block.texture] = block;
         this.blocks[block.id + "_" + block.data] = block;
-        //this.countByID = Math.floor(16 / this.blocks.length);
-    //this.IDBycount = Math.floor(this.stones.length / 16);
+        if(StoneDictionary.types[block.data].isgen || (block.id == 1 && block.data == 1) || (block.id == 1 && block.data == 3) || (block.id == 1 && block.data == 5) || block.id == 13) Stones.registerID(block.id, block.data);
     },
     registerOre: function (material, smallgen) {
         setLoadingTip("Ores: " + material.name);

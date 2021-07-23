@@ -1,16 +1,15 @@
 #pragma once
 
 #include <helper\BlockPos.h>
-
+class ChunkLocalHeight {};
 class ChunkBlockPos {
 public:
 	//char filler_BlockPos[UNKNOW_SIZE];
 	int x, y, z;
 public:
-	ChunkBlockPos(Vec3 const&);
-	ChunkBlockPos(ChunkPos const&, int);
-	ChunkBlockPos(float, float, float);
-	ChunkBlockPos(double, double, double);
+	ChunkBlockPos();
+	ChunkBlockPos(BlockPos const&, short);
+	ChunkBlockPos(unsigned char, ChunkLocalHeight, unsigned char);
 	void relative(unsigned char, int) const;
 	void randomFloat() const;
 	void randomSeed() const;

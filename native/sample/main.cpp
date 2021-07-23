@@ -22,11 +22,12 @@
 #include <helper\ChunkSource.h>
 #include <helper\IBlockWorldGenAPI.h>
 #include <helper\RenderParams.h>
+#include <helper\NativeBlockSource.h>
 //#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\OreFeature.h>
 
 namespace patch
 {
-    template < typename T > std::string to_string( const T& n )
+    template<typename T> std::string to_string( const T& n )
     {
         std::ostringstream stm ;
         stm << n ;
@@ -88,12 +89,14 @@ public:
 			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
 
 			HookManager::addCallback(SYMBOL("mcpe", "_ZN21BiomeDecorationSystem8decorateER10LevelChunkR11BlockSourceR6RandomN3gsl4spanI22BiomeDecorationFeatureLin1EEE"), LAMBDA((HookManager::CallbackController* controller, ChunkSource& chunkSource, LevelChunk& chunk), {
-				for(unsigned int x = 0; x < 16; x++) {
-					for(unsigned int y = 0; y < 170; y++) {
-						for(unsigned int z = 0; z < 16; z++) {
-							if(chunk.getBlock(*new ChunkBlockPos((float)x, (float)y, (float)z)).getRuntimeId() != VanillaBlocks::mStone->getRuntimeId()) continue;
+				ChunkPos cp = chunk.getPosition();
+				for(float x = 0; x < 16; x++) {
+					for(float y = 0; y < 170; y++) {
+						for(float z = 0; z < 16; z++) {
+							ChunkBlockPos* cbp = new ChunkBlockPos(x, chunk.getHeightRange(), z);
+							if(chunk.getBlock(*cbp).getRuntimeId() != VanillaBlocks::mStone->getRuntimeId()) continue;
 							PerlinSimplexNoise* psn = new PerlinSimplexNoise(chunkSource.getLevel().getSeed(), 2);
-							if(iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 0)] != 0 && iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 1)] != 0) chunk.getDimension().getTickingArea().getBlockSource().setBlock(*new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), *blk[iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 0)]], iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos((float)x, (float)y, (float)z))), 1)], nullptr);
+							if(iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 0)] != 0 && iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 1)] != 0) BlockSourceProvider::getBlockSource().setBlock(*new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), *blk[iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 0)]], iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 1)], nullptr);
 						}
 					}
 				}

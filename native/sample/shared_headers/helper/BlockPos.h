@@ -1,10 +1,10 @@
 #pragma once
 
+#include <helper\ChunkBlockPos.h>
 
 class Rotation;
 class Mirror;
-class ChunkPos;
-
+class SubChunkPos;
 struct BlockPos;
 class Vec3 {
 	public:
@@ -12,6 +12,13 @@ class Vec3 {
 	public:
 	Vec3(BlockPos const&);
 };
+class ChunkPos {
+	public:
+    int x, y, z;
+	ChunkPos::ChunkPos(Vec3 const&);
+	ChunkPos::ChunkPos(BlockPos const&);
+};
+class ChunkBlockPos;
 class BlockPos {
 	public:
 	//char filler_BlockPos[UNKNOW_SIZE];
@@ -19,6 +26,8 @@ class BlockPos {
 	public:
 	BlockPos(Vec3 const&);
 	BlockPos(ChunkPos const&, int);
+	BlockPos(SubChunkPos const&, int);
+	BlockPos(ChunkPos const&, ChunkBlockPos const&, short);
 	BlockPos(float, float, float);
 	BlockPos(double, double, double);
 	void relative(unsigned char, int) const;

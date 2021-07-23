@@ -2,7 +2,8 @@ StoneDictionary.registerType({
 	name: "stone",
 	isgen: true,
 	gen: {
-		dimension: 0,
+		minheight: 1,
+		maxheight: 170,
 		rarity: 10
 	}
 });
@@ -40,9 +41,13 @@ StoneDictionary.registerStone("granite", {
 	level: 3,
 	name: "granite_black",
 	dimension: 0,
+	minheight: 1,
+	maxheight: 170,
 	rarity: 0.2,
 	name2: "granite_red",
 	dimension2: 0,
+	minheight2: 1,
+	maxheight2: 170,
 	rarity2: 0.2
 });
 StoneDictionary.registerStone("mineral", {
@@ -52,9 +57,12 @@ StoneDictionary.registerStone("mineral", {
 	name: "marble",
 	dimension: 0,
 	rarity: 0.5,
+	minheight: 1,
+	maxheight: 170,
 	name2: "basalt",
 	dimension2: 0,
 	rarity2: 0.5,
+	minheight2: 1,
+	maxheight2: 170,
 });
 //StoneDictionary.addToCreative();
-Stones.ends();
