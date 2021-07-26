@@ -1,9 +1,9 @@
 //API for GregTech ore generation
 let StoneDictionary = {
-  types: {},
+  types: [],
 	stones: {},
   registerType: function(type) {
-    this.types[this.types.length] = type;
+    this.types.push(type);
   },
 	registerStone: function(id, variants) {
 		this.stones[id] = variants;
@@ -17,12 +17,13 @@ let StoneDictionary = {
     this.stones[id].id = BlockID[id];
     let so = [];
     for(let i in this.types) {
-      if(this.types[i].isgen) Stones.registerID(id, i);
+      Logger.Log(this.types[i].isgen, "bik");
+      if(this.types[i].isgen) Stones.registerID(BlockID[id], Number(i));
       so.push({name: variants.name, texture: [[inverted + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
     }
     for(let i in this.types) {
-      Logger.Log(this.types[i], "гамасекк");
-      if(this.types[i].isgen) Stones.registerID(id, 7 + i);
+      Logger.Log(this.types[i].isgen, "nik");
+      if(this.types[i].isgen) Stones.registerID(BlockID[id], Number(7 + i));
       so.push({name: variants.name2, texture: [[inverted2 + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
     }
 

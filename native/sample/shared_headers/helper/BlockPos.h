@@ -15,8 +15,8 @@ class Vec3 {
 class ChunkPos {
 	public:
     int x, y, z;
-	ChunkPos::ChunkPos(Vec3 const&);
-	ChunkPos::ChunkPos(BlockPos const&);
+	ChunkPos(Vec3 const&);
+	ChunkPos(BlockPos const&);
 };
 class ChunkBlockPos;
 class BlockPos {

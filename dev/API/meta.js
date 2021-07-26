@@ -1,17 +1,3 @@
-TemperaturePoints = { //for Kelvin's
-  NO: -0.1,
-  ABSOLUTE_ZERO: 0, //temperature couldn't and impossible be same or lower!
-  CELCIUS_ZERO: 273.15,
-  PLANK: 1.4167841616e32, //events for same and higher temperature is unknown and indescribable, is couldn't to use.
-  
-  kelvinsToCelsius: function(point) {
-    return point + 273.15;
-  },
-  celsiusToKelvins: function(point) {
-    return point - 273.15;
-  },
-}
-
 let concater = function(formulareal, material) {
     
 	if(!material.formula.protons) {

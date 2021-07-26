@@ -35,16 +35,17 @@ namespace patch
     }
 }
 std::map<int, int>::iterator cur;
+ std::vector<int>::iterator it;
 
-std::map<int, int> blockids;
+std::vector<int> blockids;
 int sizeid = 0;
 std::map<int, int> iblockids;
 
-std::map<int, int> blockdatas;
+std::vector<int> blockdatas;
 int sizedata = 0;
 std::map<int, int> iblockdatas;
 
-std::map<int, Block*> blk;
+std::map<int, Block*> blks;
 
 int getNearest(int pos, short mode) {
 	switch(mode) {
@@ -96,7 +97,7 @@ public:
 							ChunkBlockPos* cbp = new ChunkBlockPos(x, chunk.getHeightRange(), z);
 							if(chunk.getBlock(*cbp).getRuntimeId() != VanillaBlocks::mStone->getRuntimeId()) continue;
 							PerlinSimplexNoise* psn = new PerlinSimplexNoise(chunkSource.getLevel().getSeed(), 2);
-							if(iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 0)] != 0 && iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 1)] != 0) BlockSourceProvider::getBlockSource().setBlock(*new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), *blk[iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 0)]], iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 1)], nullptr);
+							if(iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 0)] != 0 && iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 1)] != 0) BlockSourceProvider::getBlockSource().setBlock(*new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), *blks[iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 0)]], iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 1)], nullptr);
 						}
 					}
 				}
@@ -138,26 +139,32 @@ JS_MODULE_VERSION(Flags, 1);
 JS_EXPORT(Stones, registerID, "V(II)", (JNIEnv* env, int id, int data) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;
-	blockids[blockids.size()] = id;
-	blockdatas[blockdatas.size()] = data;
+	blockids.push_back(id);
+	blockdatas.push_back(data);
+	Logger::debug("j", "wew");
+	blockdatas.size();
+	blockids.size();
 	return 0;
 });
 JS_EXPORT(Stones, ends, "V()", (JNIEnv* env) {
 // for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;
+	Logger::debug("b", "gotoir");
+	Logger::debug("v", blockids.size());
 	sizeid = 1 / blockids.size();
-	for(cur = blockids.begin(); cur != blockids.end(); cur++) {
-		iblockids[sizeid * (cur->first)] = cur->second;
-		Logger::debug("b", cur->second);
-		Block* b = BlockRegistry::getBlockById(cur->second);
+	for(it = blockids.begin(); it != blockids.end(); it++) {
+		Logger::debug("b", sizeid);
+		iblockids.insert(std::pair<int, int>(sizeid * (it - blockids.begin()), *it));
+		Logger::debug("b", *it);
+		Block* b = BlockRegistry::getBlockById(*it);
 		Logger::debug("a", static_cast<char>(b == nullptr));
 		Block* ba = BlockRegistry::getBlockById(2);
 		Logger::debug("asweq", static_cast<char>(ba == nullptr));
-		//blk[sizedata * (cur->first)] = b;
+		//blks.insert(std::pair<int, Block*>(sizedata * (it - blockids.begin()), b));
 	}
 	sizedata = 1 / blockdatas.size();
-	for(cur = blockdatas.begin(); cur != blockdatas.end(); cur++) {
-		iblockdatas[sizedata * (cur->first)] = cur->second;
+	for(it = blockdatas.begin(); it != blockdatas.end(); it++) {
+		iblockdatas.insert(std::pair<int, int>(sizedata * (it - blockdatas.begin()), *it));
 	}
 	return 0;
 });

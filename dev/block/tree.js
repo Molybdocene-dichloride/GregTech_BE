@@ -131,7 +131,7 @@ Callback.addCallback("GenerateChunkUniversal", function (chunkX, chunkZ, random,
 	let biome = World.getBiome((chunkX + 0.5) * 16, (chunkZ + 0.5) * 16);
     if(TreeDictionary.trees["rubber"].generation.biomes[biome]) {
 	    if(Math.random() < TreeDictionary.trees["rubber"].generation.rarity) {
-  			let coords = GenerationUtils.findSurface(chunkX*16 + random.nextInt(16), 96, chunkZ*16 + random.nextInt(16));
+  			let coords = GenerationUtils.findSurface(chunkX * 16 + random.nextInt(16), 96, chunkZ * 16 + random.nextInt(16));
 			  if(World.getBlockID(coords.x, coords.y, coords.z) == 2) {
 			    
 				  TreeDictionary.generateTree(coords.x, coords.y + 1, coords.z, random, TreeDictionary.trees["rubber"])
