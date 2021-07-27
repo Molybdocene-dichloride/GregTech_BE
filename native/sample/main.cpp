@@ -23,31 +23,52 @@
 #include <helper\IBlockWorldGenAPI.h>
 #include <helper\RenderParams.h>
 #include <helper\NativeBlockSource.h>
-//#include <C:\Users\111\Desktop\projects\innercore-mod-toolchain-master\toolchain-mod\src\native\sample\helper\OreFeature.h>
 
-namespace patch
-{
-    template<typename T> std::string to_string( const T& n )
-    {
+namespace TemperaturePoints { //for Kelvin's
+	long double NO = -0.1;
+	long double ABSOLUTE_ZERO = 0; //temperature couldn't and impossible be same or lower!
+	long double CELCIUS_ZERO = 273.15;
+  	long double PLANK = 1.4167841616e32; //events for same and higher temperature is unknown and indescribable(Quantum gravity is not fully developed), is couldn't to use.
+  
+  	long double kelvinsToCelsius(long double point) {
+    	return point + 273.15;
+	}
+  	long double celsiusToKelvins(long double point) {
+    	return point - 273.15;
+  	}
+}
+namespace Plank { //Plank values enum
+  long double CONST = pow(6.62607015, -34);
+	long double TEMPERATURE = pow(1.4167841616, 32); //events for same and higher temperature is unknown and indescribable(Quantum gravity is not fully developed), is couldn't to use.
+  long double DENSITY = pow(5.1550, 96); //
+  long double MASS = pow(2.176, -8); //
+  long double CHARGE = pow(2.5, -8); //
+  long double LENGTH = pow(1.6162551818, -35); //
+  long double TIME = pow(5.391161313, -19); //
+  long double PRESSURE = 4.63309e113; //
+} //обиан тебя
+
+namespace patch {
+    template<typename T> std::string to_string( const T& n ) {
         std::ostringstream stm ;
         stm << n ;
         return stm.str() ;
     }
 }
-std::map<int, int>::iterator cur;
- std::vector<int>::iterator it;
+std::map<long, long>::iterator cur;
+std::vector<long>::iterator it;
 
-std::vector<int> blockids;
-int sizeid = 0;
-std::map<int, int> iblockids;
+std::vector<long> blockids;
+float sizeid = 0;
+std::map<long, long> iblockids;
 
-std::vector<int> blockdatas;
-int sizedata = 0;
-std::map<int, int> iblockdatas;
+std::vector<long> blockdatas;
+float sizedata = 0;
+std::map<long, long> iblockdatas;
 
-std::map<int, Block*> blks;
+std::map<long, Block*> blks;
 
-int getNearest(int pos, short mode) {
+long getNearest(long pos, short mode) {
 	switch(mode) {
 		case 0:
 		return floor(pos / sizeid) * sizeid;
@@ -136,37 +157,49 @@ JS_MODULE_VERSION(Flags, 1);
 
 // exports module and function to javascript, now you can call WRAP_NATIVE("SampleNativeModule") and a module with single function "hello", receiving two numbers, will be returned
 // signature I(LL) defines a method, receiving two ints, and returning long
-JS_EXPORT(Stones, registerID, "V(II)", (JNIEnv* env, int id, int data) {
+JS_EXPORT(Stones, registerID, "V(LL)", (JNIEnv* env, long id, long data) {
 	// for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;
+	Logger::debug("j", "wew");
+	Logger::debug("j", patch::to_string(id).c_str());
+	Logger::debug("jf", patch::to_string(data).c_str());
+	
 	blockids.push_back(id);
 	blockdatas.push_back(data);
-	Logger::debug("j", "wew");
-	blockdatas.size();
-	blockids.size();
+	Logger::debug("sj", patch::to_string(blockids.size()).c_str());
+	Logger::debug("fgj", patch::to_string(blockdatas.size()).c_str());
 	return 0;
 });
 JS_EXPORT(Stones, ends, "V()", (JNIEnv* env) {
 // for different return types you must call appropriate NativeJS::wrap... functions
 	// if you function is void, use return 0;
 	Logger::debug("b", "gotoir");
-	Logger::debug("v", blockids.size());
-	sizeid = 1 / blockids.size();
-	for(it = blockids.begin(); it != blockids.end(); it++) {
-		Logger::debug("b", sizeid);
-		iblockids.insert(std::pair<int, int>(sizeid * (it - blockids.begin()), *it));
-		Logger::debug("b", *it);
+	Logger::debug("v", patch::to_string(blockids.size()).c_str());
+	sizeid = 1.0f / blockids.size();
+	Logger::debug("jsd", patch::to_string(blockids[7]).c_str());
+	for(it = blockids.begin(); it != blockids.end(); ++it) {
+		Logger::debug("s", patch::to_string(sizeid).c_str());
+		iblockids.insert(std::pair<long, long>(sizeid * (it - blockids.begin()), *it));
+		Logger::debug("С", patch::to_string(it - blockids.begin()).c_str());
+		Logger::debug("b", patch::to_string(*it).c_str());
 		Block* b = BlockRegistry::getBlockById(*it);
-		Logger::debug("a", static_cast<char>(b == nullptr));
-		Block* ba = BlockRegistry::getBlockById(2);
-		Logger::debug("asweq", static_cast<char>(ba == nullptr));
+		Logger::debug("a", patch::to_string(b == nullptr).c_str());
+		Block* ba = BlockRegistry::getBlockById(8194);
+		Logger::debug("asweq", patch::to_string(ba == nullptr).c_str());
 		//blks.insert(std::pair<int, Block*>(sizedata * (it - blockids.begin()), b));
 	}
 	sizedata = 1 / blockdatas.size();
-	for(it = blockdatas.begin(); it != blockdatas.end(); it++) {
-		iblockdatas.insert(std::pair<int, int>(sizedata * (it - blockdatas.begin()), *it));
+	for(it = blockdatas.begin(); it != blockdatas.end(); ++it) {
+		Logger::debug("b", patch::to_string(*it).c_str());
+		iblockdatas.insert(std::pair<long, long>(sizedata * (it - blockdatas.begin()), *it));
 	}
 	return 0;
+});
+JS_EXPORT(Flags, NO, "F()", (JNIEnv* env) {
+	// for different return types you must call appropriate NativeJS::wrap... functions
+	// if you function is void, use return 0;
+	
+	return NativeJS::wrapDoubleResult(TemperaturePoints::NO);
 });
 JS_EXPORT(Flags, hasFlag, "I(LL)", (JNIEnv* env, long long value1, long long value2) {
 	// for different return types you must call appropriate NativeJS::wrap... functions

@@ -37,7 +37,6 @@ long long pack(int num, ...) {
 			vac = vac | t;
 		}
 __android_log_write(ANDROID_LOG_INFO, "Hexacarbonylvanadium", patch::to_string(t).c_str());
-		__android_log_write(ANDROID_LOG_INFO, "асока", patch::to_string(vac).c_str());
 	}
 
 	/* завершение */

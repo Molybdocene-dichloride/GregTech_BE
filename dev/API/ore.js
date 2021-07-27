@@ -17,12 +17,12 @@ let StoneDictionary = {
     this.stones[id].id = BlockID[id];
     let so = [];
     for(let i in this.types) {
-      Logger.Log(this.types[i].isgen, "bik");
+      Logger.Log(BlockID[id], "bik");
       if(this.types[i].isgen) Stones.registerID(BlockID[id], Number(i));
       so.push({name: variants.name, texture: [[inverted + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
     }
     for(let i in this.types) {
-      Logger.Log(this.types[i].isgen, "nik");
+      Logger.Log(BlockID[id], "nik");
       if(this.types[i].isgen) Stones.registerID(BlockID[id], Number(7 + i));
       so.push({name: variants.name2, texture: [[inverted2 + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
     }

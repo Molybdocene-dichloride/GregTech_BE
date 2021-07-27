@@ -51,7 +51,7 @@ MaterialDictionary.registerMaterial(new Material("aluminium", Elements.Al, "INGO
 MaterialDictionary.registerMaterial(new Material("americium", Elements.Am, "INGOT", Flags.pack3(STD_METAL, GENERATE_ROD, GENERATE_LONG_ROD), 1473.15, 2873.15));
 MaterialDictionary.registerMaterial(new Material("antimony", Elements.Sb, "INGOT", 
 Flags.pack2(EXT_METAL, MORTAR_GRINDABLE), 903.78, 1908));
-MaterialDictionary.registerMaterial(new Material("arsenic", Elements.As, "DUST", 0, TemperaturePoints.NO, 887)); //w
+MaterialDictionary.registerMaterial(new Material("arsenic", Elements.As, "DUST", 0, Flags.NO, 887)); //w
 MaterialDictionary.registerMaterial(new Material("barium", Elements.Ba, "INGOT", STD_METAL, 983.15, 2118));
 MaterialDictionary.registerMaterial(new Material("beryllium", Elements.Be, "INGOT",Flags.pack2(STD_METAL, GENERATE_ORE), 1558.15, 3243.15));
 MaterialDictionary.registerMaterial(new Material("bismuth", Elements.Bi, "INGOT", GENERATE_ORE, 544.45, 1833.15));

@@ -69,23 +69,3 @@ GTValues = {
     //because forge is too fucking retarded to cache results or at least do not create fucking
     //immutable collections every time you retrieve indexed mod list
 }
-TemperaturePoints = { //for Kelvin's
-  NO: -0.1,
-  ABSOLUTE_ZERO: 0, //temperature couldn't and impossible be same or lower!
-  CELCIUS_ZERO: 273.15,
-  PLANK: 1.4167841616e32, //events for same and higher temperature is unknown and indescribable(Quantum gravity is not fully developed), is couldn't to use.
-  
-  kelvinsToCelsius: function(point) {
-    return point + 273.15;
-  },
-  celsiusToKelvins: function(point) {
-    return point - 273.15;
-  },
-}
-Plank = { //Plank values enum
-  TEMPERATURE: 1.4167841616e32, //events for same and higher temperature is unknown and indescribable(Quantum gravity is not fully developed), is couldn't to use.
-  DENSITY: 1.4167841616e32, //events for same and higher temperature is unknown and indescribable(Quantum gravity is not fully developed), is couldn't to use.
-  MASS: 1.4167841616e32, //events for same and higher temperature is unknown and indescribable(Quantum gravity is not fully developed), is couldn't to use
-  CHARGE: 1.4167841616e32, //events for same and higher temperature is unknown and indescribable(Quantum gravity is not fully developed), is couldn't to use.
-  LENGTH: 1.4167841616e32, //events for same and higher temperature is unknown and indescribable(Quantum gravity is not fully developed), is couldn't to use.
-} //обиан тебя
