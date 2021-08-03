@@ -49,9 +49,8 @@ MaterialDictionary.registerMaterial(new Material("_NULL", of(), "MARKER", 0));
 
 MaterialDictionary.registerMaterial(new Material("aluminium", Elements.Al, "INGOT", Flags.pack5(EXT2_METAL, GENERATE_SMALL_GEAR, GENERATE_ORE, GENERATE_RING, GENERATE_FRAME), 933.25, 2773.15)); //WA
 MaterialDictionary.registerMaterial(new Material("americium", Elements.Am, "INGOT", Flags.pack3(STD_METAL, GENERATE_ROD, GENERATE_LONG_ROD), 1473.15, 2873.15));
-MaterialDictionary.registerMaterial(new Material("antimony", Elements.Sb, "INGOT", 
-Flags.pack2(EXT_METAL, MORTAR_GRINDABLE), 903.78, 1908));
-MaterialDictionary.registerMaterial(new Material("arsenic", Elements.As, "DUST", 0, Flags.NO, 887)); //w
+MaterialDictionary.registerMaterial(new Material("antimony", Elements.Sb, "INGOT", Flags.pack2(EXT_METAL, MORTAR_GRINDABLE), 903.78, 1908));
+MaterialDictionary.registerMaterial(new Material("arsenic", Elements.As, "DUST", 0, Scientific.NO, 887)); //w
 MaterialDictionary.registerMaterial(new Material("barium", Elements.Ba, "INGOT", STD_METAL, 983.15, 2118));
 MaterialDictionary.registerMaterial(new Material("beryllium", Elements.Be, "INGOT",Flags.pack2(STD_METAL, GENERATE_ORE), 1558.15, 3243.15));
 MaterialDictionary.registerMaterial(new Material("bismuth", Elements.Bi, "INGOT", GENERATE_ORE, 544.45, 1833.15));
@@ -60,72 +59,44 @@ MaterialDictionary.registerMaterial(new Material("cadmium", Elements.Cd, "INGOT"
 MaterialDictionary.registerMaterial(new Material("calcium", Elements.Ca, "INGOT", 0, 1112, 1757));
 MaterialDictionary.registerMaterial(new Material("carbon", Elements.C, "INGOT", 0, 3780, 4130));
 MaterialDictionary.registerMaterial(new Material("cerium", Elements.Ce, "INGOT", 0, 1072, 3699));
-MaterialDictionary.registerMaterial(new Material("cobalt", Elements.Co, "INGOT", 
-STD_METAL, 1768, 3143));
-MaterialDictionary.registerMaterial(new Material("copper", Elements.Cu, "INGOT",
-Flags.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_DENSE), 1356.55, 2840.15));
+MaterialDictionary.registerMaterial(new Material("cobalt", Elements.Co, "INGOT", STD_METAL, 1768, 3143));
+MaterialDictionary.registerMaterial(new Material("copper", Elements.Cu, "INGOT", Flags.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_DENSE), 1356.55, 2840.15));
 MaterialDictionary.registerMaterial(new Material("chlorine", Elements.Cl, "FLUID",  STATE_GAS, -101, 172));
 MaterialDictionary.registerMaterial(new Material("chrome", Elements.Cr, "INGOT", Flags.pack3(EXT2_METAL, GENERATE_RING, GENERATE_ROTOR) , 2130, 2945));
 MaterialDictionary.registerMaterial(new Material("gallium", Elements.Ga, "INGOT", GENERATE_PLATE, 302.91, 2477));
-MaterialDictionary.registerMaterial(new Material("gold", Elements.Au, "INGOT", 
-Flags.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES), 1337.33, 3129));
+MaterialDictionary.registerMaterial(new Material("gold", Elements.Au, "INGOT", Flags.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES), 1337.33, 3129));
 MaterialDictionary.registerMaterial(new Material("fluorine", Elements.F, "FLUID", STATE_GAS, -219.67, 53.48));
-MaterialDictionary.registerMaterial(new Material("iridium", Elements.Ir, "INGOT", 
-Flags.pack5(GENERATE_ORE, EXT2_METAL, GENERATE_ORE, GENERATE_RING, GENERATE_ROTOR), 2739, 4701));
-MaterialDictionary.registerMaterial(new Material("iron", Elements.Fe, "INGOT", 
-Flags.pack3(Flags.pack3(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE),
-Flags.pack3(GENERATE_RING, GENERATE_DENSE, GENERATE_FRAME), 
-Flags.pack3(GENERATE_LONG_ROD, GENERATE_PLASMA, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES)), 1811, 3134));
-MaterialDictionary.registerMaterial(new Material("lead", Elements.Pb, "INGOT", 
-Flags.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_DENSE), 600, 2022));
+MaterialDictionary.registerMaterial(new Material("iridium", Elements.Ir, "INGOT", Flags.pack5(GENERATE_ORE, EXT2_METAL, GENERATE_ORE, GENERATE_RING, GENERATE_ROTOR), 2739, 4701));
+MaterialDictionary.registerMaterial(new Material("iron", Elements.Fe, "INGOT", Flags.pack3(Flags.pack3(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE), Flags.pack3(GENERATE_RING, GENERATE_DENSE, GENERATE_FRAME), Flags.pack3(GENERATE_LONG_ROD, GENERATE_PLASMA, EXCLUDE_BLOCK_CRAFTING_BY_HAND_RECIPES)), 1811, 3134));
+MaterialDictionary.registerMaterial(new Material("lead", Elements.Pb, "INGOT", Flags.pack4(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_DENSE), 600, 2022));
 MaterialDictionary.registerMaterial(new Material("magnesium", Elements.Mg, "INGOT", STD_METAL, 923.15, 1363.15));
 MaterialDictionary.registerMaterial(new Material("manganese", Elements.Mn, "INGOT", GENERATE_FOIL, 1517, 2235));
-MaterialDictionary.registerMaterial(new Material("lithium", Elements.Li, "INGOT", 
-Flags.pack2(STD_METAL, GENERATE_ORE), 453.65,	1603));
+MaterialDictionary.registerMaterial(new Material("lithium", Elements.Li, "INGOT", Flags.pack2(STD_METAL, GENERATE_ORE), 453.65,	1603));
 MaterialDictionary.registerMaterial(new Material("mercury", Elements.Hg, "FLUID", SMELT_INTO_FLUID, 234.3210, 629.88));
 MaterialDictionary.registerMaterial(new Material("molybdenum", Elements.Mo, "INGOT", GENERATE_ORE, 2896, 4912));
 MaterialDictionary.registerMaterial(new Material("neodymium", Elements.Nd, "INGOT",Flags.pack3(STD_METAL, GENERATE_ROD, GENERATE_ORE), 1297, 3347));
-MaterialDictionary.registerMaterial(new Material("nickel", Elements.Ni, "INGOT", 
-Flags.pack4(STD_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_PLASMA), 1728, 3003));
+MaterialDictionary.registerMaterial(new Material("nickel", Elements.Ni, "INGOT", Flags.pack4(STD_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_PLASMA), 1728, 3003));
 MaterialDictionary.registerMaterial(new Material("niobium", Elements.Nb, "INGOT", STD_METAL, 2741, 5015));
-MaterialDictionary.registerMaterial(new Material("nitrogen", Elements.N, "FLUID", 
-Flags.pack2(STATE_GAS | GENERATE_PLASMA), 63.29, 77.4));
-MaterialDictionary.registerMaterial(new Material("oxygen", Elements.O, "FLUID", 
-Flags.pack2(STATE_GAS, GENERATE_PLASMA) , 54.8, 90.19));
+MaterialDictionary.registerMaterial(new Material("nitrogen", Elements.N, "FLUID", Flags.pack2(STATE_GAS | GENERATE_PLASMA), 63.29, 77.4));
+MaterialDictionary.registerMaterial(new Material("oxygen", Elements.O, "FLUID", Flags.pack2(STATE_GAS, GENERATE_PLASMA) , 54.8, 90.19));
 MaterialDictionary.registerMaterial(new Material("hydrogen", Elements.H, "FLUID", STATE_GAS, 14.01, 20,28));
 MaterialDictionary.registerMaterial(new Material("palladium", Elements.Pd, "INGOT",Flags.pack3(EXT2_METAL, GENERATE_ORE, GENERATE_FLUID_BLOCK), 1828, 2940));
 MaterialDictionary.registerMaterial(new Material("phosphorus", Elements.P, "DUST", GENERATE_ORE, 317.3, 553));
-MaterialDictionary.registerMaterial(new Material("platinum", Elements.Pt, "INGOT", 
-Flags.pack3(EXT2_METAL, GENERATE_ORE, GENERATE_FLUID_BLOCK), 2041.4, 4098));
+MaterialDictionary.registerMaterial(new Material("platinum", Elements.Pt, "INGOT", Flags.pack3(EXT2_METAL, GENERATE_ORE, GENERATE_FLUID_BLOCK), 2041.4, 4098));
 MaterialDictionary.registerMaterial(new Material("potassium", Elements.K, "INGOT", EXT_METAL, 336.8, 1047));
-MaterialDictionary.registerMaterial(new Material("titanium", Elements.Ti, "INGOT", 
-Flags.pack2(EXT2_METAL, MORTAR_GRINDABLE), 1943, 3560));
-MaterialDictionary.registerMaterial(new Material("silver", Elements.Ag, "INGOT", 
-Flags.pack3(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE), 1235.1, 2485));
-MaterialDictionary.registerMaterial(new Material("silicon", Elements.Si, "INGOT", 
-Flags.pack2(STD_METAL, GENERATE_FOIL), 1688, 2623));
+MaterialDictionary.registerMaterial(new Material("titanium", Elements.Ti, "INGOT", Flags.pack2(EXT2_METAL, MORTAR_GRINDABLE), 1943, 3560));
+MaterialDictionary.registerMaterial(new Material("silver", Elements.Ag, "INGOT", Flags.pack3(EXT2_METAL, GENERATE_ORE, MORTAR_GRINDABLE), 1235.1, 2485));
+MaterialDictionary.registerMaterial(new Material("silicon", Elements.Si, "INGOT", Flags.pack2(STD_METAL, GENERATE_FOIL), 1688, 2623));
 MaterialDictionary.registerMaterial(new Material("sodium", Elements.Na, "INGOT", STD_METAL, 370.96, 1156,1));
-MaterialDictionary.registerMaterial(new Material("sulfur", Elements.S, "DUST", 
-Flags.pack4(NO_SMASHING, NO_SMELTING, FLAMMABLE, GENERATE_ORE), 386, 717.824));
-MaterialDictionary.registerMaterial(new Material("tantalum", Elements.Ta, "INGOT", 
-Flags.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), 3290, 5731));
-MaterialDictionary.registerMaterial(new Material("tin", Elements.Sn, "INGOT", 
-Flags.pack5(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING, GENERATE_ROTOR, GENERATE_ORE), 505.06, 2893));
-MaterialDictionary.registerMaterial(new Material("thorium", Elements.Th, "INGOT", 
-Flags.pack2(STD_METAL, GENERATE_ORE), 2028, 5060));
+MaterialDictionary.registerMaterial(new Material("sulfur", Elements.S, "DUST", Flags.pack4(NO_SMASHING, NO_SMELTING, FLAMMABLE, GENERATE_ORE), 386, 717.824));
+MaterialDictionary.registerMaterial(new Material("tantalum", Elements.Ta, "INGOT", Flags.pack3(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING), 3290, 5731));
+MaterialDictionary.registerMaterial(new Material("tin", Elements.Sn, "INGOT", Flags.pack5(EXT2_METAL, MORTAR_GRINDABLE, GENERATE_RING, GENERATE_ROTOR, GENERATE_ORE), 505.06, 2893));
+MaterialDictionary.registerMaterial(new Material("thorium", Elements.Th, "INGOT", Flags.pack2(STD_METAL, GENERATE_ORE), 2028, 5060));
 MaterialDictionary.registerMaterial(new Material("tungsten", Elements.W, "INGOT", EXT2_METAL, 3695, 5828));
 MaterialDictionary.registerMaterial(new Material("uranium", Elements.U[238], "INGOT", Flags.pack2(STD_METAL, GENERATE_ORE), 1405.5, 4018));
 MaterialDictionary.registerMaterial(new Material("uranium235", Elements.U[235], "INGOT", Flags.pack2(STD_METAL, GENERATE_ROD), 1405.5, 4018));
 MaterialDictionary.registerMaterial(new Material("vanadium", Elements.V, "INGOT", STD_METAL, 2160, 3650));
-MaterialDictionary.registerMaterial(new Material("zinc", Elements.Zn, "INGOT",
-Flags.pack4(STD_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_FOIL), 692.75, 1179.35));
-
-
-
-
-
-
-
+MaterialDictionary.registerMaterial(new Material("zinc", Elements.Zn, "INGOT", Flags.pack4(STD_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_FOIL), 692.75, 1179.35));
 
 MaterialDictionary.registerMaterial(new Material("almandine", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["iron"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "DUST", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("amber", of(), "GEM", Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
@@ -220,59 +191,37 @@ MaterialDictionary.registerMaterial(new Material("stone", of(), "DUST", Flags.pa
 MaterialDictionary.registerMaterial(new Material("granite_red", of(), "DUST", NO_SMASHING));
 MaterialDictionary.registerMaterial(new Material("sandstone_red", of(), "DUST", NO_SMASHING));
 
-
 MaterialDictionary.registerMaterial(new Material("lava", of(), "FLUID", 0));
 MaterialDictionary.registerMaterial(new Material("clay", of(new MaterialStack(MaterialDictionary.dict["sodium"], 2), new MaterialStack(MaterialDictionary.dict["lithium"], 1), new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["silicon"], 2), new MaterialStack(MaterialDictionary.dict["water"], 6)), "DUST", MORTAR_GRINDABLE));
-MaterialDictionary.registerMaterial(new Material("charcoal", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "GEM", 
-Flags.pack4(FLAMMABLE, NO_SMELTING, NO_SMASHING, MORTAR_GRINDABLE)));
-MaterialDictionary.registerMaterial(new Material("glass", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", 
-Flags.pack2(Flags.pack3(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_RECYCLING, SMELT_INTO_FLUID, EXCLUDE_BLOCK_CRAFTING_RECIPES))));
+MaterialDictionary.registerMaterial(new Material("charcoal", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "GEM", Flags.pack4(FLAMMABLE, NO_SMELTING, NO_SMASHING, MORTAR_GRINDABLE)));
+MaterialDictionary.registerMaterial(new Material("glass", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", Flags.pack2(Flags.pack3(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_RECYCLING, SMELT_INTO_FLUID, EXCLUDE_BLOCK_CRAFTING_RECIPES))));
 MaterialDictionary.registerMaterial(new Material("wheat", of(), "DUST", 0));
 MaterialDictionary.registerMaterial(new Material("brick", of(new MaterialStack(MaterialDictionary.dict["clay"], 1)), "DUST", Flags.pack2(EXCLUDE_BLOCK_CRAFTING_RECIPES, DECOMPOSITION_BY_CENTRIFUGING)));
-MaterialDictionary.registerMaterial(new Material("steam", of(new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "FLUID", 
-Flags.pack3(NO_RECYCLING, GENERATE_FLUID_BLOCK, DISABLE_DECOMPOSITION)));
-
-
-
+MaterialDictionary.registerMaterial(new Material("steam", of(new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "FLUID", Flags.pack3(NO_RECYCLING, GENERATE_FLUID_BLOCK, DISABLE_DECOMPOSITION)));
 
 MaterialDictionary.registerMaterial(new Material("amethyst", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 4), new MaterialStack(MaterialDictionary.dict["iron"], 1)), "GEM", Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT))); //A
 MaterialDictionary.registerMaterial(new Material("apatite", of(new MaterialStack(MaterialDictionary.dict["calcium"], 5), new MaterialStack(MaterialDictionary.dict["phosphate"], 3), new MaterialStack(MaterialDictionary.dict["chlorine"], 1)), "GEM", Flags.pack4(GENERATE_ORE, NO_SMASHING, NO_SMELTING, CRYSTALLISABLE)));
 MaterialDictionary.registerMaterial(new Material("bauxite", of(new MaterialStack(MaterialDictionary.dict["rutile"], 2), new MaterialStack(MaterialDictionary.dict["aluminium"], 16), new MaterialStack(MaterialDictionary.dict["hydrogen"], 10), new MaterialStack(MaterialDictionary.dict["oxygen"], 11)), "DUST", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("bentonite", of(new MaterialStack(MaterialDictionary.dict["sodium"], 1), new MaterialStack(MaterialDictionary.dict["magnesium"], 6), new MaterialStack(MaterialDictionary.dict["silicon"], 12), new MaterialStack(MaterialDictionary.dict["hydrogen"], 4), new MaterialStack(MaterialDictionary.dict["water"], 5), new MaterialStack(MaterialDictionary.dict["oxygen"], 36)), "DUST", GENERATE_ORE));
-MaterialDictionary.registerMaterial(new Material("blaze", of(new MaterialStack(MaterialDictionary.dict["dark_ash"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1)), "DUST", 
-Flags.pack4(NO_SMELTING, SMELT_INTO_FLUID, MORTAR_GRINDABLE, BURNING)));
-MaterialDictionary.registerMaterial(new Material("ender_eye", of(new MaterialStack(MaterialDictionary.dict["ender_pearl"], 1), new MaterialStack(MaterialDictionary.dict["blaze"], 1)), "GEM", 
-Flags.pack4(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING, NO_SMELTING)));
-MaterialDictionary.registerMaterial(new Material("monazite", of(new MaterialStack(MaterialDictionary.dict["rare_earth"], 1), new MaterialStack(MaterialDictionary.dict["phosphate"], 1)), "GEM",
-Flags.pack4(GENERATE_ORE, NO_SMASHING, NO_SMELTING, CRYSTALLISABLE))); // ? - lantanoids rateearh
+MaterialDictionary.registerMaterial(new Material("blaze", of(new MaterialStack(MaterialDictionary.dict["dark_ash"], 1), new MaterialStack(MaterialDictionary.dict["sulfur"], 1)), "DUST", Flags.pack4(NO_SMELTING, SMELT_INTO_FLUID, MORTAR_GRINDABLE, BURNING)));
+MaterialDictionary.registerMaterial(new Material("ender_eye", of(new MaterialStack(MaterialDictionary.dict["ender_pearl"], 1), new MaterialStack(MaterialDictionary.dict["blaze"], 1)), "GEM", Flags.pack4(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING, NO_SMELTING)));
+MaterialDictionary.registerMaterial(new Material("monazite", of(new MaterialStack(MaterialDictionary.dict["rare_earth"], 1), new MaterialStack(MaterialDictionary.dict["phosphate"], 1)), "GEM", Flags.pack4(GENERATE_ORE, NO_SMASHING, NO_SMELTING, CRYSTALLISABLE))); // ? - lantanoids rateearh
 MaterialDictionary.registerMaterial(new Material("olivine", of(new MaterialStack(MaterialDictionary.dict["magnesium"], 2), new MaterialStack(MaterialDictionary.dict["iron"], 1), new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 2)), "GEM", Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
-MaterialDictionary.registerMaterial(new Material("opal", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", 
-Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
+MaterialDictionary.registerMaterial(new Material("opal", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", Flags.pack4(STD_GEM, NO_SMASHING, NO_SMELTING, HIGH_SIFTER_OUTPUT)));
 MaterialDictionary.registerMaterial(new Material("lapis",  of(new MaterialStack(MaterialDictionary.dict["lazurite"], 12), new MaterialStack(MaterialDictionary.dict["sodalite"], 2), new MaterialStack(MaterialDictionary.dict["pyrite"], 1), new MaterialStack(MaterialDictionary.dict["calcite"], 1)), "GEM", GENERATE_ORE));
 MaterialDictionary.registerMaterial(new Material("lignite", of(new MaterialStack(MaterialDictionary.dict["carbon"], 2), new MaterialStack(MaterialDictionary.dict["water"], 4), new MaterialStack(MaterialDictionary.dict["dark_ash"], 1)), "GEM", Flags.pack5(GENERATE_ORE, FLAMMABLE, NO_SMELTING, NO_SMASHING, MORTAR_GRINDABLE)));
 MaterialDictionary.registerMaterial(new Material("pitchblende", of(new MaterialStack(MaterialDictionary.dict["uraninite"], 3), new MaterialStack(MaterialDictionary.dict["thorium"], 1), new MaterialStack(MaterialDictionary.dict["lead"], 1)), "DUST", GENERATE_ORE));
 
-
-MaterialDictionary.registerMaterial(new Material("garnet_red", of(new MaterialStack(MaterialDictionary.dict["pyrope"], 3), new MaterialStack(MaterialDictionary.dict["almandine"], 5), new MaterialStack(MaterialDictionary.dict["spessartine"], 8)), "GEM", 
-Flags.pack2(Flags.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE))));
+MaterialDictionary.registerMaterial(new Material("garnet_red", of(new MaterialStack(MaterialDictionary.dict["pyrope"], 3), new MaterialStack(MaterialDictionary.dict["almandine"], 5), new MaterialStack(MaterialDictionary.dict["spessartine"], 8)), "GEM", Flags.pack2(Flags.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE))));
 MaterialDictionary.registerMaterial(new Material("redstone", of(new MaterialStack(MaterialDictionary.dict["silicon"], 1), new MaterialStack(MaterialDictionary.dict["pyrite"], 5), new MaterialStack(MaterialDictionary.dict["ruby"], 1), new MaterialStack(MaterialDictionary.dict["mercury"], 3)), "DUST", GENERATE_ORE));
 
-MaterialDictionary.registerMaterial(new Material("garnet_yellow", of(new MaterialStack(MaterialDictionary.dict["andradite"], 5), new MaterialStack(MaterialDictionary.dict["grossular"], 8), new MaterialStack(MaterialDictionary.dict["uvarovite"], 3)), "GEM", 
-Flags.pack2(Flags.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE))));
-MaterialDictionary.registerMaterial(new Material("flint",  of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", 
-Flags.pack2(NO_SMASHING, MORTAR_GRINDABLE)));
+MaterialDictionary.registerMaterial(new Material("garnet_yellow", of(new MaterialStack(MaterialDictionary.dict["andradite"], 5), new MaterialStack(MaterialDictionary.dict["grossular"], 8), new MaterialStack(MaterialDictionary.dict["uvarovite"], 3)), "GEM", Flags.pack2(Flags.pack3(STD_SOLID, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_SMELTING, HIGH_SIFTER_OUTPUT, GENERATE_ORE))));
+MaterialDictionary.registerMaterial(new Material("flint",  of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", Flags.pack2(NO_SMASHING, MORTAR_GRINDABLE)));
 MaterialDictionary.registerMaterial(new Material("vanadium_magnetite",  of(new MaterialStack(MaterialDictionary.dict["magnetite"], 1), new MaterialStack(MaterialDictionary.dict["vanadium"], 1)), "DUST", GENERATE_ORE));
-
-
-
 
 MaterialDictionary.registerMaterial(new Material("red_alloy", of(new MaterialStack(MaterialDictionary.dict["copper"], 1), new MaterialStack(MaterialDictionary.dict["redstone"], 4)), "INGOT", Flags.pack2(GENERATE_PLATE, GENERATE_FINE_WIRE)));
 
 MaterialDictionary.addMaterials();
-//MaterialDictionary.registerMaterial(new Material("amber", "Al2O3", "gem", "",  0x0000FF, ));
-//MaterialDictionary.registerMaterial(new Material("fake_ruby", "Al2O3", "gem", "ored", , 0xBD4949, ));
-//MaterialDictionary.registerMaterial(new Material("pyrochlore", "Al2O3", "DUST", GENERATE_ORE,  0xE6D2D2, ));
-
 
 invertedIDs.invertIDs();
 MaterialDictionary.addToCreative();

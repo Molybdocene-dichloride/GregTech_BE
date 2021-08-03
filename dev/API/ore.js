@@ -23,7 +23,7 @@ let StoneDictionary = {
     }
     for(let i in this.types) {
       Logger.Log(BlockID[id], "nik");
-      if(this.types[i].isgen) Stones.registerID(BlockID[id], Number(7 + i));
+      if(this.types[i].isgen) Stones.registerID(BlockID[id], 7 + Number(i));
       so.push({name: variants.name2, texture: [[inverted2 + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
     }
 

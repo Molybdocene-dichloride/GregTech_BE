@@ -19,18 +19,10 @@ Saver.addSavesScope("oreGrid",
 );
 Callback.addCallback("GenerateChunkUniversal", function (chunkX, chunkZ, random, dimension, chunkSeed, worldSeed, dimensionSeed) {
   if(!isore[dimension] || !isore[dimension][chunkX + "_" + chunkZ]) {
-    
   Logger.Log(chunkX + "_" + chunkZ, "zoppo");
+  Flags.generate(chunkX, chunkZ);
   //granites
-  let highbl = OreDictionary.findChunkHighSurface(chunkX, chunkZ);
-
-	let coords = GenerationUtils.randomXZ(chunkX, chunkZ);
-	    if(GenerationUtils.findHighSurface(coords.x, coords.z).y > 14) {
-	      let randomStone = random.nextInt(Object.keys(StoneDictionary.stones).length);
-	      let randomSubStone = random.nextInt(2);
-    	
-    	//StoneDictionary.generateStonePerlin({x: chunkX, z: chunkZ}, BlockID[Object.keys(StoneDictionary.stones)[randomStone]], randomSubStone * 8, dimensionSeed, 256, 2, 42, 1, {"1_0": "1_0"});
-	    }
+  let highbl = OreDictionary.findChunkHighSurface(chunkX, chunkZ);   
   // ore vein
   //coords of 3x3 chunk grid
   let mixX = Math.floor(chunkX / 3);
@@ -540,8 +532,7 @@ if(OreDictionary.rollPercentage(OreDictionary.grids[dimension][mixX + "_" + mixZ
 }}
       }}}
   }
-  
-  
+
   //smallores
   for(let i = 0; i < OreDictionary.ores.length; i++) {
     if(OreDictionary.smallgens[i].isgen && dimension in OreDictionary.smallgens[i] && highbl > OreDictionary.smallgens[i][dimension].minimalheight) {
@@ -560,7 +551,7 @@ if(OreDictionary.rollPercentage(OreDictionary.grids[dimension][mixX + "_" + mixZ
         }
     }
   }
-  
+
   if(!isore[dimension]) isore[dimension] = {};
   isore[dimension][chunkX + "_" + chunkZ] = true;
   }
@@ -583,4 +574,5 @@ Callback.addCallback("GenerateBiomeMap", function(chunkX, chunkZ, random, dimens
        if(GenerationUtils.getPerlinNoise(chunkX * 16 + x, 0, chunkZ * 16 + z, dimensionSeed, 1 / 72, 2) > 0.7) World.setBiomeMap(chunkX * 16 + x, chunkZ * 16 + z, customBiome.id)
     }
   }
+
 });

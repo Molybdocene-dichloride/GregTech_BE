@@ -1,5 +1,4 @@
 GTValues = {
-
     /**
      * <p/>
      * This is worth exactly one normal Item.
@@ -12,24 +11,20 @@ GTValues = {
      * For example Nugget = M / 9 as it contains out of 1/9 of an Ingot.
      */
     M: 3628800,
-
     /**
      * Renamed from "FLUID_MATERIAL_UNIT" to just "L"
      * <p/>
      * Fluid per Material Unit (Prime Factors: 3 * 3 * 2 * 2 * 2 * 2)
      */
     L: 144,
-
     /**
      * The Item WildCard Tag. Even shorter than the "-1" of the past
      */
     //W = OreDictionary.WILDCARD_VALUE,
-
     /**
      * The Voltage Tiers. Use this Array instead of the old named Voltage Variables
      */
     V: [8, 32, 128, 512, 2048, 8192, 32768, 131072, 524288,  2147483647],
-
     ULV: 0,
     LV: 1,
     MV: 2,
@@ -40,22 +35,18 @@ GTValues = {
     ZPM: 7,
     UV: 8,
     MAX: 9,
-
     /**
      * The short names for the voltages
      */
     VN: ["ULV", "LV", "MV", "HV", "EV", "IV", "LuV", "ZPM", "UV", "MAX"],
-
     /**
      * Color values for the voltages
      */
     VC: [0xDCDCDC, 0xDCDCDC, 0xFF6400, 0xFFFF1E, 0x808080, 0xF0F0F5, 0xF0F0F5, 0xF0F0F5, 0xF0F0F5, 0xF0F0F5],
-
     /**
      * The long names for the voltages
      */
     VOLTAGE_NAMES: ["Ultra Low Voltage", "Low Voltage", "Medium Voltage", "High Voltage", "Extreme Voltage", "Insane Voltage", "Ludicrous Voltage", "ZPM Voltage", "Ultimate Voltage", "Maximum Voltage"],
-
     /**
      * ModID strings, since they are quite common parameters
      */
@@ -65,7 +56,9 @@ GTValues = {
         MODID_CT = "crafttweaker",
         MODID_TOP = "theoneprobe",
         MODID_CTM = "ctm";*/
-
     //because forge is too fucking retarded to cache results or at least do not create fucking
     //immutable collections every time you retrieve indexed mod list
 }
+const Scientific = WRAP_NATIVE("Scientific");
+const Flags = WRAP_NATIVE("Flags");
+const Stones = WRAP_NATIVE("Stones");

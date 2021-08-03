@@ -1,5 +1,3 @@
-const Flags = WRAP_NATIVE("Flags");
-const Stones = WRAP_NATIVE("Stones");
 const setLoadingTip = ModAPI.requireGlobal("MCSystem.setLoadingTip");
 
 setLoadingTip("Register textures");

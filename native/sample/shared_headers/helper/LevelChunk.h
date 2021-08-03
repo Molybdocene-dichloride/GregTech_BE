@@ -9,5 +9,5 @@ class LevelChunk {
     Dimension getDimension() const;
     Block getBlock(ChunkBlockPos const&) const;
     ChunkLocalHeight getHeightRange() const;
-    ChunkPos getPosition() const;
+    ChunkPos* getPosition() const;
 };

@@ -2,5 +2,5 @@
 
 #include <helper\Block.h>
 namespace VanillaBlocks {
-    static Block const *const mStone;
+    Block const *const mStone;
 };

@@ -14,15 +14,16 @@ class Vec3 {
 };
 class ChunkPos {
 	public:
-    int x, y, z;
+    int chunkXPos, chunkZPos;
 	ChunkPos(Vec3 const&);
 	ChunkPos(BlockPos const&);
+	BlockPos getMiddleBlockPosition(int) const;
 };
 class ChunkBlockPos;
 class BlockPos {
 	public:
 	//char filler_BlockPos[UNKNOW_SIZE];
-	int x, y, z;
+	double x, y, z;
 	public:
 	BlockPos(Vec3 const&);
 	BlockPos(ChunkPos const&, int);
