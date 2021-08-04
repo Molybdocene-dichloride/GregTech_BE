@@ -105,32 +105,41 @@ void generate(long x, long z) {
 	if(!ifLoaded) {
 		Stones::ends();
 		ifLoaded = true;
-	} 
-	for(int x = 0; x < 16; x++) {
+	}
+	BlockLegacy* stone = BlockRegistry::getBlockById(8);
+	Logger::debug("BGTY", patch::to_string<int>((int) stone->id).c_str());
+
+	BlockPos xc((float)x * 16 + 4, (float)43, (float)z * 16 + 4);
+	Block* b = BlockSourceProvider::getBlockSource().getBlock(xc);
+	Logger::debug("pexes", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(b)).c_str());
+	Logger::debug("jjsw", patch::to_string<int>((int)b->getVariant()).c_str());
+
+	BlockLegacy* bli = b->getBlockLegacy();
+	Logger::debug("vczx", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(bli)).c_str());
+	Logger::debug("bll", bli->id);
+	/*for(int x = 0; x < 16; x++) {
 		for(int y = 0; y < 170; y++) {
 			for(int z = 0; z < 16; z++) {
 				int xx = x * 16 + x;
 				int zz = z * 16 + z;
 
-				BlockLegacy* stone = BlockRegistry::getBlockById(1);
-
 				BlockPos xc((float) xx, (float) y, (float) zz);
 				Block* b = BlockSourceProvider::getBlockSource().getBlock(xc);
 				Logger::debug("pexes", patch::to_string<bool>(b != nullptr).c_str());
-				//Logger::debug("jjsw", patch::to_string<int>((int)b->getVariant()).c_str());
+				Logger::debug("jjsw", patch::to_string<int>((int)b->getVariant()).c_str());
 
-				//BlockLegacy* bli = b->getBlockLegacy();
+				BlockLegacy* bli = b->getBlockLegacy();
 				//Logger::debug("vczx", patch::to_string<bool>(bli != nullptr).c_str());
-				//Logger::debug("paasdd", patch::to_string<short>(bli->getBlockItemId()).c_str());
+				//Logger::debug("vaasdd", patch::to_string<short>(bli->id).c_str());
 				//Logger::debug("bll", patch::to_string<short>(bl->getBlockItemId()).c_str());
-
+				IdConversion::dynamicToStatic(bli->id, IdConversion::Scope::BLOCK);
 				//delete xc;
 				/*if(chunk.getBlock(*cbp).getRuntimeId() != VanillaBlocks::mStone->getRuntimeId()) continue;
 				PerlinSimplexNoise* psn = new PerlinSimplexNoise(chunkSource.getLevel().getSeed(), 2);
-				if(iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 0)] != 0 && iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 1)] != 0) BlockSourceProvider::getBlockSource().setBlock(*new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), *blks[iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(*cp, *cbp, 256))), 0)]], iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(*cp, *cbp, 256))), 1)], nullptr);*/
+				if(iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 0)] != 0 && iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(cp, *cbp, 256))), 1)] != 0) BlockSourceProvider::getBlockSource().setBlock(*new BlockPos(chunk.getPosition().x + x, chunk.getPosition().y + y, chunk.getPosition().z + z), *blks[iblockids[getNearest(psn->getValue(*new Vec3(*new BlockPos(*cp, *cbp, 256))), 0)]], iblockdatas[getNearest(psn->getValue(*new Vec3(*new BlockPos(*cp, *cbp, 256))), 1)], nullptr);
 			}
 		}
-	}
+	}*/
 }
 class GTOreGenerationDestroyerModule : public Module { //destroy vanilla ore generation
 public:

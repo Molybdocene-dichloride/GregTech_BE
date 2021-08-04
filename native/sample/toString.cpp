@@ -13,7 +13,11 @@ namespace patch {
 void crutch() {
     patch::to_string<size_t>(0);
     patch::to_string<int>(0);
+    patch::to_string<unsigned char>(0);
+    patch::to_string<uintptr_t>(0);
     patch::to_string<unsigned int>(0);
+    patch::to_string<unsigned short>(0);
+     patch::to_string<unsigned long>(0);
     patch::to_string<short>(0);
     patch::to_string<long>(0);
     patch::to_string<char>(0);

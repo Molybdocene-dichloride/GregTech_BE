@@ -20,7 +20,7 @@ Saver.addSavesScope("oreGrid",
 Callback.addCallback("GenerateChunkUniversal", function (chunkX, chunkZ, random, dimension, chunkSeed, worldSeed, dimensionSeed) {
   if(!isore[dimension] || !isore[dimension][chunkX + "_" + chunkZ]) {
   Logger.Log(chunkX + "_" + chunkZ, "zoppo");
-  Flags.generate(chunkX, chunkZ);
+  //Flags.generate(chunkX, chunkZ);
   //granites
   let highbl = OreDictionary.findChunkHighSurface(chunkX, chunkZ);   
   // ore vein

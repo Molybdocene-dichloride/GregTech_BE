@@ -120,35 +120,20 @@ function FuelMap(minInputs, maxInputs, defaultEUt) {
 let RecipeDictionary = {
     RECIPE_FURNACE_MAP: false,
     recipes: null,
+    recipes2: null,
     create: function() {
-      let trv = recipes.keySet().iterator();
-      let itt = trv.iterator();
+      let itt = this.recipes.keySet().iterator();
       while(itt.hasNext()) {
         let f = itt.next();
-        
-        recipes.get(f).getSortedEntries();
+        Logger.Log(f.getKey(), "starikl");
+        let ottr = f.getValue().iterator();
+        while(ottr.hasNext()) {
+          let f = itt.next();
+          //Logger.Log(f, "starikl");
+        }
       }
     },
     getBySources: function(slots) {
-      /*let lo = RecipeDictionary.recipes.keySet().iterator();
-      let pllp = 0;
-      while(lo.hasNext()) {
-        let u = lo.next();
-        Logger.Log(u, "ghhh");
-        
-       let sr = RecipeDictionary.recipes.get(u);
-       
-       let itt = sr.iterator();
-      while(itt.hasNext()) {
-        let uu = itt.next();
-        Logger.Log(uu.getSortedEntries()[0], "ghhhggtko");
-        Logger.Log(uu.getSortedEntries()[0].id, "gooo");
-        Logger.Log(uu.getSortedEntries()[0].data, "gsss");
-        Logger.Log(uu.getSortedEntries()[0].count, "gsss");
-       
-        pllp++;
-      }
-      }*/
       if(slots.length == 0) return null;
       if(slots.length == 1) {
         slots[0].index = 1;
@@ -1258,21 +1243,18 @@ if(material.type == "GEM") RecipeDictionary.addShapedForTool(["x x", "xxх"], ['
     },
 };
 
-//let field = java.lang.Class.forName("com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry");
-
 Callback.addCallback("PostLoaded", function() {
   let t = new com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry().getClass();
   
   let field = t.getDeclaredField("componentQuickAccess");
-  //let field = java.lang.Class.forName("java.lang.String").getDeclaredField("recipes");
+  
        field.setAccessible(true);
       RecipeDictionary.recipes = field.get(t);
       
       let eeed = [{id: 5, data: 0, count: 1, index: 0}];
       
       Logger.Log("red", eeed[0].count, "ced");
-      
+      RecipeDictionary.create();
+
       RecipeDictionary.getBySources(eeed);
-      
-      Logger.Log("red", eeed[0].count, "ced");
 });
