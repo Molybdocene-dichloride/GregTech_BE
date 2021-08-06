@@ -595,45 +595,6 @@ let uiw = new UI.StandardWindow({
   }
 });
 
-IDRegistry.genBlockID("cheetahtable");
-Block.createBlock("cheetahtable", [{name: "table of testers", texture: [["cobblestone", 0]], inCreative: true}]);
-TileEntity.registerPrototype(BlockID.cheetahtable, {
-  useNetworkItemContainer: true,
-  init: function() {
-    
-  },
-  tick: function() {
-    Logger.Log("zakotyui", 
-    this.container
-    );
-    let rec = Recipes.provideRecipe(this.container, "workbench");
-    Logger.Log("zakotyi", rec);
-    if(rec) {
-      Logger.Log("zakokotyy", rec);
-      this.container.setSlot("recipeSlot", rec.id, rec.count, rec.data);
-    } else {
-      this.container.setSlot("recipeSlot", 0, 0, 0);
-    }
-  },
-  destroy: function() {
-    
-  },
-  client: {
-    load: function() {},
-  },
-  getGuiScreen: function () {
-    return uiw;
-  },
-  getScreenName: function(player, coords) {
-      return "workbench"
-    },
-    // это событие вызывается на стороне клиента, this в данном случае не определен, по переданному имени, которое вернул метод getScreenName, возвращает окно, которое нужно открыть
-    getScreenByName: function(screenName) {
-      Logger.Log("vg", uiw);
-      return uiw;
-    },
-});
-
 //Создадим UID blockWorkbench
 IDRegistry.genBlockID("blockWorkbench");
 

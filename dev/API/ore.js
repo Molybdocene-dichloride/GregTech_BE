@@ -52,6 +52,7 @@ let StoneDictionary = {
 }
 
 let OreDictionary = {
+    grid_size: 3,
     blocks: [],
     number: [],
     invblocks: [],
@@ -224,18 +225,27 @@ variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" 
   };
 
   //code vein
-  function OreMixVein(name, dimensions, primary, secondary, inbetween, sporadic, minimalheight, maximalheight, rarity, density, size, sizeing, covariance) {
+  function OreMixVein(name, dimensions, primary, secondary, inbetween, sporadic, minimalaltitude, maximalaltitude, rarity, density, size, sizeing, covariance) {
     this.name = name;
     this.dimensions = dimensions;
     this.primary = primary;
+    //this.primaryheight    
     this.secondary = secondary;
+    //this.secondaryheight
     this.inbetween = inbetween;
+    //this.inbetweenminheight
+    //this.inbetweenmaxheight
     this.sporadic = sporadic;
-    this.minimalheight = minimalheight;
-    this.maximalheight = maximalheight;
+    //this.inbetweendensity //relativeToOther
+    //this.sporadicdensity //relativeToOther
+    this.minimalheight = minimalaltitude;
+    this.maximalheight = maximalaltitude;
+    //this.minimalheight = minimalheight;
+    //this.maximalheight = maximalheight;
     this.rarity = rarity;
     this.density = density;
     this.size = size;
+    //this.height = height;
     this.covariance = covariance;
     this.sizeing = sizeing;
     /*checkGen() {

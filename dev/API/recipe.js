@@ -120,18 +120,86 @@ function FuelMap(minInputs, maxInputs, defaultEUt) {
 let RecipeDictionary = {
     RECIPE_FURNACE_MAP: false,
     recipes: null,
+    recipesU: null,
     recipes2: null,
     create: function() {
-      let itt = this.recipes.keySet().iterator();
+      let itt = this.recipesU.entrySet().iterator();
       while(itt.hasNext()) {
         let f = itt.next();
         Logger.Log(f.getKey(), "starikl");
-        let ottr = f.getValue().iterator();
-        while(ottr.hasNext()) {
-          let f = itt.next();
-          //Logger.Log(f, "starikl");
+        Logger.Log(f.getValue(), "oipui");
+        let recipe = f.getValue();
+        Logger.Log(recipe.getClass().getName(), "oipui");
+        if(recipe.getClass().getName().contains("Shaped")) {
+          Logger.Log("$", "Shd");
+          let pfield = recipe.getClass().getDeclaredField("pattern");
+          pfield.setAccessible(true);
+          let entries = pfield.get(recipe);
+          let bigstr = "";
+          let countOv0 = 0;
+          for(let x = 0; x < entries.length; x++) {
+            let countOf0 = 0;
+            for(let z = 0; z < entries.length; z++) {
+              if(entries[x][z].id != 0) countOf0 += 1;
+              Logger.Log(entries[x][z].id, "Xerriopl");
+              Logger.Log(entries[x][z].data, "Ferriopl");
+              Logger.Log(entries[x][z].getCode(), "Code");
+            }
+            if(countOf0 != 0) {
+              for(let z = 0; z < entries.length; z++) {
+                bigstr += entries[x][z].getCode() + "_";
+              }
+            }
+          }
+          bigstr = bigstr.substring(0, bigstr.length - 1);
+          Logger.Log(bigstr, "biggy");
+        } else if(recipe.getClass().getName().contains("Shapeless")) {
+          Logger.Log("&", "Shls");
+          let entries = recipe.getSortedEntries();
+          let arr = [];
+          for(let i = 0; i < entries.length; i++) {
+            Logger.Log(entries[i].id, "Xerriopl");
+            Logger.Log(entries[i].data, "Ferriopl");
+            arr.push(entries[i].getCode());
+          }
+          Logger.Log(entries.length, "length");
+        }
+        //bigstr += recipe.getPrefix();
+        //recipes2[bigstr] = result;
+        let result = recipe.getResult();
+        Logger.Log(result.id, "result");
+        Logger.Log(result.data, "result");
+        Logger.Log(recipe.getPrefix(), "prefix");
+        
+      }
+    },
+    createOfCombinations: function(arr) {
+      let arrOfArrs = [];
+      if(arr.length == 0) {
+        
+      } else if(arr.length == 1) {
+        arrOfArrs.push(arr);
+      } else {
+      for(let i in arr) {
+        let all = createOfCombinations0(arr, arr[i].substring(0, 0));
+        for(let j in all) {
+          arrOfArrs.push(all);
         }
       }
+      }
+      return arrOfArrs;
+    },
+    createOfCombinations0: function(arr, arrI) {
+      let arrOfArrs = [];
+      for(let i in arr) {
+        if(arrI[i] == arr.substring(arrI.length - 1)) continue;
+        arrI[i] += "_" + arr.substring(arrI.length - 1);
+        let all = createOfCombinations0(arr, arr[i]);
+        for(let j in all) {
+          arrOfArrs.push(all);
+        }
+      }
+      return arrOfArrs;
     },
     getBySources: function(slots) {
       if(slots.length == 0) return null;
@@ -1247,14 +1315,16 @@ Callback.addCallback("PostLoaded", function() {
   let t = new com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry().getClass();
   
   let field = t.getDeclaredField("componentQuickAccess");
+  field.setAccessible(true);
+  RecipeDictionary.recipes = field.get(t);
   
-       field.setAccessible(true);
-      RecipeDictionary.recipes = field.get(t);
-      
-      let eeed = [{id: 5, data: 0, count: 1, index: 0}];
-      
-      Logger.Log("red", eeed[0].count, "ced");
-      RecipeDictionary.create();
+  let fiel = t.getDeclaredField("recipeByUid");
+  fiel.setAccessible(true);
+  RecipeDictionary.recipesU = fiel.get(t);
+  
+  let eeed = [{id: 5, data: 0, count: 1, index: 0}];
+  Logger.Log("red", eeed[0].count, "ced");
+  RecipeDictionary.create();
 
-      RecipeDictionary.getBySources(eeed);
+  RecipeDictionary.getBySources(eeed);
 });

@@ -709,9 +709,10 @@ function ComplexStructure(coords, dimension) {
   }
 }
 Callback.addCallback("DestroyBlock", function (coords, tile, playerUid) {
+  if(tile.id != 61) return;
   Logger.Log(tile.id, "zolotz");
-  if(tile.id != 58) return;
-  GenerationDictionary.chunkExcavateForBlockCoords(coords.relative.x, coords.relative.z, [1, 8, 9, 10, 11, 7, 24, 179, 172, 87, 88, 121], BlockSource.getDefaultForActor(playerUid));
+  let bs = new BlockState(8, {liquid_depth: 1});
+  BlockSource.getDefaultForActor(playerUid).setBlock(coords.x, coords.y, coords.z, 8, 0);
 });
 
 Logger.Log(GenerationDictionary.getGaussianProbabilityDensity(new Vector3(0, 0, 0), 0, new CovarianceMatrix([[5, 0, 0], [0, 5, 0], [0, 0, 5]]), new Vector3(0, 0, 0)), "weakeэ");
