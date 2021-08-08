@@ -255,9 +255,7 @@ let MachineDictionary = {
     this.sizes[this.sizes.length] = size;
     for(let i in this.materials) {
       this.pipes[this.materials[i].material.name + "_" + size.type] = Object.keys(this.pipes).length;
-      
     }
-    
   },
   registerMaterial: function(material, rate, temperature) {
     this.materials[material.name] = {material: material, rate: rate, temperature: temperature, type: "liquid"};

@@ -1,6 +1,3 @@
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-fpermissive"
-
 #include <string>
 #include <sstream>
 #include <cmath>
@@ -17,12 +14,12 @@
 #include <helper\common.h>
 #include <helper\PerlinSimplexNoise.h>
 #include <helper\LevelChunk.h>
-#include <helper\VanillaBlocks.h>
+//#include <helper\VanillaBlocks.h>
 #include <helper\ChunkSource.h>
 #include <helper\IBlockWorldGenAPI.h>
 #include <helper\RenderParams.h>
 #include <helper\NativeBlockSource.h>
-#include <helper\block.h>
+#include <helper\Block.h>
 #include <horizon\pool.h>
 #include <innercore\block_registry.h>
 #include <innercore\id_conversion_map.h>
@@ -42,8 +39,6 @@ std::map<float, std::shared_ptr<Block>>::iterator cur;
 
 namespace Stones {
 	void ends() {
-		// for different return types you must call appropriate NativeJS::wrap... functions
-		// if you function is void, use return 0;
 		Logger::debug("b", "gotoir");
 		Logger::debug("v", patch::to_string<size_t>(blockids.size()).c_str());
 		sizeid = 1.0f / blockids.size();
@@ -116,7 +111,7 @@ void generate(long x, long z) {
 
 	BlockLegacy* bli = b->getBlockLegacy();
 	Logger::debug("vczx", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(bli)).c_str());
-	Logger::debug("bll", bli->id);
+	//Logger::debug("bll", bli->id);
 	/*for(int x = 0; x < 16; x++) {
 		for(int y = 0; y < 170; y++) {
 			for(int z = 0; z < 16; z++) {
@@ -170,7 +165,6 @@ public:
 			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
 	}
 };
-
 class GTPipelineRenderer : public Module { //destroy vanilla ore generation
 public:
 	GTPipelineRenderer(const char* id): Module(id) {};
@@ -190,6 +184,7 @@ public:
 MAIN {
 	// create all modules
 	Module* main_module = new GTOreGenerationDestroyerModule("destroy_ore");
+	//Module* finite_module = new GTFiniteWaterModule("finite");
 }
 
 // module version defines version of next functions, that belong to this module
@@ -309,4 +304,3 @@ JS_EXPORT(Flags, pack11, "I(LLLLLLLLLLL)", (JNIEnv* env, long long value1, long 
 	in case of complex functions parameters are ignored
 	JNIEnv* is always passed as first parameter
 */
-#pragma GCC diagnostic pop

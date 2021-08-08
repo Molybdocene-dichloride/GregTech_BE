@@ -66,6 +66,7 @@ let OreDictionary = {
     invsmallgens: [],
     invsmallgen: [],
     veins: [],
+    veinsByName: {},
     grids: {},
     sumOfRarites: 0,
     posDara: 0,
@@ -167,6 +168,7 @@ variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" 
     },
     registerVein: function (vein) {
   this.veins[this.veins.length] = vein;
+  this.veinsByName[vein.name] = vein;
   this.sumOfRarites += vein.rarity;
     },
   strongIf: function(coords){

@@ -6,9 +6,7 @@
 
 class BlockLegacy {
     public:
-    void** vtable; //0
-	std::string nameId;
-    char filler[212 - 8];
+    char filler[212];
     char id;
     short getBlockItemId() const;
     bool isSlabBlock() const;

@@ -539,7 +539,7 @@ java.util.Collections.sort(chars);
                 iddatainput[f] = preiddatainput.data;
                 Logger.Log(iddatainput[f], "typeeer");
                 f++;
-              } else if(input[i].type == "machinep") {
+              } else if(input[i].type == "pipe_machine") {
                 let preiddatainput = PipeDictionary.pipes[input[i].typed + "_" + input[i].name];
                 iddatainput[f] = BlockID.gtblockpipe;
                 f++;
@@ -678,7 +678,7 @@ java.util.Collections.sort(chars);
            iddataoutput = {id: MaterialDictionary.invdata[output.form][output.material.name].id, count: output.count, data: MaterialDictionary.invdata[output.form][output.material.name].data};
         } else if(output.type == "common") {
           iddataoutput = {id: output.id, count: output.count, data: output.data};
-        } else if(output.type == "machinep") {
+        } else if(output.type == "pipe_machine") {
            iddataoutput = {id: BlockID.gtblockpipe, data: PipeDictionary.pipes[output.typed + "_" + output.name], count: output.count};
         }
             function fun(api, field, result) {
@@ -1215,8 +1215,24 @@ if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) {RecipeDictionar
       if(machine.type = "machine_steam") {
         let machine0 = {type: machine.type, name: machine.name, count: machine.count, tier: 0};
         let machine1 = {type: machine.type, name: machine.name, count: machine.count, tier: 1};
-        this.addShaped(mask, input, machine0);
-        this.addShaped(mask, input, machine1);
+        let input0 = [];
+        let input1 = [];
+        for(let i in input) {
+          if(i % 2 == 0) {
+            input0.push(input[i]);
+            input1.push(input[i]);
+          } else {
+            if(input[i].type == "casing") {
+              input0.push({type: "casing", typed: "bronze_" + input[i].typed});
+              input1.push({type: "casing", typed: "steel_" + input[i].typed});
+            } else if(input[i].type == "pipe_machine") {
+              input0.push({type: "pipe_machine", name: input[i].name, typed: "bronze"});
+              input1.push({type: "pipe_machine", name: input[i].name, typed: "steel"});
+            }
+          }
+        }
+        if(this.steammachines[machine.name].tier[0] == 0) this.addShaped(mask, input0, machine0);
+        if(this.steammachines[machine.name].tier[1] == 1) this.addShaped(mask, input1, machine1);
       } else if("machine_electric") {
         //this.addShaped();
       } else if("casing") {
@@ -1312,6 +1328,7 @@ if(material.type == "GEM") RecipeDictionary.addShapedForTool(["x x", "xxх"], ['
 };
 
 Callback.addCallback("PostLoaded", function() {
+  setLoadingTip("Register recipies for crafting table");
   let t = new com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry().getClass();
   
   let field = t.getDeclaredField("componentQuickAccess");
@@ -1327,4 +1344,5 @@ Callback.addCallback("PostLoaded", function() {
   RecipeDictionary.create();
 
   RecipeDictionary.getBySources(eeed);
+  setLoadingTip("");
 });
