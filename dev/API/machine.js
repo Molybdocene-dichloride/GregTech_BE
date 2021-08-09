@@ -69,6 +69,8 @@ let MachineDictionary = {
           let variants = [];
           variants[0] = this.registerCasing("bronze_hull", "MACHINE_BRONZE_SIDE");
           variants[1] = this.registerCasing("bronze_bricks_hull", "MACHINE_BRONZEBRICKS_BOTTOM", "MACHINE_BRONZEBRICKS_TOP", "MACHINE_BRONZEBRICKS_SIDE");
+          variants[2] = this.registerCasing("steel_hull", "MACHINE_STEEL_SIDE");
+          variants[3] = this.registerCasing("steel_bricks_hull", "MACHINE_STEELBRICKS_BOTTOM", "MACHINE_STEELBRICKS_TOP", "MACHINE_STEELBRICKS_SIDE");
           Block.createBlock("gtcasing", variants);
       },
       registerCasing: function(name) {

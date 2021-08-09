@@ -133,17 +133,17 @@ RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["charcoal"], 
 RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["charcoal"], form: "dust"}, 1600, {material: MaterialDictionary.dict["dark_ash"], form: "dustTiny"}, true);
 RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["lignite"], form: "gem"}, 400, {material: MaterialDictionary.dict["dark_ash"], form: "dustTiny"}, true);
 RecipeDictionary.addFurnaceFuel({material: MaterialDictionary.dict["lignite"], form: "dust"}, 400, {material: MaterialDictionary.dict["dark_ash"], form: "dustTiny"}, true);
-//
-/*
-Recipes.addShaped({id: BlockID.gtcasing, count: 1, data: MachineDictionary.casings["bronze_hull"]}, ["ppp", "p p", "ppp"], ['p', ItemID.gtmetaitem1, MaterialDictionary.invdata["plate"]["bronze"].data]);
-Recipes.addShaped({id: BlockID.gtcasing, count: 1, data: MachineDictionary.casings["bronze_bricks_hull"]}, ["ppp", "p p", "fff"], ['f', 45, 0, 'p', ItemID.gtmetaitem1, MaterialDictionary.invdata["plate"]["bronze"].data]);
-*/
 
 RecipeDictionary.addMachineShaped(["pop", "pip", "pap"], ['o', {type: "common", id: 33, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'a', {type: "common", id: 145, data: 0}, 'i', {type: "casing", typed: "hull"}], {type: "machine_steam", count: 1, name: "hammer"});
+RecipeDictionary.addMachineShaped(["pop", "pip", "pap"], ['o', {type: "common", id: 29, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'a', {type: "common", id: 145, data: 0}, 'i', {type: "casing", typed: "hull"}], {type: "machine_steam", count: 1, name: "hammer"});
 RecipeDictionary.addMachineShaped(["ppp", "fif", "ppp"], ['f', {type: "common", id: 61, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "casing", typed: "bricks_hull"}], {type: "machine_steam", count: 1, name: "alloy_smelter"});
 RecipeDictionary.addMachineShaped(["ppp", "oio", "ppp"], ['o', {type: "common", id: 33, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "casing", typed: "hull"}], {type: "machine_steam", count: 1, name: "compressor"});
+RecipeDictionary.addMachineShaped(["ppp", "oio", "ppp"], ['o', {type: "common", id: 29, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "casing", typed: "hull"}], {type: "machine_steam", count: 1, name: "compressor"});
 RecipeDictionary.addMachineShaped(["ppp", "pip", "pfp"], ['f', {type: "common", id: 61, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "casing", typed: "bricks_hull"}], {type: "machine_steam", count: 1, name: "furnace"});
 RecipeDictionary.addMachineShaped(["ppp", "fig", "ppp"], ['f', {type: "common", id: 33, data: 0}, 'g', {type: "common", id: 20, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "casing", typed: "hull"}], {type: "machine_steam", count: 1, name: "extractor"});
+RecipeDictionary.addMachineShaped(["ppp", "fig", "ppp"], ['f', {type: "common", id: 29, data: 0}, 'g', {type: "common", id: 20, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "casing", typed: "hull"}], {type: "machine_steam", count: 1, name: "extractor"});
+RecipeDictionary.addMachineShaped(["fpf", "pip", "gpg"], ['f', {type: "common", id: 264, data: 0}, 'g', {type: "common", id: 33, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "casing", typed: "hull"}], {type: "machine_steam", count: 1, name: "macerator"});
+RecipeDictionary.addMachineShaped(["fpf", "pip", "gpg"], ['f', {type: "common", id: 264, data: 0}, 'g', {type: "common", id: 29, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "casing", typed: "hull"}], {type: "machine_steam", count: 1, name: "macerator"});
 RecipeDictionary.addMachineShaped(["ppp", "p p", "gig"], ['i', {type: "common", id: 61, data: 0}, 'g', {type: "common", id: 45, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "common", id: 61, data: 0}], {type: "machine_steam", name: "boiler", count: 1});
 RecipeDictionary.addMachineShaped(["ggg", "fff", "pip"], ['f', {type: "material", material: MaterialDictionary.dict["silver"], form: "plate"}, 'g', {type: "common", id: 20, data: 0}, 'p', {type: "pipe_machine", name: "small"}, 'i', {type: "casing", typed: "bricks_hull"}], {type: "machine_steam", name: "boiler_solar", count: 1});
 RecipeDictionary.addMachineShaped(["fff", "ggg", "fif"], ['f', {type: "material", material: MaterialDictionary.dict["steel"], form: "plate"}, 'g', {type: "common", id: 20, data: 0}, 'i', {type: "casing", typed: "bricks_hull"}], {type: "machine_steam", name: "boiler_lava", count: 1});

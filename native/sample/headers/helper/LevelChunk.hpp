@@ -1,8 +1,8 @@
 #pragma once
 
-#include <helper\BlockPos.h>
-#include <helper\Block.h>
-#include <helper\Dimension.h>
+#include <helper\BlockPos.hpp>
+#include <helper\Block.hpp>
+#include <helper\Dimension.hpp>
 class LevelChunk {
     public:
     Level getLevel() const;

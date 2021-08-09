@@ -1,6 +1,6 @@
 #pragma once
 
-#include <helper\TickingArea.h>
+#include <helper\TickingArea.hpp>
 
 class Dimension {
     public:

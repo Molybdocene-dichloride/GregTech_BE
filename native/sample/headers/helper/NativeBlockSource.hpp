@@ -1,6 +1,6 @@
 #pragma once
 
-#include <helper\BlockSource.h>
+#include <helper\BlockSource.hpp>
 namespace BlockSourceProvider {
     BlockSource getBlockSource();
 }

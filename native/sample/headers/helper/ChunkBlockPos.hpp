@@ -1,6 +1,6 @@
 #pragma once
 
-#include <helper\BlockPos.h>
+#include <helper\BlockPos.hpp>
 class ChunkLocalHeight {};
 class ChunkBlockPos {
 public:

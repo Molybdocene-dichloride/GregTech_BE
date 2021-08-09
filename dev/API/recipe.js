@@ -1228,11 +1228,14 @@ if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) {RecipeDictionar
             } else if(input[i].type == "pipe_machine") {
               input0.push({type: "pipe_machine", name: input[i].name, typed: "bronze"});
               input1.push({type: "pipe_machine", name: input[i].name, typed: "steel"});
+            } else {
+              input0.push(input[i]);
+              input1.push(input[i]);
             }
           }
         }
-        if(this.steammachines[machine.name].tier[0] == 0) this.addShaped(mask, input0, machine0);
-        if(this.steammachines[machine.name].tier[1] == 1) this.addShaped(mask, input1, machine1);
+        if(MachineDictionary.steammachines[machine.name].tier[0] == 0) this.addShaped(mask, input0, machine0);
+        if(MachineDictionary.steammachines[machine.name].tier[1] == 1) this.addShaped(mask, input1, machine1);
       } else if("machine_electric") {
         //this.addShaped();
       } else if("casing") {

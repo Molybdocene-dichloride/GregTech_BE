@@ -8,21 +8,22 @@
 #include <logger.h>
 #include <nativejs.h>
 
-#include <toString.h>
-#include <flags.h>
-
-#include <helper\common.h>
-#include <helper\PerlinSimplexNoise.h>
-#include <helper\LevelChunk.h>
+#include <helper\common.hpp>
+#include <helper\PerlinSimplexNoise.hpp>
+#include <helper\LevelChunk.hpp>
 //#include <helper\VanillaBlocks.h>
-#include <helper\ChunkSource.h>
-#include <helper\IBlockWorldGenAPI.h>
-#include <helper\RenderParams.h>
-#include <helper\NativeBlockSource.h>
-#include <helper\Block.h>
+#include <helper\ChunkSource.hpp>
+#include <helper\IBlockWorldGenAPI.hpp>
+#include <helper\RenderParams.hpp>
+#include <helper\NativeBlockSource.hpp>
+#include <helper\Block.hpp>
 #include <horizon\pool.h>
 #include <innercore\block_registry.h>
 #include <innercore\id_conversion_map.h>
+
+#include <Localization.hpp>
+#include <flags.hpp>
+#include <toString.hpp>
 
 std::vector<long>::iterator it;
 
@@ -39,6 +40,10 @@ std::map<float, std::shared_ptr<Block>>::iterator cur;
 
 namespace Stones {
 	void ends() {
+		//LocalizationSystem::chooseLanguage("en_US");
+		Logger::debug("shrink", LocalizationSystem::getLanguage("en_US").c_str());
+		Logger::debug("shrinked", LocalizationSystem::getLocalizationStrings("en_US")["item.rotten_flesh.name"].c_str());
+
 		Logger::debug("b", "gotoir");
 		Logger::debug("v", patch::to_string<size_t>(blockids.size()).c_str());
 		sizeid = 1.0f / blockids.size();
@@ -101,16 +106,16 @@ void generate(long x, long z) {
 		Stones::ends();
 		ifLoaded = true;
 	}
-	BlockLegacy* stone = BlockRegistry::getBlockById(8);
-	Logger::debug("BGTY", patch::to_string<int>((int) stone->id).c_str());
+	//BlockLegacy* stone = BlockRegistry::getBlockById(8);
+	//Logger::debug("BGTY", patch::to_string<int>((int) stone->id).c_str());
 
-	BlockPos xc((float)x * 16 + 4, (float)43, (float)z * 16 + 4);
-	Block* b = BlockSourceProvider::getBlockSource().getBlock(xc);
-	Logger::debug("pexes", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(b)).c_str());
-	Logger::debug("jjsw", patch::to_string<int>((int)b->getVariant()).c_str());
+	//BlockPos xc((float)x * 16 + 4, (float)43, (float)z * 16 + 4);
+	//Block* b = BlockSourceProvider::getBlockSource().getBlock(xc);
+	//Logger::debug("pexes", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(b)).c_str());
+	//Logger::debug("jjsw", patch::to_string<int>((int)b->getVariant()).c_str());
 
-	BlockLegacy* bli = b->getBlockLegacy();
-	Logger::debug("vczx", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(bli)).c_str());
+	//BlockLegacy* bli = b->getBlockLegacy();
+	//Logger::debug("vczx", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(bli)).c_str());
 	//Logger::debug("bll", bli->id);
 	/*for(int x = 0; x < 16; x++) {
 		for(int y = 0; y < 170; y++) {

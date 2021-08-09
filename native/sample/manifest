@@ -2,11 +2,12 @@
     "shared": {
         "name": "gregtech",
 		"include": [
-			"shared_headers"
+			"headers"
 		]
     },
 
     "depends": [
+		"gnustl_shared",
     	"minecraftpe",
     	"innercore",
 		"nativejs"

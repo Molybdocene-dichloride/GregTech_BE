@@ -1,8 +1,8 @@
 #pragma once
-#include <helper\Util.h>
-#include <helper\BlockPos.h>
-#include <helper\Random.h>
-#include <helper\RenderParams.h>
+#include <helper\Util.hpp>
+#include <helper\BlockPos.hpp>
+#include <helper\Random.hpp>
+#include <helper\RenderParams.hpp>
 
 class ActorBlockSyncMessage;
 class ActorLocation;

@@ -1,7 +1,7 @@
 #include <string>
 #include <sstream>
-#include <toString.h>
-#include <helper\ChunkBlockPos.h>
+#include <toString.hpp>
+#include <helper\ChunkBlockPos.hpp>
 namespace patch {
     template<typename T> std::string to_string(const T& n) {
         std::ostringstream stm;

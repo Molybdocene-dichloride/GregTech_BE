@@ -1,5 +1,5 @@
 #pragma once
-#include <helper\BlockSource.h>
+#include <helper\BlockSource.hpp>
 class TickingArea {
     public:
 	BlockSource getBlockSource();

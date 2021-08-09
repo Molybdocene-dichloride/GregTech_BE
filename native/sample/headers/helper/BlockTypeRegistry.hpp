@@ -2,7 +2,7 @@
 #include <map>
 #include <utility>
 #include <atomic>
-#include <helper\Block.h>
+#include <helper\Block.hpp>
 #include <gsl\pointers>
 
 template <typename T> class SharedCounter {

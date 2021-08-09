@@ -1,5 +1,5 @@
 #pragma once
-#include <helper\Actor.h>
+#include <helper\Actor.hpp>
 
 class Actor;
 
