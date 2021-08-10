@@ -3,7 +3,8 @@
 #include <vector>
 #include <logger.h>
 #include <toString.hpp>
-
+//#include <stl/fstream>
+#include <stl/unordered_map>
 #include <stl/string>
 #include <stl/vector>
 #include <stl/map>
@@ -29,6 +30,8 @@ public:
     static void chooseLanguage(Localization const&);
     static void chooseLanguage(std::__ndk1::string const&);
 	static std::__ndk1::vector<Localization*> mLanguages;
+    static std::__ndk1::vector<std::__ndk1::string> mLanguageCodes;
+    static std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>& getSupportedLanguageCodes();
 	static Localization* mCurrentLanguage;
 };
 namespace LocalizationSystem {
@@ -36,16 +39,19 @@ namespace LocalizationSystem {
     Localization* getLocalization(std::__ndk1::string CODE);
     std::__ndk1::string getLanguage(std::__ndk1::string CODE);
     std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>& getLocalizationStrings(std::__ndk1::string CODE);
-    //std::string translate(Localization* lang, std::string str) {   
-    //}
-    //std::string translate(std::string lang, std::string str) {
-    //}
+    std::__ndk1::string translate(Localization* lang, std::__ndk1::string str);
+    std::__ndk1::string translate(std::__ndk1::string CODE, std::__ndk1::string str);
+    void insert(Localization* lang, std::__ndk1::string str, std::__ndk1::string val);
+    void insert(std::__ndk1::string CODE, std::__ndk1::string str, std::__ndk1::string val);
     Localization* getCurrentLocalization();
     std::__ndk1::string getCurrentLanguage();
     std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>& getCurrentLocalizationStrings();
-    /*std::string translateToCurrent(std::string str) {   
-        return I18n::getCurrentLanguage()->_getStrings();
-    }*/
+    std::__ndk1::string translateToCurrent(std::__ndk1::string str);
+    void insertToCurrent(std::__ndk1::string str, std::__ndk1::string val);
     void chooseLanguage(std::__ndk1::string code);
     void chooseLanguage(Localization const& localization);
+
+    std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> translateToAll(std::__ndk1::string str);
+    void loadTranslationDir(std::__ndk1::string dir);
+    //void loadTranslations(std::__ndk1::string dir);
 };

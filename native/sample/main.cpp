@@ -25,6 +25,7 @@
 #include <flags.hpp>
 #include <toString.hpp>
 
+
 std::vector<long>::iterator it;
 
 std::vector<long> blockids;
@@ -40,9 +41,14 @@ std::map<float, std::shared_ptr<Block>>::iterator cur;
 
 namespace Stones {
 	void ends() {
-		//LocalizationSystem::chooseLanguage("en_US");
-		Logger::debug("shrink", LocalizationSystem::getLanguage("en_US").c_str());
-		Logger::debug("shrinked", LocalizationSystem::getLocalizationStrings("en_US")["item.rotten_flesh.name"].c_str());
+		//LocalizationSystem::chooseLanguage("de_DE");
+		Logger::debug("shrink", LocalizationSystem::translateToCurrent("item.rotten_flesh.name").c_str());
+		std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>::iterator ite;
+		std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> rotten = LocalizationSystem::translateToAll("item.rotten_flesh.name");
+		for(ite = rotten.begin(); ite != rotten.end(); ++ite) {
+			Logger::debug("first", ite->first.c_str());
+			Logger::debug("second", ite->second.c_str());
+		}
 
 		Logger::debug("b", "gotoir");
 		Logger::debug("v", patch::to_string<size_t>(blockids.size()).c_str());
