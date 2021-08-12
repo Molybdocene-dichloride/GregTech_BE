@@ -1,7 +1,7 @@
 #pragma once
-#include <helper\BlockPos.hpp>
-#include <helper\Block.hpp>
-#include <helper\Actor.hpp>
+#include <mcpe\BlockPos.hpp>
+#include <mcpe\Block.hpp>
+#include <mcpe\Actor.hpp>
 
 class BlockSource {
     public:

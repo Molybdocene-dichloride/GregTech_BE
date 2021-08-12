@@ -1,6 +1,6 @@
 #pragma once
 
-#include <helper\ChunkBlockPos.hpp>
+#include <mcpe\ChunkBlockPos.hpp>
 
 class Rotation;
 class Mirror;

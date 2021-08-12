@@ -8,15 +8,15 @@
 #include <logger.h>
 #include <nativejs.h>
 
-#include <helper\common.hpp>
-#include <helper\PerlinSimplexNoise.hpp>
-#include <helper\LevelChunk.hpp>
-//#include <helper\VanillaBlocks.h>
-#include <helper\ChunkSource.hpp>
-#include <helper\IBlockWorldGenAPI.hpp>
-#include <helper\RenderParams.hpp>
-#include <helper\NativeBlockSource.hpp>
-#include <helper\Block.hpp>
+#include <mcpe\common.hpp>
+#include <mcpe\PerlinSimplexNoise.hpp>
+#include <mcpe\LevelChunk.hpp>
+//#include <mcpe\VanillaBlocks.h>
+#include <mcpe\ChunkSource.hpp>
+#include <mcpe\IBlockWorldGenAPI.hpp>
+#include <mcpe\RenderParams.hpp>
+#include <mcpe\NativeBlockSource.hpp>
+#include <mcpe\Block.hpp>
 #include <horizon\pool.h>
 #include <innercore\block_registry.h>
 #include <innercore\id_conversion_map.h>
@@ -41,14 +41,8 @@ std::map<float, std::shared_ptr<Block>>::iterator cur;
 
 namespace Stones {
 	void ends() {
-		//LocalizationSystem::chooseLanguage("de_DE");
-		Logger::debug("shrink", LocalizationSystem::translateToCurrent("item.rotten_flesh.name").c_str());
-		std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>::iterator ite;
-		std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> rotten = LocalizationSystem::translateToAll("item.rotten_flesh.name");
-		for(ite = rotten.begin(); ite != rotten.end(); ++ite) {
-			Logger::debug("first", ite->first.c_str());
-			Logger::debug("second", ite->second.c_str());
-		}
+		LocalizationSystem::loadTranslations("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/ru_RU.lang");
+		//Logger::debug("shrink", LocalizationSystem::translateToCurrent("item.rotten_flesh.name").c_str());
 
 		Logger::debug("b", "gotoir");
 		Logger::debug("v", patch::to_string<size_t>(blockids.size()).c_str());

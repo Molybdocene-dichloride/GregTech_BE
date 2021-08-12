@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <gsl/pointers>
-#include <helper/ptrs.hpp>
+#include <mcpe/ptrs.hpp>
 
 class BlockLegacy {
     public:

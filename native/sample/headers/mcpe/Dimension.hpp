@@ -1,6 +1,6 @@
 #pragma once
 
-#include <helper\TickingArea.hpp>
+#include <mcpe\TickingArea.hpp>
 
 class Dimension {
     public:

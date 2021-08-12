@@ -173,33 +173,75 @@ let RecipeDictionary = {
         
       }
     },
-    createOfCombinations: function(arr) {
+    createOfCombinations: function(arr, collisions) {
       let arrOfArrs = [];
       if(arr.length == 0) {
         
       } else if(arr.length == 1) {
-        arrOfArrs.push(arr);
+        arrOfArrs.push(arr[0]);
       } else {
-      for(let i in arr) {
-        let all = createOfCombinations0(arr, arr[i].substring(0, 0));
-        for(let j in all) {
-          arrOfArrs.push(all);
+        for(let i in arr) {
+          let index = arr.length;
+          let all = createOfCombinations0(arr, arr[i], index, collisions);
+          for(let j in all) {
+            arrOfArrs.push(all);
+          }
         }
-      }
       }
       return arrOfArrs;
     },
-    createOfCombinations0: function(arr, arrI) {
+    createOfCombinations0: function(arr, arrI, index, collisions) {
       let arrOfArrs = [];
       for(let i in arr) {
-        if(arrI[i] == arr.substring(arrI.length - 1)) continue;
-        arrI[i] += "_" + arr.substring(arrI.length - 1);
-        let all = createOfCombinations0(arr, arr[i]);
+        if(!collisions && arrI == arr[i]) continue;
+        //arrI[i] += "_" + arr.substring(arrI.length - 1);
+        let arrt = [arrI];
+        index--;
+        let all = createOfCombinations1(arr, arrt, arr[i], index, collisions);
         for(let j in all) {
           arrOfArrs.push(all);
         }
       }
       return arrOfArrs;
+    },
+    createOfCombinations1: function(arr, arrt, arrI, index, collisions) {
+      let arrOfArrs = [];
+      for(let i in arr) {
+        if(!collisions && arrI == arr[i]) continue;
+        //arrI[i] += "_" + arr.substring(arrI.length - 1);
+        let arre = [].push.apply(arrt, arrI);
+        index--;
+        if(index > 1) {
+          let all = createOfCombinations1(arr, arre, arr[i], index, collisions);
+          for(let j in all) {
+            arrOfArrs.push(all);
+          }
+        } else {
+          arrOfArrs.push(arre);
+        }
+      }
+      return arrOfArrs;
+    },
+    iterate: function(forIterate, variants, index) {
+      let vals = {};
+      for(let i in forIterate) {
+        for(let j in forIterate[i].id) {
+          vals[i] = forIterate[i].id[j];
+          let forIterate1 = forIterate;
+          delete forIterate1[i];
+          this.iterateV(vals, input, forIterate1, variants, index);
+        }
+      }
+    },
+    iterateV: function(vals, input, forIterate, variants, index) {
+      for(let i in forIterate) {
+        for(let j in forIterate[i].id) {
+          vals.push(forIterate[i].id[j]);
+          let forIterate1 = forIterate;
+          delete forIterate1[i];
+          this.iterateV(vals, input, forIterate1, variants, index);
+        }
+      }
     },
     getBySources: function(slots) {
       if(slots.length == 0) return null;
@@ -525,6 +567,20 @@ java.util.Collections.sort(chars);
         Recipes.addFurnaceFuel(iddatainput.id, iddatainput.data, time);
     },
     addShaped: function(mask, input, output, prefix, func) {
+        let forIterate = {};
+        let variants = 1;
+        for(let i in input) {
+          if(i%2 != 0) {
+            if(Array.isArray(input[i].id)) {
+              variants *= input[i].id.length;
+              forIterate[i] = input[i];
+            }
+          }
+        }
+        let opc = this.createOfCombinations(forIterate, true);
+        for(let i in opc) {
+          Logger::Log(opc[i], "gty");
+        }
         let iddatainput = [];
         let f = 0;
         for(let i in input) {

@@ -1,9 +1,10 @@
 #pragma once
+#include <dirent.h>
 #include <string>
 #include <vector>
 #include <logger.h>
 #include <toString.hpp>
-//#include <stl/fstream>
+#include <stl/fstream>
 #include <stl/unordered_map>
 #include <stl/string>
 #include <stl/vector>
@@ -24,7 +25,7 @@ public:
 class I18n {
 public:
     static Localization* getLocaleFor(std::__ndk1::string const&);
-    static Localization* get(std::__ndk1::string const&);
+    //static Localization* get(std::__ndk1::string const&);
 	static std::__ndk1::string get(std::__ndk1::string const&, std::vector<std::__ndk1::string> const&);
 	static Localization* getCurrentLanguage();
     static void chooseLanguage(Localization const&);
@@ -48,10 +49,11 @@ namespace LocalizationSystem {
     std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>& getCurrentLocalizationStrings();
     std::__ndk1::string translateToCurrent(std::__ndk1::string str);
     void insertToCurrent(std::__ndk1::string str, std::__ndk1::string val);
-    void chooseLanguage(std::__ndk1::string code);
-    void chooseLanguage(Localization const& localization);
+    void chooseLocalization(std::__ndk1::string code);
+    void chooseLocalization(Localization const& localization);
 
     std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> translateToAll(std::__ndk1::string str);
+
+    void loadTranslations(std::__ndk1::string dir);
     void loadTranslationDir(std::__ndk1::string dir);
-    //void loadTranslations(std::__ndk1::string dir);
 };

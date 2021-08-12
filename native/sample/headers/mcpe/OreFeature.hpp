@@ -1,7 +1,7 @@
 #pragma once
-#include <helper\BlockPos.hpp>
-#include <helper\IBlockWorldGenAPI.hpp>
-#include <helper\RenderParams.hpp>
+#include <mcpe\BlockPos.hpp>
+#include <mcpe\IBlockWorldGenAPI.hpp>
+#include <mcpe\RenderParams.hpp>
 
 class OreFeature {
 	public:
