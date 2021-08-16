@@ -196,6 +196,7 @@ MaterialDictionary.registerMaterial(new Material("clay", of(new MaterialStack(Ma
 MaterialDictionary.registerMaterial(new Material("charcoal", of(new MaterialStack(MaterialDictionary.dict["carbon"], 1)), "GEM", Flags.pack4(FLAMMABLE, NO_SMELTING, NO_SMASHING, MORTAR_GRINDABLE)));
 MaterialDictionary.registerMaterial(new Material("glass", of(new MaterialStack(MaterialDictionary.dict["silicon_dioxide"], 1)), "GEM", Flags.pack2(Flags.pack3(GENERATE_PLATE, GENERATE_LENSE, NO_SMASHING), Flags.pack3(NO_RECYCLING, SMELT_INTO_FLUID, EXCLUDE_BLOCK_CRAFTING_RECIPES))));
 MaterialDictionary.registerMaterial(new Material("wheat", of(), "DUST", 0));
+MaterialDictionary.registerMaterial(new Material("wood", of(), "DUST", 0));
 MaterialDictionary.registerMaterial(new Material("brick", of(new MaterialStack(MaterialDictionary.dict["clay"], 1)), "DUST", Flags.pack2(EXCLUDE_BLOCK_CRAFTING_RECIPES, DECOMPOSITION_BY_CENTRIFUGING)));
 MaterialDictionary.registerMaterial(new Material("steam", of(new MaterialStack(MaterialDictionary.dict["hydrogen"], 2), new MaterialStack(MaterialDictionary.dict["oxygen"], 1)), "FLUID", Flags.pack3(NO_RECYCLING, GENERATE_FLUID_BLOCK, DISABLE_DECOMPOSITION)));
 

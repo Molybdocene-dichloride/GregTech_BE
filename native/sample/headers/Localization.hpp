@@ -1,14 +1,22 @@
 #pragma once
 #include <dirent.h>
+
 #include <string>
 #include <vector>
-#include <logger.h>
-#include <toString.hpp>
+
 #include <stl/fstream>
-#include <stl/unordered_map>
+//#include <stl/unordered_map>
 #include <stl/string>
 #include <stl/vector>
 #include <stl/map>
+
+#include <logger.h>
+#include <mod.h>
+#include <symbol.h>
+#include <hook.h>
+
+#include <toString.hpp>
+
 class HashedString {
     public:
     const char* c_str() const;
@@ -56,4 +64,9 @@ namespace LocalizationSystem {
 
     void loadTranslations(std::__ndk1::string dir);
     void loadTranslationDir(std::__ndk1::string dir);
+
+    class CustomLocalizationLoadingModule : public Module { //load custom localization pairs to I18n
+        CustomLocalizationLoadingModule(const char* id);
+	    virtual void initialize();
+    };
 };

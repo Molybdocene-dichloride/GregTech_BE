@@ -27,23 +27,57 @@ function RecipeMap(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs,
     this.defaultEUt = defaultEUt;
     this.get = {};
     this.addRecipe = function(recipe) {
+      let forIterate = [];
+      let variants = 1
+      let e = 0;
+        for(let i in recipe.inputd) {
+          if(i%2 != 0) {
+            if((recipe.inputs[i].type == "common" ||  recipe.inputs[i].type == "material") && Array.isArray(pecipe.inputs[i].id) && recipe.inputs[i].id.length > 1) {
+              variants *= recipe.inputs[i].id.length;
+              forIterate[e] = recipe.inputs[i];
+              forIterate[e].in = i;
+              e++;
+            }
+          }
+        }
+        let opc = RecipeDictionary.createOfCombinations(forIterate, true, variants);
+        let inputs = [];
+        for(let i in opc) {
+          let inpu = {};
+          for(let o in recipe.input) {
+            inpu[o] = input[o];
+          }
+          Logger.Log(i, "gty");
+          for(let j in opc[i]) {
+            Logger.Log(opc[i][j].id, "opl");
+            Logger.Log(opc[i][j].inn, "iok");
+            
+            if(opc[i][j].type == "common") inpu[opc[i][j].inn] = {type: inpu[opc[i][j].inn].type, id: opc[i][j].id, data: inpu[opc[i][j].inn].data};
+            if(opc[i][j].type == "material") inpu[opc[i][j].inn] = {type: inpu[opc[i][j].inn].type, form: opc[i][j].form, material: inpu[opc[i][j].inn]. material};
+          }
+          inputs.push(inpu);
+        }
+        if(inputs.length == 0) {
+          inputs[0] = recipe.input;
+        }
+        for(let n in inputs) {
         this[this.length] = recipe;
         let t = "";
         
-        for(let input in recipe.inputs) {
+        for(let i in inputs[n]) {
           let iddata = null;
               //Logger.Log("pentazonium", i);
-              if(recipe.inputs[input].type == "material") {
+              if(inputs[n][i].type == "material") {
                 Logger.Log("pe", iddata);
 
-              iddata = MaterialDictionary.invdata[recipe.inputs[input].form][recipe.inputs[input].material.name];
+              iddata = MaterialDictionary.invdata[inputs[n][i].form][inputs[n][i].material.name];
               
               Logger.Log("eeyue", iddata);
 
-            } else if(recipe.inputs[input].type == "ore") {
-              Logger.Log(recipe.inputs[input].material.name, ".•o°");
+            } else if(inputs[n][i].type == "ore") {
+              Logger.Log(inputs[n][i].material.name, ".•o°");
 
-              iddata = {id: OreDictionary.data[recipe.inputs[input].material.name].id, data: 0};
+              iddata = {id: OreDictionary.data[inputs[n][i].material.name].id, data: 0};
             }
             
           t += iddata.id + "_";
@@ -59,6 +93,7 @@ function RecipeMap(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs,
         this.get[t].push(recipe);
         
         this.length++;
+        }
     }
     this.deleteRecipe = function(recipe) {
         for(let i in this) {
@@ -173,53 +208,90 @@ let RecipeDictionary = {
         
       }
     },
-    createOfCombinations: function(arr, collisions) {
+    createOfCombinations: function(arr, collisions, variants) {
       let arrOfArrs = [];
-      if(arr.length == 0) {
-        
-      } else if(arr.length == 1) {
+      if(variants == 0) {
+      } else if(variants == 1) {
         arrOfArrs.push(arr[0]);
       } else {
-        for(let i in arr) {
-          let index = arr.length;
-          let all = createOfCombinations0(arr, arr[i], index, collisions);
-          for(let j in all) {
-            arrOfArrs.push(all);
-          }
-        }
-      }
-      return arrOfArrs;
-    },
-    createOfCombinations0: function(arr, arrI, index, collisions) {
-      let arrOfArrs = [];
-      for(let i in arr) {
-        if(!collisions && arrI == arr[i]) continue;
-        //arrI[i] += "_" + arr.substring(arrI.length - 1);
-        let arrt = [arrI];
-        index--;
-        let all = createOfCombinations1(arr, arrt, arr[i], index, collisions);
-        for(let j in all) {
-          arrOfArrs.push(all);
-        }
-      }
-      return arrOfArrs;
-    },
-    createOfCombinations1: function(arr, arrt, arrI, index, collisions) {
-      let arrOfArrs = [];
-      for(let i in arr) {
-        if(!collisions && arrI == arr[i]) continue;
-        //arrI[i] += "_" + arr.substring(arrI.length - 1);
-        let arre = [].push.apply(arrt, arrI);
-        index--;
-        if(index > 1) {
-          let all = createOfCombinations1(arr, arre, arr[i], index, collisions);
-          for(let j in all) {
-            arrOfArrs.push(all);
+        //for(let i in arr) {
+        if(arr[0].type == "common") {
+          for(let j in arr[0].id) {
+            let index = arr.length - 1;
+            Logger.Log(arr[0].id.length, "medal");
+            Logger.Log(arr.length - 1, "medical");
+            if(index > 0) {
+              let all = this.createOfCombinations0(arr, [{type: "common", inn: arr[0].in, id: arr[0].id[j]}], j, index, collisions);
+              for(let k in all) {
+                arrOfArrs.push(all[k]);
+              }
+            } else {
+              arrOfArrs.push([{type: "common", inn: arr[0].in, id: arr[0].id[j]}]);
+            }
           }
         } else {
-          arrOfArrs.push(arre);
+            for(let j in arr[0].form) {
+
+            let index = arr.length - 1;
+            Logger.Log(arr[0].form.length, "medal");
+            Logger.Log(arr.length - 1, "medical");
+            if(index > 0) {
+              let all = this.createOfCombinations0(arr, [{type: "material", inn: arr[0].in, form: arr[0].form[j]}], j, index, collisions);
+              for(let k in all) {
+                arrOfArrs.push(all[k]);
+              }
+            } else {
+              arrOfArrs.push([{type: "material", inn: arr[0].in, form: arr[0].form[j]}]);
+            }
+          }
+          }
+        //}//
+      }
+      return arrOfArrs;
+    },
+    createOfCombinations0: function(arr, arrI, jj, index, collisions) {
+      let arrOfArrs = [];
+      //for(let i in arr) {
+      if(arr[0].type == "common") {
+        for(let j in arr[arr.length - index].id) {
+          if(!collisions && arrI == arr[arr.length - index].id[j] && j == jj) continue;
+          //arrI[i] += "_" + arr.substring(arrI.length - 1);
+          let inde = index;
+          inde--;
+          let arrt = arrI.slice(0);
+          arrt.push({type: "common", inn: arr[arr.length - index].in, id: arr[arr.length - index].id[j]});
+          Logger.Log(arrt, "ui");
+          Logger.Log(inde, "uoii");
+          if(inde > 0) {
+            let all = this.createOfCombinations0(arr, arrt, j, inde, collisions);
+            for(let k in all) {
+              arrOfArrs.push(all[k]);
+            }
+          } else {
+            arrOfArrs.push(arrt);
+          }
+        }
+      } else {
+         for(let j in arr[arr.length - index].form) {
+          if(!collisions && arrI == arr[arr.length - index].form[j] && j == jj) continue;
+          //arrI[i] += "_" + arr.substring(arrI.length - 1);
+          let inde = index;
+          inde--;
+          let arrt = arrI.slice(0);
+          arrt.push({type: "material", inn: arr[arr.length - index].in, form: arr[arr.length - index].form[j]});
+          Logger.Log(arrt, "ui");
+          Logger.Log(inde, "uoii");
+          if(inde > 0) {
+            let all = this.createOfCombinations0(arr, arrt, j, inde, collisions);
+            for(let k in all) {
+              arrOfArrs.push(all[k]);
+            }
+          } else {
+            arrOfArrs.push(arrt);
+          }
         }
       }
+      //}
       return arrOfArrs;
     },
     iterate: function(forIterate, variants, index) {
@@ -559,7 +631,7 @@ java.util.Collections.sort(chars);
         Recipes.addFurnace(iddatainput.id, iddatainput.data, iddataoutput.id, iddataoutput.data, prefix);
     },
     addFurnaceFuel: function(input, time, output, isCoalBoiler) {
-      setLoadingTip("Recipes: fuel of " + input.name);
+      setLoadingTip("Recipes: fuel of " + input.material.name);
        let iddatainput = MaterialDictionary.invdata[input.form][input.material.name];
       if(isCoalBoiler) {
         MachineDictionary.steammachines["boiler"].recipes.addRecipe(new FuelRecipe([{type: "material", material: input.material, form: input.form, count: 1}], [{type: "material", material: output.material, form: output.form, count: 1}], time, 1));
@@ -567,59 +639,79 @@ java.util.Collections.sort(chars);
         Recipes.addFurnaceFuel(iddatainput.id, iddatainput.data, time);
     },
     addShaped: function(mask, input, output, prefix, func) {
-        let forIterate = {};
-        let variants = 1;
+        let forIterate = [];
+        let variants = 1
+        let e = 0;
         for(let i in input) {
           if(i%2 != 0) {
-            if(Array.isArray(input[i].id)) {
+            if((input[i].type == "common" ||  input[i].type == "material") && Array.isArray(input[i].id) && input[i].id.length > 1) {
               variants *= input[i].id.length;
-              forIterate[i] = input[i];
+              forIterate[e] = input[i];
+              forIterate[e].in = i;
+              e++;
             }
           }
         }
-        let opc = this.createOfCombinations(forIterate, true);
+        let opc = this.createOfCombinations(forIterate, true, variants);
+        let inputs = [];
         for(let i in opc) {
-          Logger::Log(opc[i], "gty");
+          let inpu = {};
+          for(let o in input) {
+            inpu[o] = input[o];
+          }
+          Logger.Log(i, "gty");
+          for(let j in opc[i]) {
+            Logger.Log(opc[i][j].id, "opl");
+            Logger.Log(opc[i][j].inn, "iok");
+            
+            if(opc[i][j].type == "common") inpu[opc[i][j].inn] = {type: inpu[opc[i][j].inn].type, id: opc[i][j].id, data: inpu[opc[i][j].inn].data};
+            if(opc[i][j].type == "material") inpu[opc[i][j].inn] = {type: inpu[opc[i][j].inn].type, form: opc[i][j].form, material: inpu[opc[i][j].inn]. material};
+          }
+          inputs.push(inpu);
         }
+        if(inputs.length == 0) {
+          inputs[0] = input;
+        }
+        for(let n in inputs) {
         let iddatainput = [];
         let f = 0;
-        for(let i in input) {
+        for(let i in inputs[n]) {
             if(i%2 == 0) {
-                iddatainput[f] = input[i];
+                iddatainput[f] = inputs[n][i];
                 f++;
             } else {
-              if(input[i].type == "material") {
-                let preiddatainput = MaterialDictionary.invdata[input[i].form][input[i].material.name];
+              if(inputs[n][i].type == "material") {
+                let preiddatainput = MaterialDictionary.invdata[inputs[n][i].form][inputs[n][i].material.name];
                 iddatainput[f] = preiddatainput.id;
                 f++;
                 iddatainput[f] = preiddatainput.data;
                 Logger.Log(iddatainput[f], "typeeer");
                 f++;
-              } else if(input[i].type == "pipe_machine") {
-                let preiddatainput = PipeDictionary.pipes[input[i].typed + "_" + input[i].name];
+              } else if(inputs[n][i].type == "pipe_machine") {
+                let preiddatainput = PipeDictionary.pipes[inputs[n][i].typed + "_" + inputs[n][i].name];
                 iddatainput[f] = BlockID.gtblockpipe;
                 f++;
                 iddatainput[f] = preiddatainput;
                 Logger.Log(iddatainput[f], "typeshar");
                 f++;
-              } else if(input[i].type == "machine") {
-                let preiddatainput = MachineDictionary.steammachines[input[i].typed][input[i].name];
+              } else if(inputs[n][i].type == "machine") {
+                let preiddatainput = MachineDictionary.steammachines[inputs[n][i].typed][inputs[n][i].name];
                 iddatainput[f] = BlockID.gtblockmachine;
                 f++;
                 iddatainput[f] = preiddatainput.data;
                 Logger.Log(iddatainput[f], "tpe");
                 f++;
-              } else if(input[i].type == "casing") {
-                let preiddatainput = MachineDictionary.casings[input[i].typed];
+              } else if(inputs[n][i].type == "casing") {
+                let preiddatainput = MachineDictionary.casings[inputs[n][i].typed];
                 iddatainput[f] = BlockID.gtcasing;
                 f++;
                 iddatainput[f] = preiddatainput;
                 Logger.Log(iddatainput[f], "typeer");
                 f++;
-              } else if(input[i].type == "common") {
-                iddatainput[f] = input[i].id;
+              } else if(inputs[n][i].type == "common") {
+                iddatainput[f] = inputs[n][i].id;
                 f++;
-                iddatainput[f] = input[i].data;
+                iddatainput[f] = inputs[n][i].data;
                 Logger.Log(iddatainput[f], "typhe");
                 f++;
               }
@@ -633,7 +725,7 @@ java.util.Collections.sort(chars);
         } else if(output.type == "casing") {
           iddataoutput = {id: BlockID.gtblockmachine, count: output.count, data: MachineDictionary.casings[output.typed]};
         }
-        Recipes.addShaped(iddataoutput, mask, iddatainput, func, prefix);
+        Recipes.addShaped(iddataoutput, mask, iddatainput, func, prefix);}
     },
     addShapedForTool: function(mask, input, output, prefix, func) {
       //setLoadingTip("Recipes: tool of " + input.name);
@@ -1239,7 +1331,7 @@ if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) {RecipeDictionar
         }
     },
     registerAlloy: function(output, EUt) {
-      setLoadingTip("Recipes: alloying of " + output.name);
+      setLoadingTip("Recipes: alloy " + output.name);
       let inputs = output.formula;
         //if(inputs[0].material.type != "INGOT") return;
         if(inputs.length == 0) return;
@@ -1247,25 +1339,37 @@ if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) {RecipeDictionar
        for(let i in inputs) {
          //ifinputs[i].type != "ingot") {}
        }
-        if(inputs.length == 2) MachineDictionary.steammachines["alloy_smelter"].recipes.addRecipe(new Recipe([{type: "material", material: inputs[0].material, form: "ingot", count: inputs[0].count}, {type: "material", material: inputs[1].material, form: "ingot", count: inputs[1].count}], [{material: output, form: "ingot", count: 1}]));
+        if(inputs.length == 2) MachineDictionary.steammachines["alloy_smelter"].recipes.addRecipe(new Recipe([{type: "material", material: inputs[0].material, form: ["ingot", "dust"], count: inputs[0].count}, {type: "material", material: inputs[1].material, form: ["ingot", "dust"], count: inputs[1].count}], [{material: output, form: "ingot", count: 1}]));
         
-        let mask = [];
+        let count = 0;
         for(let i in inputs) {
-            mask.push({material: inputs[i].material, form: "dust"});
+            count += inputs[i].count;
         }
-        RecipeDictionary.addShapeless(mask,  {material: output, form: "dust", count: 1});
+        if(count <= 9) {
+          let mask = [];
+          for(let i in inputs) {
+            for(let j = 0; j < inputs[i].count; j++) {
+              mask.push({material: inputs[i].material, form: "dust"});
+            }
+          }
+          RecipeDictionary.addShapeless(mask,  {material: output, form: "dust", count: 1});
         
         let omask = [];
         for(let i in inputs) {
+          for(let j = 0; j < inputs[i].count; j++) {
             omask.push({material: inputs[i].material, form: "dustTiny"});
-        }
+            }
+          }
         RecipeDictionary.addShapeless(omask,  {material: output, form: "dustTiny", count: 1});
         
         let kmask = [];
         for(let i in inputs) {
+          for(let j = 0; j < inputs[i].count; j++) {
             kmask.push({material: inputs[i].material, form: "dustSmall"});
+          }
         }
         RecipeDictionary.addShapeless(kmask,  {material: output, form: "dustSmall", count: 1});
+      }
     },
     addMachineShaped: function (mask, input, machine) {
       if(machine.type = "machine_steam") {

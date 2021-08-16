@@ -1,3 +1,4 @@
+PipeDictionary.registerMaterial(MaterialDictionary.dict["wood"], 10);
 PipeDictionary.registerMaterial(MaterialDictionary.dict["copper"], 10);
 PipeDictionary.registerMaterial(MaterialDictionary.dict["bronze"], 20);
 PipeDictionary.registerMaterial(MaterialDictionary.dict["steel"], 40);

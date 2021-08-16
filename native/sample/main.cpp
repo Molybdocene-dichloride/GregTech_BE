@@ -17,6 +17,7 @@
 #include <mcpe\RenderParams.hpp>
 #include <mcpe\NativeBlockSource.hpp>
 #include <mcpe\Block.hpp>
+
 #include <horizon\pool.h>
 #include <innercore\block_registry.h>
 #include <innercore\id_conversion_map.h>
@@ -41,8 +42,13 @@ std::map<float, std::shared_ptr<Block>>::iterator cur;
 
 namespace Stones {
 	void ends() {
-		LocalizationSystem::loadTranslations("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/ru_RU.lang");
-		//Logger::debug("shrink", LocalizationSystem::translateToCurrent("item.rotten_flesh.name").c_str());
+		//LocalizationSystem::loadTranslations("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/ru_RU.lang");
+		LocalizationSystem::loadTranslationDir("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/");
+		Logger::debug("shrink", LocalizationSystem::translate("en_US", "gregtech.universal.tooltip.voltage_in").c_str());
+		Logger::debug("shrink", LocalizationSystem::translateToCurrent("gregtech.universal.tooltip.voltage_in").c_str());
+
+		Logger::debug("shrinkG", LocalizationSystem::translate("en_US", "cover.robotic_arm.transfer_mode.description").c_str());
+		Logger::debug("shrinkG", LocalizationSystem::translate("ru_RU", "cover.robotic_arm.transfer_mode.description").c_str());
 
 		Logger::debug("b", "gotoir");
 		Logger::debug("v", patch::to_string<size_t>(blockids.size()).c_str());
@@ -184,26 +190,16 @@ public:
 	}
 };
 
-// entry point for a native library
-// only one MAIN {} allowed per library
 MAIN {
-	// create all modules
-	Module* main_module = new GTOreGenerationDestroyerModule("destroy_ore");
-	//Module* finite_module = new GTFiniteWaterModule("finite");
+	Module* main_module = new GTOreGenerationDestroyerModule("gregtech.rewriting_ore_generator");
+	//Module* localization_module = new LocalizationSystem::CustomLocalizationLoader("gregtech.loading_localizations");
 }
 
-// module version defines version of next functions, that belong to this module
-// if several modules with one name is loaded and several same functions registered, only function with highest version is registered
-// this is required in case of libraries
 JS_MODULE_VERSION(Scientific, 1);
 JS_MODULE_VERSION(Stones, 1);
 JS_MODULE_VERSION(Flags, 1);
 
-// exports module and function to javascript, now you can call WRAP_NATIVE("SampleNativeModule") and a module with single function "hello", receiving two numbers, will be returned
-// signature I(LL) defines a method, receiving two ints, and returning long
 JS_EXPORT(Stones, registerID, "V(II)", (JNIEnv* env, long id, long data) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	Logger::debug("j", "wew");
 	Logger::debug("j", patch::to_string<long>(id).c_str());
 	Logger::debug("jf", patch::to_string<long>(data).c_str());
@@ -215,79 +211,49 @@ JS_EXPORT(Stones, registerID, "V(II)", (JNIEnv* env, long id, long data) {
 	return 0;
 });
 JS_EXPORT(Scientific, NO, "F()", (JNIEnv* env) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapDoubleResult(Scientific::TemperaturePoints::NO);
 });
 JS_EXPORT(Flags, hasFlag, "I(LL)", (JNIEnv* env, long long value1, long long value2) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(hasFlag(value1, value2));
 });
 JS_EXPORT(Flags, generate, "V(II)", (JNIEnv* env, long x, long z) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	generate(x, z);
 	return 0;
 });
 JS_EXPORT(Flags, createFlag, "I(L)", (JNIEnv* env, long long value1) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(createFlag(value1));
 });
 JS_EXPORT(Flags, recepiee, "I(L)", (JNIEnv* env, long long value1) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(recepiee(value1));
 });
 JS_EXPORT(Flags, pack2, "I(LL)", (JNIEnv* env, long long value1, long long value2) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(2, value1, value2));
 });
 JS_EXPORT(Flags, pack3, "I(LLL)", (JNIEnv* env, long long value1, long long value2, long long value3) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(3, value1, value2, value3));
 });
 JS_EXPORT(Flags, pack4, "I(LLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(4, value1, value2, value3, value4));
 });
 JS_EXPORT(Flags, pack5, "I(LLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(5, value1 , value2 , value3 , value4 , value5));
 });
 JS_EXPORT(Flags, pack6, "I(LLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(6, value1 , value2 , value3 , value4 , value5 , value6));
 });
 JS_EXPORT(Flags, pack7, "I(LLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(7, value1 , value2 , value3 , value4 , value5 , value6 , value7));
 });
 JS_EXPORT(Flags, pack8, "I(LLLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7, long long value8) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(8, value1 , value2 , value3 , value4 , value5 , value6 , value7 , value8));
 });
 JS_EXPORT(Flags, pack9, "I(LLLLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7, long long value8, long long value9) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(9, value1 , value2 , value3 , value4 , value5 , value6 , value7 , value8, value9));
 });
 JS_EXPORT(Flags, pack10, "I(LLLLLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7, long long value8, long long value9, long long value10) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(10, value1 , value2 , value3 , value4 , value5 , value6 , value7 , value8, value9, value10));
 });
 JS_EXPORT(Flags, pack11, "I(LLLLLLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7, long long value8, long long value9, long long value10, long long value11) {
-	// for different return types you must call appropriate NativeJS::wrap... functions
-	// if you function is void, use return 0;
 	return NativeJS::wrapIntegerResult(pack(11, value1, value2, value3, value4, value5, value6 , value7 , value8, value9, value10, value11));
 });
 // native js signature rules:

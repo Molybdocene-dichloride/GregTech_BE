@@ -1,46 +1,27 @@
-class Translator {
-  files : File
-  pairs : {[key: String]: TranslationLang}
-  Translator() {}
-  Translator(file : File) {
-    this.addFile(file);
+class PrefixPostfixTranslator {
+  Translator(pre, post) {
+    LocalizationSystem.createNativeObj(pre, post);
   }
-  addFile(file : File) {
-    this.files.push(file);
-    if() this[file.substring(file.last("/") + 1, file.of(file.last("/"), ".") - 1)] = new TranslationLang(e, e[yt]);
-    let e = FileTools.ReadKeyValueFile(file);
-    for(let yt in e) {
-      if(yt) this[e] = new TranslationBundle(yt, e[yt]);
-      
-    }
+  translateToCurrent(str) : String {
+    return LocalizationSystem.translateToCurrent(str);
   }
-  addFiles(xir : File) {
-    for() {
-      this.files.push(file);
-      let e = FileTools.ReadKeyValueFile(file);
-      for(let yt in e) {
-        this[yt] = new TranslationBundle(yt, e[yt]);
-       }
-    }
+  translateToCurrentFormatted(prefix, str) : String {
+    return LocalizationSystem.translateToCurrent(str);
   }
-  add(str : TranslationBundle) {
-    this[str.str1] = str;
-    
+  
+  translate(str) : String {
+    return LocalizationSystem.translateToCurrent(str);
   }
-  add(str : String, str : String) {
-    this[str] = new TranslationPair(str);
+  translateFormatted(prefix, str) : String {
+    return LocalizationSystem.translateToCurrent(str);
   }
-  get(str) : String {
-    return this[str].str2;
- }
-  get(prefix, str) : String {
-    return this[prefix + "." + str + ".name"].str2;
+  
+  translateAll(str) : String {
+    return LocalizationSystem.translateToAll(str);
   }
-  getBundle(prefix, str) : TranslationBundle {
-    return this[prefix + "." + str + ".name"];
+  translateAllFormatted(prefix, str) : String {
+    return LocalizationSystem.translateToAll(str);
   }
-} & {
-   [key: String]: TranslationBundle
 }
 
 class TranslationBundle {

@@ -12,7 +12,7 @@ long long pack(int num, ...) {
 	va_list argptr;
 	long long vac = 0;
 	/* инициализация argptr */
-	va_start (argptr, num);
+	va_start(argptr, num);
 	for(; num; num--) {
 		long long t = va_arg(argptr, long long);
 		if(vac == 0) {

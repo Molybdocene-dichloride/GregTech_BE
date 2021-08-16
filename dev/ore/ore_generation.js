@@ -81,7 +81,7 @@ Callback.addCallback("GenerateChunkUniversal", function (chunkX, chunkZ, random,
     if (!OreDictionary.grids[dimension]) OreDictionary.grids[dimension] = {};
     //granites
     let highbl = OreDictionary.findChunkHighSurface(chunkX, chunkZ);
-    //Flags.generate(chunkX, chunkZ);
+    Flags.generate(chunkX, chunkZ);
     if (!OreDictionary.grids[dimension][mixX + "_" + mixZ]) {
       OreDictionary.grids[dimension][mixX + "_" + mixZ] = {};
       OreDictionary.grids[dimension][mixX + "_" + mixZ].xM = mixX;

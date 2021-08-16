@@ -453,10 +453,10 @@ function MaterialStack(material, count) {
 	this.count = count;
 };
 function of() {
-    let stacks = []; 
-    for(let i in arguments) {
-        stacks[i] == arguments[i];
-    }
+  let stacks = []; 
+  for(let i in arguments) {
+      stacks[i] == arguments[i];
+  }
 	return stacks;
 }
 
