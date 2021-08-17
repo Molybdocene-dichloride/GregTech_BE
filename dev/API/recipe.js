@@ -683,6 +683,7 @@ java.util.Collections.sort(chars);
               if(inputs[n][i].type == "material") {
                 let preiddatainput = MaterialDictionary.invdata[inputs[n][i].form][inputs[n][i].material.name];
                 iddatainput[f] = preiddatainput.id;
+                Logger.Log(iddatainput[f], "tyeer");
                 f++;
                 iddatainput[f] = preiddatainput.data;
                 Logger.Log(iddatainput[f], "typeeer");
@@ -1372,6 +1373,7 @@ if(input.hasFlag(GENERATE_ROD) && input.hasFlag(GENERATE_RING)) {RecipeDictionar
       }
     },
     addMachineShaped: function (mask, input, machine) {
+      Logger.debug("ssdsd", "klang");
       if(machine.type = "machine_steam") {
         let machine0 = {type: machine.type, name: machine.name, count: machine.count, tier: 0};
         let machine1 = {type: machine.type, name: machine.name, count: machine.count, tier: 1};

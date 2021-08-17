@@ -65,7 +65,33 @@ namespace LocalizationSystem {
     void loadTranslations(std::__ndk1::string dir);
     void loadTranslationDir(std::__ndk1::string dir);
 
+    extern std::__ndk1::string name_postfix_t;
+
+    class PrefixPostfixTranslator {
+        std::__ndk1::string pre;
+        std::__ndk1::string post;
+        public:
+        PrefixPostfixTranslator(std::__ndk1::string pre, std::__ndk1::string post = name_postfix_t);
+        std::__ndk1::string translateToCurrent(std::__ndk1::string str);
+        std::__ndk1::string translateToCurrentFormatted(std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format);
+        std::__ndk1::string translate(Localization* lang, std::__ndk1::string str);
+        std::__ndk1::string translateFormatted(Localization* lang, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format);
+        std::__ndk1::string translate(std::__ndk1::string CODE, std::__ndk1::string str);
+        std::__ndk1::string translateFormatted(std::__ndk1::string CODE, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format);
+        std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> translateToAll(std::__ndk1::string str);
+        std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> translateToAllFormatted(std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format);
+    };
+
+    extern PrefixPostfixTranslator ItemTranslator;
+    extern PrefixPostfixTranslator TileTranslator;
+    extern PrefixPostfixTranslator DamageTranslator;
+    extern PrefixPostfixTranslator ActionTranslator;
+    extern PrefixPostfixTranslator CommandsTranslator;
+    extern PrefixPostfixTranslator OptionsTranslator;
+    extern PrefixPostfixTranslator AchievementTranslator;
+
     class CustomLocalizationLoadingModule : public Module { //load custom localization pairs to I18n
+        public:
         CustomLocalizationLoadingModule(const char* id);
 	    virtual void initialize();
     };

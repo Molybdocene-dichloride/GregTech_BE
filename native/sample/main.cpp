@@ -44,11 +44,11 @@ namespace Stones {
 	void ends() {
 		//LocalizationSystem::loadTranslations("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/ru_RU.lang");
 		LocalizationSystem::loadTranslationDir("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/");
-		Logger::debug("shrink", LocalizationSystem::translate("en_US", "gregtech.universal.tooltip.voltage_in").c_str());
-		Logger::debug("shrink", LocalizationSystem::translateToCurrent("gregtech.universal.tooltip.voltage_in").c_str());
+		Logger::debug("shrink", LocalizationSystem::ItemTranslator.translateToCurrent("invalid").c_str());
+		Logger::debug("shrink", LocalizationSystem::ItemTranslator.translate("en_US", "invalid").c_str());
 
-		Logger::debug("shrinkG", LocalizationSystem::translate("en_US", "cover.robotic_arm.transfer_mode.description").c_str());
-		Logger::debug("shrinkG", LocalizationSystem::translate("ru_RU", "cover.robotic_arm.transfer_mode.description").c_str());
+		Logger::debug("bigger", LocalizationSystem::ItemTranslator.translateToCurrent("rotten_flesh").c_str());
+		Logger::debug("bigger", LocalizationSystem::ItemTranslator.translate("en_US", "rotten_flesh").c_str());
 
 		Logger::debug("b", "gotoir");
 		Logger::debug("v", patch::to_string<size_t>(blockids.size()).c_str());
@@ -159,7 +159,7 @@ public:
 				controller->prevent();
 				return 0;
 			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);*/
-			
+			//Hook
 			HookManager::addCallback(SYMBOL("mcpe", "_ZNK10OreFeature5placeER17IBlockWorldGenAPIRK8BlockPosR6RandomR12RenderParams"), LAMBDA((HookManager::CallbackController* controller, IBlockWorldGenAPI& gen, BlockPos const& pos, Random& rand, RenderParams& rend), {	
 				controller->prevent();
 				return 0;
@@ -191,13 +191,14 @@ public:
 };
 
 MAIN {
-	Module* main_module = new GTOreGenerationDestroyerModule("gregtech.rewriting_ore_generator");
-	//Module* localization_module = new LocalizationSystem::CustomLocalizationLoader("gregtech.loading_localizations");
+	Module* main_module = new GTOreGenerationDestroyerModule("gregtech.ore_generator_module");
+	Module* localization_module = new LocalizationSystem::CustomLocalizationLoadingModule("gregtech.loading_localizations_module");
 }
 
 JS_MODULE_VERSION(Scientific, 1);
 JS_MODULE_VERSION(Stones, 1);
 JS_MODULE_VERSION(Flags, 1);
+JS_MODULE_VERSION(LocalizationSystem, 1);
 
 JS_EXPORT(Stones, registerID, "V(II)", (JNIEnv* env, long id, long data) {
 	Logger::debug("j", "wew");
@@ -255,6 +256,57 @@ JS_EXPORT(Flags, pack10, "I(LLLLLLLLLL)", (JNIEnv* env, long long value1, long l
 });
 JS_EXPORT(Flags, pack11, "I(LLLLLLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7, long long value8, long long value9, long long value10, long long value11) {
 	return NativeJS::wrapIntegerResult(pack(11, value1, value2, value3, value4, value5, value6 , value7 , value8, value9, value10, value11));
+});
+
+JS_EXPORT_COMPLEX(LocalizationSystem, translate, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	Logger::debug("gh", patch::to_string<NativeJS::ComplexArgs::ValueType>(ca.get("key").type).c_str());
+	return NativeJS::wrapStringResult(env, LocalizationSystem::translate(ca.get("lang").asString(), ca.get("key").asString()).c_str());
+});
+JS_EXPORT_COMPLEX(LocalizationSystem, translateToCurrent, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	return NativeJS::wrapStringResult(env, LocalizationSystem::translateToCurrent(ca.get("key").asString()).c_str());
+});
+JS_EXPORT_COMPLEX(LocalizationSystem, insert, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	LocalizationSystem::insert(ca.get("lang").asString(), ca.get("key").asString(), ca.get("val").asString());
+	return 0;
+});
+JS_EXPORT_COMPLEX(LocalizationSystem, insertToCurrent, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	LocalizationSystem::insertToCurrent(ca.get("key").asString(), ca.get("val").asString());
+	return 0;
+});
+JS_EXPORT_COMPLEX(LocalizationSystem, chooseLocalization, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	LocalizationSystem::chooseLocalization(ca.get("lang").asString());
+	return 0;
+});
+JS_EXPORT(LocalizationSystem, getCurrentLanguage, "S()", (JNIEnv* env) {
+	return NativeJS::wrapStringResult(env, LocalizationSystem::getCurrentLanguage().c_str());
+});
+JS_EXPORT_COMPLEX(LocalizationSystem, loadTranslations, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	LocalizationSystem::loadTranslations(ca.get("path").asString());
+	return 0;
+});
+JS_EXPORT_COMPLEX(LocalizationSystem, loadTranslationDir, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	LocalizationSystem::loadTranslationDir(ca.get("path").asString());
+	return 0;
+});
+//technical for JS PrefixPostfixTranslator
+JS_EXPORT_COMPLEX(LocalizationSystem, _createNativeTranslatorObj, "I(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	if(ca.get("pre").asString() == "item") {
+		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(&LocalizationSystem::ItemTranslator));
+	} else if(ca.get("pre").asString() == "tile") {
+		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(&LocalizationSystem::TileTranslator));
+	}
+	return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(new LocalizationSystem::PrefixPostfixTranslator(ca.get("pre").asString(), ca.get("post").asString())));
+});
+JS_EXPORT_COMPLEX(LocalizationSystem, _deleteNativeTranslatorObj, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	delete ca.get("_pointer").asPointer();
+	return 0;
+});
+
+JS_EXPORT_COMPLEX(LocalizationSystem, _translate, "F(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translate(ca.get("lang").asString(), ca.get("key").asString()));
+});
+JS_EXPORT_COMPLEX(LocalizationSystem, _translateToCurrent, "F(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translateToCurrent(ca.get("key").asString()));
 });
 // native js signature rules:
 /* signature represents parameters and return type, RETURN_TYPE(PARAMETERS...) example: S(OI)

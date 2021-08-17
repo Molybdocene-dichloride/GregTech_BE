@@ -1,5 +1,6 @@
 #include <stl/sstream>
 
+#include <nativejs.h>
 #include <logger.h>
 
 #include <toString.hpp>
@@ -88,4 +89,5 @@ void crutch() {
     patch::to_string<float>(0.0f);
     std::__ndk1::string b = patch::to_string<bool>(0);
     patch::to_string<void const*>((void const*) &b);
+    patch::to_string<NativeJS::ComplexArgs::ValueType>(NativeJS::ComplexArgs::ValueType::DOUBLE);
 }

@@ -59,6 +59,3 @@ GTValues = {
     //because forge is too fucking retarded to cache results or at least do not create fucking
     //immutable collections every time you retrieve indexed mod list
 }
-const Scientific = WRAP_NATIVE("Scientific");
-const Flags = WRAP_NATIVE("Flags");
-const Stones = WRAP_NATIVE("Stones");

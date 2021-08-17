@@ -109,48 +109,43 @@ namespace LocalizationSystem {
     }
     std::__ndk1::string name_postfix_t = "name";
 
-    class PrefixPostfixTranslator {
-        std::__ndk1::string pre;
-        std::__ndk1::string post;
-        public:
-        PrefixPostfixTranslator(std::__ndk1::string pre, std::__ndk1::string post = name_postfix_t) {
-            this->pre = pre;
-            this->post = post;
-        }
-        std::__ndk1::string translateToCurrent(std::__ndk1::string str) {
-            return LocalizationSystem::translateToCurrent(pre + "." + str + "." + post);
-        }
-        std::__ndk1::string translateToCurrentFormatted(std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
-            return patch::to_formatedString(LocalizationSystem::translateToCurrent(pre + "." + str + "." + post), format);
-        }
+    PrefixPostfixTranslator::PrefixPostfixTranslator(std::__ndk1::string pre, std::__ndk1::string post) {
+        this->pre = pre;
+        this->post = post;
+    }
+    std::__ndk1::string PrefixPostfixTranslator::translateToCurrent(std::__ndk1::string str) {
+        return LocalizationSystem::translateToCurrent(pre + "." + str + "." + post);
+    }
+    std::__ndk1::string PrefixPostfixTranslator::translateToCurrentFormatted(std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
+        return patch::to_formatedString(LocalizationSystem::translateToCurrent(pre + "." + str + "." + post), format);
+    }
         
-        std::__ndk1::string translate(Localization* lang, std::__ndk1::string str) {
-            return LocalizationSystem::translate(lang, pre + "." + str + "." + post);
-        }
-        std::__ndk1::string translateFormatted(Localization* lang, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
-            return patch::to_formatedString(LocalizationSystem::translate(lang, pre + "." + str + "." + post), format);
-        }
+    std::__ndk1::string PrefixPostfixTranslator::translate(Localization* lang, std::__ndk1::string str) {
+        return LocalizationSystem::translate(lang, pre + "." + str + "." + post);
+    }
+    std::__ndk1::string PrefixPostfixTranslator::translateFormatted(Localization* lang, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
+        return patch::to_formatedString(LocalizationSystem::translate(lang, pre + "." + str + "." + post), format);
+    }
 
-        std::__ndk1::string translate(std::__ndk1::string CODE, std::__ndk1::string str) {
-            return LocalizationSystem::translate(CODE, pre + "." + str + "." + post);
-        }
-        std::__ndk1::string translateFormatted(std::__ndk1::string CODE, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
-            return patch::to_formatedString(LocalizationSystem::translate(CODE, pre + "." + str + "." + post), format);
-        }
+    std::__ndk1::string PrefixPostfixTranslator::translate(std::__ndk1::string CODE, std::__ndk1::string str) {
+        return LocalizationSystem::translate(CODE, pre + "." + str + "." + post);
+    }
+    std::__ndk1::string PrefixPostfixTranslator::translateFormatted(std::__ndk1::string CODE, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
+        return patch::to_formatedString(LocalizationSystem::translate(CODE, pre + "." + str + "." + post), format);
+    }
 
-        std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> translateToAll(std::__ndk1::string str) {
-            return LocalizationSystem::translateToAll(pre + "." + str + "." + post);
+    std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> PrefixPostfixTranslator::translateToAll(std::__ndk1::string str) {
+        return LocalizationSystem::translateToAll(pre + "." + str + "." + post);
+    }
+    std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> PrefixPostfixTranslator::translateToAllFormatted(std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
+        std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> mp;
+        std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> bstr = LocalizationSystem::translateToAll(pre + "." + str + "." + post);
+        std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>::iterator it;
+        for(it = bstr.begin(); it != bstr.end(); ++it) {
+            mp.insert(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(it->first, patch::to_formatedString(it->second, format)));
         }
-        std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> translateToAllFormatted(std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
-            std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> mp;
-            std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> bstr = LocalizationSystem::translateToAll(pre + "." + str + "." + post);
-            std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>::iterator it;
-            for(it = bstr.begin(); it != bstr.end(); ++it) {
-                mp.insert(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(it->first, patch::to_formatedString(it->second, format)));
-            }
-            return mp;
-        }
-    };
+        return mp;
+    }
     PrefixPostfixTranslator ItemTranslator("item");
     PrefixPostfixTranslator TileTranslator("tile");
     PrefixPostfixTranslator DamageTranslator("death", "");
@@ -163,6 +158,7 @@ namespace LocalizationSystem {
 
     CustomLocalizationLoadingModule::CustomLocalizationLoadingModule(const char* id) : Module(id) {};
     void CustomLocalizationLoadingModule::initialize() {
+        DLHandleManager::initializeHandle("libminecraftpe.so", "mcpe");
         HookManager::addCallback(SYMBOL("mcpe", "_ZN4I18n14chooseLanguageERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE"), LAMBDA((HookManager::CallbackController* controller), {
 			for(it = custom[LocalizationSystem::getCurrentLanguage()].begin(); it != custom[LocalizationSystem::getCurrentLanguage()].end(); ++it) {
                 LocalizationSystem::insertToCurrent(it->first, it->second);

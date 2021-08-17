@@ -1,27 +1,21 @@
 class PrefixPostfixTranslator {
-  Translator(pre, post) {
-    LocalizationSystem.createNativeObj(pre, post);
+  obj: number,
+  PrefixPostfixTranslator(pre, post) {
+    LocalizationSystem._createNativeObj({pre: pre, post: post});
   }
   translateToCurrent(str) : String {
-    return LocalizationSystem.translateToCurrent(str);
+    return LocalizationSystem._translateToCurrent({_pointer: , str});
   }
-  translateToCurrentFormatted(prefix, str) : String {
-    return LocalizationSystem.translateToCurrent(str);
-  }
+  /*translateToCurrentFormatted(prefix, str) : String {
+    return LocalizationSystem._translateToCurrent(str);
+  }*/
   
   translate(str) : String {
-    return LocalizationSystem.translateToCurrent(str);
+    return LocalizationSystem._translateToCurrent({str});
   }
-  translateFormatted(prefix, str) : String {
-    return LocalizationSystem.translateToCurrent(str);
-  }
-  
-  translateAll(str) : String {
-    return LocalizationSystem.translateToAll(str);
-  }
-  translateAllFormatted(prefix, str) : String {
-    return LocalizationSystem.translateToAll(str);
-  }
+  /*translateFormatted(prefix, str) : String {
+    return LocalizationSystem._translateToCurrent(str);
+  }*/
 }
 
 class TranslationBundle {

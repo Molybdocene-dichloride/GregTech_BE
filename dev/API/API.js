@@ -1,6 +1,6 @@
-const setLoadingTip = ModAPI.requireGlobal("MCSystem.setLoadingTip");
-
+setLoadingText("Loading Mods: GregTech Bedrock Edition");
 setLoadingTip("Register textures");
+
 var copyed = null;
 let IconTransformator = {
   ARGBtoRGBA: function (colour) {
