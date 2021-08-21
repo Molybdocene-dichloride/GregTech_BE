@@ -4,7 +4,9 @@
 		"lib": [
 			"ESNext"
 		],
-		"outFile": "/home/ferrocene/Desktop/GT/toolchain/build/project/sources/main.js",
+		"outDir": "C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\src\\dev\\",
+		"composite": true,
+		"declaration": true,
 		"experimentalDecorators": true,
 		"downlevelIteration": true,
 		"allowJs": true
@@ -15,18 +17,10 @@
 		"webpack"
 	],
 	"include": [
-		"import.js",
-		"API.js",
-		"API/net.js",
-		"sound.js",
-		"meta.js",
-		"ore.js",
-		"machine/pipe.js",
-		"machine/machine.js",
-		"recipe.js",
-		"tree.js"
+		"API/machine/translation.ts"
 	],
 	"files": [
+		"C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\toolchain\\declarations\\gregtech.d.ts",
 		"C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\toolchain\\declarations\\core-engine.d.ts",
 		"C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\toolchain\\declarations\\android-declarations.d.ts",
 		"C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\toolchain\\declarations\\android.d.ts"

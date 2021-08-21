@@ -1,23 +1,20 @@
-class PrefixPostfixTranslator {
-  _pointer: number;
-  PrefixPostfixTranslator(pre: String, post: String) {
-    this._pointer = LocalizationSystem._createNativeTranslatorObj({pre: pre, post: post});
-  }
-  translateToCurrent(key: String) : String {
-    return LocalizationSystem._translateToCurrent({_pointer: this._pointer, key: key});
-  }
-  /*translateToCurrentFormatted(key: String) : String {
-    return LocalizationSystem._translateToCurrent(str);
-  }*/
-  
-  translate(lang: String, key: String) : String {
-    return LocalizationSystem._translate({_pointer: this._pointer, lang: lang, key: key});
-  }
-  /*translateFormatted(lang: String, key: String) : String {
-    return LocalizationSystem._translateToCurrent(str);
-  }*/
-}
-
+var PrefixPostfixTranslator = /** @class */ (function () {
+    function PrefixPostfixTranslator() {
+    }
+    PrefixPostfixTranslator.prototype.PrefixPostfixTranslator = function (pre, post) {
+        this._pointer = LocalizationSystem._createNativeObj({ pre: pre, post: post });
+    };
+    PrefixPostfixTranslator.prototype.translateToCurrent = function (key) {
+        return LocalizationSystem._translateToCurrent({ _pointer: this._pointer, key: key });
+    };
+    /*translateToCurrentFormatted(key: String) : String {
+      return LocalizationSystem._translateToCurrent(str);
+    }*/
+    PrefixPostfixTranslator.prototype.translate = function (lang, key) {
+        return LocalizationSystem._translate({ _pointer: this._pointer, lang: lang, key: key });
+    };
+    return PrefixPostfixTranslator;
+}());
 /*class TranslationBundle {
   unlocalized : String;
   TranslationBundle() {}
@@ -76,4 +73,4 @@ class TranslationPair {
     this.unlocalized = unlocalized;
     this.localized = localized;
   }
-}*/
+}*/ 

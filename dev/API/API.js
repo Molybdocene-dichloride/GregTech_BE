@@ -1,5 +1,5 @@
 setLoadingText("Loading Mods: GregTech Bedrock Edition");
-setLoadingTip("Register textures");
+setLoadingTip.setText("Register textures");
 
 var copyed = null;
 let IconTransformator = {

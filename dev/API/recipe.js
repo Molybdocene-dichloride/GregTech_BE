@@ -40,6 +40,7 @@ function RecipeMap(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs,
             }
           }
         }
+        if(variants == 1) variants = 0;
         let opc = RecipeDictionary.createOfCombinations(forIterate, true, variants);
         let inputs = [];
         for(let i in opc) {
@@ -639,6 +640,19 @@ java.util.Collections.sort(chars);
         Recipes.addFurnaceFuel(iddatainput.id, iddatainput.data, time);
     },
     addShaped: function(mask, input, output, prefix, func) {
+
+        let ru = RecipeUtil.shapedUtil(input, mask);
+        Logger.Log(ru.variants);
+        for(let i in ru.mask) {
+          Logger.Log(ru.mask[i], "kiop");
+        }
+        for(let i in ru.unraw) {
+          Logger.Log(ru.unraw[i], "kiop");
+        }
+        for(let i in ru.raw) {
+          Logger.Log(ru.raw[i], "kiop");
+        }
+
         let forIterate = [];
         let variants = 1
         let e = 0;
@@ -1492,9 +1506,10 @@ if(material.type == "GEM") RecipeDictionary.addShapedForTool(["x x", "xxх"], ['
     },
 };
 
+const wrr = WRAP_JAVA("com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry");
 Callback.addCallback("PostLoaded", function() {
   setLoadingTip("Register recipies for crafting table");
-  let t = new com.zhekasmirnov.innercore.api.mod.recipes.workbench.WorkbenchRecipeRegistry().getClass();
+  let t = new wrr().getClass();
   
   let field = t.getDeclaredField("componentQuickAccess");
   field.setAccessible(true);

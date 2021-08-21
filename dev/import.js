@@ -9,4 +9,4 @@ IMPORT("SoundAPI");
 IMPORT("Vector");
 
 const setLoadingTip = ModAPI.requireGlobal("MCSystem.setLoadingTip");
-const setLoadingText = WRAP_JAVA("com.zhekasmirnov.innercore.ui.LoadingUI.setText");
+const setLoadingText = WRAP_JAVA("com.zhekasmirnov.innercore.ui.LoadingUI");

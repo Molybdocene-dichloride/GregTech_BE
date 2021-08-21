@@ -1,16 +1,16 @@
 namespace RotationTransforms {
-  worldRotationToBlockRotation: function (rotation, rotationOfBlock) {
+  function worldRotationToBlockRotation(rotation, rotationOfBlock) : number {
     Logger.Log(rotationOfBlock, "@seao");
     if(rotationOfBlock == 3) {
       return rotation;
     }
     let e;
-    for(let i = 0; i < MetaRenderer.rotationMap[3].length; i++) {
+    for(let i = 0; i < MetaRenderer.rotationMap[3].length; i++) : number {
       if(MetaRenderer.rotationMap[3][i] == rotation) e = i;
     }
     return MetaRenderer.rotationMap[rotationOfBlock][e];
-  },
-  blockRotationToWorldRotation: function (rotation, rotationOfBlock) {
+  }
+  function blockRotationToWorldRotation(rotation, rotationOfBlock) {
           Logger.Log(rotationOfBlock, "@sas");
           if(rotationOfBlock == 3) {
             return rotation;
@@ -47,11 +47,11 @@ namespace Machine {
     }
   }
   export abstract class FuelRecipe implements IRecipe {
-    this.inputs = [];
-    this.outputs = [];
-    this.duration = [];
-    this.EUt = 0;
-    constructor(inputs, outputs, duration, EUt, postHandler) {
+    inputs = [];
+    outputs = [];
+    duration = [];
+    EUt = 0;
+    FuelRecipe(inputs: String[], outputs: String[], duration: number[], EUt: number, postHandler: String) {
       this.inputs = inputs;
       this.outputs = outputs;
       this.duration = duration;
@@ -70,7 +70,7 @@ namespace Machine {
     maxFluidInputs: number = 0;
     minFluidOutputs: number = 0;
     maxFluidOutputs: number = 0;
-    this.defaultEUt: number = 0;
+    defaultEUt: number = 0;
     constructor(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs, defaultEUt) {
       this.minInputs = minInputs;
       this.maxInputs = maxInputs;
@@ -125,7 +125,7 @@ namespace Machine {
         }
     }
   } & {
-     [key: string]: Machine.Recipe 
+     [key: String]: Machine.Recipe 
   }
   
   let ItemInstances = {
@@ -135,13 +135,13 @@ namespace Machine {
 export abstract class FuelMap implements IRecipeMap {
   minInputs: number = 0;
   maxInputs: number = 0;
-    minOutputs: number = 0;
-    maxOutputs: number = 0;
-    minFluidInputs: number = 0;
-    maxFluidInputs: number = 0;
-    minFluidOutputs: number = 0;
-    maxFluidOutputs: number = 0;
-    this.defaultEUt: number = 0;
+  minOutputs: number = 0;
+  maxOutputs: number = 0;
+  minFluidInputs: number = 0;
+  maxFluidInputs: number = 0;
+  minFluidOutputs: number = 0;
+  maxFluidOutputs: number = 0;
+  defaultEUt: number = 0;
   constructor(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs, defaultEUt) {
       this.minInputs = minInputs;
       this.maxInputs = maxInputs;
@@ -197,10 +197,10 @@ export abstract class FuelMap implements IRecipeMap {
     ENERGY
   }
   export class ElectricStack {
-    id: string = 0,
-    amount: number = 0,
-    current: number = 0
-    limit: number = 0,
+    id: number = 0;
+    amount: number = 0;
+    current: number = 0;
+    limit: number = 0;
     
     constructor(id: string, amount: number, current : number, limit: number) {
       this.id = id;
@@ -214,10 +214,10 @@ export abstract class FuelMap implements IRecipeMap {
     }
   }
   export class FluidStack {
-    private id: string = null,
-    private amount: number = 0,
-    private limit: number = 0,
-    constId: boolean = false,
+    private id: string = null;
+    private amount: number = 0;
+    private limit: number = 0;
+    constId: boolean = false;
     constructor(amount: number, limit: number) {
       this.amount = amount;
       this.limit = limit;
@@ -330,9 +330,9 @@ prepareStack(index: number, stack : ElectricStack, isZero: boolean) : void {
 }
   }
   export class FluidStorage {
-  limit: number = 0,
-  limits: number[] = [],
-  stacks: Machine.FluidStack[] = [],
+  limit: number = 0;
+  limits: number[] = [];
+  stacks: Machine.FluidStack[] = [];
   
   constructor(limit: number) {
       this.limit = limit;

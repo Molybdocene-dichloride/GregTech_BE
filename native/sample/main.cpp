@@ -259,7 +259,6 @@ JS_EXPORT(Flags, pack11, "I(LLLLLLLLLLL)", (JNIEnv* env, long long value1, long 
 });
 
 JS_EXPORT_COMPLEX(LocalizationSystem, translate, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	Logger::debug("gh", patch::to_string<NativeJS::ComplexArgs::ValueType>(ca.get("key").type).c_str());
 	return NativeJS::wrapStringResult(env, LocalizationSystem::translate(ca.get("lang").asString(), ca.get("key").asString()).c_str());
 });
 JS_EXPORT_COMPLEX(LocalizationSystem, translateToCurrent, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
@@ -290,23 +289,26 @@ JS_EXPORT_COMPLEX(LocalizationSystem, loadTranslationDir, "V(SS)", (JNIEnv* env,
 });
 //technical for JS PrefixPostfixTranslator
 JS_EXPORT_COMPLEX(LocalizationSystem, _createNativeTranslatorObj, "I(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	if(ca.get("pre").asString() == "item") {
-		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(&LocalizationSystem::ItemTranslator));
-	} else if(ca.get("pre").asString() == "tile") {
-		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(&LocalizationSystem::TileTranslator));
+	if(LocalizationSystem::trmap.find(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())) != trmap.end()) {
+		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(trmap[std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())]));
+	} else {
+		LocalizationSystem::PrefixPostfixTranslator* ppt = new LocalizationSystem::PrefixPostfixTranslator(ca.get("pre").asString(), ca.get("post").asString());
+		LocalizationSystem::trmap[std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())] = ppt;
+		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(ppt));
 	}
-	return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(new LocalizationSystem::PrefixPostfixTranslator(ca.get("pre").asString(), ca.get("post").asString())));
 });
 JS_EXPORT_COMPLEX(LocalizationSystem, _deleteNativeTranslatorObj, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	delete ca.get("_pointer").asPointer();
+	LocalizationSystem::PrefixPostfixTranslator* ppt = (LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer();
+	LocalizationSystem::trmap.erase(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ppt->pre, ppt->post));
+	delete ppt;
 	return 0;
 });
 
 JS_EXPORT_COMPLEX(LocalizationSystem, _translate, "F(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translate(ca.get("lang").asString(), ca.get("key").asString()));
+	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translate(ca.get("lang").asString(), ca.get("key").asString()).c_str());
 });
 JS_EXPORT_COMPLEX(LocalizationSystem, _translateToCurrent, "F(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translateToCurrent(ca.get("key").asString()));
+	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translateToCurrent(ca.get("key").asString()).c_str());
 });
 // native js signature rules:
 /* signature represents parameters and return type, RETURN_TYPE(PARAMETERS...) example: S(OI)
