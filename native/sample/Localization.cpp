@@ -113,6 +113,8 @@ namespace LocalizationSystem {
     PrefixPostfixTranslator::PrefixPostfixTranslator(std::__ndk1::string pre, std::__ndk1::string post) {
         this->pre = pre;
         this->post = post;
+
+        LocalizationSystem::trmap.insert(std::__ndk1::pair<std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>, PrefixPostfixTranslator*>(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(this->pre, this->post), this));
     }
     std::__ndk1::string PrefixPostfixTranslator::translateToCurrent(std::__ndk1::string str) {
         return LocalizationSystem::translateToCurrent(pre + "." + str + "." + post);
@@ -147,17 +149,19 @@ namespace LocalizationSystem {
         }
         return mp;
     }
+    PrefixPostfixTranslator::~PrefixPostfixTranslator() {
+        LocalizationSystem::trmap.erase(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(this->pre, this->post));
+    }
 
-    PrefixPostfixTranslator* ItemTranslator("item");
-    PrefixPostfixTranslator* TileTranslator("tile");
-    PrefixPostfixTranslator* DamageTranslator("death", "");
-    PrefixPostfixTranslator* ActionTranslator("action");
-    PrefixPostfixTranslator* CommandsTranslator("commands");
-    PrefixPostfixTranslator* OptionsTranslator("options");
-    PrefixPostfixTranslator* AchievementTranslator("achievement");
-
-    std::__ndk1::map<std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>, PrefixPostfixTranslator*> trmap = {{new std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>("item", ".name"), ItemTranslator}, 
-        {new std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>("tile", ".name"), TileTranslator}};
+    std::__ndk1::map<std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>, PrefixPostfixTranslator*> trmap;
+    
+    PrefixPostfixTranslator* ItemTranslator = new PrefixPostfixTranslator("item");
+    PrefixPostfixTranslator* TileTranslator = new PrefixPostfixTranslator("tile");
+    PrefixPostfixTranslator* DamageTranslator = new PrefixPostfixTranslator("death", "");
+    PrefixPostfixTranslator* ActionTranslator = new PrefixPostfixTranslator("action");
+    PrefixPostfixTranslator* CommandsTranslator = new PrefixPostfixTranslator("commands");
+    PrefixPostfixTranslator* OptionsTranslator = new PrefixPostfixTranslator("options");
+    PrefixPostfixTranslator* AchievementTranslator = new PrefixPostfixTranslator("achievement");
 
     std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>::iterator it;
 
@@ -177,23 +181,19 @@ namespace LocalizationSystem {
 }
 
 namespace FurnaceSystem {
-	std::__ndk1::map<ItemStack, ItemStack> custom;
-	void addFurnaceRecipes(int id1, int data1, int count1, int id1, int data2, int count2) {
-		Item* item1 = ItemRegistry::getItemById(id1);
-		Item* item2 = ItemRegistry::getItemById(id2);
-		addFurnaceRecipes(item1, data1, count1, item2, data2, count2);
+    std::__ndk1::map<ItemStackInfo, ItemStackInfo> custom;
+    void addFurnaceRecipes(ItemStack& item1, ItemStack& item2) {
+		custom.insert(std::__ndk1::pair<ItemStackInfo, ItemStackInfo>(ItemStackInfo(item1), ItemStackInfo(item2)));
 	}
-	void addFurnaceRecipes(Item& item1, int data1, int count1, Item& item2, int data2, int count2) {
-		ItemStack itemS1(item1, data1, count1);
-		ItemStack itemS2(item2, data2, count2);
-		addFurnaceRecipes(itemS1, itemS2);
+    void addFurnaceRecipes(Item& item1, int data1, int count1, Item& item2, int data2, int count2) {
+        custom.insert(std::__ndk1::pair<ItemStackInfo, ItemStackInfo>(ItemStackInfo(item1, data1, count1), ItemStackInfo(item2, data1, count1)));
 	}
-	void addFurnaceRecipes(ItemStack& item1, ItemStack& item2) {
-		custom.insert(std::__ndk1::pair<ItemStack, ItemStack>(item1, item2));
+	void addFurnaceRecipes(int id1, int data1, int count1, int id2, int data2, int count2) {
+        custom.insert(std::__ndk1::pair<ItemStackInfo, ItemStackInfo>(ItemStackInfo(id1, data1, count1), ItemStackInfo(id1, data1, count1)));
 	}
     class GTFurnaceModule : public Module { //adding custom recipes to furnace
     public:
-	GTFurnace(const char* id): Module(id) {};
+	GTFurnaceModule(const char* id): Module(id) {};
 	    virtual void initialize() {	
         	HookManager::addCallback(SYMBOL("mcpe", "_ZNK7Recipes22getFurnaceRecipeResultERK13ItemStackBaseRK12HashedString"), LAMBDA((HookManager::CallbackController* controller, ItemStackBase const& item, HashedString const& prefix), {
 				Logger::debug("gh", patch::to_string<bool>(controller->hasResult()).c_str());
@@ -206,4 +206,4 @@ namespace FurnaceSystem {
 			}, ), HookManager::RETURN | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
 	    }
     };
-};
+}

@@ -780,8 +780,8 @@ this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, r
                         for(let i in this.data.type.recipes) {
                         if(this.data.type.recipes[i] && this.data.type.recipes[i].type && this.data.type.recipes[i].type == "fuel") {
                         this.data.i = this.data.type.recipes[i];
-                        let irdata = MaterialDictionary.invdata[this.data.type.recipes[i].inputs[0].form][this.data.type.recipes[i].inputs[0].material.name];
-                        let irdata1 = MaterialDictionary.invdata[this.data.type.recipes[i].outputs[0].form][this.data.type.recipes[i].outputs[0].material.name];
+                        let irdata = MaterialDictionary.invdata[this.data.type.recipes[i].input[0].form][this.data.type.recipes[i].input[0].material.name];
+                        let irdata1 = MaterialDictionary.invdata[this.data.type.recipes[i].output[0].form][this.data.type.recipes[i].output[0].material.name];
                       if(this.container.getSlot("coal0").id == irdata.id && this.container.getSlot("coal0").data == irdata.data && this.container.getSlot("coal0").count > 0) {
                       this.container.setSlot("coal0", irdata.id, this.container.getSlot("coal0").count - 1, irdata.data);
                       
@@ -1019,9 +1019,9 @@ Logger.Log(MachineDictionary.steammachines[screenName.substring(0, screenName.in
              let checked = true;
               for(let j = 0; j < this.data.type.recipes.maxInputs; j++) {
                 Logger.Log(j, "???");
-                Logger.Log(this.data.type.recipes.get[t][i].inputs[j].count, "zooi");
+                Logger.Log(this.data.type.recipes.get[t][i].input[j].count, "zooi");
                 Logger.Log(this.container.getSlot("input" + j).count, "zouu");
-                if(!(this.data.type.recipes.get[t][i].inputs[j].count <= this.container.getSlot("input" + j).count)) {
+                if(!(this.data.type.recipes.get[t][i].input[j].count <= this.container.getSlot("input" + j).count)) {
                   checked = false;
                   break;
                 }
@@ -1050,15 +1050,15 @@ Logger.Log(MachineDictionary.steammachines[screenName.substring(0, screenName.in
      input: function(j) {
        for(let i = 0; i < this.data.type.recipes.maxInputs; i++) {
               //this.data["input" + i] = j[i];
-              if(j.inputs[i].type == "material") {
-              iddata = MaterialDictionary.invdata[j.inputs[i].form][j.inputs[i].material.name];
-            } else if(j.inputs[i].type == "ore") {
-              iddata = {id: OreDictionary.data[j.inputs[i].material.name].id};
+              if(j.input[i].type == "material") {
+              iddata = MaterialDictionary.invdata[j.input[i].form][j.input[i].material.name];
+            } else if(j.input[i].type == "ore") {
+              iddata = {id: OreDictionary.data[j.input[i].material.name].id};
             }
-          if(j.inputs[i].type == "material") {
-              this.container.setSlot("input" + i, this.container.getSlot("input" + i).id, this.container.getSlot("input" + i).count - j.inputs[i].count, this.container.getSlot("input" + i).data /*this.container.getSlot("input" + i).extra*/);
-          } else if(j.inputs[i].type == "ore") {
-            this.container.setSlot("input" + i, this.container.getSlot("input" + i).id, this.container.getSlot("input" + i).count - j.inputs[i].count, this.container.getSlot("input" + i).data /*this.container.getSlot("input" + i).extra*/);
+          if(j.input[i].type == "material") {
+              this.container.setSlot("input" + i, this.container.getSlot("input" + i).id, this.container.getSlot("input" + i).count - j.input[i].count, this.container.getSlot("input" + i).data /*this.container.getSlot("input" + i).extra*/);
+          } else if(j.input[i].type == "ore") {
+            this.container.setSlot("input" + i, this.container.getSlot("input" + i).id, this.container.getSlot("input" + i).count - j.input[i].count, this.container.getSlot("input" + i).data /*this.container.getSlot("input" + i).extra*/);
           }
               this.container.validateSlot("input" + i);
               Logger.Log("this", "decoun");
@@ -1084,7 +1084,7 @@ Logger.Log(MachineDictionary.steammachines[screenName.substring(0, screenName.in
        Logger.Log("xcom ui");
        let checked = true;
        for(let i = 0; i < this.data.type.recipes.maxOutputs; i++) {
-           let iddata = MaterialDictionary.invdata[j.outputs[i].form][j.outputs[i].material.name];
+           let iddata = MaterialDictionary.invdata[j.output[i].form][j.output[i].material.name];
            
            Logger.Log(this.container.getSlot("output" + i).id, "details");
            Logger.Log(this.container.getSlot("output" + i).data, "details");
@@ -1092,9 +1092,9 @@ Logger.Log(MachineDictionary.steammachines[screenName.substring(0, screenName.in
            
            Logger.Log(iddata.id, "details");
            Logger.Log(iddata.data, "details");
-           Logger.Log(j.outputs[i].count, "detailee");
+           Logger.Log(j.output[i].count, "detailee");
            
-            if(this.container.getSlot("output" + i).id == 0 || (this.container.getSlot("output" + i).id == iddata.id && this.container.getSlot("output" + i).data == iddata.data && this.container.getSlot("output" + i).count + j.outputs[i].count < Item.getMaxStack(this.container.getSlot("output" + i).id))) {
+            if(this.container.getSlot("output" + i).id == 0 || (this.container.getSlot("output" + i).id == iddata.id && this.container.getSlot("output" + i).data == iddata.data && this.container.getSlot("output" + i).count + j.output[i].count < Item.getMaxStack(this.container.getSlot("output" + i).id))) {
             } else {
               checked = false;
             }
@@ -1113,11 +1113,11 @@ Logger.Log(MachineDictionary.steammachines[screenName.substring(0, screenName.in
      output: function(j) {
        Logger.Log("peakks", "zoom");
        for(let i = 0; i < this.data.type.recipes.maxOutputs; i++) {
-           let iddata = MaterialDictionary.invdata[j.outputs[i].form][j.outputs[i].material.name];
+           let iddata = MaterialDictionary.invdata[j.output[i].form][j.output[i].material.name];
                 Logger.Log("peakoiks", iddata.id);
                 Logger.Log("peakoiks", iddata.data);
-                Logger.Log("peakoiks", j.outputs[i].count);
-               this.container.setSlot("output" + i, iddata.id, this.container.getSlot("output" + i).count + j.outputs[i].count, iddata.data/*iddata.extra*/);
+                Logger.Log("peakoiks", j.output[i].count);
+               this.container.setSlot("output" + i, iddata.id, this.container.getSlot("output" + i).count + j.output[i].count, iddata.data/*iddata.extra*/);
                this.container.validateSlot("output" + i);
               }
      },
@@ -1154,26 +1154,24 @@ Logger.Log(MachineDictionary.steammachines[screenName.substring(0, screenName.in
         // выведет true при подключении блока для выхода энергии с нижней стороны.
     },
     getCapacity: function(fluid) {
-        if(!fluid) return this.liquidStorage.getLimit("steam"); // установим лимит хранилища энергии в 2 миллиона (2e6 - это способ записи числа 2000000)
+        if(!fluid) return this.liquidStorage.getLimit("steam");
         return this.liquidStorage.getLimit(fluid);
     },
     receive: function(type, amount, sidepre) {
       
-        amount = Math.min(amount, this.getCapacity()); // устанавлимаем максимальное количество энергии, которое может принять механизм равным 1000.
+        amount = Math.min(amount, this.getCapacity());
         Logger.Log(amount, "zaebok");
-        let add = Math.min(amount, this.getCapacity() - this.liquidStorage.getAmount("steam")); // уменьшаем количество энергии, так, чтобы хранилище не переполнялось;
+        let add = Math.min(amount, this.getCapacity() - this.liquidStorage.getAmount("steam"));
         Logger.Log(this.liquidStorage.getAmount("steam"), "as");
-        this.liquidStorage.addLiquid("steam", add); // добавляем энергию в хранилище
+        this.liquidStorage.addLiquid("steam", add);
         Logger.Log(this.liquidStorage.getAmount("steam"), "as");
         this.data.sidepre = PipeNetBuilder.sideToNeighboring(sidepre);
-        return add; // и возвращаем сколько забрали энергии
+        return add;
     },
     Еtick: function(type, src){
-        let output = Math.min(this.getCapacity(), this.liquidStorage.getAmount("steam")); // определяем, сколько энергии блок может отдать
+        let output = Math.min(this.getCapacity(), this.liquidStorage.getAmount("steam"));
         //Logger.Log(output, "osmocene");
-        this.liquidStorage.addLiquid("steam", src.add(this, output, "steam", {x: this.x, y: this.y, z: this.z}) - output, this.data.sidepre); // прибавляем к хранилищу количество энергии, которое осталось после отправки пакета, и вычитаем сколько отправляли.
-        //Logger.Log(this.liquidStorage.getAmount("steam"), "ruthenocene");
-        //this.data.sidepre = null;
+        this.liquidStorage.addLiquid("steam", src.add(this, output, "steam", {x: this.x, y: this.y, z: this.z}) - output, this.data.sidepre);
     },
     
     worldRotationToBlockRotation: function (rotation) {

@@ -1,6 +1,6 @@
 declare class PrefixPostfixTranslator {
     _pointer: number;
-    PrefixPostfixTranslator(pre: String, post: String): void;
+    constructor(pre: String, post: String);
     translateToCurrent(key: String): String;
     translate(lang: String, key: String): String;
 }

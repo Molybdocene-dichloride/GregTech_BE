@@ -1,9 +1,7 @@
 var PrefixPostfixTranslator = /** @class */ (function () {
-    function PrefixPostfixTranslator() {
+    function PrefixPostfixTranslator(pre, post) {
+        this._pointer = LocalizationSystem._createNativeTranslatorObj({ pre: pre, post: post });
     }
-    PrefixPostfixTranslator.prototype.PrefixPostfixTranslator = function (pre, post) {
-        this._pointer = LocalizationSystem._createNativeObj({ pre: pre, post: post });
-    };
     PrefixPostfixTranslator.prototype.translateToCurrent = function (key) {
         return LocalizationSystem._translateToCurrent({ _pointer: this._pointer, key: key });
     };

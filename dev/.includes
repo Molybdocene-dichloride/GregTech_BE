@@ -2,11 +2,13 @@ import.js
 GTValues.js
 
 API/API.js
+API/machine/translation.js
 API/meta.js
 API/tool.js
 API/generation.js
 API/ore.js
 API/machine.js
+API/recipeutil.js
 API/recipe.js
 API/net.js
 

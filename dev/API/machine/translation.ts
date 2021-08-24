@@ -1,6 +1,6 @@
 class PrefixPostfixTranslator {
-  _pointer: number;
-  PrefixPostfixTranslator(pre: String, post: String) {
+  private _pointer: number;
+  constructor(pre: String, post: String = ".name") {
     this._pointer = LocalizationSystem._createNativeTranslatorObj({pre: pre, post: post});
   }
   translateToCurrent(key: String) : String {
@@ -17,6 +17,9 @@ class PrefixPostfixTranslator {
     return LocalizationSystem._translateToCurrent(str);
   }*/
 }
+
+let ItemTranslator = new PrefixPostfixTranslator("item");
+let TileTranslator = new PrefixPostfixTranslator("tile");
 
 /*class TranslationBundle {
   unlocalized : String;

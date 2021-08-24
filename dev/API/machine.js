@@ -57,13 +57,6 @@ let MachineDictionary = {
       count0: 0,
       count1: 0,
       //steam
-      genMachineRendererPipelines: function(isrotated, isFullRotated, ismisks) {
-        
-      },
-      renderMachinePipeline: function(enable, rotation, misc) {
-        
-      },
-      
       registerCasings: function() {
           IDRegistry.genBlockID("gtcasing");
           let variants = [];
@@ -293,44 +286,3 @@ let MachineDictionary = {
     return false;
   }
 };
-
-function Wire(material) {
-	this.x;
-	this.y;
-	this.z;
-	this.material = material;
-	this.findNearestWires = function() {
-		wireslocal = [];
-		wires.forEach(new function(wire, i, arr) {
-			if(wire.x == machine.x - 1) {
-				wireslocal[wirelocal.length] = wire;
-			}
-			if(wire.x == machine.x + 1) {
-				wireslocal[wirelocal.length] = wire;
-			}
-			if(wire.x == machine.y - 1) {
-				wireslocal[wirelocal.length] = wire;
-			}
-			if(wire.x == machine.y + 1) {
-				wireslocal[wirelocal.length] = wire;
-			}
-			if(wire.x == machine.z - 1) {
-				wireslocal[wirelocal.length] = wire;
-			}
-			if(wire.x == machine.z + 1) {
-				wireslocal[wirelocal.length] = wire;
-			}
-		});
-		return wires;
-	};
-	this.update = new function(previous, energy) {
-		wiress = this.findNearestWires();
-		wiress.remove(previous);
-		wiress.forEach(new function(wire, i, arr) {
-			if(wire.energy >= wire.buffer & this.energy < this.energyMax) {
-    			this.energy -= this.energyconsumption;
-				wire.update();
-    		 }
-		});
-	};
-}

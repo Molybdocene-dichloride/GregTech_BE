@@ -15,6 +15,8 @@
 #include <symbol.h>
 #include <hook.h>
 
+#include <innercore\item_registry.h>
+
 #include <toString.hpp>
 
 class HashedString {
@@ -80,15 +82,19 @@ namespace LocalizationSystem {
         std::__ndk1::string translateFormatted(std::__ndk1::string CODE, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format);
         std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> translateToAll(std::__ndk1::string str);
         std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> translateToAllFormatted(std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format);
+        ~PrefixPostfixTranslator();
     };
 
-    extern PrefixPostfixTranslator ItemTranslator;
-    extern PrefixPostfixTranslator TileTranslator;
-    extern PrefixPostfixTranslator DamageTranslator;
-    extern PrefixPostfixTranslator ActionTranslator;
-    extern PrefixPostfixTranslator CommandsTranslator;
-    extern PrefixPostfixTranslator OptionsTranslator;
-    extern PrefixPostfixTranslator AchievementTranslator;
+    extern std::__ndk1::map<std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>, PrefixPostfixTranslator*> trmap;
+    
+    extern PrefixPostfixTranslator* ItemTranslator;
+    extern PrefixPostfixTranslator* TileTranslator;
+    extern PrefixPostfixTranslator* DamageTranslator;
+    extern PrefixPostfixTranslator* ActionTranslator;
+    extern PrefixPostfixTranslator* CommandsTranslator;
+    extern PrefixPostfixTranslator* OptionsTranslator;
+    extern PrefixPostfixTranslator* AchievementTranslator;
+
 
     class CustomLocalizationLoadingModule : public Module { //load custom localization pairs to I18n
         public:

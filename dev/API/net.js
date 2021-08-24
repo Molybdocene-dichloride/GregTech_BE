@@ -1,15 +1,10 @@
 let TileEntityRegistry = {
-
-	// adds energy type for tile entity prototype
-
 	addEnergyType: function(Prototype, energyType) {
 		/*if (!Prototype.__energyLibInit) {
 			this.setupInitialParams(Prototype);
 		}*/
 		Prototype.__Types[energyType] = energyType;
 	},
-
-	//same as addEnergyType, but works on already created prototypes, accessing them by id
 	addEnergyTypeForId: function(id, energyType) {
 		let Prototype = TileEntity.getPrototype(id);
 		if (Prototype) {
@@ -429,7 +424,21 @@ var PipeNetBuilder = {
 	  return this.getSide(relative);
 	},
 	getRelativeCoords: function(x, y, z, side) {
-		var dir = this.directions[side];
+		let dir = this.directions[side];
+		return {x: x + dir.x, y: y + dir.y, z: z + dir.z};
+	},
+	getNormalRelativeCoords: function(x, y, z, side) {
+	  let pside;
+	  if(side == 5) {
+	    pside = 2;
+	  } else if(side == 4) {
+	    pside = 3;
+	  } else if(side == 2) {
+	    pside = 4;
+	  } else if(side == 3) {
+	    pside = 5;
+	  }
+		let dir = this.directions[pside];
 		return {x: x + dir.x, y: y + dir.y, z: z + dir.z};
 	},
 	sideToNeighboring: function(side) {
@@ -441,7 +450,7 @@ var PipeNetBuilder = {
 	}
 }
 
-var GLOBAL_WEB_ID = 0;
+let GLOBAL_WEB_ID = 0;
 function PipeNet(Type, overloadFunc) {
 
 	this.Type = Type; //item, liquid

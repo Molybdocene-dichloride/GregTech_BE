@@ -1,5 +1,5 @@
-setLoadingText("Loading Mods: GregTech Bedrock Edition");
-setLoadingTip.setText("Register textures");
+setLoadingText.setText("Loading Mods: GregTech Bedrock Edition");
+setLoadingTip("Register textures");
 
 var copyed = null;
 let IconTransformator = {
@@ -2400,7 +2400,6 @@ let MetaRenderer = {
   getEntityYaw: ModAPI.requireGlobal("Entity.getYaw"),
   getEntityPitch: ModAPI.requireGlobal("Entity.getPitch"),
    invalidateModel: function (coords, texture, rotatedtexture, puts) {
-     
      let array = [texture.textures[rotatedtexture[0]], texture.textures[rotatedtexture[1]], texture.textures[rotatedtexture[2]], texture.textures[rotatedtexture[3]], texture.textures[rotatedtexture[4]], texture.textures[rotatedtexture[5]]];
      //Logger.Log(World.getTileEntity(coords.x, coords.y, coords.z).data.put.length, "xenaft");
       /*for(let put in puts) {
@@ -2445,7 +2444,7 @@ let MetaRenderer = {
   getBlockRotation: function(player, isFull) {
 		let pitch = this.getEntityPitch(player);
 
-		if(isFull){
+		if(isFull) {
 			if(pitch < -45) return 0;
 			if(pitch > 45) return 1;
 		}

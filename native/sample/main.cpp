@@ -44,11 +44,11 @@ namespace Stones {
 	void ends() {
 		//LocalizationSystem::loadTranslations("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/ru_RU.lang");
 		LocalizationSystem::loadTranslationDir("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/");
-		Logger::debug("shrink", LocalizationSystem::ItemTranslator.translateToCurrent("invalid").c_str());
-		Logger::debug("shrink", LocalizationSystem::ItemTranslator.translate("en_US", "invalid").c_str());
+		Logger::debug("shrink", LocalizationSystem::ItemTranslator->translateToCurrent("invalid").c_str());
+		Logger::debug("shrink", LocalizationSystem::ItemTranslator->translate("en_US", "invalid").c_str());
 
-		Logger::debug("bigger", LocalizationSystem::ItemTranslator.translateToCurrent("rotten_flesh").c_str());
-		Logger::debug("bigger", LocalizationSystem::ItemTranslator.translate("en_US", "rotten_flesh").c_str());
+		Logger::debug("bigger", LocalizationSystem::ItemTranslator->translateToCurrent("rotten_flesh").c_str());
+		Logger::debug("bigger", LocalizationSystem::ItemTranslator->translate("en_US", "rotten_flesh").c_str());
 
 		Logger::debug("b", "gotoir");
 		Logger::debug("v", patch::to_string<size_t>(blockids.size()).c_str());
@@ -289,17 +289,15 @@ JS_EXPORT_COMPLEX(LocalizationSystem, loadTranslationDir, "V(SS)", (JNIEnv* env,
 });
 //technical for JS PrefixPostfixTranslator
 JS_EXPORT_COMPLEX(LocalizationSystem, _createNativeTranslatorObj, "I(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	if(LocalizationSystem::trmap.find(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())) != trmap.end()) {
-		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(trmap[std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())]));
+	if(LocalizationSystem::trmap.find(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())) != LocalizationSystem::trmap.end()) {
+		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(LocalizationSystem::trmap[std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())]));
 	} else {
 		LocalizationSystem::PrefixPostfixTranslator* ppt = new LocalizationSystem::PrefixPostfixTranslator(ca.get("pre").asString(), ca.get("post").asString());
-		LocalizationSystem::trmap[std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())] = ppt;
 		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(ppt));
 	}
 });
 JS_EXPORT_COMPLEX(LocalizationSystem, _deleteNativeTranslatorObj, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
 	LocalizationSystem::PrefixPostfixTranslator* ppt = (LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer();
-	LocalizationSystem::trmap.erase(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ppt->pre, ppt->post));
 	delete ppt;
 	return 0;
 });
