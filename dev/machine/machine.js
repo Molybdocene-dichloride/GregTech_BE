@@ -1,10 +1,9 @@
 setLoadingTip("GTMachines: register Machines");
 MachineDictionary.registerCasings();
-//1234
+
 let bitmap = android.graphics.BitmapFactory.decodeFile(__dir__ + "gui/BronzeAlloySmelterPocket.png");
 
-
-MachineDictionary.registerSteamMachine({ name: "alloy_smelter", 
+MachineDictionary.registerSteamMachine({name: "alloy_smelter", 
 type: MachineDictionary.PROCESSING, 
 hull: ["BRONZE", "STEEL"],
 tier: [0, 1],

@@ -19,12 +19,14 @@ let StoneDictionary = {
     for(let i in this.types) {
       Logger.Log(BlockID[id], "bik");
       if(this.types[i].isgen) Stones.registerID(BlockID[id], Number(i));
-      so.push({name: variants.name, texture: [[inverted + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
+      Translation.addTranslation("tile.mineral." + variants.name + ".normal.name", {en: LocalizationSystem.translate({lang: "en_US", key: "tile.mineral." + variants.name + ".normal.name"})});
+      so.push({name: "tile.mineral." + variants.name + ".normal.name", texture: [[inverted + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
     }
     for(let i in this.types) {
       Logger.Log(BlockID[id], "nik");
       if(this.types[i].isgen) Stones.registerID(BlockID[id], 7 + Number(i));
-      so.push({name: variants.name2, texture: [[inverted2 + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
+      Translation.addTranslation("tile.mineral." + variants.name2 + ".normal.name", {en: LocalizationSystem.translate({lang: "en_US", key: "tile.mineral." + variants.name2 + ".normal.name"})});
+      so.push({name: "tile.mineral." + variants.name2 + ".normal.name", texture: [[inverted2 + "_" + this.types[i].name.toUpperCase(), 0]], inCreative: true});
     }
 
     Block.createBlock(id, so, "stone");

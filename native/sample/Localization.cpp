@@ -29,13 +29,13 @@ namespace LocalizationSystem {
         std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> ma;
         if(custom.find(lang->getFullLanguageCode()) == custom.end()) custom.insert(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>>(lang->getFullLanguageCode(), ma));
         custom[lang->getFullLanguageCode()].insert(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(key, val));
-        if(lang->getFullLanguageCode() == LocalizationSystem::getCurrentLanguage() || lang->getFullLanguageCode() == "en_US") lang->_getStrings()[key] = val;
+        if(lang->getFullLanguageCode() == LocalizationSystem::getCurrentLanguage() || lang->getFullLanguageCode() == std::__ndk1::string("en_US")) lang->_getStrings()[key] = val;
     }
     void insert(std::__ndk1::string CODE, std::__ndk1::string key, std::__ndk1::string val) {
         std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> ma;
         if(custom.find(CODE) == custom.end()) custom.insert(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>>(CODE, ma));
         custom[CODE].insert(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(key, val));
-        if(CODE == LocalizationSystem::getCurrentLanguage() || CODE == "en_US") I18n::getLocaleFor(CODE)->_getStrings()[key] = val;
+        if(CODE == LocalizationSystem::getCurrentLanguage() || CODE == std::__ndk1::string("en_US")) I18n::getLocaleFor(CODE)->_getStrings()[key] = val;
     }
 
     Localization* getCurrentLocalization() {
@@ -86,10 +86,8 @@ namespace LocalizationSystem {
 
         if (inf.is_open()) {
             while(std::__ndk1::getline(inf, strInput)) {
-
                 std::__ndk1::string key = strInput.substr(0, strInput.find('='));
                 std::__ndk1::string val = strInput.substr(strInput.find('=') + 1);
-                //lang->_getStrings()[str] = val;
 
                 LocalizationSystem::insert(lang, key, val);
 	        }
@@ -100,6 +98,7 @@ namespace LocalizationSystem {
     }
     void loadTranslationDir(std::__ndk1::string dir) {
         DIR* d = opendir(dir.c_str());
+        Logger::debug("zcatped", dir.c_str());
         struct dirent *inf;
         while((inf = readdir(d)) != false) {
             if(inf->d_name == "..") continue;
@@ -117,6 +116,7 @@ namespace LocalizationSystem {
         LocalizationSystem::trmap.insert(std::__ndk1::pair<std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>, PrefixPostfixTranslator*>(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(this->pre, this->post), this));
     }
     std::__ndk1::string PrefixPostfixTranslator::translateToCurrent(std::__ndk1::string str) {
+        Logger::debug("89feh", (pre + "." + str + "." + post).c_str());
         return LocalizationSystem::translateToCurrent(pre + "." + str + "." + post);
     }
     std::__ndk1::string PrefixPostfixTranslator::translateToCurrentFormatted(std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
@@ -124,6 +124,7 @@ namespace LocalizationSystem {
     }
         
     std::__ndk1::string PrefixPostfixTranslator::translate(Localization* lang, std::__ndk1::string str) {
+        Logger::debug("89gh", (pre + "." + str + "." + post).c_str());
         return LocalizationSystem::translate(lang, pre + "." + str + "." + post);
     }
     std::__ndk1::string PrefixPostfixTranslator::translateFormatted(Localization* lang, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
@@ -131,6 +132,7 @@ namespace LocalizationSystem {
     }
 
     std::__ndk1::string PrefixPostfixTranslator::translate(std::__ndk1::string CODE, std::__ndk1::string str) {
+        Logger::debug("89eh", (pre + "." + str + "." + post).c_str());
         return LocalizationSystem::translate(CODE, pre + "." + str + "." + post);
     }
     std::__ndk1::string PrefixPostfixTranslator::translateFormatted(std::__ndk1::string CODE, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {

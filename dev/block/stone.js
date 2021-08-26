@@ -70,9 +70,3 @@ StoneDictionary.registerStone("mineral", {
 	minheight2: 1,
 	maxheight2: 170,
 });
-Callback.addCallback("PreBlocksDefined", function(screenName, lastScreenName, isPushEvent) {
-	/*Logger.Log(screenName, "sewio");
-	if(screenName == "play_screen - worlds") {
-		Stones.ends();
-	}*/
-});

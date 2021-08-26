@@ -10,48 +10,25 @@ TreeDictionary = {
   lengt: 0,
   registerTree: function (tree) {
     this.trees[tree.name] = tree;
+    //Translation.addTranslation("gregtech.machine.steam_" + type.name + "_bronze.name", {en: LocalizationSystem.translate({lang: "en_US", key: "gregtech.machine.steam_" + type.name + "_bronze.name"})});
     this.data[this.lengt] =  {name: tree.name, type: "wood", texture: [["log_" + tree.name + "_top", 0], ["log_" + tree.name + "_top", 0], ["log_" + tree.name + "_side", 0]]};
-    
-   // var moel = new ICRender.Model();
-     // moel.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [[tree.name + "_wood", 1], [tree.name + "_wood", 1], [tree.name + "_wood", 0], [tree.name + "_wood", 0], [tree.name + "_wood", 0], [tree.name + "_wood", 0]]));
-
-      //BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, moel);
     
     this.lengt++;
     
     this.data[this.lengt] =  {name: tree.name, type: "leave", texture: [["leaves_" + tree.name, 0]]};
     
-   // let model = new ICRender.Model();
-     // model.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [[tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0], [tree.name + "_leaves", 0]]));
-
-      //BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, model);
-    
     this.lengt++;
     
     this.data[this.lengt] =  {name: tree.name, type: "func_wood", texture: [["log_" + tree.name + "_top", 0], ["log_" + tree.name + "_top", 0], ["log_" + tree.name + "_side", 0]]};
-    
-    //var odel = new ICRender.Model();
-    //  odel.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [[tree.name + "_funcwood", 1], [tree.name + "_funcwood", 1], [tree.name + "_funcwood", 0], [tree.name + "_funcwood", 0], [tree.name + "_funcwood", 0], [tree.name + "_funcwood", 0]]));
-
-     // BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, odel);
     
     this.lengt++;
     
     this.data[this.lengt] =  {name: tree.name, type: "sapling", texture: [["sapling_" + tree.name, 0]]};
     
-    //var mol = new ICRender.Model();
-    //  mol.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0], ["rubber_tree_sapling", 0]]));
-
-      //BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, mol);
-    
     this.lengt++;
     
     this.data[this.lengt] =  {name: tree.name, type: "planks", texture: [["planks_" + tree.name, 0]]};
-    
-    //var moele = new ICRender.Model();
-      //moele.addEntry(new BlockRenderer.Model(0, 0, 0, 1, 1, 1, [["rubbertree_leaves", 0], ["rubbertree_leaves", 0], ["rubberwooe_leaves", 0], ["rubbertree_leaves", 0], ["rubber_tree_leaves", 0], ["rubbertree_leaves", 0]]));
 
-      //BlockRenderer.setStaticICRender(BlockID.gttree, this.lengt, moele);
     this.lengt++;
   },
   addToCreative: function() {

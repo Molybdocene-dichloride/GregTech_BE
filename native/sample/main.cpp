@@ -272,7 +272,7 @@ JS_EXPORT_COMPLEX(LocalizationSystem, insertToCurrent, "V(SS)", (JNIEnv* env, Na
 	LocalizationSystem::insertToCurrent(ca.get("key").asString(), ca.get("val").asString());
 	return 0;
 });
-JS_EXPORT_COMPLEX(LocalizationSystem, chooseLocalization, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+JS_EXPORT_COMPLEX(LocalizationSystem, chooseLanguage, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
 	LocalizationSystem::chooseLocalization(ca.get("lang").asString());
 	return 0;
 });
@@ -302,10 +302,10 @@ JS_EXPORT_COMPLEX(LocalizationSystem, _deleteNativeTranslatorObj, "V(SS)", (JNIE
 	return 0;
 });
 
-JS_EXPORT_COMPLEX(LocalizationSystem, _translate, "F(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+JS_EXPORT_COMPLEX(LocalizationSystem, _translate, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
 	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translate(ca.get("lang").asString(), ca.get("key").asString()).c_str());
 });
-JS_EXPORT_COMPLEX(LocalizationSystem, _translateToCurrent, "F(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+JS_EXPORT_COMPLEX(LocalizationSystem, _translateToCurrent, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
 	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translateToCurrent(ca.get("key").asString()).c_str());
 });
 // native js signature rules:
