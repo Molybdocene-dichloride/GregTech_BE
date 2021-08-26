@@ -1,5 +1,16 @@
+loadUsingBuildConfig();
+
+Logger.Log(LocalizationSystem.getCurrentLanguage(), "HYT");
+
+Logger.Log(LocalizationSystem.translate({lang: "en_US", key: "item.feather.name"}), "HYT");
+Logger.Log(LocalizationSystem.translateToCurrent({key: "item.feather.name"}), "HYT");
+
+LocalizationSystem.chooseLanguage({lang: "en_US"});
+
+Logger.Log(LocalizationSystem.translate({lang: "en_US", key: "item.feather.name"}), "HYT");
+Logger.Log(LocalizationSystem.translateToCurrent({key: "item.feather.name"}), "HYT");
+
 let concater = function(formulareal, material) {
-    
 	if(!material.formula.protons) {
 		for(let i in material.formula) {
 			concater(formulareal, material.formula[i].material);

@@ -3,6 +3,7 @@ GTValues.js
 
 API/API.js
 API/machine/translation.js
+API/machine/translationload.js
 API/meta.js
 API/tool.js
 API/generation.js

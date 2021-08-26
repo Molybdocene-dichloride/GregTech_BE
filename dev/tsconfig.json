@@ -18,6 +18,7 @@
 	],
 	"include": [
 		"API/machine/translation.ts",
+		"API/machine/translationload.ts",
 		//"API/machine/chunks.ts"
 	],
 	"files": [

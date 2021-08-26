@@ -1634,6 +1634,11 @@ generateClientMaterial("lazurite", "GEM", GENERATE_ORE, 0x6478FF, IconTransforma
 generateClientMaterial("lepidolite", "DUST", GENERATE_ORE, 0xF0328C, IconTransformator.UV.FINE);
 generateClientMaterial("magnesite", "DUST", GENERATE_ORE, 0xFAFAB4, IconTransformator.UV.METALLIC);
 generateClientMaterial("magnetite", "DUST", GENERATE_ORE, 0x1E1E1E, IconTransformator.UV.METALLIC);
+generateClientMaterial("azurite", "DUST", 
+Flags.pack2(GENERATE_ORE, INDUCTION_SMELTING_LOW_OUTPUT), 0x055F05, IconTransformator.UV.DULL);
+generateClientMaterial("cuprite", "RUBY", 
+GENERATE_ORE, 0x770000, IconTransformator.UV.DULL);
+generateClientMaterial("tenorite", "FINE", GENERATE_ORE, 0x606060, IconTransformator.UV.DULL);
 generateClientMaterial("malachite", "DUST", 
 Flags.pack2(GENERATE_ORE, INDUCTION_SMELTING_LOW_OUTPUT), 0x055F05, IconTransformator.UV.DULL);
 generateClientMaterial("molybdenite", "DUST", GENERATE_ORE, 0x191919, IconTransformator.UV.METALLIC);
