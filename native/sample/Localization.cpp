@@ -19,11 +19,14 @@ namespace LocalizationSystem {
     std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>& getLocalizationStrings(std::__ndk1::string CODE) {
         return I18n::getLocaleFor(CODE)->_getStrings();
     }
-    std::__ndk1::string translate(Localization* lang, std::__ndk1::string str) {
-        return lang->_getStrings()[str];
+    std::__ndk1::string translate(Localization* lang, std::__ndk1::string key) {
+        return lang->_getStrings()[key];
     }
-    std::__ndk1::string translate(std::__ndk1::string CODE, std::__ndk1::string str) {
-        return I18n::getLocaleFor(CODE)->_getStrings()[str];
+    std::__ndk1::string translate(std::__ndk1::string CODE, std::__ndk1::string key) {
+        //I18n::getLocaleFor(CODE)->get(key, std::__ndk1::vector<String>())
+        //if(custom.find(CODE) == custom.end() || custom[CODE].find(key) == custom[CODE].end()) return I18n::getLocaleFor(CODE)->_getStrings()[key];
+        Logger::debug(custom[CODE][key].c_str(), "sain");
+        return custom[CODE][key];
     }
     void insert(Localization* lang, std::__ndk1::string key, std::__ndk1::string val) {
         std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> ma;
@@ -47,8 +50,10 @@ namespace LocalizationSystem {
     std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>& getCurrentLocalizationStrings() {
         return I18n::mCurrentLanguage->_getStrings();
     }
-    std::__ndk1::string translateToCurrent(std::__ndk1::string str) {   
-        return I18n::getCurrentLanguage()->_getStrings()[str];
+    std::__ndk1::string translateToCurrent(std::__ndk1::string key) {   
+        //if(custom.find(I18n::mCurrentLanguage->getFullLanguageCode()) == custom.end() || custom[I18n::mCurrentLanguage->getFullLanguageCode()].find(key) == custom[I18n::mCurrentLanguage->getFullLanguageCode()].end()) return I18n::getCurrentLanguage()->_getStrings()[key];
+        Logger::debug(custom[I18n::mCurrentLanguage->getFullLanguageCode()][key].c_str(), "sain");
+        return custom[I18n::mCurrentLanguage->getFullLanguageCode()][key];
     }
     void insertToCurrent(std::__ndk1::string key, std::__ndk1::string val) {
         custom[LocalizationSystem::getCurrentLanguage()].insert(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(key, val));  
@@ -98,7 +103,6 @@ namespace LocalizationSystem {
     }
     void loadTranslationDir(std::__ndk1::string dir) {
         DIR* d = opendir(dir.c_str());
-        Logger::debug("zcatped", dir.c_str());
         struct dirent *inf;
         while((inf = readdir(d)) != false) {
             if(inf->d_name == "..") continue;
@@ -115,25 +119,31 @@ namespace LocalizationSystem {
 
         LocalizationSystem::trmap.insert(std::__ndk1::pair<std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>, PrefixPostfixTranslator*>(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(this->pre, this->post), this));
     }
-    std::__ndk1::string PrefixPostfixTranslator::translateToCurrent(std::__ndk1::string str) {
-        Logger::debug("89feh", (pre + "." + str + "." + post).c_str());
-        return LocalizationSystem::translateToCurrent(pre + "." + str + "." + post);
+    std::__ndk1::string PrefixPostfixTranslator::translateToCurrent(std::__ndk1::string key) {
+        Logger::debug("89feh", (pre + "." + key + "." + post).c_str());
+        std::__ndk1::string str = pre + "." + key;
+        if(!post.empty()) str += "." + post;
+        return LocalizationSystem::translateToCurrent(str);
     }
     std::__ndk1::string PrefixPostfixTranslator::translateToCurrentFormatted(std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
         return patch::to_formatedString(LocalizationSystem::translateToCurrent(pre + "." + str + "." + post), format);
     }
         
-    std::__ndk1::string PrefixPostfixTranslator::translate(Localization* lang, std::__ndk1::string str) {
-        Logger::debug("89gh", (pre + "." + str + "." + post).c_str());
-        return LocalizationSystem::translate(lang, pre + "." + str + "." + post);
+    std::__ndk1::string PrefixPostfixTranslator::translate(Localization* lang, std::__ndk1::string key) {
+        Logger::debug("89gh", (pre + "." + key + "." + post).c_str());
+        std::__ndk1::string str = pre + "." + key;
+        if(!post.empty()) str += "." + post;
+        return LocalizationSystem::translate(lang, str);
     }
     std::__ndk1::string PrefixPostfixTranslator::translateFormatted(Localization* lang, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
         return patch::to_formatedString(LocalizationSystem::translate(lang, pre + "." + str + "." + post), format);
     }
 
-    std::__ndk1::string PrefixPostfixTranslator::translate(std::__ndk1::string CODE, std::__ndk1::string str) {
-        Logger::debug("89eh", (pre + "." + str + "." + post).c_str());
-        return LocalizationSystem::translate(CODE, pre + "." + str + "." + post);
+    std::__ndk1::string PrefixPostfixTranslator::translate(std::__ndk1::string CODE, std::__ndk1::string key) {
+        Logger::debug("89eh", (pre + "." + key + "." + post).c_str());
+        std::__ndk1::string str = pre + "." + key;
+        if(!post.empty()) str += "." + post;
+        return LocalizationSystem::translate(CODE, str);
     }
     std::__ndk1::string PrefixPostfixTranslator::translateFormatted(std::__ndk1::string CODE, std::__ndk1::string str, std::__ndk1::vector<patch::ICell*> format) {
         return patch::to_formatedString(LocalizationSystem::translate(CODE, pre + "." + str + "." + post), format);

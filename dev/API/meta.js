@@ -1,7 +1,5 @@
 loadUsingBuildConfig();
 
-Logger.Log(LocalizationSystem.translateToCurrent({key: "tile.wire_coil.tooltip_ebf"}), "gr");
-Logger.Log(LocalizationSystem.translate({lang: "en_US", key: "tile.wire_coil.tooltip_ebf"}), "gr");
 let concater = function(formula) {
 	let formulareal = "";
 	if(!formula.protons) {
@@ -427,29 +425,38 @@ function of() {
 	return stacks;
 }
 
-let MaterialTranslator = new PrefixPostfixTranslator("material");
+let MaterialTranslator = new PrefixPostfixTranslator("material", "");
+let MaterialPrefixTranslator = new PrefixPostfixTranslator("item.material.oreprefix", "");
 
 function Material(unlocalized_name, formula, type, materialGenerationFlags, pointMelting, pointBoiling) {
 	this.id = unlocalized_name;
 	this.name = this.id;
+	this.usablename = this.id[0].toUpperCase() + this.id.substring(1);
+
+	this.localizedNames = {};
+
 	this.formula = formula;
+	this.formulatext = concater(this.formula);
+
 	this.type = type;
+
 	this.pointBoiling = pointBoiling;
 	this.pointMelting = pointMelting;
-	this.formulatext = concater(this.formula);
 
 	this.getType = function() {
 		return this.type;
 	};
 
 	this.getUnlocalizedName = function() {
-		return this.usablename;
+		return this.name;
 	};
 	this.getName = function(lang) {
-		MaterialTranslator.translate(lang, this.usablename);
+		if(!LocalizationSystem.getCurrentLanguage() in localizedNames) this.localizedNames[lang] = MaterialTranslator.translate(lang, this.name);
+		return this.localizedNames[lang];
 	};
 	this.getCurrentName = function() {
-		MaterialTranslator.translateToCurrent(this.usablename);
+		if(!LocalizationSystem.getCurrentLanguage() in localizedNames) this.localizedNames[LocalizationSystem.getCurrentLanguage()] = MaterialTranslator.translateToCurrent(this.name);
+		return this.localizedNames[LocalizationSystem.getCurrentLanguage()];
 	};
 
 	this.getFormula = function() {
@@ -480,6 +487,8 @@ function Material(unlocalized_name, formula, type, materialGenerationFlags, poin
 	this.upgradeItem = function (item, form) {
 		MaterialDictionary.upgradeItem(this, item, form);
 	};
-
-	this.usablename = this.id[0].toUpperCase() + this.id.substring(1);
 }
+
+Logger.Log(MaterialTranslator.translateToCurrent("copper"), "freek");
+MaterialPrefixTranslator.translateToCurrent("ore");
+Logger.Log(java.lang.String.format(MaterialPrefixTranslator.translateToCurrent("ore"), MaterialTranslator.translateToCurrent("copper")), "freek");

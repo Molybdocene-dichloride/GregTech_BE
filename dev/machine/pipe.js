@@ -8,7 +8,7 @@ PipeDictionary.registerSize({type: "small", multiplier: 2});
 PipeDictionary.registerSize({type: "normal", multiplier: 4});
 PipeDictionary.registerSize({type: "large", multiplier: 8});
 PipeDictionary.registerSize({type: "huge", multiplier: 16});
-
+Logger.Log("gt", "fret");
 PipeDictionary.addToCreative();
 
 TileEntity.registerPrototype(BlockID.gtblockpipe, {

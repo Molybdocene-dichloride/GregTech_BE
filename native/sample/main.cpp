@@ -42,13 +42,7 @@ std::map<float, std::shared_ptr<Block>>::iterator cur;
 
 namespace Stones {
 	void ends() {
-		//LocalizationSystem::loadTranslations("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/ru_RU.lang");
-		LocalizationSystem::loadTranslationDir("/sdcard/games/horizon/packs/Future/innercore/mods/GregTech_/lang/");
-		Logger::debug("shrink", LocalizationSystem::ItemTranslator->translateToCurrent("invalid").c_str());
-		Logger::debug("shrink", LocalizationSystem::ItemTranslator->translate("en_US", "invalid").c_str());
-
-		Logger::debug("bigger", LocalizationSystem::ItemTranslator->translateToCurrent("rotten_flesh").c_str());
-		Logger::debug("bigger", LocalizationSystem::ItemTranslator->translate("en_US", "rotten_flesh").c_str());
+		//FurnaceSystem::addFurnaceRecipes
 
 		Logger::debug("b", "gotoir");
 		Logger::debug("v", patch::to_string<size_t>(blockids.size()).c_str());
@@ -290,9 +284,12 @@ JS_EXPORT_COMPLEX(LocalizationSystem, loadTranslationDir, "V(SS)", (JNIEnv* env,
 //technical for JS PrefixPostfixTranslator
 JS_EXPORT_COMPLEX(LocalizationSystem, _createNativeTranslatorObj, "I(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
 	if(LocalizationSystem::trmap.find(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())) != LocalizationSystem::trmap.end()) {
+		Logger::debug("89h", "ddd");
 		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(LocalizationSystem::trmap[std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())]));
 	} else {
+		Logger::debug("89fh", "{}");
 		LocalizationSystem::PrefixPostfixTranslator* ppt = new LocalizationSystem::PrefixPostfixTranslator(ca.get("pre").asString(), ca.get("post").asString());
+		Logger::debug("89fh", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(ppt)).c_str());
 		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(ppt));
 	}
 });
@@ -306,6 +303,7 @@ JS_EXPORT_COMPLEX(LocalizationSystem, _translate, "S(SS)", (JNIEnv* env, NativeJ
 	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translate(ca.get("lang").asString(), ca.get("key").asString()).c_str());
 });
 JS_EXPORT_COMPLEX(LocalizationSystem, _translateToCurrent, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
+	Logger::debug("89fh", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(ca.get("_pointer").asPointer())).c_str());
 	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translateToCurrent(ca.get("key").asString()).c_str());
 });
 // native js signature rules:

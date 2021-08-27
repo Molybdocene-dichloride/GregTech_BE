@@ -29,6 +29,7 @@ public:
 	std::__ndk1::string fullLanguageCode; // 4 - getFullLanguageCode from 1.13.0.6
 	std::__ndk1::map<std::__ndk1::string, std::__ndk1::string> strings; // 8 - _getStrings from 1.13.0.6
 	std::__ndk1::map<std::__ndk1::string, std::__ndk1::string>& _getStrings() const;
+    std::__ndk1::string get(std::__ndk1::string&, std::vector<std::__ndk1::string> const&) const;
     std::__ndk1::string _getSimple(std::__ndk1::string) const;
 	std::__ndk1::string getFullLanguageCode() const;
 };

@@ -453,9 +453,10 @@ for (let id in MaterialDictionary.data) {
 		Item.registerNameOverrideFunction(invertedIDs.itemID[id], function(item) {
 			let material = MaterialDictionary.data[item.id][item.data].material;
 			let form = MaterialDictionary.data[item.id][item.data].form;
-			if (form == undefined) return "unknown";
-			if (material == undefined) return "unknown " + form;
-			return material.getCurrentName() + " " + form + "\n" + material.formulatext;
+			if(form == undefined) return "unknown";
+			if(material == undefined) return "unknown " + form;
+			
+			return String.format(MaterialPrefixTranslator.translateToCurrent(form), material.getCurrentName()) + "\n" + material.formulatext;
 		});
 	}
 }

@@ -193,7 +193,7 @@ MachineDictionary.textures[BlockID.gtblockmachine] = [];
 
 let PipeDictionary = {
 	sizes: [],
-	materials: { },
+	materials: {},
 	pipes: [],
 	data: [],
 	registerSize: function (size) {
