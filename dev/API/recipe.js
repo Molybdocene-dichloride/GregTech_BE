@@ -556,7 +556,7 @@ let RecipeDictionary = {
 		setLoadingTip("Recipes: fuel of " + input.material.name);
 		let iddatainput = MaterialDictionary.invdata[input.form][input.material.name];
 		if (isCoalBoiler) {
-			MachineDictionary.steammachines["boiler"].recipes.addRecipe(new FuelRecipe([{ type: "material", material: input.material, form: input.form, count: 1 }], [{ type: "material", material: output.material, form: output.form, count: 1 }], time, 1));
+			MachineDictionary.steammachines["boiler_coal"].recipes.addRecipe(new FuelRecipe([{ type: "material", material: input.material, form: input.form, count: 1 }], [{ type: "material", material: output.material, form: output.form, count: 1 }], time, 1));
 		}
 		Recipes.addFurnaceFuel(iddatainput.id, iddatainput.data, time);
 	},

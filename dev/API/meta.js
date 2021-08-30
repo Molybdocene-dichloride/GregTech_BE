@@ -451,11 +451,11 @@ function Material(unlocalized_name, formula, type, materialGenerationFlags, poin
 		return this.name;
 	};
 	this.getName = function(lang) {
-		if(!LocalizationSystem.getCurrentLanguage() in localizedNames) this.localizedNames[lang] = MaterialTranslator.translate(lang, this.name);
+		if(!LocalizationSystem.getCurrentLanguage() in this.localizedNames) this.localizedNames[lang] = MaterialTranslator.translate(lang, this.name);
 		return this.localizedNames[lang];
 	};
 	this.getCurrentName = function() {
-		if(!LocalizationSystem.getCurrentLanguage() in localizedNames) this.localizedNames[LocalizationSystem.getCurrentLanguage()] = MaterialTranslator.translateToCurrent(this.name);
+		if(!LocalizationSystem.getCurrentLanguage() in this.localizedNames) this.localizedNames[LocalizationSystem.getCurrentLanguage()] = MaterialTranslator.translateToCurrent(this.name);
 		return this.localizedNames[LocalizationSystem.getCurrentLanguage()];
 	};
 
@@ -489,6 +489,12 @@ function Material(unlocalized_name, formula, type, materialGenerationFlags, poin
 	};
 }
 
+LocalizationSystem.translateToCurrent({key: "tile.wire_coil.tooltip_level"});
+LocalizationSystem.translateToCurrent({key: "gregtech.machine.block_breaker.speed_bonus"});
+
+Logger.Log(MaterialTranslator.translate("en_US", "copper"), "freek");
+MaterialPrefixTranslator.translate("en_US", "ore");
 Logger.Log(MaterialTranslator.translateToCurrent("copper"), "freek");
 MaterialPrefixTranslator.translateToCurrent("ore");
-Logger.Log(java.lang.String.format(MaterialPrefixTranslator.translateToCurrent("ore"), MaterialTranslator.translateToCurrent("copper")), "freek");
+Logger.Log(java.lang.String.format(MaterialPrefixTranslator.translate("en_US", "ore"), MaterialTranslator.translate("en_US", "copper")), "frоооk");
+Logger.Log(java.lang.String.format(MaterialPrefixTranslator.translateToCurrent("ore"), MaterialTranslator.translateToCurrent("copper")), "frоооk");

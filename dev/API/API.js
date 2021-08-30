@@ -2066,7 +2066,7 @@ addMachineForGenerate(["MACHINE_BRONZE", "MACHINE_STEEL"],  ["bronze", "steel"],
 addMachineForGenerate(["MACHINE_BRONZE", "MACHINE_STEEL"],  ["bronze", "steel"], "macerator", ["FRONT"]);
 addMachineForGenerate(["MACHINE_BRONZE", "MACHINE_STEEL"],  ["bronze", "steel"], "compressor", ["FRONT"]);
 addMachineForGenerate(["MACHINE_BRONZE", "MACHINE_STEEL"],  ["bronze", "steel"], "extractor", ["SIDE", "FRONT"]);
-addMachineForGenerate(["MACHINE_BRONZEBRICKS", "MACHINE_STEELBRICKS"],  ["bronze", "steel"], "boiler", ["FRONT"]);
+addMachineForGenerate(["MACHINE_BRONZEBRICKS", "MACHINE_STEELBRICKS"],  ["bronze", "steel"], "boiler_steam", ["FRONT"]);
 addMachineForGenerate(["MACHINE_STEELBRICKS"],  ["steel"], "boiler_lava", ["FRONT"]);
 addMachineForGenerate(["MACHINE_BRONZEBRICKS"],  ["bronze"], "boiler_solar", ["TOP"]);
 

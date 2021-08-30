@@ -220,7 +220,7 @@ let PipeDictionary = {
 		let variables = [];
 		for (let m = 0; m < Object.keys(PipeDictionary.materials).length; m++) {
 			for (let s = 0; s < PipeDictionary.sizes.length; s++) {
-				Translation.addTranslation("item.material.oreprefix.pipe" + this.sizes[s].type, {en: LocalizationSystem.translate({lang: "en_US", key: "item.material.oreprefix.pipe" + this.sizes[s].type})});
+				Translation.addTranslation("item.material.oreprefix.pipe" + String.toUpperCase(this.sizes[s].type[0]) + this.sizes[s].type.substring(1), {en: LocalizationSystem.translate({lang: "en_US", key: "item.material.oreprefix.pipe" + String.toUpperCase(this.sizes[s].type[0]) + this.sizes[s].type.substring(1)})});
 				variables[m * PipeDictionary.sizes.length + s] = { name: this.sizes[s].type + " " + Object.keys(PipeDictionary.materials)[m] + " pipe", texture: [["bedrock"], 0], inCreative: true };
 				this.data[m * PipeDictionary.sizes.length + s] = { type: Object.keys(PipeDictionary.materials)[m], size: this.sizes[s] };
 			}

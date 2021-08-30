@@ -252,7 +252,7 @@ MachineDictionary.registerSteamMachine({
 }));
 
 MachineDictionary.registerSteamMachine({
-    name: "boiler",
+    name: "boiler_coal",
     type: MachineDictionary.GENERATOR,
     hull: ["BRONZEBRICKS", "STEELBRICKS"],
     tier: [0, 1],

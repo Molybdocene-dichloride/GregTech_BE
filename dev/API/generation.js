@@ -591,9 +591,6 @@ let GenerationDictionary = {
 		  }
 		}
   },
-  generateChunkPerlin: function(coordsChunk, id, data, seed, scale, octaves, maxPos, onlyIn, ids) {
-     GenerationDictionary.generateBoxPerlin({x: coordsChunk.x * 16, y: 5, z: coordsChunk.z * 16}, {x: 16, y: maxPos || OreDictionary.findChunkHighSurface(coordsChunk.x, coordsChunk.z), z: 16}, id, data, seed, scale, octaves, onlyIn, ids);
-  },
   getStandardGaussianNoise: function(coords, seed) { //SEMI STANDARD
     return GenerationDictionary.getGaussianProbabilityDensity(coords, seed, new CovarianceMatrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]), 0);
   },
