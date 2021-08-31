@@ -1,46 +1,51 @@
 namespace Unification {
-  parseChem(chemString: string) {
+    class Colour {
+		mc: number;
+		hex: number;
+    }
+    parseChem(chemString: string) {
     
-  }
-  of(...formula: MaterialStack[]) {
-	  let stacks = [];
-	  for(let i in arguments) {
-	  if(arguments[i] instanceof MaterialStack) stacks[i] == arguments[i];
-	  if(arguments[i] instanceof StackedFormula) stacks[i] == new MaterialStack(arguments[i]);
+    }
+    of(...formula: MaterialStack[]) {
+	let stacks = [];
+	for(let i in arguments) {
+	      if(arguments[i] instanceof MaterialStack) stacks[i] == arguments[i];
+	      if(arguments[i] instanceof StackedFormula) stacks[i] == new MaterialStack(arguments[i]);
 	  }
 	  return new StackedFormula(stacks);
-  }
-  public static MarkerMaterial Empty = new MarkerMaterial("empty");
-  namespace Colours {
-    public static MarkerMaterial Colorless = new MarkerMaterial("colorless");
-    public static MarkerMaterial Black = new MarkerMaterial("black");
-    public static MarkerMaterial Red = new MarkerMaterial("red");
-    public static MarkerMaterial Green = new MarkerMaterial("green");
-    public static MarkerMaterial Brown = new MarkerMaterial("brown");
-    public static MarkerMaterial Blue = new MarkerMaterial("blue");
-    public static MarkerMaterial Purple = new MarkerMaterial("purple");
-        public static MarkerMaterial Cyan = new MarkerMaterial("cyan");
-        public static MarkerMaterial Silver = new MarkerMaterial("silver");
-        public static MarkerMaterial Gray = new MarkerMaterial("gray");
-        public static MarkerMaterial Pink = new MarkerMaterial("pink");
-        public static MarkerMaterial Lime = new MarkerMaterial("lime");
+    }
+    let _null = new MarkerMaterial<null>(null, null, null);
+    let Empty = new MarkerMaterial<null>("empty", "empty", null);
+    namespace Colours {
+		let Colorless = new MarkerMaterial<Unification.Colour>("colorless", "colourless", {hex: OxFFFFFF});
+		let Black = new MarkerMaterial<Unification.Colour>("black", "black", {hex: Ox000000});
+		let Red = new MarkerMaterial<Unification.Colour>("red", "red", {hex: 0});
+		let Green = new MarkerMaterial<Unification.Colour>("green", "green", {hex: 0});
+		let Brown = new MarkerMaterial<Unification.Colour>("brown", "brown", {hex: 0});
+		let Blue = new MarkerMaterial<Unification.Colour>("blue", "blue", {hex: 0});
+		let Purple = new MarkerMaterial<Unification.Colour>("purple", "purple", {hex: 0});
+		let Cyan = new MarkerMaterial<Unification.Colour>("cyan", "cyan", {hex: 0});
+		let Silver = new MarkerMaterial<Unification.Colour>("silver", "silver", {hex: 0});
+		let Gray = new MarkerMaterial<Unification.Colour>("gray", "gray", {hex: 0});
+		let Pink = new MarkerMaterial<Unification.Colour>("pink", "pink", {hex: 0xFF5555});
+		let Lime = new MarkerMaterial<Unification.Colour>("lime", "lime", {hex: 0});
      
-    public static MarkerMaterial Yellow = new MarkerMaterial("yellow");
-    public static MarkerMaterial LightBlue = new MarkerMaterial("light_blue");
-    public static MarkerMaterial Magenta = new MarkerMaterial("magenta");
-    public static MarkerMaterial Orange = new MarkerMaterial("orange");
-    public static MarkerMaterial White = new MarkerMaterial("white");
+		let Yellow = new MarkerMaterial<Unification.Colour>("yellow", "yellow", {hex: 0});
+		let LightBlue = new MarkerMaterial<Unification.Colour>("light_blue", "light_blue", {hex: 0});
+		let Magenta = new MarkerMaterial<Unification.Colour>("magenta", "magenta", {hex:0});
+		let Orange = new MarkerMaterial<Unification.Colour>("orange", "orange", {hex:0});
+		let White = new MarkerMaterial<Unification.Colour>("white", "white", {hex:0});
   }
   namespace Tier {
-    public static Material Primitive = new MarkerMaterial("primitive");
-    public static Material Basic = new MarkerMaterial("basic");
-    public static Material Good = new MarkerMaterial("good");
-    public static Material Advanced = new MarkerMaterial("advanced");
-    public static Material Extreme = new MarkerMaterial("extreme");
-    public static Material Elite = new MarkerMaterial("elite");
-    public static Material Master = new MarkerMaterial("master");
-    public static Material Ultimate = new MarkerMaterial("ultimate");
-    public static Material Superconductor = new Material(354, "superconductor", 0xFFFFFF, MaterialIconSet.NONE, of(), 0L, null);
-    public static Material Infinite = new MarkerMaterial("infinite");
+      let Primitive = new MarkerMaterial<number>("primitive", "primitive", GTValues.ULV);
+      let Basic = new MarkerMaterial<number>("basic", "basic", GTValues.LV);
+      let Good = new MarkerMaterial<number>("good", "good", GTValues.MV);
+      let Advanced = new MarkerMaterial<number>("advanced", "advanced", GTValues.HV);
+      let Extreme = new MarkerMaterial<number>("extreme", "extreme", GTValues.EV);
+      let Elite = new MarkerMaterial<number>("elite", "elite", GTValues.IV);
+      let Master = new MarkerMaterial<number>("master", "master", GTValues.LuV);
+      let Ultimate = new MarkerMaterial<number>("ultimate", "ultimate", GTValues.ZPM);
+      let Superconductor = new MarkerMaterial<number>("superconductor", "superconductor", GTValues.UV);
+      let Infinite = new MarkerMaterial<number>("infinite", "infinite", 0);
   }
 }

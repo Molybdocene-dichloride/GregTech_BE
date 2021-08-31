@@ -1265,7 +1265,7 @@ let RecipeDictionary = {
 			Logger.Log(MaterialDictionary.data[MaterialDictionary.invdata["crushedCentrifuged"][input.name].id][MaterialDictionary.invdata["crushedCentrifuged"][input.name].data].material.name, "cancater1material");
 		}
 	},
-	registerAlloy: function (output, EUt) {
+	registerAlloyRecipes: function (output, EUt) {
 		setLoadingTip("Recipes: alloy " + output.name);
 		let inputs = output.formula;
 		//if(inputs[0].material.type != "INGOT") return;
@@ -1280,6 +1280,7 @@ let RecipeDictionary = {
 		for (let i in inputs) {
 			count += inputs[i].count;
 		}
+		Logger.Log(count, "awersun");
 		if (count <= 9) {
 			let pattern = [];
 			for (let i in inputs) {

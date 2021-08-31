@@ -22,7 +22,7 @@ RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lead"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["magnesium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["manganese"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["lithium"]);
-//RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["mercury"]);
+RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["mercury"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["molybdenum"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["neodymium"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["nickel"]);
@@ -119,9 +119,9 @@ RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["wheat"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["brick"]);
 RecipeDictionary.registerFormHandlingRecipes(MaterialDictionary.dict["steam"]);
 
-RecipeDictionary.registerAlloy(MaterialDictionary.dict["battery_alloy"]); //A
-RecipeDictionary.registerAlloy(MaterialDictionary.dict["bronze"]); //A
-RecipeDictionary.registerAlloy(MaterialDictionary.dict["red_alloy"]);
+RecipeDictionary.registerAlloyRecipes(MaterialDictionary.dict["battery_alloy"]); //A
+RecipeDictionary.registerAlloyRecipes(MaterialDictionary.dict["bronze"]); //A
+RecipeDictionary.registerAlloyRecipes(MaterialDictionary.dict["red_alloy"]);
 
 for(let i in ToolDictionary.materials) {
   RecipeDictionary.registerToolRecipe(ToolDictionary.materials[i]);

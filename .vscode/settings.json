@@ -9,5 +9,19 @@
         "multi_span": "cpp",
         "span": "cpp",
         "string_span": "cpp"
-    }
+    },
+    "telemetry.enableCrashReporter": false,
+    "html.hover.documentation": false,
+    "html.suggest.html5": false,
+    "html.format.preserveNewLines": false,
+    "html.autoClosingTags": false,
+    "javascript.autoClosingTags": false,
+    "typescript.autoClosingTags": false,
+    "css.hover.documentation": false,
+    "less.hover.documentation": false,
+    "scss.hover.documentation": false,
+    "git.pullTags": false,
+    "workbench.settings.enableNaturalLanguageSearch": false,
+    "npm.fetchOnlinePackageInfo": false,
+    "json.schemaDownload.enable": false
 }

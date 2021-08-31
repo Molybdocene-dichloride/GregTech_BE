@@ -14,4 +14,5 @@ function loadUsingBuildConfig() {
 ;
 function addInnerCoreTranslation(key) {
     Translation.addTranslation(key, { en: LocalizationSystem.translate({ lang: "en_US", key: "tile.wire_coil.tooltip_ebf" }) });
+    //Translation.addTranslation(key, {en: LocalizationSystem.translate({lang: "en_US", key: "tile.wire_coil.tooltip_ebf"})});
 }

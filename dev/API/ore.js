@@ -162,8 +162,9 @@ variation[i] = {texture: this.blocks[Object.keys(this.blocks)[i]].texture + "_" 
     createvariables: function(material, variation) {
         let variables = [];
         for(let i in variation) {
-            Translation.addTranslation("item.material.oreprefix.ore" + material.getCurrentName(), {en: java.lang.String.format(MaterialPrefixTranslator.translate("en_US", "ore"), material.getCurrentName())});
-            variables[i] = {name: "item.material.oreprefix.ore" + material.getCurrentName(), texture: [[variation[i].texture, 0]], inCreative: true};
+          //Logger.Log(java.lang.String.format(MaterialPrefixTranslator.translate("en_US", "ore"), material.getCurrentName()), "free");
+            Translation.addTranslation("item.material.oreprefix.ore" + material.getName("en_US"), {en: java.lang.String.format(MaterialPrefixTranslator.translate("en_US", "ore"), material.getName("en_US"))});
+            variables[i] = {name: "item.material.oreprefix.ore" + material.getName("en_US"), texture: [[variation[i].texture, 0]], inCreative: true};
         }
         return variables;
     },

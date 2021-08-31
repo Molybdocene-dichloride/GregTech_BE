@@ -4,7 +4,7 @@
 		"lib": [
 			"ESNext"
 		],
-		"outDir": "C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\src\\dev\\",
+		"outDir": "/home/ferrocene/Desktop/projct/toolchain-mod/src/dev/",
 		"composite": true,
 		"declaration": true,
 		"experimentalDecorators": true,
@@ -17,14 +17,14 @@
 		"webpack"
 	],
 	"include": [
-		"API/machine/translation.ts",
-		"API/machine/translationload.ts",
+		"/home/ferrocene/Desktop/projct/toolchain-mod/src/dev/API/translation/translation.ts",
+		"/home/ferrocene/Desktop/projct/toolchain-mod/src/dev/API/translation/translationload.ts"
 		//"API/machine/chunks.ts"
 	],
 	"files": [
-		"C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\toolchain\\declarations\\gregtech.d.ts",
-		"C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\toolchain\\declarations\\core-engine.d.ts",
-		"C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\toolchain\\declarations\\android-declarations.d.ts",
-		"C:\\Users\\111\\Desktop\\projects\\innercore-mod-toolchain-master\\toolchain-mod\\toolchain\\declarations\\android.d.ts"
+		"/home/ferrocene/Desktop/projct/toolchain-mod/toolchain/declarations/gregtech.d.ts",
+		"/home/ferrocene/Desktop/projct/toolchain-mod/toolchain/declarations/core-engine.d.ts",
+		"/home/ferrocene/Desktop/projct/toolchain-mod/toolchain/declarations/android-declarations.d.ts",
+		"/home/ferrocene/Desktop/projct/toolchain-mod/toolchain/declarations/android.d.ts"
 	]
 }

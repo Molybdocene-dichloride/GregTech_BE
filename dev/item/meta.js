@@ -98,7 +98,6 @@ MaterialDictionary.registerMaterial(new Material("uranium235", Elements.U[235], 
 MaterialDictionary.registerMaterial(new Material("vanadium", Elements.V, "INGOT", STD_METAL, 2160, 3650));
 MaterialDictionary.registerMaterial(new Material("zinc", Elements.Zn, "INGOT", Flags.pack4(STD_METAL, GENERATE_ORE, MORTAR_GRINDABLE, GENERATE_FOIL), 692.75, 1179.35));
 
-
 //MaterialDictionary.registerMaterial(new Material("carbonate", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["iron"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "ANION", GENERATE_ORE));
 //MaterialDictionary.registerMaterial(new Material("phosphate", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["iron"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "ANION", GENERATE_ORE));
 //MaterialDictionary.registerMaterial(new Material("hydroxide", of(new MaterialStack(MaterialDictionary.dict["aluminium"], 2), new MaterialStack(MaterialDictionary.dict["iron"], 3), new MaterialStack(MaterialDictionary.dict["silicon"], 3), new MaterialStack(MaterialDictionary.dict["oxygen"], 12)), "ANION", GENERATE_ORE));
@@ -456,7 +455,7 @@ for (let id in MaterialDictionary.data) {
 			if(form == undefined) return "unknown";
 			if(material == undefined) return "unknown " + form;
 			
-			return String.format(MaterialPrefixTranslator.translateToCurrent(form), material.getCurrentName()) + "\n" + material.formulatext;
+			return java.lang.String.format(MaterialPrefixTranslator.translateToCurrent(form), material.getCurrentName()) + "\n" + material.formulatext;
 		});
 	}
 }

@@ -451,11 +451,16 @@ function Material(unlocalized_name, formula, type, materialGenerationFlags, poin
 		return this.name;
 	};
 	this.getName = function(lang) {
-		if(!LocalizationSystem.getCurrentLanguage() in this.localizedNames) this.localizedNames[lang] = MaterialTranslator.translate(lang, this.name);
+		if(!(lang in this.localizedNames)) this.localizedNames[lang] = MaterialTranslator.translate(lang, this.name);
 		return this.localizedNames[lang];
 	};
 	this.getCurrentName = function() {
-		if(!LocalizationSystem.getCurrentLanguage() in this.localizedNames) this.localizedNames[LocalizationSystem.getCurrentLanguage()] = MaterialTranslator.translateToCurrent(this.name);
+		//Logger.Log(MaterialTranslator.translateToCurrent(this.name), "loie");
+		//Logger.Log(LocalizationSystem.getCurrentLanguage() in this.localizedNames, "loie");
+
+		if(!(LocalizationSystem.getCurrentLanguage() in this.localizedNames)) this.localizedNames[LocalizationSystem.getCurrentLanguage()] = MaterialTranslator.translateToCurrent(this.name);
+		//Logger.Log(LocalizationSystem.getCurrentLanguage() in this.localizedNames, "loie");
+
 		return this.localizedNames[LocalizationSystem.getCurrentLanguage()];
 	};
 
