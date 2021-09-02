@@ -6,7 +6,7 @@ furnace_sound: new Sound(),
 macerator_sound: new Sound(),
 compressor_sound: new Sound(),
 extractor_sound: new Sound()
-}
+};
 
 sounds.wrench.setSource("res/sound/Wrench.ogg");
 sounds.interrupt.setSource("res/sound/InterruptOne.ogg");
