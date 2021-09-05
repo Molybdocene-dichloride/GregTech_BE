@@ -27,17 +27,17 @@ namespace LiquidSystem {
 	class CustomLiquidBlock : public LiquidBlockStatic {
 		CustomLiquidBlock(std::string const& name) : CustomLiquidBlock(name, *BlockRegistry::getBlockById(8).getMaterial()) {};
 		CustomLiquidBlock(std::string const& name, Material const& material) : BlockLegacy(name, material) {}; //CustomLiquidMaterial
-		_getFlow(LiquidBlock* liquid, BlockSource& source, const BlockPos& pos) {
-		
-		}
-		getSpread(BlockSource& source, const BlockPos& pos) {
+		Vec3 _getFlow(LiquidBlock* liquid, BlockSource& source, const BlockPos& pos) {
 			
 		}
-		getTickDelay(BlockSource& source) {
+		Vec3 getSpread(BlockSource& source, const BlockPos& pos) {
+			
+		}
+		int getTickDelay(BlockSource& source) {
 			return material.getViscosity();
 		}
-		tick(BlockSource& source, BlockPos const& pos, Random& rand) {
-		
+		void tick(BlockSource& source, BlockPos const& pos, Random& rand) {
+			
 		}
 	};
 }

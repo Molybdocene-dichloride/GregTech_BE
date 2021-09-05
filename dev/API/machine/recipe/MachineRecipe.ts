@@ -1,30 +1,42 @@
-  export abstract class Recipe implements IRecipe {
-    inputs: number[];
-    outputs: number[];
-    duration: number;
-    EUt: number;
-    constructor(inputs, outputs, duration, EUt, postHandler) {
+export class Recipe implements IRecipe {
+	private inputs: LinkedHashMap<string, IStack>;
+    private outputs: LinkedHashMap<string, IStack>;
+    private duration: number;
+    final private hidden: boolean;
+    constructor(inputs: LinkedHashMap<string, IStack>, outputs: LinkedHashMap<string, IStack>, duration: number, hidden: boolean = true) {
       this.inputs = inputs;
       this.outputs = outputs;
       this.duration = duration;
-      EUt = EUt;
+      
+      this,hidden = hidden;
     }
+    
+    getEfficiency(): number {
+		return 1;
+	}
     isSteam() : boolean {
-        return this.EUt <= 16;
-    }
-  }
+        return this.inputs.get("eut").count <= 16;
+	}
+	isHidden(): boolean {
+		return hidden;
+	}
+	provideRecipe(): void {};
+}
   
   export abstract class RecipeMap implements IRecipeMap {
-    minInputs: number = 0;
-    maxInputs: number = 0;
-    minOutputs: number = 0;
-    maxOutputs: number = 0;
-    minFluidInputs: number = 0;
-    maxFluidInputs: number = 0;
-    minFluidOutputs: number = 0;
-    maxFluidOutputs: number = 0;
-    defaultEUt: number = 0;
-    constructor(minInputs: number, maxInputs: number, minOutputs: number, maxOutputs: number, minFluidInputs: number, maxFluidInputs: number, minFluidOutputs: number, maxFluidOutputs: number, defaultEUt: number) {
+	private factory: BasicRecipeFactory:
+	private recipes: LinkedHashMap<LinkedHashMap<string, IStack>, IRecipe>;
+	
+    private minInputs: number;
+    private maxInputs: number;
+    private minOutputs: number;
+    private maxOutputs: number;
+    private minFluidInputs: number;
+    private maxFluidInputs: number;
+    private minFluidOutputs: number;
+    private maxFluidOutputs: number;
+
+    constructor(minInputs: number, maxInputs: number, minOutputs: number, maxOutputs: number, minFluidInputs: number, maxFluidInputs: number, minFluidOutputs: number, maxFluidOutputs: number, defaultEUt: number, b: RecipeBuilder, hidden: boolean = false) {
       this.minInputs = minInputs;
       this.maxInputs = maxInputs;
       this.minOutputs = minInputs;
@@ -33,9 +45,10 @@
       this.maxFluidInputs = maxFluidInputs;
       this.minFluidOutputs = minFluidOutputs;
       this.maxFluidOutputs = maxFluidOutputs;
-      this.defaultEUt = defaultEUt;
+      this.factory = b;
+      this.hidden = hidden;
     }
-    addRecipe(recipe: Recipe) : void {
+    putRecipe(recipe: Recipe) : void {
         Logger.Log("rmap", "gfertyu");
 		let ru = RecipeUtil.shapedUtil(recipe.input);
 
@@ -75,51 +88,16 @@
 			}
 			inputs[0] = inp;
 		}
-		for(let n in inputs) {
-			this[this.length] = recipe;
-			let t = "";
-			for(let i in inputs[n]) {
-				let iddata;
-				if(inputs[n][i].type == "material") {
-					let preiddatainput = MaterialDictionary.invdata[inputs[n][i].form][inputs[n][i].material.name];
-					iddata = {id: preiddatainput.id, data: preiddatainput.data};
-				} else if(inputs[n][i].type == "pipe_machine") {
-					let preiddatainput = PipeDictionary.pipes[inputs[n][i].typed + "_" + inputs[n][i].name];
-					iddata = {id: BlockID.gtblockpipe, data: preiddatainput};
-				} else if(inputs[n][i].type == "machine") {
-					let preiddatainput = MachineDictionary.steammachines[inputs[n][i].typed][inputs[n][i].name];
-					iddata = {id: BlockID.gtblockmachine, data: preiddatainput.data};
-				} else if(inputs[n][i].type == "casing") {
-					let preiddatainput = MachineDictionary.casings[inputs[n][i].typed];
-					iddata = {id: BlockID.gtcasing, data: preiddatainput};
-				} else if(inputs[n][i].type == "common") {
-					let preiddatainput = inputs[n][i];
-					iddata = {id: preiddatainput.id, data: preiddatainput.data};
-				} else if(inputs[n][i].type == "ore") {
-					iddata = {id: OreDictionary.data[inputs[n][i].material.name].id, data: 0};
-				}
-				t += iddata.id + "_";
-				t += iddata.data + "_";
-			}
-			t = t.substring(0, t.length - 2);
-
-			if(!this.get[t]) this.get[t] = [];
-			this.get[t].push(recipe);
-			this.length++;
-		}
+		this.recipes.put(recipe.inputs, recipe);
 	}
-    deleteRecipe(recipe: Recipe): void {
-        for(let i in this) {
-            if(this[i] == recipe) { 
-                delete this[i];
-                break;
-            }
-        }
-    }
-  } & {
-     [key: String]: Machine.Recipe 
-  }
-  
-  let ItemInstances = {
-     [key: string]: ItemInstance
+	deleteRecipe(index: string) {
+		recipes.remove(index);
+	}
+    findRecipe(inputs: LinkedHashMap<string, IStack>) {
+		return this.recipes.get(inputs);
+	}
+	
+	findFactory(): B {
+		return factory;
+	}
   }
