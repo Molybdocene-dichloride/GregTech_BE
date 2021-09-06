@@ -1,8 +1,8 @@
-export class FluidStorage {
+export class FluidPartStorage extends IPartStorage<ElectricStack> {
     private limit : number;
     private limitStacks: number;
     
-    private stacks : FluidStack[];
+    private slots : LinkedHashMap<string, FluidStack>;
 
     constructor(limitStacks: number, limit : number) {
 		this.limitStacks = limitStacks;

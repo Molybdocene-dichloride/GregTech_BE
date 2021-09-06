@@ -1,26 +1,7 @@
-class GTWindow extends UI.StandardWindow {
+class GTTierableWindow extends UI.StandardWindow {
   currentMainWindow = this.getWindow("main");
-  constructor(prefix, prototype_, prototype1) {
-    super(prototype_);
-    
-    this.addWindow(prototype1);
-    
-    for(let i in this.drawing) {
-      if(this.getWindow("main").drawing[i].bitmap && this.getWindow("main").drawing[i].bitmap.contains("*")) {
-        this.getWindow("main").drawing[i].bitmap.substring(0, this.getWindow("main").drawing[i].bitmap.indexOf("*") - 1) + prefix + this.getWindow("main").drawing[i].bitmap.substring(this.getWindow("main").drawing[i].bitmap.indexOf("*") + 1);
-      }
-    }
-    
-    for(let i in this.getElements("main")) {
-      if(this.getElement("main", i).bitmap && this.getElement("main", i).bitmap.contains("*")) {
-        this.getElement("main", i).bitmap.substring(0, this.getElement("main", i).bitmap.indexOf("*") - 1) + prefix + this.getElement("main", i).bitmap.substring(this.getElement("main", i).bitmap.indexOf("*") + 1);
-      }
-    }
-    for(let i in this.getElements("main1")) {
-      if(this.getElement("main1", i).bitmap && this.getElement("main1", i).bitmap.contains("*")) {
-        this.getElement("main1", i).bitmap.substring(0, this.getElement("main1", i).bitmap.indexOf("*") - 1) + prefix + this.getElement("main1", i).bitmap.substring(this.getElement("main1", i).bitmap.indexOf("*") + 1);
-      }
-    }
+  constructor(id, tier) {
+    super(null);
   },
   getMainWindow() {
     return this.currentMainWindow;

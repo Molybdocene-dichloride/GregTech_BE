@@ -18,7 +18,6 @@
 	],
 	"include": [
 		"/home/ferrocene/Desktop/projct/toolchain-mod/src/dev/API/translation/translation.ts",
-		"/home/ferrocene/Desktop/projct/toolchain-mod/src/dev/API/translation/translationload.ts"
 		//"API/machine/chunks.ts"
 	],
 	"files": [

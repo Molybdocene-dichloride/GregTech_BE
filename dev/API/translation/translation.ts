@@ -59,8 +59,8 @@ namespace langMap {
 	zh = "zn_CN";
 	uk = "uk_UA";
 }
-function getFullLanguage(2code: string) {
-	return langMap[2code] || "en_US";
+function getFullLanguage(two_code: string) {
+	return langMap[two_code] || "en_US";
 }
 
 function loadUsingBuildConfig() {

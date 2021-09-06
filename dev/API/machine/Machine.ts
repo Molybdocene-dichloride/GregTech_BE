@@ -1,20 +1,20 @@
 //Server
 abstract class Machine extends BlockStateTileEntity {
-    tier: number;
-    window: MetaWindow;
+    private tier: number;
     
-    progress : number;
-    temperature : number;
+    private progress : number;
+    private temperature : number;
     
-    connectable : boolean;
-    pipeconnectable : boolean;
-    //pipeconnectableSides : [];
-    itemconnectable : boolean;
-    fluidconnectable : boolean;
-    connectCounter : number;
-
-    fluidStorage : new Machine.FluidStorage(),
-	_Nets: {};
+    private connectable : boolean;
+    private pipeconnectable : boolean;
+    private itemconnectable : boolean;
+    private fluidconnectable : boolean;
+    
+    private connectCounter : number;
+    
+	private itemStorage : new ItemStorage();
+    private fluidStorage : new FluidStorage();
+	private _Nets: LinkedHashMap<KirchhoffNet>;
     init() : void {
         this.enabled = true;
         this.progress = 0;

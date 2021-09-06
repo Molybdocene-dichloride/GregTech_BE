@@ -7,9 +7,9 @@ class Colour {
 }
 class ChunkBase extends Animation.Base {
   render: ChunkRender;
-  constructor(x: number, y: number, z: number, colour: Colour) {
-    super(x, y, z);
-    if(this.render == null) this.render = new ChunkRender(colour);
+  constructor(x: number, z: number, colour: Colour) {
+    super(x, 0, z);
+    this.render = new ChunkRender(colour);
     this.describe({render: this.render.getId()});
   }
 }
@@ -54,4 +54,19 @@ class ChunkRender extends Render {
     
     return part;
   }
+}
+
+let chunks: LinkedHashMap<ChunkBase> = new LinkedHashMap<ChunkBase>();
+function loadChunkBorders() {
+	for(let x = -1; x < 2; x++) {
+		for(let z = -1; z < 2; z++) {
+			if(!chunks.exists(new Pos(x, z))) {
+				chunks.put(new ChunkBase(x, z));
+			}
+			chunks.get().load();
+		}
+	}
+}
+function unloadChunkBorders() {
+	
 }
