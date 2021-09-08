@@ -40,7 +40,7 @@ class ItemStackInfo {
         this->data = item.getDamageValue();
         this->count = item.count;
     }
-    bool operator<(const ItemStackInfo& c2) {
+    bool operator<(const ItemStackInfo& c2) const {
         this->id + this->data + this->count < c2.id + c2.data + c2.count;
     }
 };

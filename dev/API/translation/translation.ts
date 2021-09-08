@@ -1,9 +1,9 @@
 class PrefixPostfixTranslator {
   private _pointer: number;
-  constructor(pre: String, post: String = "name") {
+  constructor(pre: string | String, post: string | String = "name") {
     this._pointer = LocalizationSystem._createNativeTranslatorObj({pre: pre, post: post});
   }
-  translateToCurrent(key: String) : String {
+  translateToCurrent(key: string | String) : string {
     if (!(typeof key === 'string' || key instanceof String)) {
       Debug.error("error: Translation key must be String");
       return "";
@@ -15,7 +15,7 @@ class PrefixPostfixTranslator {
     return LocalizationSystem._translateToCurrent(str);
   }*/
   
-  translate(lang: String, key: String) : String {
+  translate(lang: string | String, key: string | String) : string {
     if(!(typeof lang === 'string' || lang instanceof String)) {
       Debug.error("error: Translation lang must be String");
       return "";
@@ -34,30 +34,18 @@ class PrefixPostfixTranslator {
 const ItemTranslator = new PrefixPostfixTranslator("item");
 const TileTranslator = new PrefixPostfixTranslator("tile");
 
-function loadUsingBuildConfig(): void {
-    for(let i = 0; i < __mod__.buildConfig.resourceDirs.size(); i++) {
-        Logger.Log(__mod__.buildConfig.resourceDirs.get(i).resourceType, "ссяв");
-        if(__mod__.buildConfig.resourceDirs.get(i).resourceType == "resource") {
-            Logger.Log(__mod__.dir + __mod__.buildConfig.resourceDirs.get(i).path, "pound");
-            if(FileTools.isExists(__mod__.dir + __mod__.buildConfig.resourceDirs.get(i).path)) {
-                Logger.Log(__mod__.dir + __mod__.buildConfig.resourceDirs.get(i).path + "lang/", "pAZ");
-                if(FileTools.isExists(__mod__.dir + __mod__.buildConfig.resourceDirs.get(i).path + "lang/")) LocalizationSystem.loadTranslationDir({path: __mod__.dir + __mod__.buildConfig.resourceDirs.get(i).path + "lang/"});
-            }
-        }
-    }
-}
 namespace langMap {
-	de = "de_DE";
-	en = "en_US";
-	es = "es_ES";
-	fi = "fi_FI";
-	fr = "fr_FR";
-	ja = "ja_JP";
-	pt = "pt_BR";
-	ro = "ro_RO";
-	ru = "ru_RU";
-	zh = "zn_CN";
-	uk = "uk_UA";
+	let de = "de_DE";
+	let en = "en_US";
+	let es = "es_ES";
+	let fi = "fi_FI";
+	let fr = "fr_FR";
+	let ja = "ja_JP";
+	let pt = "pt_BR";
+	let ro = "ro_RO";
+	let ru = "ru_RU";
+	let zh = "zn_CN";
+	let uk = "uk_UA";
 }
 function getFullLanguage(two_code: string) {
 	return langMap[two_code] || "en_US";

@@ -7,19 +7,7 @@ export class ElectricStorage extends IStorage<ElectricStack> {
 		this.slots = new LinkedHashMap<string, ElectricPartStorage>();
         this.limit = limit;
     }
-    
-    setLimitAll(limit : string, forced : boolean = false) : void {
-		let bool = false;
-		for(let i in this.slots) {
-			if(this.limit < this.slots.get(i).limit) bool = true;
-		}
-		if(!bool || forced) {
-			this.limit = limit;
-			for(let i in slots) {
-				setLimit(i, limit, true, true);
-			}
-		}
-    }
+ 
     setLimit(limit : string, forced: boolean = false, limiter: Limiter = this.limiter) : void {
 		let bool = false;
 		let summ = 0;
@@ -69,6 +57,8 @@ export class ElectricStorage extends IStorage<ElectricStack> {
     getLimit(index : string) : number {
         return this.slots.get(index).getLimit;
     }
+    
+    
     setAmount(index : string, amount : number) : number {
         let oamount = Math.limit(this.slots.get(index).limit, amount);
         this.slots.get(index).amount = oamount;
@@ -92,30 +82,59 @@ export class ElectricStorage extends IStorage<ElectricStack> {
     getRelativeAmount(index : string) : number {
         return 1 / this.slots.get(index).amount;
     }
-    isFull(index : string) : boolean {
-        return this.slots.get(index).amount == this.slots.get(index).limit;
-    }
-    isEmpty(index : string) : boolean {
-        return this.slots.get(index).amount == 0;
-    }
+    
+    isFull(): boolean {
+		let amount = 0;
+		for(let i in this.slots) {
+			for(let i in this.slots.get(index).slots) {
+				amount += this.slots.get(index).slots.get(i).amount;
+			}
+		}
+        return amount == this.limit;    
+	}
+    isFull(index : string): boolean {
+		let amount = 0;
+		for(let i in this.slots.get(index).slots) {
+			amount += this.slots.get(index).slots.get(i).amount;
+		}
+        return amount == this.slots.get(index).limit;    
+	}
+	isEmpty(): boolean {
+		let amount = 0;
+		for(let i in this.slots) {
+			for(let i in this.slots.get(index).slots) {
+				amount += this.slots.get(index).slots.get(i).amount;
+			}
+		}
+        return amount == 0;    
+	}
+    isEmpty(index : string): boolean {
+		let amount = 0;
+		for(let i in this.slots.get(index).slots) {
+			amount += this.slots.get(index).slots.get(i).amount;
+		}
+        return amount == 0;
+	}
+    
     getEnergy(index : string, amount : number) : ElectricStack {
-        let oamount = Math.limit(slots(index).amount, amount);
-        this.slots.get(index).amount -= oamount;
-        return oamount;
+		return this.slots.get(index).getEnergy(amount);
     }
     getEnergy(index : string, stack : ItemStack) : ElectricStack {
-        let oamount = Math.limit(slots(index).amount, stack.amount);
-        this.slots.get(index).amount -= oamount;
-        stack.amount = (oamount);
-        return stack;
+		return this.slots.get(index).getEnergy(amount);
     }
-    prepareStack(index : string, id : number, limit : number): void {
-        this.stacks.get(index) = new ItemStack(id, 0, limit);
+    
+    prepareStorage(index : string, id : number, limit : number): void {
+        this.stacks.put(index, new ElectricPartStorage(id, 0, limit));
     }
-    prepareStack(index : string, stack : ItemStack, zero : boolean = true): void {
-        if(zero) stack.amount = 0;
-        this.stacks.get(index) = stack;
+    prepareStorage(index : string, stack : ElectricPartStorage, zero : boolean = true): void {
+        if(zero) stack.clean();
+        this.stacks.put(index, stack);
     }
+    getStorage(index : string): ElectricPartStorage {
+		return this.slots.get(index)
+	}
+    
+    tick(): void {}
 }
 
 
@@ -124,50 +143,23 @@ export class ElectricStorage extends IStorage<ElectricStack> {
 
 
 export class ElectricPartStorage extends IPartStorage<ElectricStack> {
+	private id: string;
     private limit : number;
     private slots : LinkedHashMap<string, ElectricStack>;
 
-    constructor(limit : number) {
+    constructor(id: string, limit : number) {
+		this.id = id;
 		this.slots = new LinkedHashMap<string, ElectricStack>();
         this.limit = limit;
     }
-    setLimit(limit : number, forced : boolean = false): LinkedHashMap<string, ElectricStack> {
-		let amount = 0;
-		for(let i in this.slots) {
-			amount += this.slots.get(i).amount;
-		}
-		
-		let ret = new LinkedHashMap<string, ElectricStack>();
-		if(forced || amount < limit) {
-			this.limit = limit;
-			let length = amount - limit / this.slots.size();
-			
-			for(let i in this.slots) {
-				ret.put(i, new ElectricStack(id, this.slots.get(i).amount - limit));
-			}
-		}
-		return ret;
+    
+    getStacks(): LinkedHashMap<string, ElectricStack> {
+		return slots;
 	}
-
-    setAmount(index: string, amount: number) : number {
-        let oamount = Math.limit(this.slots.get(index).limit, amount);
-        this.slots.get(index).amount = oamount;
-        return amount - oamount;
-    }
-    
-    addEnergy(index : string, amount : number) : number {
-        let oamount = Math.limit(this.slots.get(index).limit - this.slots.get(index).amount, amount);
-        this.slots.get(index).amount += oamount;
-        return amount - oamount;
-    }
-    addEnergy(index : string, stack : ElectricStack) : ElectricStack {
-        let oamount = Math.limit(this.slots.get(index).limit - this.slots.get(index).amount, stack.amount);
-        this.slots.get(index).amount += oamount;
-        stack.amount -= (oamount);
-        return stack;
-    }
-    
-    
+	getStack(id: string): ElectricStack {
+		return slots;
+	}
+	
     getLimit() : number {
         return this.limit;
     }
@@ -201,24 +193,69 @@ export class ElectricPartStorage extends IPartStorage<ElectricStack> {
 		}
         return amount == 0;
     }
-    getEnergy(index : string, amount : number) : number {
+    
+    getEnergy(index : string, amount : number) : ElectricStack {
+		if(this.slots.containsKey(index)) return null;
         let oamount = Math.min(this.slots.get(string).amount, amount);
         this.slots.get(index).amount -= oamount;
-        return oamount;
+        return new ElectricStack(this.slots.get(string).id, oamount, this.slots.get(string).limit);
     }
-    getEnergy(index : string, stack : ElectricStack) : ElectricStack {
+    getEnergy(stack : ElectricStack) : ElectricStack {
+		if(this.slots.containsKey(index)) return null;
         let oamount = Math.min(this.slots.get(index).amount, stack.amount);
         this.slots.get(index).amount -= oamount;
         stack.amount = oamount;
         return stack;
     }
     
+    setLimit(limit : number, forced : boolean = false): LinkedHashMap<string, ElectricStack> {
+		let amount = 0;
+		for(let i in this.slots) {
+			amount += this.slots.get(i).amount;
+		}
+		
+		let ret = new LinkedHashMap<string, ElectricStack>();
+		if(forced || amount < limit) {
+			this.limit = limit;
+			let length = amount - limit / this.slots.size();
+			
+			for(let i in this.slots) {
+				ret.put(i, new ElectricStack(id, this.slots.get(i).amount - limit));
+			}
+		}
+		return ret;
+	}
+
+    setAmount(index: string, amount: number) : number {
+        let oamount = Math.limit(this.slots.get(index).limit, amount);
+        this.slots.get(index).amount = oamount;
+        return amount - oamount;
+    }
     
-    prepareStack(index : number, id : number, limit : number): void {
-        this.stacks.put(index, new ElectricStack(id, 0, limit));
+    addEnergy(index : string, amount : number) : number {
+        let oamount = Math.limit(this.slots.get(index).limit - this.slots.get(index).amount, amount);
+        this.slots.get(index).amount += oamount;
+        return amount - oamount;
     }
-    prepareStack(index : number, stack : ElectricStack, zero : boolean = true): void {
+    addEnergy(stack : ElectricStack) : ElectricStack {
+        let oamount = Math.limit(this.slots.get(stack.id).limit - this.slots.get(stack.id).amount, stack.amount);
+        this.slots.get(stack.id).amount += oamount;
+        stack.amount -= (oamount);
+        return stack;
+    }
+    
+    prepareStack(id : number, limit : number): void {
+        this.stacks.put(id, new ElectricStack(id, 0, limit));
+    }
+    prepareStack(stack : ElectricStack, zero : boolean = true): void {
         if(zero) stack.amount = 0;
-        this.stacks.put(index, stack);
+        this.stacks.put(stack.id, stack);
     }
+    
+    clean(): void {
+		this.slots.clear();
+	}
+	clcopy(): void {
+		this.slots.clear();
+	}
 }

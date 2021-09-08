@@ -1,28 +1,18 @@
 abstract class LowMultiblockMachine extends Machine implements IMultiblockLogic, IProcessingLogic {
-  shape: MultiblockMachine.Shape;
-  recipes: RecipeMap;
-  getRecipes(): RecipeMap {
+  private shape: MultiblockMachine.Shape;
 
-    return recipes:
-  }
-  getRecipe(index : number): Recipe {
-    return recipes[index];
-  }
-  addRecipe(recipe: Recipe): void {
-    recipes[recipes.length] = recipe;
-  }
-  getShape() : MultiblockMachine.Shape {
+  private getShape() : MultiblockMachine.Shape {
     return shape;
   }
-  setShape(shape : MultiblockMachine.Shape) : void {
+  private setShape(shape : MultiblockMachine.Shape) : void {
     this.shape = shape;
   }
-  getBlock(position: Vec3) : Tile {
+  private getBlock(position: Vec3) : Tile {
      return shape.getBlock(position);
-  },
+  }
   checkBlocks() : boolean {
     return shape.checkBlocks();
-  },
+  }
   init() : void {
     super.init();
     prepareMultiblock();

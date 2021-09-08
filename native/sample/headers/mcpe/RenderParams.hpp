@@ -1,5 +1,5 @@
 #pragma once
-#include <mcpe\Actor.hpp>
+#include <mcpe/Actor.hpp>
 
 class Actor;
 

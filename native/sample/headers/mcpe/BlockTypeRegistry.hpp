@@ -2,8 +2,8 @@
 #include <map>
 #include <utility>
 #include <atomic>
-#include <mcpe\Block.hpp>
-#include <gsl\pointers>
+#include <mcpe/Block.hpp>
+#include <gsl/pointers>
 
 template <typename T> class SharedCounter {
 public:

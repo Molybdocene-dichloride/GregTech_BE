@@ -14,7 +14,10 @@ abstract class Machine extends BlockStateTileEntity {
     
 	private itemStorage : new ItemStorage();
     private fluidStorage : new FluidStorage();
-	private _Nets: LinkedHashMap<KirchhoffNet>;
+	private _Nets: LinkedHashMap<? extends INet>;
+	
+	recipes: RecipeMap;
+	
     init() : void {
         this.enabled = true;
         this.progress = 0;
@@ -182,6 +185,16 @@ abstract class Machine extends BlockStateTileEntity {
 		return fluidconnectable;
 	}
 	
+	getRecipes(): RecipeMap {
+		return recipes:
+	}
+	getRecipe(index : number): Recipe {
+		return recipes[index];
+	}
+	addRecipe(recipe: Recipe): void {
+		recipes[recipes.length] = recipe;
+	}
+  
 	client: ClientTileEntitySide;
 }
 

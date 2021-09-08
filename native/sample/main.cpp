@@ -8,19 +8,19 @@
 #include <logger.h>
 #include <nativejs.h>
 
-#include <mcpe\common.hpp>
-#include <mcpe\PerlinSimplexNoise.hpp>
-#include <mcpe\LevelChunk.hpp>
+#include <mcpe/common.hpp>
+#include <mcpe/PerlinSimplexNoise.hpp>
+#include <mcpe/LevelChunk.hpp>
 //#include <mcpe\VanillaBlocks.h>
-#include <mcpe\ChunkSource.hpp>
-#include <mcpe\IBlockWorldGenAPI.hpp>
-#include <mcpe\RenderParams.hpp>
-#include <mcpe\NativeBlockSource.hpp>
-#include <mcpe\Block.hpp>
+#include <mcpe/ChunkSource.hpp>
+#include <mcpe/IBlockWorldGenAPI.hpp>
+#include <mcpe/RenderParams.hpp>
+#include <mcpe/NativeBlockSource.hpp>
+#include <mcpe/Block.hpp>
 
-#include <horizon\pool.h>
-#include <innercore\block_registry.h>
-#include <innercore\id_conversion_map.h>
+#include <horizon/pool.h>
+#include <innercore/block_registry.h>
+#include <innercore/id_conversion_map.h>
 
 #include <Localization.hpp>
 #include <flags.hpp>

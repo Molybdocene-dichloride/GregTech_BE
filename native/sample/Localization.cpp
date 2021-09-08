@@ -196,6 +196,9 @@ namespace LocalizationSystem {
 
 namespace FurnaceSystem {
     std::__ndk1::map<ItemStackInfo, ItemStackInfo> custom;
+    void addFurnaceRecipes(ItemStackInfo& item1, ItemStackInfo& item2) {
+		custom.insert(std::__ndk1::pair<ItemStackInfo, ItemStackInfo>(item1, item2));
+	}
     void addFurnaceRecipes(ItemStack& item1, ItemStack& item2) {
 		custom.insert(std::__ndk1::pair<ItemStackInfo, ItemStackInfo>(ItemStackInfo(item1), ItemStackInfo(item2)));
 	}

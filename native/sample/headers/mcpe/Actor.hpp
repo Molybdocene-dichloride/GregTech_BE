@@ -1,8 +1,8 @@
 #pragma once
-#include <mcpe\Util.hpp>
-#include <mcpe\BlockPos.hpp>
-#include <mcpe\Random.hpp>
-#include <mcpe\RenderParams.hpp>
+#include <mcpe/Util.hpp>
+#include <mcpe/BlockPos.hpp>
+#include <mcpe/Random.hpp>
+#include <mcpe/RenderParams.hpp>
 
 class ActorBlockSyncMessage;
 class ActorLocation;

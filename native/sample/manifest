@@ -1,15 +1,15 @@
 {
-    "shared": {
-        "name": "gregtech",
+    	"shared": {
+        	"name": "gregtech",
 		"include": [
 			"headers"
 		]
-    },
+    	},
 
-    "depends": [
+	"depends": [
 		"gnustl_shared",
-    	"minecraftpe",
-    	"innercore",
+    		"minecraftpe",
+    		"innercore",
 		"nativejs"
 	]
 }

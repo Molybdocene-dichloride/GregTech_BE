@@ -1,8 +1,8 @@
 #pragma once
 
-#include <mcpe\BlockPos.hpp>
-#include <mcpe\Block.hpp>
-#include <mcpe\Dimension.hpp>
+#include <mcpe/BlockPos.hpp>
+#include <mcpe/Block.hpp>
+#include <mcpe/Dimension.hpp>
 class LevelChunk {
     public:
     Level getLevel() const;

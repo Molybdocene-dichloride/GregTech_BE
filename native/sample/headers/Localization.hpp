@@ -15,7 +15,7 @@
 #include <symbol.h>
 #include <hook.h>
 
-#include <innercore\item_registry.h>
+#include <innercore/item_registry.h>
 
 #include <toString.hpp>
 

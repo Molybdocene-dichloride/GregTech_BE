@@ -1,6 +1,6 @@
 #pragma once
 
-#include <mcpe\ChunkBlockPos.hpp>
+#include <mcpe/ChunkBlockPos.hpp>
 
 class PerlinSimplexNoise {
     public:

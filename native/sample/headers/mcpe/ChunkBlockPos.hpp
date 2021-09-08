@@ -1,6 +1,6 @@
 #pragma once
 
-#include <mcpe\BlockPos.hpp>
+#include <mcpe/BlockPos.hpp>
 class ChunkLocalHeight {};
 class ChunkBlockPos {
 public:
