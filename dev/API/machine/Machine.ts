@@ -16,7 +16,8 @@ abstract class Machine extends BlockStateTileEntity {
     private fluidStorage : new FluidStorage();
 	private _Nets: LinkedHashMap<? extends INet>;
 	
-	recipes: RecipeMap;
+	private shape: MachineRegion;
+	private recipes: RecipeMap;
 	
     init() : void {
         this.enabled = true;
@@ -51,7 +52,7 @@ abstract class Machine extends BlockStateTileEntity {
         this.fluidconnectable = true;
     }
     preparePipe() : void {
-        if (this.connectable && this.pipeconnectable) {
+        if(this.connectable && this.pipeconnectable) {
             this.connectEncounter = 0;
             this.__Nets = {};
             TileEntityRegistry.addMacineAccessAtCoords(this.x, this.y, this.z, this);
@@ -184,17 +185,13 @@ abstract class Machine extends BlockStateTileEntity {
 	canFluidConnect(side?: number): boolean {
 		return fluidconnectable;
 	}
-	
-	getRecipes(): RecipeMap {
-		return recipes:
-	}
-	getRecipe(index : number): Recipe {
-		return recipes[index];
-	}
-	addRecipe(recipe: Recipe): void {
-		recipes[recipes.length] = recipe;
-	}
-  
+  private getShape() : MachineRegion {
+    return shape;
+  }
+  private setShape(shape : MachineRegion) : void {
+    this.shape = shape;
+  }
+	  
 	client: ClientTileEntitySide;
 }
 

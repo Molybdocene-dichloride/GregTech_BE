@@ -2,9 +2,11 @@ namespace MultiblockMachine {
 	export abstract class MultiblockRegion {
 		private blockSource: BlockSource;
 		private position: Vec3;
-		constructor(blockSource: BlockSource, position: Vec3) {
+		private pattern: BlockPattern;
+		constructor(blockSource: BlockSource, position: Vec3, pattern: BlockPattern) {
 			this.blockSource = blockSource;
 			this.position = position;
+			this.pattern = pattern;
 		}
 		getBlockSource() : BlockSource {
 			return blockSource;
@@ -12,25 +14,25 @@ namespace MultiblockMachine {
 		getBlock(position: Vec3) : Tile {
 			return blockSource.getBlock(this.position.x + position.x, this.position.y + position.y, this.position.z + position.z);
 		}
-		abstract checkBlocks() : boolean;
+		validateBlocks(): boolean {
+			pattern.validatePattern();
+		};
 	}
-	export class ClosedShape extends Shape {
+	export class ClosedMultiblockRegion extends MultiblockRegion {
 		private supportedBlocks: ArrayList<Tile>;
+		private wallBlocks: ArrayList<Tile>;
 		private maxDepth: number;
-		constructor(blockSource: BlockSource, position: Vec3, wallBlocks: ArrayList<Tile>, supportedBlocks: ArrayList<Tile>, maxDepth: number) {
+		constructor(blockSource: BlockSource, position: Vec3, wallBlocks: ArrayList<Tile>, supportedBlocks: ArrayList<Tile>, minDepth: number, maxDepth: number) {
 			super(blockSource, position);
+			this.wallBlocks = wallBlocks;
 			this.supportedBlocks = supportedBlocks;
 			this.maxDepth = maxDepth;
 		}
-		checkBlocks() {
-			
-		}
 	}
-  export abstract class BoxShape extends Shape {
-    size;
+  export class StandardMultiblockRegion extends MultiblockRegion {
+    size: number;
     constructor(position: Vec3, positionRel: Vec3, size: Vec3, casing: casing, blockSource: source) {
       super(position, positionRel, casing, blockSource);
-      this.size = size;
     }
     
     getBlock(position: Vec3) : Tile {
@@ -38,22 +40,6 @@ namespace MultiblockMachine {
           return null;
         }
       return super.getBlock(position);
-    }
-    
-    checkBlocks() : boolean {
-      let is = true
-      for(let i = 0; i < size.x; i++) {
-        for(let j = 0; j < size.y; j++) {
-      for(let j = 0; j < size.z; j++) {
-  
-        let block = blockSource.getBlock(this.position.x + i, this.position.y + j, this.position.z + k)
-        if(!(block.id == casing.id && block.data == casing.data)) {
-          is = false;
-        }
-      }
-        }
-      }
-      return is;
     }
   }
 }

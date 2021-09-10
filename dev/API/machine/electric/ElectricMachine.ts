@@ -1,5 +1,4 @@
 abstract class ElectricMachine extends Machine implements IElectricLogic {
-  
   energyconnectable: false
   energyinputconnectable: false
   dynamoconnectable: false

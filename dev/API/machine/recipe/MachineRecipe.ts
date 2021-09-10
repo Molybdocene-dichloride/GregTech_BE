@@ -11,6 +11,9 @@ export class Recipe implements IRecipe {
       this,hidden = hidden;
     }
     
+    getDuration(tier: number): number {
+		return this.duration;
+	}
     getEfficiency(): number {
 		return 1;
 	}
@@ -20,10 +23,19 @@ export class Recipe implements IRecipe {
 	isHidden(): boolean {
 		return hidden;
 	}
-	provideRecipe(): void {};
+	
+	getInputs(): void {
+		return this.inputs;
+	}
+	getOutputs(): void {
+		return this.outputs;
+	}
+	provideRecipe(itemStorage: ItemStorage, itemStorage: ItemStorage, electricStorage: ElectricStorage): void {
+		return this.outputs;
+	}
 }
   
-  export abstract class RecipeMap implements IRecipeMap {
+  export abstract class RecipeMap implements IRecipeMap<BasicRecipeFactory> {
 	private factory: BasicRecipeFactory:
 	private recipes: LinkedHashMap<LinkedHashMap<string, IStack>, IRecipe>;
 	
@@ -48,7 +60,7 @@ export class Recipe implements IRecipe {
       this.factory = b;
       this.hidden = hidden;
     }
-    putRecipe(recipe: Recipe) : void {
+    findRecipe(recipe: Recipe) : void {
         Logger.Log("rmap", "gfertyu");
 		let ru = RecipeUtil.shapedUtil(recipe.input);
 
@@ -93,10 +105,16 @@ export class Recipe implements IRecipe {
 	deleteRecipe(index: string) {
 		recipes.remove(index);
 	}
-    findRecipe(inputs: LinkedHashMap<string, IStack>) {
-		return this.recipes.get(inputs);
+    findRecipe(inputs: LinkedHashMap<string, IStack>): Recipe {
+		let getted = this.recipes.get(inputs);
+		if(getted == null) return null;
+		return getted;	
 	}
-	
+	getOutputs(inputs: LinkedHashMap<string, IStack>): outputs: LinkedHashMap<string, IStack> {
+		let getted = this.recipes.get(inputs);
+		if(getted == null) return null;
+		return getted.getOutputs();
+	}
 	findFactory(): B {
 		return factory;
 	}

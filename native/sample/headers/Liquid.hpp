@@ -8,6 +8,13 @@
 #include <mcpe/block/Liquid.hpp>
 
 namespace LiquidSystem {
+	void enableInfinitySources() {
+		
+	}
+	void disableInfinitySources() {
+		
+	}
+	
 	CustomLiquidMaterial* toCLM(Material* mat) {
 		if(CustomLiquidMaterial* v = dynamic_cast<CustomLiquidMaterial*>(mat)) {
 			return v;
@@ -40,4 +47,50 @@ namespace LiquidSystem {
 			
 		}
 	};
+	
+	class GTLiquidModule : public Module { //change behaviour of Water &/| Lava &/| provide custom liquid managers
+		public:
+		GTLiquidModule(const char* id): Module(id) {};
+	    virtual void initialize() {	
+        	HookManager::addCallback(SYMBOL("mcpe", "_ZNK7Recipes22getFurnaceRecipeResultERK13ItemStackBaseRK12HashedString"), LAMBDA((HookManager::CallbackController* controller, ItemStackBase const& item, HashedString const& prefix), {
+				Logger::debug("gh", patch::to_string<bool>(controller->hasResult()).c_str());
+                //Logger::debug("oop", patch::to_string<bool>(((ItemStackBase*)controller->getResult())->).c_str());
+                //if(custom.find(item) != m.end()) {
+					//return custom[item];
+				//}
+				//return controller->getResult();
+				//return controller->call<ItemStackBase, ItemStackBase const&, HashedString>(item, prefix);
+			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
+			
+			HookManager::addCallback(SYMBOL("mcpe", "_ZNK7Recipes22getFurnaceRecipeResultERK13ItemStackBaseRK12HashedString"), LAMBDA((HookManager::CallbackController* controller, ItemStackBase const& item, HashedString const& prefix), {
+				Logger::debug("gh", patch::to_string<bool>(controller->hasResult()).c_str());
+                //Logger::debug("oop", patch::to_string<bool>(((ItemStackBase*)controller->getResult())->).c_str());
+                //if(custom.find(item) != m.end()) {
+					//return custom[item];
+				//}
+				//return controller->getResult();
+				//return controller->call<ItemStackBase, ItemStackBase const&, HashedString>(item, prefix);
+			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
+			
+			HookManager::addCallback(SYMBOL("mcpe", "_ZNK7Recipes22getFurnaceRecipeResultERK13ItemStackBaseRK12HashedString"), LAMBDA((HookManager::CallbackController* controller, ItemStackBase const& item, HashedString const& prefix), {
+				Logger::debug("gh", patch::to_string<bool>(controller->hasResult()).c_str());
+                //Logger::debug("oop", patch::to_string<bool>(((ItemStackBase*)controller->getResult())->).c_str());
+                //if(custom.find(item) != m.end()) {
+					//return custom[item];
+				//}
+				//return controller->getResult();
+				//return controller->call<ItemStackBase, ItemStackBase const&, HashedString>(item, prefix);
+			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
+			
+			HookManager::addCallback(SYMBOL("mcpe", "_ZNK7Recipes22getFurnaceRecipeResultERK13ItemStackBaseRK12HashedString"), LAMBDA((HookManager::CallbackController* controller, ItemStackBase const& item, HashedString const& prefix), {
+				Logger::debug("gh", patch::to_string<bool>(controller->hasResult()).c_str());
+                //Logger::debug("oop", patch::to_string<bool>(((ItemStackBase*)controller->getResult())->).c_str());
+                //if(custom.find(item) != m.end()) {
+					//return custom[item];
+				//}
+				//return controller->getResult();
+				//return controller->call<ItemStackBase, ItemStackBase const&, HashedString>(item, prefix);
+			}, ), HookManager::CALL | HookManager::LISTENER | HookManager::CONTROLLER | HookManager::RESULT);
+	    }
+    };
 }

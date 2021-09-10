@@ -209,8 +209,8 @@ namespace FurnaceSystem {
         custom.insert(std::__ndk1::pair<ItemStackInfo, ItemStackInfo>(ItemStackInfo(id1, data1, count1), ItemStackInfo(id1, data1, count1)));
 	}
     class GTFurnaceModule : public Module { //adding custom recipes to furnace
-    public:
-	GTFurnaceModule(const char* id): Module(id) {};
+		public:
+		GTFurnaceModule(const char* id): Module(id) {};
 	    virtual void initialize() {	
         	HookManager::addCallback(SYMBOL("mcpe", "_ZNK7Recipes22getFurnaceRecipeResultERK13ItemStackBaseRK12HashedString"), LAMBDA((HookManager::CallbackController* controller, ItemStackBase const& item, HashedString const& prefix), {
 				Logger::debug("gh", patch::to_string<bool>(controller->hasResult()).c_str());

@@ -6,13 +6,7 @@ export interface IProcessingLogic {
   addRecipe(recipe: Recipe): void
   provideProcessing(): void
 }
-export interface IGenerationLogic {
-  getRecipes(): FuelMap
-  getRecipe(index : number): FuelRecipe
-  
-  addRecipe(recipe: FuelRecipe): void
-  provideGeneration(): void
-}
+
 export interface IElectricLogic {
   provideEnergy(): void
 }

@@ -4,12 +4,14 @@ abstract class BlockStateTileEntity extends TileEntity {
 	
 	private initialized: boolean;
 	private enabled: boolean;
+	private errored: boolean;
 	
 	private rotation: number;
 	constructor() {
 		this.initialized = false;
 		this.enabled = false;
-		
+		this.errored = false;
+
 		this.rotate = 2;
 		
 		this.sendPacket("gtmachine_rotate", {block: {x: this.x, y: this.y, z: this.z}, rotation: this.data.rotation, put0: this.data.put0, put1: this.data.put1, put2: this.data.put2, put3: this.data.put3, put4: this.data.put4, put5: this.data.put5, textures: this.data.type.textures, rotationOfBlock: this.data.rotation});

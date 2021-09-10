@@ -90,17 +90,3 @@ abstract class SteamGenerator extends SteamMachine implements IGenerationLogic {
                 }
   }
 }
-abstract class BronzeSteamGenerator extends SteamGenerator {
-  init() : void {
-    super.init();
-    tier = 0;
-  }
-}
-abstract class SteelSteamGenerator extends SteamGenerator {
-  init() : void {
-    super.init();
-    tier = 1;
-  }
-
-  
-}
