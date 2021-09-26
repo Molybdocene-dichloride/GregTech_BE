@@ -1,5 +1,17 @@
 namespace MultiblockMachine {
-	export abstract class MultiblockRegion {
+	export abstract class MachineRegion {
+		canSeeSky(): boolean;
+		
+		getSolarRadiation(): number;
+		
+		findActorAtSide(side, ObstacleFinder): Object;
+		findBlockAtSide(side, ObstacleFinder);
+		canSeeAtSide(side, ObstacleFinder): boolean;
+		
+		addParticle(type: number, x: number, y: number, z: number, vx: number, vy: number, vz: number, data?: number);
+		addFarParticle(type: number, x: number, y: number, z: number, vx: number, vy: number, vz: number, data?: number);
+	}
+	export abstract class MultiblockRegion extends MachineRegion {
 		private blockSource: BlockSource;
 		private position: Vec3;
 		private pattern: BlockPattern;

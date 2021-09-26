@@ -1,5 +1,6 @@
 //Server
 abstract class Machine extends BlockStateTileEntity {
+	private id: string;
     private tier: number;
     
     private progress : number;
@@ -18,7 +19,10 @@ abstract class Machine extends BlockStateTileEntity {
 	
 	private shape: MachineRegion;
 	private recipes: RecipeMap;
-	
+	constructor(id: string, tier: number) {
+		this.id = id;
+		this.tier = tier;
+	}
     init() : void {
         this.enabled = true;
         this.progress = 0;
@@ -121,7 +125,6 @@ abstract class Machine extends BlockStateTileEntity {
     }
     provide(stack : ItemInstance, src : any) {
         /*if(hatchs.some(element => return element === hatch) && typeof hatch == typeofHatch(typeof stack) && fluid.amount > 0)*/
-
         for (let i in slotsResult) {
             if (slots[i].id == item.id && slots[i].data == item.data) {
 
@@ -141,7 +144,7 @@ abstract class Machine extends BlockStateTileEntity {
         this.fluidStorage.addLiquid("steam", src.add(this, output, "steam", { x: this.x, y: this.y, z: this.z }) - output, this.sidepre);
 
     }
-  enableConnect(): void {
+	enableConnect(): void {
 		connectable = true;
 	}
 	disableConnect(): void {
@@ -185,13 +188,26 @@ abstract class Machine extends BlockStateTileEntity {
 	canFluidConnect(side?: number): boolean {
 		return fluidconnectable;
 	}
-  private getShape() : MachineRegion {
-    return shape;
-  }
-  private setShape(shape : MachineRegion) : void {
-    this.shape = shape;
-  }
-	  
+	
+	getRegion() : MachineRegion {
+		return shape;
+	}
+	setRegion(shape : MachineRegion) : void {
+		this.shape = shape;
+	}
+	
+	input: function(j): void {
+		itemStorage.input(j);
+		fluidStorage.input(j);
+	}
+	checkOutput: function(j): boolean {
+		return !(!itemStorage.checkOutput(j) || !fluidStorage.checkOutput(j));
+	}
+	output: function(j): void {
+		itemStorage.output(j);
+		fluidStorage.output(j);
+	}
+	
 	client: ClientTileEntitySide;
 }
 

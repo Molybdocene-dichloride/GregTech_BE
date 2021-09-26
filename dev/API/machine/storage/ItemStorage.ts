@@ -133,6 +133,34 @@ export class ElectricStorage extends IStorage<ElectricStack> {
     getStorage(index : string): ElectricPartStorage {
 		return this.slots.get(index)
 	}
+	
+	input: function(j) {
+		for(let i = 0; i < this.recipes.maxInputs; i++) {
+			this.itemStorage.get("input" + i).hide(this.itemStorage.getSlot("input" + i).id, j.inputs[i].count, this.itemStorage.getSlot("input" + i).data /*this.container.getSlot("input" + i).extra*/);
+			this.itemStorage.validate("input" + i);
+		}
+	}
+	output: function(j) {
+       Logger.Log("peakks", "zoom");
+       for(let i = 0; i < this.data.type.recipes.maxOutputs; i++) {
+           let iddata = MaterialDictionary.invdata[j.outputs[i].form][j.outputs[i].material.name];
+			Logger.Log("peakoiks", iddata.id);
+			Logger.Log("peakoiks", iddata.data);
+			Logger.Log("peakoiks", j.outputs[i].count);
+			this.container.setSlot("output" + i, iddata.id, this.container.getSlot("output" + i).count + j.outputs[i].count, iddata.data/*iddata.extra*/);
+			this.container.validateSlot("output" + i);
+		}
+	}
+	checkOutput: function(j) {
+		let checked = true;
+		for(let i = 0; i < this.recipes.maxOutputs; i++) {
+			if(!this.container.getSlot("output" + i).id == 0 || (this.container.getSlot("output" + i).id == iddata.id && this.container.getSlot("output" + i).data == iddata.data && this.container.getSlot("output" + i).count + j.outputs[i].count < Item.getMaxStack(this.container.getSlot("output" + i).id))) {
+				checked = false;
+			}
+		}
+		Logger.Log("qshablop", checked);
+		return checked;
+	}
     
     tick(): void {}
 }

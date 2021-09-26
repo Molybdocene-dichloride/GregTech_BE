@@ -34,14 +34,14 @@ class SteamExtractor extends SteamProcessor {
     recipes = new RecipeMap(1, 1, 1, 1);
   }
 }
-classSteamBoiler extends SteamGenerator {
+class SteamBoiler extends SteamGenerator {
   init() : void {
     super.init();
     recipes = new FuelMap(1, 1, 1, 1);
     maxTemperature = 773.15;
   }
 }
-class SteamSolarBoier extends BronzeSteamGenerator {
+class SteamSolarBoier extends SteamGenerator {
   init() : void {
     super.init();
     recipes = new FuelMap(0, 0, 0, 0);
@@ -56,7 +56,7 @@ class SteamLavaBoier extends SteamGenerator {
   }
 }
 
-class BronzeBlastFurnace extends LowMultiblockMachine {
+class BlastFurnace extends LowMultiblockMachine {
   init() : void {
     shape = new MultiblockMachine.BoxShape(new Vector3(x, y, z), new Vector3(2, 1, 1), Vector3(3, 4, 3), {id: BlockID.z, data: 0}, this.blockSource);
     super.init();

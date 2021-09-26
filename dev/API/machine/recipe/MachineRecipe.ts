@@ -1,4 +1,4 @@
-export class Recipe implements IRecipe {
+export class StandardRecipe implements IRecipe {
 	private inputs: LinkedHashMap<string, IStack>;
     private outputs: LinkedHashMap<string, IStack>;
     private duration: number;
@@ -10,7 +10,6 @@ export class Recipe implements IRecipe {
       
       this,hidden = hidden;
     }
-    
     getDuration(tier: number): number {
 		return this.duration;
 	}
@@ -30,8 +29,34 @@ export class Recipe implements IRecipe {
 	getOutputs(): void {
 		return this.outputs;
 	}
-	provideRecipe(itemStorage: ItemStorage, itemStorage: ItemStorage, electricStorage: ElectricStorage): void {
-		return this.outputs;
+	provideRecipe(currentMachineInfo: MachineInfo, itemStorage: ItemStorage, fluidStorage: fluidStorage, electricStorage?: ElectricStorage): boolean {
+		if(!this.check(this.EUt * 2, false, true)) return;
+		if((!currentMachineInfo.isProcess) || !(!itemStorage.checkOutput(j) || !fluidStorage.checkOutput(j))) {
+			if(!currentMachineInfo.isProcess) {
+				currentMachineInfo.duration = this.duration;
+				currentMachineInfo.worktime = 0;
+				currentMachineInfo.steamcomsumption = this.EUt * 6;
+				currentMachineInfo.isProcess = true;
+				itemStorage.input(this);
+				fluidStorage.input(this);
+            }
+			fluidStorage.getLiquid("steam", currentMachineInfo.steamcomsumption);
+			
+			currentMachineInfo.worktime += 1;
+			
+			if(currentMachineInfo.worktime >= this.duration) {
+				itemStorage.output(this);
+				fluidStorage.output(this);
+				currentMachineInfo.end = true;
+				currentMachineInfo.isProcess = false;
+				currentMachineInfo.duration = 0;
+				currentMachineInfo.worktime = 0;
+				currentMachineInfo.steamcomsumption = 0;
+			}
+			currentMachineInfo.relative_worktime = currentMachineInfo.worktime / currentMachineInfo.duration;
+			this.uiContainer.setScale("scale", currentMachineInfo.relative_worktime);
+		}
+		return currentMachineInfo.end;
 	}
 }
   
@@ -107,7 +132,6 @@ export class Recipe implements IRecipe {
 	}
     findRecipe(inputs: LinkedHashMap<string, IStack>): Recipe {
 		let getted = this.recipes.get(inputs);
-		if(getted == null) return null;
 		return getted;	
 	}
 	getOutputs(inputs: LinkedHashMap<string, IStack>): outputs: LinkedHashMap<string, IStack> {

@@ -1,73 +1,61 @@
-export abstract class FuelRecipe implements IRecipe {
-    inputs: ItemInstance[];
-    outputs: ItemInstance[];
-    duration: number;
-    EUt: number;
-    FuelRecipe(inputs: String[], outputs: String[], duration: number[], EUt: number, postHandler: String) {
+export abstract class ContinuousRecipe implements IRecipe {
+	private inputs: LinkedHashMap<string, IStack>;
+    private outputs: LinkedHashMap<string, IStack>;
+    private duration: number;
+    final private hidden: boolean;
+    constructor(inputs: LinkedHashMap<string, IStack>, outputs: LinkedHashMap<string, IStack>, duration: number, hidden: boolean = true) {
       this.inputs = inputs;
       this.outputs = outputs;
       this.duration = duration;
-      this.EUt = EUt;
+      
+      this,hidden = hidden;
     }
+    getDuration(tier: number): number {
+		return this.duration;
+	}
+    getEfficiency(): number {
+		return 1;
+	}
     isSteam() : boolean {
-        return this.EUt <= 16;
-    }
-  }
-  export abstract class FuelMap implements IRecipeMap {
-  minInputs: number;
-  maxInputs: number;
-  minOutputs: number;
-  maxOutputs: number;
-  minFluidInputs: number;
-  maxFluidInputs: number;
-  minFluidOutputs: number;
-  maxFluidOutputs: number;
-  defaultEUt: number;
-  constructor(minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs, defaultEUt) {
-      this.minInputs = minInputs;
-      this.maxInputs = maxInputs;
-      this.minOutputs = minInputs;
-      this.maxOutputs = maxInputs;
-      this.minFluidInputs = minFluidInputs;
-      this.maxFluidInputs = maxFluidInputs;
-      this.minFluidOutputs = minFluidOutputs;
-      this.maxFluidOutputs = maxFluidOutputs;
-      this.defaultEUt = defaultEUt;
-  }
-  addRecipe(recipe: FuelRecipe) : void {
-        this[this.length] = recipe;
-        let t = "";
-        for(let input in recipe.inputs) {
-          let iddata = null;
-              //Logger.Log("pentazonium", i);
-              if(recipe.inputs[input].type == "material") {
-                Logger.Log("pe", iddata);
-
-              iddata = MaterialDictionary.invdata[recipe.inputs[input].form][recipe.inputs[input].material.name];
-              
-              Logger.Log("eeyue", iddata);
-
-            } else if(recipe.inputs[input].type == "ore") {
-              Logger.Log(recipe.inputs[input].material.name, ".•o°");
-
-              iddata = {id: OreDictionary.data[recipe.inputs[input].material.name].id, data: 0};
+        return this.inputs.get("eut").count <= 16;
+	}
+	isHidden(): boolean {
+		return hidden;
+	}
+	
+	getInputs(): void {
+		return this.inputs;
+	}
+	getOutputs(): void {
+		return this.outputs;
+	}
+	provideRecipe(currentMachineInfo: MachineInfo, itemStorage: ItemStorage, fluidStorage: fluidStorage, electricStorage?: ElectricStorage): boolean {
+		if((!currentMachineInfo.isProcess) || !(!itemStorage.checkOutput(j) || !fluidStorage.checkOutput(j))) {
+			if(!currentMachineInfo.isProcess) {
+				currentMachineInfo.duration = this.duration;
+				currentMachineInfo.worktime = 0;
+				currentMachineInfo.steamcomsumption = this.EUt * 6;
+				currentMachineInfo.isProcess = true;
             }
             
-          t += iddata.id + "_";
-          t += recipe.inputs[input].count + "_";
-          t += iddata.data + "_";
-        }
-        t = t.substring(0, t.length - 2);
-        this.get[t] = recipe;
-        
-        this.length++;
-  }
-  deleteRecipe(recipe: FuelRecipe) : void {
-    for(let i in this) {
-      if(this[i] == recipe) { 
-        delete this[i];
-        break;
-      }
-    }
-  }
- }
+            itemStorage.input(this);
+			fluidStorage.input(this);
+			
+			itemStorage.output(this);
+			fluidStorage.output(this);
+			
+			currentMachineInfo.worktime += 1;
+			
+			if(currentMachineInfo.worktime >= this.duration) {
+				currentMachineInfo.end = true;
+				currentMachineInfo.isProcess = false;
+				currentMachineInfo.duration = 0;
+				currentMachineInfo.worktime = 0;
+				currentMachineInfo.steamcomsumption = 0;
+			}
+			currentMachineInfo.relative_worktime = currentMachineInfo.worktime / currentMachineInfo.duration;
+			this.uiContainer.setScale("scale", currentMachineInfo.relative_worktime);
+		}
+		return currentMachineInfo.end;
+	}
+}
