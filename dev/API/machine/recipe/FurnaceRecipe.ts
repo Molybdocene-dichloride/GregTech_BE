@@ -1,4 +1,4 @@
-export abstract class FurnaceRecipeMap implements IRecipeMap<BasicRecipeFactory> {
+export class FurnaceRecipeMap implements IRecipeMap<BasicRecipeFactory> {
 	//Recipe cache
 	private recipes: LinkedHashMap<LinkedHashMap<string, IStack>, IRecipe>;
 	
@@ -28,7 +28,8 @@ export abstract class FurnaceRecipeMap implements IRecipeMap<BasicRecipeFactory>
 		}
 		return getted.getOutputs();
 	}
-	findFactory(): B {
+	findFactory(): BasicRecipeFactory {
 		return null;
 	}
   }
+let furnace_recipes = new FurnaceRecipeMap();

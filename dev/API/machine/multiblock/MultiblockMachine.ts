@@ -1,15 +1,20 @@
-abstract class MultiblockMachine extends Machine implements IProcessingLogic {
-	init() : void {
+abstract class MultiblockMachine extends Machine {
+	private AABBRange sizeAllowed;
+	private AABB size;
+	constructor(id: string, tier: number, sizeAllowed: AABBRange) {
+		super(id, tier);
+		this,sizeAllowed = sizeAllowed;
+	}
+	init(): void {
 		super.init();
 		prepareMultiblock();
 	}
-	tick() : void {
+	tick(): void {
 		super.tick();
 		this.provideMultiblock();
 	}
 	prepareMultiblock() : void {
-		//setShape(shape);
-		if(shape.checkBlocks) {
+		if(this.validateBlocks()) {
 			correct = true;
 		} else {
 			correct = false;
@@ -20,17 +25,28 @@ abstract class MultiblockMachine extends Machine implements IProcessingLogic {
 		this.fluidconnectable = false;
 	}
 	provideMultiblock() : void {
-		if(shape.checkBlocks) {
+		if(this.validateBlocks()) {
 			correct = true;
 		} else {
 			correct = false;
 		}
 	}
-	
-	private getBlock(position: Vec3) : Tile {
+
+	getBlock(position: Vec3) : Tile {
 		return shape.getBlock(position);
 	}
-	checkBlocks() : boolean {
+	validateBlocks() : boolean {
 		return shape.checkBlocks();
+	}
+	
+	getSize(): AABB {
+		return this.size;
+	}
+	
+	getAllowedSizes(): AABBRange {
+		return this.sizeAllowed;
+	}
+	setAllowedSizes(AABBRange sizeAllowed): void {
+		this.sizeAllowed = sizeAllowed;
 	}
 }

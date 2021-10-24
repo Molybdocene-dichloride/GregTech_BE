@@ -92,7 +92,7 @@ export abstract class RecipeFactory<B extends RecipeFactory<B>, A extends IRecip
 	
 	abstract dupe(reset: boolean = false, destroy: boolean = false, save: boolean = true): A;
 }
-export class SimpleRecipeFactory extends RecipeFactory<SimpleRecipeFactory, Recipe> {
+export class SimpleRecipeFactory extends RecipeFactory<SimpleRecipeFactory, StandardRecipe> {
 	this.minInputs: number;
 	this.maxInputs: number;
 	this.minOutputs: number;

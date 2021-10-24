@@ -67,30 +67,7 @@ namespace Stones {
 		Logger::debug("grt", patch::to_string<size_t>(iblockdatas.size()).c_str());
 	}
 }
-namespace Scientific {
-	namespace TemperaturePoints { //for Kelvin's
-		long double NO = -0.1;
-		long double ABSOLUTE_ZERO = 0; //temperature couldn't and impossible be same or lower!
-		long double CELCIUS_ZERO = 273.15;
-  		long double PLANK = 1.4167841616e32; //events for same and higher temperature is unknown and indescribable (Quantum gravity is not fully developed), is couldn't to use.
-  		long double kelvinsToCelsius(long double point) {
-    		return point + 273.15;
-		}
-  		long double celsiusToKelvins(long double point) {
-    		return point - 273.15;
-  		}
-	} 
-	namespace Plank { //Plank values enum
-		long double CONST = 6.62607015e-34;
-		long double TEMPERATURE = 1.4167841616e32; //events for same and higher temperature is unknown and indescribable (Quantum gravity is not fully developed), is couldn't to use.
-		long double DENSITY = 5.1550e96; //
-		long double MASS = 2.176e-8; //
-		long double CHARGE = 2.5e-8; //
-		long double LENGTH = 1.6162551818e-35; //
-		long double TIME = 5.391161313e-19; //
-		long double PRESSURE = 4.63309e113; //
-	} //d0bed0b1d0b8d0b0d0bd20d182d0b5d0b1d18f
-}
+
 long getNearest(long pos, short mode) {
 	switch(mode) {
 		case 0:
@@ -186,126 +163,7 @@ public:
 
 MAIN {
 	Module* main_module = new GTOreGenerationDestroyerModule("gregtech.ore_generator_module");
-	Module* localization_module = new LocalizationSystem::CustomLocalizationLoadingModule("gregtech.loading_localizations_module");
 }
-
-JS_MODULE_VERSION(Scientific, 1);
-JS_MODULE_VERSION(Stones, 1);
-JS_MODULE_VERSION(Flags, 1);
-JS_MODULE_VERSION(LocalizationSystem, 1);
-
-JS_EXPORT(Stones, registerID, "V(II)", (JNIEnv* env, long id, long data) {
-	Logger::debug("j", "wew");
-	Logger::debug("j", patch::to_string<long>(id).c_str());
-	Logger::debug("jf", patch::to_string<long>(data).c_str());
-	
-	blockids.push_back(id);
-	blockdatas.push_back(data);
-	Logger::debug("sj", patch::to_string<size_t>(blockids.size()).c_str());
-	Logger::debug("fgj", patch::to_string<size_t>(blockdatas.size()).c_str());
-	return 0;
-});
-JS_EXPORT(Scientific, NO, "F()", (JNIEnv* env) {
-	return NativeJS::wrapDoubleResult(Scientific::TemperaturePoints::NO);
-});
-JS_EXPORT(Flags, hasFlag, "I(LL)", (JNIEnv* env, long long value1, long long value2) {
-	return NativeJS::wrapIntegerResult(hasFlag(value1, value2));
-});
-JS_EXPORT(Flags, generate, "V(II)", (JNIEnv* env, long x, long z) {
-	generate(x, z);
-	return 0;
-});
-JS_EXPORT(Flags, createFlag, "I(L)", (JNIEnv* env, long long value1) {
-	return NativeJS::wrapIntegerResult(createFlag(value1));
-});
-JS_EXPORT(Flags, recepiee, "I(L)", (JNIEnv* env, long long value1) {
-	return NativeJS::wrapIntegerResult(recepiee(value1));
-});
-JS_EXPORT(Flags, pack2, "I(LL)", (JNIEnv* env, long long value1, long long value2) {
-	return NativeJS::wrapIntegerResult(pack(2, value1, value2));
-});
-JS_EXPORT(Flags, pack3, "I(LLL)", (JNIEnv* env, long long value1, long long value2, long long value3) {
-	return NativeJS::wrapIntegerResult(pack(3, value1, value2, value3));
-});
-JS_EXPORT(Flags, pack4, "I(LLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4) {
-	return NativeJS::wrapIntegerResult(pack(4, value1, value2, value3, value4));
-});
-JS_EXPORT(Flags, pack5, "I(LLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5) {
-	return NativeJS::wrapIntegerResult(pack(5, value1 , value2 , value3 , value4 , value5));
-});
-JS_EXPORT(Flags, pack6, "I(LLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6) {
-	return NativeJS::wrapIntegerResult(pack(6, value1 , value2 , value3 , value4 , value5 , value6));
-});
-JS_EXPORT(Flags, pack7, "I(LLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7) {
-	return NativeJS::wrapIntegerResult(pack(7, value1 , value2 , value3 , value4 , value5 , value6 , value7));
-});
-JS_EXPORT(Flags, pack8, "I(LLLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7, long long value8) {
-	return NativeJS::wrapIntegerResult(pack(8, value1 , value2 , value3 , value4 , value5 , value6 , value7 , value8));
-});
-JS_EXPORT(Flags, pack9, "I(LLLLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7, long long value8, long long value9) {
-	return NativeJS::wrapIntegerResult(pack(9, value1 , value2 , value3 , value4 , value5 , value6 , value7 , value8, value9));
-});
-JS_EXPORT(Flags, pack10, "I(LLLLLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7, long long value8, long long value9, long long value10) {
-	return NativeJS::wrapIntegerResult(pack(10, value1 , value2 , value3 , value4 , value5 , value6 , value7 , value8, value9, value10));
-});
-JS_EXPORT(Flags, pack11, "I(LLLLLLLLLLL)", (JNIEnv* env, long long value1, long long value2, long long value3, long long value4, long long value5, long long value6, long long value7, long long value8, long long value9, long long value10, long long value11) {
-	return NativeJS::wrapIntegerResult(pack(11, value1, value2, value3, value4, value5, value6 , value7 , value8, value9, value10, value11));
-});
-
-JS_EXPORT_COMPLEX(LocalizationSystem, translate, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	return NativeJS::wrapStringResult(env, LocalizationSystem::translate(ca.get("lang").asString(), ca.get("key").asString()).c_str());
-});
-JS_EXPORT_COMPLEX(LocalizationSystem, translateToCurrent, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	return NativeJS::wrapStringResult(env, LocalizationSystem::translateToCurrent(ca.get("key").asString()).c_str());
-});
-JS_EXPORT_COMPLEX(LocalizationSystem, insert, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	LocalizationSystem::insert(ca.get("lang").asString(), ca.get("key").asString(), ca.get("val").asString());
-	return 0;
-});
-JS_EXPORT_COMPLEX(LocalizationSystem, insertToCurrent, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	LocalizationSystem::insertToCurrent(ca.get("key").asString(), ca.get("val").asString());
-	return 0;
-});
-JS_EXPORT_COMPLEX(LocalizationSystem, chooseLanguage, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	LocalizationSystem::chooseLocalization(ca.get("lang").asString());
-	return 0;
-});
-JS_EXPORT(LocalizationSystem, getCurrentLanguage, "S()", (JNIEnv* env) {
-	return NativeJS::wrapStringResult(env, LocalizationSystem::getCurrentLanguage().c_str());
-});
-JS_EXPORT_COMPLEX(LocalizationSystem, loadTranslations, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	LocalizationSystem::loadTranslations(ca.get("path").asString());
-	return 0;
-});
-JS_EXPORT_COMPLEX(LocalizationSystem, loadTranslationDir, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	LocalizationSystem::loadTranslationDir(ca.get("path").asString());
-	return 0;
-});
-//technical for JS PrefixPostfixTranslator
-JS_EXPORT_COMPLEX(LocalizationSystem, _createNativeTranslatorObj, "I(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	if(LocalizationSystem::trmap.find(std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())) != LocalizationSystem::trmap.end()) {
-		Logger::debug("89h", "ddd");
-		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(LocalizationSystem::trmap[std::__ndk1::pair<std::__ndk1::string, std::__ndk1::string>(ca.get("pre").asString(), ca.get("post").asString())]));
-	} else {
-		Logger::debug("89fh", "{}");
-		LocalizationSystem::PrefixPostfixTranslator* ppt = new LocalizationSystem::PrefixPostfixTranslator(ca.get("pre").asString(), ca.get("post").asString());
-		Logger::debug("89fh", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(ppt)).c_str());
-		return NativeJS::wrapIntegerResult(reinterpret_cast<uintptr_t>(ppt));
-	}
-});
-JS_EXPORT_COMPLEX(LocalizationSystem, _deleteNativeTranslatorObj, "V(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	LocalizationSystem::PrefixPostfixTranslator* ppt = (LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer();
-	delete ppt;
-	return 0;
-});
-
-JS_EXPORT_COMPLEX(LocalizationSystem, _translate, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translate(ca.get("lang").asString(), ca.get("key").asString()).c_str());
-});
-JS_EXPORT_COMPLEX(LocalizationSystem, _translateToCurrent, "S(SS)", (JNIEnv* env, NativeJS::ComplexArgs ca) {
-	Logger::debug("89fh", patch::to_string<uintptr_t>(reinterpret_cast<uintptr_t>(ca.get("_pointer").asPointer())).c_str());
-	return NativeJS::wrapStringResult(env, ((LocalizationSystem::PrefixPostfixTranslator*)ca.get("_pointer").asPointer())->translateToCurrent(ca.get("key").asString()).c_str());
-});
 // native js signature rules:
 /* signature represents parameters and return type, RETURN_TYPE(PARAMETERS...) example: S(OI)
 	return types:

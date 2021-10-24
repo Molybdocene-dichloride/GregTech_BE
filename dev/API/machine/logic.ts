@@ -1,17 +1,4 @@
 export interface IProcessingLogic {
-  recipes: RecipeMap
-  getRecipes(): RecipeMap
-  getRecipe(index : number): Recipe
-  
-  addRecipe(recipe: Recipe): void
-  provideProcessing(): void
-}
-
-export interface IElectricLogic {
-  provideEnergy(): void
-}
-export interface ISteamLogic {
-  provideSteam(): void
 }
 
 namespace MultiblockMachine {

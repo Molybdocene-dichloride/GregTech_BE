@@ -60,7 +60,7 @@ export class StandardRecipe implements IRecipe {
 	}
 }
   
-  export abstract class RecipeMap implements IRecipeMap<BasicRecipeFactory> {
+export abstract class RecipeMap implements IRecipeMap<BasicRecipeFactory> {
 	private factory: BasicRecipeFactory:
 	private recipes: LinkedHashMap<LinkedHashMap<string, IStack>, IRecipe>;
 	
@@ -139,7 +139,7 @@ export class StandardRecipe implements IRecipe {
 		if(getted == null) return null;
 		return getted.getOutputs();
 	}
-	findFactory(): B {
+	findFactory(): BasicRecipeFactory {
 		return factory;
 	}
   }

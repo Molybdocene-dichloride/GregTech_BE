@@ -1,22 +1,7 @@
-abstract class SteamProcessor extends SteamMachine implements IProcessingLogic {
-	getTier(): number {
-		return tier;
-	}
-	getRecipes(): RecipeMap {
-		return recipes:
-	}
-	getRecipe(index : number): Recipe {
-		return recipes[index];
-	}
-	addRecipe(recipe: Recipe): void {
-		recipes[recipes.length] = recipe;
-	}
-	
-	tick() : void {
+abstract class SteamProcessor extends SteamMachine implements MayProcess, HasRecipe {
+	recipes: RecipeMap;
+	tick(): void {
 		super.tick();
-		provideProcessing();
-	}
-	provideProcessing() : void {
 		if(this.recipes) {
 			currentMachineInfo.end = false;
 			Logger.Log(this.data.tick, "sheoe");
@@ -54,6 +39,15 @@ abstract class SteamProcessor extends SteamMachine implements IProcessingLogic {
 				this.data.steamcomsumption = 0;
 			}
 		}
-		return checked;
+		return checked;		
+	}
+	getRecipes(): RecipeMap {
+		return recipes:
+	}
+	getRecipe(index : number): Recipe {
+		return recipes[index];
+	}
+	addRecipe(recipe: Recipe): void {
+		recipes[recipes.length] = recipe;
 	}
 }

@@ -1,0 +1,607 @@
+05bc1ea8 <LiquidBlockStatic::tick(BlockSource&, BlockPos const&, Random&) const@@Base>:
+ 5bc1ea8:	b5f0      	push	{r4, r5, r6, r7, lr}
+ 5bc1eaa:	af03      	add	r7, sp, #12
+ 5bc1eac:	f84d bd04 	str.w	fp, [sp, #-4]!
+ 5bc1eb0:	f8d0 0080 	ldr.w	r0, [r0, #128]	; 0x80
+ 5bc1eb4:	460e      	mov	r6, r1
+ 5bc1eb6:	2106      	movs	r1, #6
+ 5bc1eb8:	461c      	mov	r4, r3
+ 5bc1eba:	4615      	mov	r5, r2
+ 5bc1ebc:	f2c4 ec0e 	blx	5e866dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35fc>
+ 5bc1ec0:	b140      	cbz	r0, 5bc1ed4 <LiquidBlockStatic::tick(BlockSource&, BlockPos const&, Random&) const@@Base+0x2c>
+ 5bc1ec2:	4631      	mov	r1, r6
+ 5bc1ec4:	462a      	mov	r2, r5
+ 5bc1ec6:	4623      	mov	r3, r4
+ 5bc1ec8:	f85d bb04 	ldr.w	fp, [sp], #4
+ 5bc1ecc:	e8bd 40f0 	ldmia.w	sp!, {r4, r5, r6, r7, lr}
+ 5bc1ed0:	f2dc bdae 	b.w	5e9ea30 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b950>
+ 5bc1ed4:	f85d bb04 	ldr.w	fp, [sp], #4
+ 5bc1ed8:	bdf0      	pop	{r4, r5, r6, r7, pc}
+ 
+ 05bc186a <LiquidBlockDynamic::tick(BlockSource&, BlockPos const&, Random&) const@@Base>:
+ 5bc186a:	b5dc      	push	{r2, r3, r4, r6, r7, lr}
+ 5bc186c:	af04      	add	r7, sp, #16
+ 5bc186e:	2400      	movs	r4, #0
+ 5bc1870:	9400      	str	r4, [sp, #0]
+ 5bc1872:	f2dd e880 	blx	5e9e974 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b894>
+ 5bc1876:	bddc      	pop	{r2, r3, r4, r6, r7, pc}
+
+05bc12b4 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base>:
+ 5bc12b4:	b5f0      	push	{r4, r5, r6, r7, lr}
+ 5bc12b6:	af03      	add	r7, sp, #12
+ 5bc12b8:	e92d 0f00 	stmdb	sp!, {r8, r9, sl, fp}
+ 5bc12bc:	b099      	sub	sp, #100	; 0x64
+ 5bc12be:	9305      	str	r3, [sp, #20]
+ 5bc12c0:	4682      	mov	sl, r0
+ 5bc12c2:	48d0      	ldr	r0, [pc, #832]	; (5bc1604 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x350>)
+ 5bc12c4:	460c      	mov	r4, r1
+ 5bc12c6:	4616      	mov	r6, r2
+ 5bc12c8:	4478      	add	r0, pc
+ 5bc12ca:	f8d0 8000 	ldr.w	r8, [r0]
+ 5bc12ce:	f8d8 0000 	ldr.w	r0, [r8]
+ 5bc12d2:	9018      	str	r0, [sp, #96]	; 0x60
+ 5bc12d4:	4608      	mov	r0, r1
+ 5bc12d6:	4611      	mov	r1, r2
+ 5bc12d8:	f2c5 e810 	blx	5e862fc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x321c>
+ 5bc12dc:	3008      	adds	r0, #8
+ 5bc12de:	f2c5 e932 	blx	5e86544 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x3464>
+ 5bc12e2:	4681      	mov	r9, r0
+ 5bc12e4:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc12e8:	9211      	str	r2, [sp, #68]	; 0x44
+ 5bc12ea:	4632      	mov	r2, r6
+ 5bc12ec:	900f      	str	r0, [sp, #60]	; 0x3c
+ 5bc12ee:	1e48      	subs	r0, r1, #1
+ 5bc12f0:	9010      	str	r0, [sp, #64]	; 0x40
+ 5bc12f2:	4650      	mov	r0, sl
+ 5bc12f4:	4621      	mov	r1, r4
+ 5bc12f6:	f2dd eacc 	blx	5e9e890 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b7b0>
+ 5bc12fa:	9007      	str	r0, [sp, #28]
+ 5bc12fc:	2106      	movs	r1, #6
+ 5bc12fe:	f8da 0080 	ldr.w	r0, [sl, #128]	; 0x80
+ 5bc1302:	f2c5 e9ec 	blx	5e866dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35fc>
+ 5bc1306:	b148      	cbz	r0, 5bc131c <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x68>
+ 5bc1308:	4620      	mov	r0, r4
+ 5bc130a:	f2d3 e8e8 	blx	5e944dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x113fc>
+ 5bc130e:	f2dc efdc 	blx	5e9e2c8 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b1e8>
+ 5bc1312:	2502      	movs	r5, #2
+ 5bc1314:	2800      	cmp	r0, #0
+ 5bc1316:	bf18      	it	ne
+ 5bc1318:	2501      	movne	r5, #1
+ 5bc131a:	e000      	b.n	5bc131e <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x6a>
+ 5bc131c:	2501      	movs	r5, #1
+ 5bc131e:	68b8      	ldr	r0, [r7, #8]
+ 5bc1320:	b108      	cbz	r0, 5bc1326 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x72>
+ 5bc1322:	2001      	movs	r0, #1
+ 5bc1324:	e00e      	b.n	5bc1344 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x90>
+ 5bc1326:	f8da 0080 	ldr.w	r0, [sl, #128]	; 0x80
+ 5bc132a:	2106      	movs	r1, #6
+ 5bc132c:	f2c5 e9d6 	blx	5e866dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35fc>
+ 5bc1330:	b120      	cbz	r0, 5bc133c <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x88>
+ 5bc1332:	9b05      	ldr	r3, [sp, #20]
+ 5bc1334:	4621      	mov	r1, r4
+ 5bc1336:	4632      	mov	r2, r6
+ 5bc1338:	f2dd eb22 	blx	5e9e980 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8a0>
+ 5bc133c:	4650      	mov	r0, sl
+ 5bc133e:	4621      	mov	r1, r4
+ 5bc1340:	f2dd eaf4 	blx	5e9e92c <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b84c>
+ 5bc1344:	9004      	str	r0, [sp, #16]
+ 5bc1346:	9807      	ldr	r0, [sp, #28]
+ 5bc1348:	2801      	cmp	r0, #1
+ 5bc134a:	db2f      	blt.n	5bc13ac <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0xf8>
+ 5bc134c:	2000      	movs	r0, #0
+ 5bc134e:	9008      	str	r0, [sp, #32]
+ 5bc1350:	a812      	add	r0, sp, #72	; 0x48
+ 5bc1352:	9016      	str	r0, [sp, #88]	; 0x58
+ 5bc1354:	48ac      	ldr	r0, [pc, #688]	; (5bc1608 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x354>)
+ 5bc1356:	4478      	add	r0, pc
+ 5bc1358:	3008      	adds	r0, #8
+ 5bc135a:	e9cd 0412 	strd	r0, r4, [sp, #72]	; 0x48
+ 5bc135e:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc1362:	3801      	subs	r0, #1
+ 5bc1364:	e9cd 120d 	strd	r1, r2, [sp, #52]	; 0x34
+ 5bc1368:	900c      	str	r0, [sp, #48]	; 0x30
+ 5bc136a:	a90c      	add	r1, sp, #48	; 0x30
+ 5bc136c:	4620      	mov	r0, r4
+ 5bc136e:	f2c4 efc6 	blx	5e862fc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x321c>
+ 5bc1372:	e896 000e 	ldmia.w	r6, {r1, r2, r3}
+ 5bc1376:	3901      	subs	r1, #1
+ 5bc1378:	e9cd 230a 	strd	r2, r3, [sp, #40]	; 0x28
+ 5bc137c:	9109      	str	r1, [sp, #36]	; 0x24
+ 5bc137e:	aa12      	add	r2, sp, #72	; 0x48
+ 5bc1380:	ab09      	add	r3, sp, #36	; 0x24
+ 5bc1382:	2105      	movs	r1, #5
+ 5bc1384:	f2dd ea7e 	blx	5e9e884 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b7a4>
+ 5bc1388:	b190      	cbz	r0, 5bc13b0 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0xfc>
+ 5bc138a:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc138e:	3801      	subs	r0, #1
+ 5bc1390:	e9cd 120d 	strd	r1, r2, [sp, #52]	; 0x34
+ 5bc1394:	900c      	str	r0, [sp, #48]	; 0x30
+ 5bc1396:	a808      	add	r0, sp, #32
+ 5bc1398:	aa0c      	add	r2, sp, #48	; 0x30
+ 5bc139a:	9000      	str	r0, [sp, #0]
+ 5bc139c:	4650      	mov	r0, sl
+ 5bc139e:	4621      	mov	r1, r4
+ 5bc13a0:	f06f 0363 	mvn.w	r3, #99	; 0x63
+ 5bc13a4:	f2dd eaf2 	blx	5e9e98c <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8ac>
+ 5bc13a8:	4683      	mov	fp, r0
+ 5bc13aa:	e003      	b.n	5bc13b4 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x100>
+ 5bc13ac:	46c3      	mov	fp, r8
+ 5bc13ae:	e157      	b.n	5bc1660 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x3ac>
+ 5bc13b0:	f06f 0b63 	mvn.w	fp, #99	; 0x63
+ 5bc13b4:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc13b8:	3001      	adds	r0, #1
+ 5bc13ba:	e9cd 120d 	strd	r1, r2, [sp, #52]	; 0x34
+ 5bc13be:	900c      	str	r0, [sp, #48]	; 0x30
+ 5bc13c0:	a90c      	add	r1, sp, #48	; 0x30
+ 5bc13c2:	4620      	mov	r0, r4
+ 5bc13c4:	f2c4 ef9a 	blx	5e862fc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x321c>
+ 5bc13c8:	e896 000e 	ldmia.w	r6, {r1, r2, r3}
+ 5bc13cc:	3101      	adds	r1, #1
+ 5bc13ce:	e9cd 230a 	strd	r2, r3, [sp, #40]	; 0x28
+ 5bc13d2:	9109      	str	r1, [sp, #36]	; 0x24
+ 5bc13d4:	aa12      	add	r2, sp, #72	; 0x48
+ 5bc13d6:	ab09      	add	r3, sp, #36	; 0x24
+ 5bc13d8:	2104      	movs	r1, #4
+ 5bc13da:	f2dd ea54 	blx	5e9e884 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b7a4>
+ 5bc13de:	b170      	cbz	r0, 5bc13fe <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x14a>
+ 5bc13e0:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc13e4:	3001      	adds	r0, #1
+ 5bc13e6:	e9cd 120d 	strd	r1, r2, [sp, #52]	; 0x34
+ 5bc13ea:	900c      	str	r0, [sp, #48]	; 0x30
+ 5bc13ec:	a808      	add	r0, sp, #32
+ 5bc13ee:	aa0c      	add	r2, sp, #48	; 0x30
+ 5bc13f0:	9000      	str	r0, [sp, #0]
+ 5bc13f2:	4650      	mov	r0, sl
+ 5bc13f4:	4621      	mov	r1, r4
+ 5bc13f6:	465b      	mov	r3, fp
+ 5bc13f8:	f2dd eac8 	blx	5e9e98c <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8ac>
+ 5bc13fc:	4683      	mov	fp, r0
+ 5bc13fe:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc1402:	e9cd 010c 	strd	r0, r1, [sp, #48]	; 0x30
+ 5bc1406:	1c50      	adds	r0, r2, #1
+ 5bc1408:	900e      	str	r0, [sp, #56]	; 0x38
+ 5bc140a:	a90c      	add	r1, sp, #48	; 0x30
+ 5bc140c:	4620      	mov	r0, r4
+ 5bc140e:	f2c4 ef76 	blx	5e862fc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x321c>
+ 5bc1412:	e896 000e 	ldmia.w	r6, {r1, r2, r3}
+ 5bc1416:	e9cd 1209 	strd	r1, r2, [sp, #36]	; 0x24
+ 5bc141a:	1c59      	adds	r1, r3, #1
+ 5bc141c:	910b      	str	r1, [sp, #44]	; 0x2c
+ 5bc141e:	aa12      	add	r2, sp, #72	; 0x48
+ 5bc1420:	ab09      	add	r3, sp, #36	; 0x24
+ 5bc1422:	2102      	movs	r1, #2
+ 5bc1424:	f2dd ea2e 	blx	5e9e884 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b7a4>
+ 5bc1428:	b170      	cbz	r0, 5bc1448 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x194>
+ 5bc142a:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc142e:	e9cd 010c 	strd	r0, r1, [sp, #48]	; 0x30
+ 5bc1432:	1c50      	adds	r0, r2, #1
+ 5bc1434:	900e      	str	r0, [sp, #56]	; 0x38
+ 5bc1436:	a808      	add	r0, sp, #32
+ 5bc1438:	aa0c      	add	r2, sp, #48	; 0x30
+ 5bc143a:	9000      	str	r0, [sp, #0]
+ 5bc143c:	4650      	mov	r0, sl
+ 5bc143e:	4621      	mov	r1, r4
+ 5bc1440:	465b      	mov	r3, fp
+ 5bc1442:	f2dd eaa4 	blx	5e9e98c <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8ac>
+ 5bc1446:	4683      	mov	fp, r0
+ 5bc1448:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc144c:	e9cd 010c 	strd	r0, r1, [sp, #48]	; 0x30
+ 5bc1450:	1e50      	subs	r0, r2, #1
+ 5bc1452:	900e      	str	r0, [sp, #56]	; 0x38
+ 5bc1454:	a90c      	add	r1, sp, #48	; 0x30
+ 5bc1456:	4620      	mov	r0, r4
+ 5bc1458:	f2c4 ef50 	blx	5e862fc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x321c>
+ 5bc145c:	e896 000e 	ldmia.w	r6, {r1, r2, r3}
+ 5bc1460:	e9cd 1209 	strd	r1, r2, [sp, #36]	; 0x24
+ 5bc1464:	1e59      	subs	r1, r3, #1
+ 5bc1466:	910b      	str	r1, [sp, #44]	; 0x2c
+ 5bc1468:	aa12      	add	r2, sp, #72	; 0x48
+ 5bc146a:	ab09      	add	r3, sp, #36	; 0x24
+ 5bc146c:	2103      	movs	r1, #3
+ 5bc146e:	f2dd ea0a 	blx	5e9e884 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b7a4>
+ 5bc1472:	b170      	cbz	r0, 5bc1492 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x1de>
+ 5bc1474:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc1478:	e9cd 010c 	strd	r0, r1, [sp, #48]	; 0x30
+ 5bc147c:	1e50      	subs	r0, r2, #1
+ 5bc147e:	900e      	str	r0, [sp, #56]	; 0x38
+ 5bc1480:	a808      	add	r0, sp, #32
+ 5bc1482:	aa0c      	add	r2, sp, #48	; 0x30
+ 5bc1484:	9000      	str	r0, [sp, #0]
+ 5bc1486:	4650      	mov	r0, sl
+ 5bc1488:	4621      	mov	r1, r4
+ 5bc148a:	465b      	mov	r3, fp
+ 5bc148c:	f2dd ea7e 	blx	5e9e98c <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8ac>
+ 5bc1490:	4683      	mov	fp, r0
+ 5bc1492:	f8cd 9018 	str.w	r9, [sp, #24]
+ 5bc1496:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc149a:	920e      	str	r2, [sp, #56]	; 0x38
+ 5bc149c:	900c      	str	r0, [sp, #48]	; 0x30
+ 5bc149e:	1c48      	adds	r0, r1, #1
+ 5bc14a0:	900d      	str	r0, [sp, #52]	; 0x34
+ 5bc14a2:	aa0c      	add	r2, sp, #48	; 0x30
+ 5bc14a4:	4650      	mov	r0, sl
+ 5bc14a6:	4621      	mov	r1, r4
+ 5bc14a8:	f2dd e9f2 	blx	5e9e890 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b7b0>
+ 5bc14ac:	eb0b 0905 	add.w	r9, fp, r5
+ 5bc14b0:	9503      	str	r5, [sp, #12]
+ 5bc14b2:	f1b9 0f07 	cmp.w	r9, #7
+ 5bc14b6:	bfc8      	it	gt
+ 5bc14b8:	f04f 39ff 	movgt.w	r9, #4294967295	; 0xffffffff
+ 5bc14bc:	f1bb 0f00 	cmp.w	fp, #0
+ 5bc14c0:	bf48      	it	mi
+ 5bc14c2:	f04f 39ff 	movmi.w	r9, #4294967295	; 0xffffffff
+ 5bc14c6:	2800      	cmp	r0, #0
+ 5bc14c8:	d411      	bmi.n	5bc14ee <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x23a>
+ 5bc14ca:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc14ce:	920e      	str	r2, [sp, #56]	; 0x38
+ 5bc14d0:	900c      	str	r0, [sp, #48]	; 0x30
+ 5bc14d2:	1c48      	adds	r0, r1, #1
+ 5bc14d4:	900d      	str	r0, [sp, #52]	; 0x34
+ 5bc14d6:	aa0c      	add	r2, sp, #48	; 0x30
+ 5bc14d8:	4650      	mov	r0, sl
+ 5bc14da:	4621      	mov	r1, r4
+ 5bc14dc:	f2dd e9d8 	blx	5e9e890 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b7b0>
+ 5bc14e0:	9d07      	ldr	r5, [sp, #28]
+ 5bc14e2:	4681      	mov	r9, r0
+ 5bc14e4:	2807      	cmp	r0, #7
+ 5bc14e6:	bfd8      	it	le
+ 5bc14e8:	f109 0908 	addle.w	r9, r9, #8
+ 5bc14ec:	e000      	b.n	5bc14f0 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x23c>
+ 5bc14ee:	9d07      	ldr	r5, [sp, #28]
+ 5bc14f0:	9808      	ldr	r0, [sp, #32]
+ 5bc14f2:	49ca      	ldr	r1, [pc, #808]	; (5bc181c <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x568>)
+ 5bc14f4:	2801      	cmp	r0, #1
+ 5bc14f6:	4479      	add	r1, pc
+ 5bc14f8:	9102      	str	r1, [sp, #8]
+ 5bc14fa:	d10e      	bne.n	5bc151a <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x266>
+ 5bc14fc:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc1500:	920e      	str	r2, [sp, #56]	; 0x38
+ 5bc1502:	900c      	str	r0, [sp, #48]	; 0x30
+ 5bc1504:	1c48      	adds	r0, r1, #1
+ 5bc1506:	900d      	str	r0, [sp, #52]	; 0x34
+ 5bc1508:	aa0c      	add	r2, sp, #48	; 0x30
+ 5bc150a:	4650      	mov	r0, sl
+ 5bc150c:	4621      	mov	r1, r4
+ 5bc150e:	f2dd e9c0 	blx	5e9e890 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b7b0>
+ 5bc1512:	bb40      	cbnz	r0, 5bc1566 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2b2>
+ 5bc1514:	2002      	movs	r0, #2
+ 5bc1516:	9008      	str	r0, [sp, #32]
+ 5bc1518:	e001      	b.n	5bc151e <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x26a>
+ 5bc151a:	2802      	cmp	r0, #2
+ 5bc151c:	db23      	blt.n	5bc1566 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2b2>
+ 5bc151e:	f8da 0080 	ldr.w	r0, [sl, #128]	; 0x80
+ 5bc1522:	2105      	movs	r1, #5
+ 5bc1524:	f2c5 e8da 	blx	5e866dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35fc>
+ 5bc1528:	b1e8      	cbz	r0, 5bc1566 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2b2>
+ 5bc152a:	a90f      	add	r1, sp, #60	; 0x3c
+ 5bc152c:	4620      	mov	r0, r4
+ 5bc152e:	f2d5 eb90 	blx	5e96c50 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x13b70>
+ 5bc1532:	f2dc eabe 	blx	5e9dab0 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1a9d0>
+ 5bc1536:	b110      	cbz	r0, 5bc153e <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x28a>
+ 5bc1538:	f04f 0900 	mov.w	r9, #0
+ 5bc153c:	e013      	b.n	5bc1566 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2b2>
+ 5bc153e:	a90f      	add	r1, sp, #60	; 0x3c
+ 5bc1540:	4620      	mov	r0, r4
+ 5bc1542:	f2cb ec40 	blx	5e8cdc4 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x9ce4>
+ 5bc1546:	4683      	mov	fp, r0
+ 5bc1548:	f2c5 e8bc 	blx	5e866c4 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35e4>
+ 5bc154c:	f8da 1080 	ldr.w	r1, [sl, #128]	; 0x80
+ 5bc1550:	f2db eff0 	blx	5e9d534 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1a454>
+ 5bc1554:	b138      	cbz	r0, 5bc1566 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2b2>
+ 5bc1556:	9802      	ldr	r0, [sp, #8]
+ 5bc1558:	6801      	ldr	r1, [r0, #0]
+ 5bc155a:	4658      	mov	r0, fp
+ 5bc155c:	f2c5 e8c4 	blx	5e866e8 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x3608>
+ 5bc1560:	2800      	cmp	r0, #0
+ 5bc1562:	bf08      	it	eq
+ 5bc1564:	4681      	moveq	r9, r0
+ 5bc1566:	68b8      	ldr	r0, [r7, #8]
+ 5bc1568:	b130      	cbz	r0, 5bc1578 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2c4>
+ 5bc156a:	eba9 0005 	sub.w	r0, r9, r5
+ 5bc156e:	46c3      	mov	fp, r8
+ 5bc1570:	fab0 f080 	clz	r0, r0
+ 5bc1574:	0945      	lsrs	r5, r0, #5
+ 5bc1576:	e06b      	b.n	5bc1650 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x39c>
+ 5bc1578:	f8da 0080 	ldr.w	r0, [sl, #128]	; 0x80
+ 5bc157c:	2106      	movs	r1, #6
+ 5bc157e:	f2c5 e8ae 	blx	5e866dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35fc>
+ 5bc1582:	b170      	cbz	r0, 5bc15a2 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2ee>
+ 5bc1584:	45a9      	cmp	r9, r5
+ 5bc1586:	dd0c      	ble.n	5bc15a2 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2ee>
+ 5bc1588:	2d07      	cmp	r5, #7
+ 5bc158a:	bfd8      	it	le
+ 5bc158c:	f1b9 0f07 	cmple.w	r9, #7
+ 5bc1590:	dc07      	bgt.n	5bc15a2 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2ee>
+ 5bc1592:	9805      	ldr	r0, [sp, #20]
+ 5bc1594:	f2c5 eb6a 	blx	5e86c6c <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x3b8c>
+ 5bc1598:	0780      	lsls	r0, r0, #30
+ 5bc159a:	9804      	ldr	r0, [sp, #16]
+ 5bc159c:	bf18      	it	ne
+ 5bc159e:	0080      	lslne	r0, r0, #2
+ 5bc15a0:	9004      	str	r0, [sp, #16]
+ 5bc15a2:	45a9      	cmp	r9, r5
+ 5bc15a4:	d102      	bne.n	5bc15ac <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x2f8>
+ 5bc15a6:	46c3      	mov	fp, r8
+ 5bc15a8:	2501      	movs	r5, #1
+ 5bc15aa:	e051      	b.n	5bc1650 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x39c>
+ 5bc15ac:	f1b9 3fff 	cmp.w	r9, #4294967295	; 0xffffffff
+ 5bc15b0:	dd2c      	ble.n	5bc160c <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x358>
+ 5bc15b2:	4650      	mov	r0, sl
+ 5bc15b4:	46c3      	mov	fp, r8
+ 5bc15b6:	f2cb e9b4 	blx	5e8c920 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x9840>
+ 5bc15ba:	9902      	ldr	r1, [sp, #8]
+ 5bc15bc:	464a      	mov	r2, r9
+ 5bc15be:	6809      	ldr	r1, [r1, #0]
+ 5bc15c0:	f2d3 eca4 	blx	5e94f0c <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x11e2c>
+ 5bc15c4:	900c      	str	r0, [sp, #48]	; 0x30
+ 5bc15c6:	a80c      	add	r0, sp, #48	; 0x30
+ 5bc15c8:	f2ca ee0e 	blx	5e8c1e8 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x9108>
+ 5bc15cc:	4602      	mov	r2, r0
+ 5bc15ce:	2003      	movs	r0, #3
+ 5bc15d0:	4631      	mov	r1, r6
+ 5bc15d2:	9000      	str	r0, [sp, #0]
+ 5bc15d4:	9806      	ldr	r0, [sp, #24]
+ 5bc15d6:	ebb0 030a 	subs.w	r3, r0, sl
+ 5bc15da:	4620      	mov	r0, r4
+ 5bc15dc:	bf18      	it	ne
+ 5bc15de:	2301      	movne	r3, #1
+ 5bc15e0:	f2dd e99e 	blx	5e9e920 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b840>
+ 5bc15e4:	4620      	mov	r0, r4
+ 5bc15e6:	4631      	mov	r1, r6
+ 5bc15e8:	f2cb eb18 	blx	5e8cc1c <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x9b3c>
+ 5bc15ec:	4650      	mov	r0, sl
+ 5bc15ee:	f2cb e998 	blx	5e8c920 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x9840>
+ 5bc15f2:	4602      	mov	r2, r0
+ 5bc15f4:	9b04      	ldr	r3, [sp, #16]
+ 5bc15f6:	2000      	movs	r0, #0
+ 5bc15f8:	9000      	str	r0, [sp, #0]
+ 5bc15fa:	4620      	mov	r0, r4
+ 5bc15fc:	4631      	mov	r1, r6
+ 5bc15fe:	f2c5 ee8e 	blx	5e8731c <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x423c>
+ 5bc1602:	e022      	b.n	5bc164a <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x396>
+ 5bc1604:	2e78      	cmp	r6, #120	; 0x78
+ 5bc1606:	0329      	lsls	r1, r5, #12
+ 5bc1608:	fd2e 0312 	stc2	3, cr0, [lr, #-72]!	; 0xffffffb8
+ 5bc160c:	9806      	ldr	r0, [sp, #24]
+ 5bc160e:	4550      	cmp	r0, sl
+ 5bc1610:	d00b      	beq.n	5bc162a <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x376>
+ 5bc1612:	4620      	mov	r0, r4
+ 5bc1614:	4631      	mov	r1, r6
+ 5bc1616:	f2c4 ee72 	blx	5e862fc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x321c>
+ 5bc161a:	4602      	mov	r2, r0
+ 5bc161c:	2000      	movs	r0, #0
+ 5bc161e:	4631      	mov	r1, r6
+ 5bc1620:	9000      	str	r0, [sp, #0]
+ 5bc1622:	4620      	mov	r0, r4
+ 5bc1624:	2312      	movs	r3, #18
+ 5bc1626:	f2ca ede6 	blx	5e8c1f4 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x9114>
+ 5bc162a:	487d      	ldr	r0, [pc, #500]	; (5bc1820 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x56c>)
+ 5bc162c:	4478      	add	r0, pc
+ 5bc162e:	6800      	ldr	r0, [r0, #0]
+ 5bc1630:	6802      	ldr	r2, [r0, #0]
+ 5bc1632:	2003      	movs	r0, #3
+ 5bc1634:	4631      	mov	r1, r6
+ 5bc1636:	9000      	str	r0, [sp, #0]
+ 5bc1638:	9806      	ldr	r0, [sp, #24]
+ 5bc163a:	ebb0 030a 	subs.w	r3, r0, sl
+ 5bc163e:	4620      	mov	r0, r4
+ 5bc1640:	bf18      	it	ne
+ 5bc1642:	2301      	movne	r3, #1
+ 5bc1644:	f2dd e96c 	blx	5e9e920 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b840>
+ 5bc1648:	46c3      	mov	fp, r8
+ 5bc164a:	2500      	movs	r5, #0
+ 5bc164c:	f8cd 901c 	str.w	r9, [sp, #28]
+ 5bc1650:	a812      	add	r0, sp, #72	; 0x48
+ 5bc1652:	f697 f62e 	bl	56592b2 <std::__ndk1::__vector_base<mce::PointLight, std::__ndk1::allocator<mce::PointLight> >::~__vector_base()@@Base+0x14>
+ 5bc1656:	2d00      	cmp	r5, #0
+ 5bc1658:	9d03      	ldr	r5, [sp, #12]
+ 5bc165a:	f8dd 9018 	ldr.w	r9, [sp, #24]
+ 5bc165e:	d00a      	beq.n	5bc1676 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x3c2>
+ 5bc1660:	ebb9 030a 	subs.w	r3, r9, sl
+ 5bc1664:	4621      	mov	r1, r4
+ 5bc1666:	4632      	mov	r2, r6
+ 5bc1668:	bf18      	it	ne
+ 5bc166a:	2301      	movne	r3, #1
+ 5bc166c:	f2dd e994 	blx	5e9e998 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8b8>
+ 5bc1670:	f04f 0801 	mov.w	r8, #1
+ 5bc1674:	e001      	b.n	5bc167a <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x3c6>
+ 5bc1676:	f04f 0800 	mov.w	r8, #0
+ 5bc167a:	68b8      	ldr	r0, [r7, #8]
+ 5bc167c:	2800      	cmp	r0, #0
+ 5bc167e:	f040 80a5 	bne.w	5bc17cc <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x518>
+ 5bc1682:	2001      	movs	r0, #1
+ 5bc1684:	aa0f      	add	r2, sp, #60	; 0x3c
+ 5bc1686:	9000      	str	r0, [sp, #0]
+ 5bc1688:	4650      	mov	r0, sl
+ 5bc168a:	4621      	mov	r1, r4
+ 5bc168c:	4633      	mov	r3, r6
+ 5bc168e:	f2dd e954 	blx	5e9e938 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b858>
+ 5bc1692:	b358      	cbz	r0, 5bc16ec <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x438>
+ 5bc1694:	f8da 0080 	ldr.w	r0, [sl, #128]	; 0x80
+ 5bc1698:	2106      	movs	r1, #6
+ 5bc169a:	f2c5 e820 	blx	5e866dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35fc>
+ 5bc169e:	2800      	cmp	r0, #0
+ 5bc16a0:	f000 8085 	beq.w	5bc17ae <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x4fa>
+ 5bc16a4:	a90f      	add	r1, sp, #60	; 0x3c
+ 5bc16a6:	4620      	mov	r0, r4
+ 5bc16a8:	f2cb eb8c 	blx	5e8cdc4 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x9ce4>
+ 5bc16ac:	f2c5 e80a 	blx	5e866c4 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35e4>
+ 5bc16b0:	2105      	movs	r1, #5
+ 5bc16b2:	f2c5 e814 	blx	5e866dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35fc>
+ 5bc16b6:	b940      	cbnz	r0, 5bc16ca <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x416>
+ 5bc16b8:	a90f      	add	r1, sp, #60	; 0x3c
+ 5bc16ba:	4620      	mov	r0, r4
+ 5bc16bc:	f2d5 eac8 	blx	5e96c50 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x13b70>
+ 5bc16c0:	2125      	movs	r1, #37	; 0x25
+ 5bc16c2:	f2c5 e80c 	blx	5e866dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35fc>
+ 5bc16c6:	2800      	cmp	r0, #0
+ 5bc16c8:	d071      	beq.n	5bc17ae <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x4fa>
+ 5bc16ca:	4853      	ldr	r0, [pc, #332]	; (5bc1818 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x564>)
+ 5bc16cc:	ad0f      	add	r5, sp, #60	; 0x3c
+ 5bc16ce:	2303      	movs	r3, #3
+ 5bc16d0:	4478      	add	r0, pc
+ 5bc16d2:	4629      	mov	r1, r5
+ 5bc16d4:	6800      	ldr	r0, [r0, #0]
+ 5bc16d6:	6802      	ldr	r2, [r0, #0]
+ 5bc16d8:	2000      	movs	r0, #0
+ 5bc16da:	9000      	str	r0, [sp, #0]
+ 5bc16dc:	4620      	mov	r0, r4
+ 5bc16de:	f2ca ed8a 	blx	5e8c1f4 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x9114>
+ 5bc16e2:	4621      	mov	r1, r4
+ 5bc16e4:	462a      	mov	r2, r5
+ 5bc16e6:	f2dd e8f4 	blx	5e9e8d0 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b7f0>
+ 5bc16ea:	e06f      	b.n	5bc17cc <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x518>
+ 5bc16ec:	9807      	ldr	r0, [sp, #28]
+ 5bc16ee:	2800      	cmp	r0, #0
+ 5bc16f0:	d46c      	bmi.n	5bc17cc <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x518>
+ 5bc16f2:	d008      	beq.n	5bc1706 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x452>
+ 5bc16f4:	aa0f      	add	r2, sp, #60	; 0x3c
+ 5bc16f6:	2001      	movs	r0, #1
+ 5bc16f8:	4621      	mov	r1, r4
+ 5bc16fa:	4633      	mov	r3, r6
+ 5bc16fc:	9000      	str	r0, [sp, #0]
+ 5bc16fe:	f2dd e934 	blx	5e9e968 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b888>
+ 5bc1702:	2800      	cmp	r0, #0
+ 5bc1704:	d062      	beq.n	5bc17cc <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x518>
+ 5bc1706:	4650      	mov	r0, sl
+ 5bc1708:	4621      	mov	r1, r4
+ 5bc170a:	4632      	mov	r2, r6
+ 5bc170c:	f2dd e94a 	blx	5e9e9a4 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8c4>
+ 5bc1710:	9907      	ldr	r1, [sp, #28]
+ 5bc1712:	eb01 0905 	add.w	r9, r1, r5
+ 5bc1716:	2907      	cmp	r1, #7
+ 5bc1718:	bfc8      	it	gt
+ 5bc171a:	f04f 0901 	movgt.w	r9, #1
+ 5bc171e:	f1b9 0f07 	cmp.w	r9, #7
+ 5bc1722:	dc53      	bgt.n	5bc17cc <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x518>
+ 5bc1724:	0601      	lsls	r1, r0, #24
+ 5bc1726:	4605      	mov	r5, r0
+ 5bc1728:	d00e      	beq.n	5bc1748 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x494>
+ 5bc172a:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc172e:	464b      	mov	r3, r9
+ 5bc1730:	3801      	subs	r0, #1
+ 5bc1732:	e9cd 1213 	strd	r1, r2, [sp, #76]	; 0x4c
+ 5bc1736:	9012      	str	r0, [sp, #72]	; 0x48
+ 5bc1738:	2005      	movs	r0, #5
+ 5bc173a:	aa12      	add	r2, sp, #72	; 0x48
+ 5bc173c:	e9cd 6000 	strd	r6, r0, [sp]
+ 5bc1740:	4650      	mov	r0, sl
+ 5bc1742:	4621      	mov	r1, r4
+ 5bc1744:	f2dd e934 	blx	5e9e9b0 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8d0>
+ 5bc1748:	f415 4f7f 	tst.w	r5, #65280	; 0xff00
+ 5bc174c:	d00e      	beq.n	5bc176c <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x4b8>
+ 5bc174e:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc1752:	464b      	mov	r3, r9
+ 5bc1754:	3001      	adds	r0, #1
+ 5bc1756:	e9cd 1213 	strd	r1, r2, [sp, #76]	; 0x4c
+ 5bc175a:	9012      	str	r0, [sp, #72]	; 0x48
+ 5bc175c:	2004      	movs	r0, #4
+ 5bc175e:	aa12      	add	r2, sp, #72	; 0x48
+ 5bc1760:	e9cd 6000 	strd	r6, r0, [sp]
+ 5bc1764:	4650      	mov	r0, sl
+ 5bc1766:	4621      	mov	r1, r4
+ 5bc1768:	f2dd e922 	blx	5e9e9b0 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8d0>
+ 5bc176c:	f415 0f7f 	tst.w	r5, #16711680	; 0xff0000
+ 5bc1770:	d00e      	beq.n	5bc1790 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x4dc>
+ 5bc1772:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc1776:	464b      	mov	r3, r9
+ 5bc1778:	e9cd 0112 	strd	r0, r1, [sp, #72]	; 0x48
+ 5bc177c:	1e50      	subs	r0, r2, #1
+ 5bc177e:	9014      	str	r0, [sp, #80]	; 0x50
+ 5bc1780:	2003      	movs	r0, #3
+ 5bc1782:	aa12      	add	r2, sp, #72	; 0x48
+ 5bc1784:	e9cd 6000 	strd	r6, r0, [sp]
+ 5bc1788:	4650      	mov	r0, sl
+ 5bc178a:	4621      	mov	r1, r4
+ 5bc178c:	f2dd e910 	blx	5e9e9b0 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8d0>
+ 5bc1790:	f1b5 7f80 	cmp.w	r5, #16777216	; 0x1000000
+ 5bc1794:	d31a      	bcc.n	5bc17cc <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x518>
+ 5bc1796:	e896 0007 	ldmia.w	r6, {r0, r1, r2}
+ 5bc179a:	464b      	mov	r3, r9
+ 5bc179c:	e9cd 0112 	strd	r0, r1, [sp, #72]	; 0x48
+ 5bc17a0:	1c50      	adds	r0, r2, #1
+ 5bc17a2:	9014      	str	r0, [sp, #80]	; 0x50
+ 5bc17a4:	2002      	movs	r0, #2
+ 5bc17a6:	aa12      	add	r2, sp, #72	; 0x48
+ 5bc17a8:	e9cd 6000 	strd	r6, r0, [sp]
+ 5bc17ac:	e00a      	b.n	5bc17c4 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x510>
+ 5bc17ae:	9b07      	ldr	r3, [sp, #28]
+ 5bc17b0:	2001      	movs	r0, #1
+ 5bc17b2:	2b08      	cmp	r3, #8
+ 5bc17b4:	db02      	blt.n	5bc17bc <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x508>
+ 5bc17b6:	e9cd 6000 	strd	r6, r0, [sp]
+ 5bc17ba:	e002      	b.n	5bc17c2 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x50e>
+ 5bc17bc:	e9cd 6000 	strd	r6, r0, [sp]
+ 5bc17c0:	3308      	adds	r3, #8
+ 5bc17c2:	aa0f      	add	r2, sp, #60	; 0x3c
+ 5bc17c4:	4650      	mov	r0, sl
+ 5bc17c6:	4621      	mov	r1, r4
+ 5bc17c8:	f2dd e8f2 	blx	5e9e9b0 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8d0>
+ 5bc17cc:	f8db 0000 	ldr.w	r0, [fp]
+ 5bc17d0:	9918      	ldr	r1, [sp, #96]	; 0x60
+ 5bc17d2:	1a40      	subs	r0, r0, r1
+ 5bc17d4:	bf01      	itttt	eq
+ 5bc17d6:	4640      	moveq	r0, r8
+ 5bc17d8:	b019      	addeq	sp, #100	; 0x64
+ 5bc17da:	e8bd 0f00 	ldmiaeq.w	sp!, {r8, r9, sl, fp}
+ 5bc17de:	bdf0      	popeq	{r4, r5, r6, r7, pc}
+ 5bc17e0:	f2c2 ed42 	blx	5e84268 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1188>
+ 5bc17e4:	e010      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17e6:	e00f      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17e8:	e00e      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17ea:	e00d      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17ec:	e00c      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17ee:	e00b      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17f0:	e00a      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17f2:	e009      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17f4:	e008      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17f6:	e007      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17f8:	e006      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17fa:	e005      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17fc:	e004      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc17fe:	e003      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc1800:	e002      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc1802:	e001      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc1804:	e000      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc1806:	e7ff      	b.n	5bc1808 <LiquidBlockDynamic::_tick(BlockSource&, BlockPos const&, Random&, bool) const@@Base+0x554>
+ 5bc1808:	4604      	mov	r4, r0
+ 5bc180a:	a812      	add	r0, sp, #72	; 0x48
+ 5bc180c:	f697 f551 	bl	56592b2 <std::__ndk1::__vector_base<mce::PointLight, std::__ndk1::allocator<mce::PointLight> >::~__vector_base()@@Base+0x14>
+ 5bc1810:	4620      	mov	r0, r4
+ 5bc1812:	f2c2 ed30 	blx	5e84274 <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1194>
+ 5bc1816:	bf00      	nop
+ 5bc1818:	eb14 0329 	adds.w	r3, r4, r9, asr #32
+ 5bc181c:	3f72      	subs	r7, #114	; 0x72
+ 5bc181e:	0329      	lsls	r1, r5, #12
+ 5bc1820:	3f6c      	subs	r7, #108	; 0x6c
+ 5bc1822:	0329      	lsls	r1, r5, #12
+
+05bc1824 <LiquidBlockDynamic::entityInside(BlockSource&, BlockPos const&, Actor&) const@@Base>:
+ 5bc1824:	b5d0      	push	{r4, r6, r7, lr}
+ 5bc1826:	af02      	add	r7, sp, #8
+ 5bc1828:	f8d0 0080 	ldr.w	r0, [r0, #128]	; 0x80
+ 5bc182c:	2106      	movs	r1, #6
+ 5bc182e:	461c      	mov	r4, r3
+ 5bc1830:	f2c4 ef54 	blx	5e866dc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x35fc>
+ 5bc1834:	b180      	cbz	r0, 5bc1858 <LiquidBlockDynamic::entityInside(BlockSource&, BlockPos const&, Actor&) const@@Base+0x34>
+ 5bc1836:	6820      	ldr	r0, [r4, #0]
+ 5bc1838:	f8d0 1080 	ldr.w	r1, [r0, #128]	; 0x80
+ 5bc183c:	4620      	mov	r0, r4
+ 5bc183e:	4788      	blx	r1
+ 5bc1840:	b950      	cbnz	r0, 5bc1858 <LiquidBlockDynamic::entityInside(BlockSource&, BlockPos const&, Actor&) const@@Base+0x34>
+ 5bc1842:	4620      	mov	r0, r4
+ 5bc1844:	2101      	movs	r1, #1
+ 5bc1846:	2201      	movs	r2, #1
+ 5bc1848:	f2dd e8b8 	blx	5e9e9bc <Village::_getNumRecentlyWorkedDwellers() const@@Base+0x1b8dc>
+ 5bc184c:	6820      	ldr	r0, [r4, #0]
+ 5bc184e:	f8d0 1114 	ldr.w	r1, [r0, #276]	; 0x114
+ 5bc1852:	4620      	mov	r0, r4
+ 5bc1854:	4788      	blx	r1
+ 5bc1856:	b100      	cbz	r0, 5bc185a <LiquidBlockDynamic::entityInside(BlockSource&, BlockPos const&, Actor&) const@@Base+0x36>
+ 5bc1858:	bdd0      	pop	{r4, r6, r7, pc}
+ 5bc185a:	6820      	ldr	r0, [r4, #0]
+ 5bc185c:	2108      	movs	r1, #8
+ 5bc185e:	f8d0 2294 	ldr.w	r2, [r0, #660]	; 0x294
+ 5bc1862:	4620      	mov	r0, r4
+ 5bc1864:	e8bd 40d0 	ldmia.w	sp!, {r4, r6, r7, lr}
+ 5bc1868:	4710      	bx	r2

@@ -18,7 +18,6 @@ abstract class Machine extends BlockStateTileEntity {
 	private _Nets: LinkedHashMap<? extends INet>;
 	
 	private shape: MachineRegion;
-	private recipes: RecipeMap;
 	constructor(id: string, tier: number) {
 		this.id = id;
 		this.tier = tier;
