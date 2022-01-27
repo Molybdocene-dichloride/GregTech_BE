@@ -18,18 +18,17 @@ abstract class Machine extends BlockStateTileEntity {
 	private _Nets: LinkedHashMap<? extends INet>;
 	
 	private shape: MachineRegion;
-	constructor(id: string, tier: number) {
-		this.id = id;
+	constructor(id: string, data: number, tier: number) {
+		super(id, data);
 		this.tier = tier;
 	}
     init() : void {
-        this.enabled = true;
+		super.init();
         this.progress = 0;
         this.temperature = 293.15;
         this.connectTick = 0;
         this.prepareConnect();
         this.preparePipe();
-        this.inited = true;
     }
     getTier(): number {
       return tier;

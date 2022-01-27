@@ -1,8 +1,5 @@
-interface IStack {
-	getID(): string;
-	getCount(): number;
-}
-class ItemStack extends ItemInstance implements IStack {
+class ItemStack extends ItemInstance implements Stack {
+	temperature
 	constructor(id, data, count) {
 		id = id;
 		data = data;
@@ -13,6 +10,9 @@ class ItemStack extends ItemInstance implements IStack {
 	}
 	getData(): number {
 		return this.data;
+	}
+	getTemperature() {
+		
 	}
 	getCount(): number {
 		return this.count;

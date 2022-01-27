@@ -1,4 +1,4 @@
-export interface IRecipe extends Cloneable {
+export class Recipe extends Cloneable {
     getInputs(): LinkedHashMap<string, IStack>;
     getInput(): IStack;
     getOutputs(): LinkedHashMap<string, IStack>;
@@ -10,6 +10,35 @@ export interface IRecipe extends Cloneable {
     getEfficiency(): number;
     getDuration();
     
+    checkInputs(storage: PartStorage): boolean {
+		for(let i in storage.getParts()) {
+			if(storage.getParts()[i].can(inputs)) {
+				return true;
+			}
+		}
+	}
+	checKOutputs(storage: PartStorage): boolean {
+		for(let i in storage.getParts()) {
+			if(storage.getParts()[i].can(outputs)) {
+				return true;
+			}
+		}
+	}
+	inputs(storage: PartStorage): boolean {
+		for(let i in storage.getParts()) {
+			if(storage.getParts()[i].get(outputs)) {
+				return true;
+			}
+		}
+	}
+	outputs(storage: PartStorage): boolean {
+		for(let i in storage.getParts()) {
+			if(storage.getParts()[i].get(outputs)) {
+				return true;
+			}
+		}
+	}
+	
     provideRecipe(): void;
 }
 export interface IRecipeMap<B extends RecipeFactory<B, IRecipe>> extends Cloneable, Serializable {

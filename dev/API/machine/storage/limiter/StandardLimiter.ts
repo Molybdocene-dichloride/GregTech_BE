@@ -1,5 +1,5 @@
-class StandardLimiter<PS extends IPartStorage> implements Limiter<PS> {
-    limit(slot: PS, limit: number, count: number, forced: boolean = false): void {
+class StandardLimiter<PS extends Slot> implements Limiter<PS> {
+    limit(Slot: PS, limit: number, count: number, forced: boolean = false): void {
 		let pre = slot.amount;
         if(forced || limit / count > pre) {
             slot.limit = limit;

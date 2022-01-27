@@ -1,31 +1,24 @@
 abstract class MultiblockMachine extends Machine {
 	private AABBRange sizeAllowed;
 	private AABB size;
-	constructor(id: string, tier: number, sizeAllowed: AABBRange) {
-		super(id, tier);
+	constructor(id: string, data: number, tier: number, sizeAllowed: AABBRange) {
+		super(id, data, tier);
 		this,sizeAllowed = sizeAllowed;
 	}
 	init(): void {
 		super.init();
-		prepareMultiblock();
-	}
-	tick(): void {
-		super.tick();
-		this.provideMultiblock();
-	}
-	prepareMultiblock() : void {
-		if(this.validateBlocks()) {
-			correct = true;
-		} else {
-			correct = false;
-		}
+		
 		this.connectable = false:
 		this.pipeconnectable = false;
 		this.itemconnectable = false;
 		this.fluidconnectable = false;
 	}
+	tick(): void {
+		super.tick();
+		this.provideMultiblock();
+	}
 	provideMultiblock() : void {
-		if(this.validateBlocks()) {
+		if(this.enabled || this.validateBlocks()) {
 			correct = true;
 		} else {
 			correct = false;

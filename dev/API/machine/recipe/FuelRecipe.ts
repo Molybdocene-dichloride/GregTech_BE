@@ -1,4 +1,4 @@
-export abstract class ContinuousRecipe implements IRecipe {
+export abstract class ContinuousRecipe extends Recipe {
 	private inputs: LinkedHashMap<string, IStack>;
     private outputs: LinkedHashMap<string, IStack>;
     private duration: number;
@@ -29,33 +29,16 @@ export abstract class ContinuousRecipe implements IRecipe {
 	getOutputs(): void {
 		return this.outputs;
 	}
-	provideRecipe(currentMachineInfo: MachineInfo, itemStorage: ItemStorage, fluidStorage: fluidStorage, electricStorage?: ElectricStorage): boolean {
-		if((!currentMachineInfo.isProcess) || !(!itemStorage.checkOutput(j) || !fluidStorage.checkOutput(j))) {
-			if(!currentMachineInfo.isProcess) {
-				currentMachineInfo.duration = this.duration;
-				currentMachineInfo.worktime = 0;
-				currentMachineInfo.steamcomsumption = this.EUt * 6;
-				currentMachineInfo.isProcess = true;
-            }
-            
-            itemStorage.input(this);
-			fluidStorage.input(this);
+	provideRecipe(currentMachineInfo: MachineInfo): boolean {
+		if((!currentMachineInfo.isProcess) || (checkOutputs(currentMachineInfo.itemStorage) && checkOutputs(currentMachineInfo.fluidStorage))) {
+            input(currentMachineInfo.itemStorage);
+			input(currentMachineInfo.fluidStorage);
+			//input(currentMachineInfo.bus);
 			
-			itemStorage.output(this);
-			fluidStorage.output(this);
-			
-			currentMachineInfo.worktime += 1;
-			
-			if(currentMachineInfo.worktime >= this.duration) {
-				currentMachineInfo.end = true;
-				currentMachineInfo.isProcess = false;
-				currentMachineInfo.duration = 0;
-				currentMachineInfo.worktime = 0;
-				currentMachineInfo.steamcomsumption = 0;
-			}
-			currentMachineInfo.relative_worktime = currentMachineInfo.worktime / currentMachineInfo.duration;
-			this.uiContainer.setScale("scale", currentMachineInfo.relative_worktime);
+			output(currentMachineInfo.itemStorage);
+			output(currentMachineInfo.fluidStorage);
+			//output(currentMachineInfo.bus);
 		}
-		return currentMachineInfo.end;
+		return true;
 	}
 }

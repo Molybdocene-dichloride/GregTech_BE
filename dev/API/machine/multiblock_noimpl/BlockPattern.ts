@@ -1,4 +1,4 @@
-type PredicateVector = ArrayList<ArrayList<ArrayList<MachinePredicate<Vec3, BlockState>>>>;а
+type PredicateVector = ArrayList<ArrayList<ArrayList<MachinePredicate<Vec3, BlockState>>>>;
 abstract class BlockPattern { //and Validator
 	private blockSource: BlockSource;
 	private permitted: PredicateVector;
@@ -16,7 +16,7 @@ class StandardBlockPattern extends BlockPattern { //simple & standard box multib
 	private casings: ArrayList<BlockState>;
 	private ioValidator: IOPredicate<String, BlockState>;
 	constructor(permitted: PredicateVector, casings: ArrayList<BlockState>) {
-		super((permitted, casings);
+		super(permitted, casings);
 	}
     validatePattern(blockSource: BlockSource, position: Vec3, size: AABBRange): void {
 		let bool = true;
@@ -51,7 +51,7 @@ class ClosedBlockPattern extends BlockPattern { //pile igniter multiblock
 	private ioValidator: IOPredicate<String, BlockState>;
 	private size: Vec3;
 	constructor(permitted: PredicateVector, casings: ArrayList<Tile>) {
-		super((permitted, casings);    
+		super(permitted, casings);    
 	}
     validatePattern(blockSource: BlockSource, position: Vec3, size: AABBRange): void {
 		std::unordered_map<Block> checked();
