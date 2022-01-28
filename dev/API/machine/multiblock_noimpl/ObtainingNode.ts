@@ -13,13 +13,8 @@ abstract class ObtainingNode extends Node {
 	addRecipe(recipe: Recipe): void {
 		recipes[recipes.length] = recipe;
 	}
-	
-	preparePipe() : void {}
-	connectTick() : void {}
 
-	receive(fluid : FluidStack, sidepre: number) : Fluid {}
-	receive(item : ItemInstance, sidepre : number) : Fluid {}
+	receive(fluid : Stack, sidepre: number) : Fluid {}
  
-	provide(stack : ItemInstance, src: any)) : void {}
-	provide(stack : FluidStack, src : any) : void {}
+	provide(stack : Stack, src: any) : void {}
 }

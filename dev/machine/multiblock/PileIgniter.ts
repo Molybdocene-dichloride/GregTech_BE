@@ -15,10 +15,20 @@ class Fire : ObtainingNode, HasRecipe {
 	}
   	tick(): void {
 		Logger.Log(this.data.tick, "sheoe");
-		let recipe = this.data.currentRecipe || recipes.getRecipe();
-		if(recipe != null) {
-			this.data.currentRecipe = recipe;
-			recipe.provideRecipe();
+		
+		for(x : xx) {
+			if(block(x) == woodid) {
+				wood.temperature++;
+			}
+		}
+		for(y : yy) {
+			if(block(x) == woodid) {
+				wood.temperature++;
+			}		}
+		for(z : zz) {
+			if(block(x) == woodid) {
+				wood.temperature++;
+			}
 		}
 	}
 }

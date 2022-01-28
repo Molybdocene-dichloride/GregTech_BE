@@ -1,59 +1,21 @@
-type PredicateVector = ArrayList<ArrayList<ArrayList<MachinePredicate<Vec3, BlockState>>>>;
 abstract class BlockPattern { //and Validator
-	private blockSource: BlockSource;
-	private permitted: PredicateVector;
-	constructor(permitted: PredicateVector, casings: ArrayList<BlockState>) {
-		this.casings = casings;
-		this.permitted = permitted;
+	constructor(walls: ArrayList<BlockState>) {
+		this.walls = walls;
 	}
-    abstract validatePattern(blockSource: BlockSource,  position: Vec3, size: AABBRange): void;
+    abstract validatePattern(blockSource: BlockSource,  position: Vec3): void;
     
     getPredicators(): PredicateVector;
     setPredicators(): void;
 }
-class StandardBlockPattern extends BlockPattern { //simple & standard box multiblock
-	private mainBlock: BlockState;
-	private casings: ArrayList<BlockState>;
-	private ioValidator: IOPredicate<String, BlockState>;
-	constructor(permitted: PredicateVector, casings: ArrayList<BlockState>) {
-		super(permitted, casings);
-	}
-    validatePattern(blockSource: BlockSource, position: Vec3, size: AABBRange): void {
-		let bool = true;
-		let x = 0;
-		let y = 0;
-		let z = 0;
-		for(; x < size.max.x; x++) {
-			x++;
-			for(; y < size.max.y; y++) {
-				y++;
-				for(; z < size.max.z; z++) {
-					z++;
-					if(!permitted.predicate(x, y, z, block) && x == size.min.x && y == size.min.y && z == size.min.z) {
-						bool = false;
-						return;
-					}
-				}
-			}
-		}
-		
-	}
-	getPredicators(): PredicateVector {
-		return permitted;
-	}
-	setPredicators(PredicateVector pv): void {
-		permitted = pv;
-	}
-}
+
 class ClosedBlockPattern extends BlockPattern { //pile igniter multiblock
-	private casings: ArrayList<BlockState>;
-	private permitted: PredicateVector;
-	private ioValidator: IOPredicate<String, BlockState>;
+	private walls: ArrayList<BlockState>;
+	
 	private size: Vec3;
-	constructor(permitted: PredicateVector, casings: ArrayList<Tile>) {
-		super(permitted, casings);    
+	constructor(walls: ArrayList<BlockState>) {
+		super(permitted, walls);    
 	}
-    validatePattern(blockSource: BlockSource, position: Vec3, size: AABBRange): void {
+    validatePattern(blockSource: BlockSource, position: Vec3): void {
 		std::unordered_map<Block> checked();
 		Block bll = getBlock(position.x, position.y - 1, position.z);
 		if(!permitted.predicate(x, y, z, block) && x == size.min.x && y == size.min.y && z == size.min.z) {
@@ -62,6 +24,18 @@ class ClosedBlockPattern extends BlockPattern { //pile igniter multiblock
 		} else {
 			checked.push();
 			checkAllBlockSides(position.x, position.y - 1, position.z, checked, aList2);
+		}
+		
+		for(i : 6) {
+			for(x : 16) {
+				if(!wall) {
+					bool = false;
+					return;
+				}
+			}
+		}
+		for(i : 6) {
+			checkAllBlockOnSide(position.x, position.y - 1, position.z, checked, aList2);
 		}
 	}
 	checkAllBlockSides(int x, int y, int z, ArrayList<ChunkPosition> aList1, ArrayList<ChunkPosition> aList2): boolean {
@@ -142,4 +116,18 @@ class ClosedBlockPattern extends BlockPattern { //pile igniter multiblock
         if (p6) aList2.add(new ChunkPosition(aX, aY, aZ - 1));
         return true;
     }
+    checkAllBlockOnSide(int x, int y, int z, ArrayList<ChunkPosition> aList): boolean {
+		for(i : 6) {
+			if(!aList.contains()) continue;
+			if(block == walls) {
+				aList.add(t);
+				if(!checkAllBlockOnSide(position.x, position.y - 1, position.z, aList)) {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
 }
