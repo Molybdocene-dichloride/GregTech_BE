@@ -1,25 +1,22 @@
-class Material {
+class Material extends HasID, HasName {
     id: string;
     unlocalized_name: string;
-    localizedNames: {[key: string]: string};
+    //chem
+    
     constructor(id: string, unlocalized_name: string) {
-		this.id = id;
-		this.unlocalized_name = unlocalized_name;
-	
-		this.localizedNames = {};
+		  this.id = id;
+		  this.unlocalized_name = unlocalized_name;
     }
+    
     getID(): string {
-		return "material." + this.id;
+		return "gt:material." + this.id;
     }
     getUnlocalizedName(): string {
-		return this.unlocalized_name;
+		return "gt:material." + this.unlocalized_name + ".name";
     }
     getLocalizedName(lang: string): string {
-		if(!(LocalizationSystem.getCurrentLanguage() in localizedNames)) this.localizedNames[lang] = MaterialTranslator.translate(lang, this.unlocalized_name);
-		return this.localizedNames[lang];
+	
     }
     getCurrentName(): string {
-		if(!(LocalizationSystem.getCurrentLanguage() in localizedNames)) this.localizedNames[LocalizationSystem.getCurrentLanguage()] = MaterialTranslator.translateToCurrent(this.unlocalized_name);
-		return this.localizedNames[LocalizationSystem.getCurrentLanguage()];
     }
 }

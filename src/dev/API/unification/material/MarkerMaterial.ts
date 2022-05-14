@@ -5,6 +5,6 @@ class MarkerMaterial<V> extends Material {
       this.val = val;
     }
     getValue(): V {
-	return val;
+	    return val;
     }
 }

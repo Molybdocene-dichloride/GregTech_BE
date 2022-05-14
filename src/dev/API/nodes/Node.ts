@@ -1,9 +1,11 @@
 interface Node {
+  placeable: boolean:
 	tilling_only: boolean;
 	intersection: boolean;
 	gravity: boolean;
 	
-	Node(tilling_only: boolean = false, intersection: boolean = false, renderable: boolean = false);
+	//Node(tilling_only: boolean = false, intersection: boolean = false, renderable: boolean = false);
+	
 	invalidate();
 	tick();
 	render();
