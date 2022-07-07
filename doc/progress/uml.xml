@@ -1,0 +1,118 @@
+@startuml
+
+component TheUniverse [
+	The Universe
+    	====
+    	Не входит ни в один пакет
+    	..//**Экспонирует**//..
+   	* //Интерфейс// 1
+   	* //Интерфейс 2//
+]
+
+component Field [
+    	Field
+    	====
+    	Interacting of massive nodes
+    	..//**Экспонирует**//..
+   	* //Интерфейс// 1
+   	* //Интерфейс 2//
+]
+
+component ElectromagneticField [
+    Electromagnetic Field
+    ====
+    Interacting of electrically charged nodes
+    ..//**Экспонирует**//..
+    * //Интерфейс// 1
+    * //Интерфейс 2//
+]
+
+component OhmElectricity [
+    Ohm Electricity
+    ====
+    Interacting of electrically charged nodes
+    ..//**Экспонирует**//..
+    * //Интерфейс// 1
+    * //Интерфейс 2//
+]
+
+component PElectricity [
+    PElectricity
+    ====
+    Interacting of electrically charged nodes
+    ..//**Экспонирует**//..
+    * //Интерфейс// 1
+    * //Интерфейс 2//
+]
+
+component GravitationalField [
+    Gravitational Field
+    ====
+    Interacting of massive nodes
+    ..//**Экспонирует**//..
+    * //Интерфейс// 1
+    * //Интерфейс 2//
+]
+
+component Acceleration [
+    Acceleration
+    ====
+    Interacting of massive nodes
+    ..//**Экспонирует**//..
+    * //Интерфейс// 1
+    * //Интерфейс 2//
+]
+
+component 2bodynewtonian [
+    2bodynewtonian
+    ====
+    Interacting of massive nodes
+    ..//**Экспонирует**//..
+    * //Интерфейс// 1
+    * //Интерфейс 2//
+]
+
+component Node [
+    	Node
+    	====
+    	Substance
+    	..//**Экспонирует**//..
+   	* //Интерфейс// 1
+   	* //Интерфейс 2//
+]
+
+ElectromagneticField --- OhmElectricity
+ElectromagneticField --- PElectricity
+
+GravitationalField --- Acceleration
+GravitationalField --- 2bodynewtonian
+
+ElectromagneticField --- Field
+GravitationalField --- Field
+TheUniverse --- Field
+TheUniverse --- Node
+Field --- Node
+Field --- Node
+
+component Maxwell [
+    Maxwell
+    ====
+    Interacting of electrically charged nodes
+    ..//**Экспонирует**//..
+    * //Интерфейс// 1
+    * //Интерфейс 2//
+]
+
+component nbodynewtonian [
+    nbodynewtonian
+    ====
+    Interacting of massive nodes
+    ..//**Экспонирует**//..
+    * //Интерфейс// 1
+    * //Интерфейс 2//
+]
+
+Maxwell -d[hidden]-> Node
+Maxwell -r[hidden]-> nbodynewtonian
+
+@enduml
