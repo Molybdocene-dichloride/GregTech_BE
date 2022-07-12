@@ -3,3 +3,6 @@ output
 .cache
 *.log
 *.icmod
+
+!/toolchain/declarations/
+!/toolchain/stdincludes
