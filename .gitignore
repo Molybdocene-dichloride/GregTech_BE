@@ -1,4 +1,4 @@
-toolchain
+toolchain/
 output
 .cache
 *.log
