@@ -4,5 +4,5 @@ output
 *.log
 *.icmod
 
-!/toolchain/declarations/
+!/toolchain/declarations
 !/toolchain/stdincludes
